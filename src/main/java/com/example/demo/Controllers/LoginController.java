@@ -1,7 +1,8 @@
 package com.example.demo.Controllers;
 
-import com.example.crudbase.entity.Usuario;
-import com.example.crudbase.repository.UsuarioRepository;
+
+import com.example.demo.Entity.Usuario;
+import com.example.demo.Repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
