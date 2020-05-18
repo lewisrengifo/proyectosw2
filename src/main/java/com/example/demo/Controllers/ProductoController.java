@@ -40,7 +40,7 @@ public class ProductoController {
         return "redirect:/producto";
     }
     @GetMapping("/editar")
-    public String editarTransportista(Model model,@RequestParam("id") int id) {
+    public String editarProducto(Model model,@RequestParam("id") int id) {
 
         Optional<Producto> optProduct = productoRepository.findById(id);
 
@@ -53,7 +53,7 @@ public class ProductoController {
         }
     }
     @GetMapping("/borrar")
-    public String borrarTransportista(Model model,
+    public String borrarProducto(Model model,
                                       @RequestParam("id") int id,
                                       RedirectAttributes attr) {
 
