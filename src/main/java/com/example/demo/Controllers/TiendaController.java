@@ -26,8 +26,6 @@ public class TiendaController {
 
     @GetMapping("nuevo")
     public String nuevo(@ModelAttribute("tienda") Tienda tienda){
-
-
         return "Tienda/newEdit";
     }
 

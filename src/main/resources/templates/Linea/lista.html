@@ -20,8 +20,8 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-action">
-                            TIENDA
-                            <a class="btn btn-primary right" th:href="@{'/tienda/nuevo'}">agregar</a>
+                            LINEA
+                            <a class="btn btn-primary right" th:href="@{'/linea/nuevo'}">agregar</a>
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
@@ -33,6 +33,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>NOMBRE</th>
+                                        <th>CÓDIGO</th>
                                         <th></th>
                                         <th></th>
                                     </tr>
@@ -40,9 +41,10 @@
                                     <tbody>
                                     <tr th:each="c, info : ${lista}">
                                         <td th:text="${info.index +1}">1</td>
-                                        <td th:text="${c.nombre}">Home</td>
-                                        <td><a th:href="@{'tienda/editar?id=' + ${c.idtienda}}"> editar</a></td>
-                                        <td><a th:href="@{'tienda/borrar?id=' + ${c.idtienda}}">borrar</a></td>
+                                        <td th:text="${c.nombrelinea}">Home</td>
+                                        <td th:text="${c.codigolinea}">Home</td>
+                                        <td><a th:href="@{'linea/editar?id=' + ${c.idlinea}}"> editar</a></td>
+                                        <td><a th:href="@{'linea/borrar?id=' + ${c.idlinea}}">borrar</a></td>
                                     </tr>
                                     </tbody>
                                 </table>
