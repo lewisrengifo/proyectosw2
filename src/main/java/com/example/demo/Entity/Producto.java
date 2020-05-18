@@ -1,6 +1,8 @@
 package com.example.demo.Entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "producto")
@@ -12,18 +14,27 @@ public class Producto {
     private int idproducto;
 
     @Column(name = "nombreproducto")
+    @NotBlank(message = "El nombre del producto no puede estar vacío")
+    @Size(max = 45,message = "El nombre del producto no puede tener más de 45 caracteres")
     private String nombreproducto;
 
     @Column(name = "codigoproducto")
+    @NotBlank(message = "El código del producto no puede estar vacío")
+    @Size(max = 3,message = "El código del producto no puede tener más de 3 caracteres")
     private String codigoproducto;
 
     @Column(name = "descripcionproducto")
+    @NotBlank(message = "La descripción del producto no puede estar vacio")
+    @Size(max = 45,message = "La descripción del producto no puede tener más de 45 caracteres")
     private String descripcionproducto;
 
     @Column(name = "codigodescripcionproducto")
+    @NotBlank(message = "El código de la descripción del producto no puede estar vacio")
+    @Size(max = 3,message = "El código de la descripción del producto no puede tener más de 3 caracteres")
     private String codigodescripcionproducto;
 
     @Column(name = "linea_idlinea")
+    @NotBlank(message = "La línea no puede estar vacío")
     private int linea;
 
     @Column(name = "foto")
