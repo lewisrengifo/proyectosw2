@@ -53,7 +53,7 @@
                                         <td th:text="${a.apellidopaterno}">H</td>
                                         <td th:text="${a.apellidomaterno}">H</td>
                                         <td th:text="${a.codigoartesano}">H</td>
-                                        <td th:text="${a.comunidad_idcomunidad.nombrecomunidad}">H</td>
+                                        <td th:text="${a.comunidad.nombrecomunidad}">H</td>
                                         <td><a th:href="@{'artesano/editar?id=' + ${a.idartesano}}"> editar</a></td>
                                         <td><a th:href="@{'artesano/borrar?id=' + ${a.idartesano}}">borrar</a></td>
                                     </tr>

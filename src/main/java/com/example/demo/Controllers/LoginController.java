@@ -34,7 +34,11 @@ public class LoginController {
         if(rol.equals("Administrador")){
             return "redirect:/usuario/lista";
         }else {
+            if (rol.equals("sede")){
+                return "redirect:/artesano";
+            }else{
             return "redirect:/categoria";
+            }
         }
     }
 
