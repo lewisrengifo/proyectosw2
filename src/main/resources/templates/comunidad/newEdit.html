@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<body>
+
+<nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+
+<nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'categoria')"></nav>
+
+
+<div id="page-wrapper">
+    <div id="page-inner">
+
+        <div class="row">
+            <div  class="col-md-8">
+                <div class="card">
+                    <div class="container">
+                        <h2 th:text="${comunidad.idcomunidad == 0? 'Nueva Comunidad' : 'editar Comunidad papu'}">
+                            Nuevo/Editar</h2>
+                        <hr/>
+                        <form method="post" th:action="@{'/comunidad/guardar'}" th:object="${comunidad}">
+                            <input type="hidden" th:field="*{idcomunidad}"/>
+
+                            <div class="form-group">
+                                <label for="nombrecomunidad">Nombre Comunidad</label>
+                                <input type="text" class="form-control" th:field="*{nombrecomunidad}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('nombrecomunidad')}" th:errors="*{nombrecomunidad}"></div>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="codigocomunidad">codigo Comunidad</label>
+                                <input type="text" class="form-control" th:field="*{codigocomunidad}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('codigocomunidad')}" th:errors="*{codigocomunidad}"></div>
+
+                            </div>
+                            <a th:href="@{'/comunidad'}" class="btn btn-danger">Cancelar</a>
+                            <button type="submit" class="btn btn-primary"
+                                    th:text="${comunidad.idcomunidad == 0? 'Registrar' : 'Actualizar'}">Reg/act
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+
+
+</body>
+</html>

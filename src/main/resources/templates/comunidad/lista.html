@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='lista de productooos')">
+</head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
+
+
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                Descripcion de Productos
+            </h1>
+        </div>
+
+            <!-- /. COMUNIDAD  -->
+            <div id="page-inner">
+                <!-- /. COMUNIDAD  -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-action">
+                                COMUNIDAD
+                                <a class="btn btn-primary right" th:href="@{'/comunidad/nuevo'}">agregar</a>
+                            </div>
+                            <div class="card-content">
+                                <div class="table-responsive">
+                                    <div th:if="${msgCo != null}" th:text="${msgCo}" class="alert alert-success"
+                                         role="alert"></div>
+
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>NOMBRE</th>
+                                            <th>CODIGO</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="c, info : ${listaComunidad}">
+                                            <td th:text="${info.index +1}">1</td>
+                                            <td th:text="${c.nombrecomunidad}">Home</td>
+                                            <td th:text="${c.codigocomunidad}">H</td>
+                                            <td><a th:href="@{'comunidad/editar?id=' + ${c.idcomunidad}}"> editar</a></td>
+                                            <td><a th:href="@{'comunidad/borrar?id=' + ${c.idcomunidad}}">borrar</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End  Kitchen Sink -->
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>
+<!-- /. PAGE WRAPPER  -->
+<!-- /. WRAPPER  -->
+<!-- JS Scripts-->
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+
+</html>
