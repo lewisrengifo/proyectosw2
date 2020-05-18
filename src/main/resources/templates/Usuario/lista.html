@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head ></head>
+<body>
+<div class="container">
+
+    <h2>Lista Usuarios</h2>
+    <a class="btn btn-primary mt-4 mb-4" th:href="@{'/usuario/nuevo'}">Nuevo Transportista</a>
+    <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+
+    <table class="table table-sm">
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+
+
+
+            <th>Rol</th>
+            <th>Estado</th>
+
+            <th></th>
+            <th></th>
+        </tr>
+        <tr th:each="usuario, info : ${listaUsuarios}">
+            <td th:text="${info.index + 1}"></td>
+            <td th:text="${usuario.nombre}"></td>
+            <td th:text="${usuario.correo}"></td>
+
+
+            <td th:text="${usuario.rol_idrol.nombre}"></td>
+            <td th:text="${usuario.enable}"></td>
+
+            <td><a class="btn btn-primary"
+                   th:href="@{'/usuario/editar' + '?id=' + ${usuario.idusuario}}">Editar</a>
+            </td>
+
+        </tr>
+    </table>
+</div>
+</body>
+</html>
