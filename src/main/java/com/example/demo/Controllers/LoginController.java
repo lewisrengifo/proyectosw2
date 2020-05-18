@@ -32,7 +32,7 @@ public class LoginController {
         session.setAttribute("usuario",usuario);
 
         if(rol.equals("Administrador")){
-            return "redirect:/comunidad";
+            return "redirect:/usuario/lista";
         }else {
             return "redirect:/categoria";
         }
