@@ -28,12 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
         ;
 
-        http.authorizeRequests().antMatchers("/comunidad","/comunidad/**", "/usuario", "/usuario/**").hasAuthority("Administrador");
-         http.authorizeRequests().antMatchers("/categoria","/categoria/**").hasAnyAuthority("Administrador","Gestor principal");
-         http.authorizeRequests().antMatchers("/producto","/producto/**").hasAnyAuthority("Administrador","Gestor principal");
-         http.authorizeRequests().anyRequest().permitAll();
-        http.authorizeRequests().antMatchers("/artesano","/artesano/**").hasAnyAuthority("Administrador","sede");
-
+        http.authorizeRequests().antMatchers("/comunidad", "/comunidad/**", "/usuario", "/usuario/**").hasAuthority("Administrador");
+        http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority("Administrador", "Gestor principal");
+        http.authorizeRequests().antMatchers("/producto", "/producto/**").hasAnyAuthority("Administrador", "Gestor principal");
+        http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Administrador", "sede");
         http.authorizeRequests().anyRequest().permitAll();
     }
 
@@ -47,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(new BCryptPasswordEncoder())
                 .usersByUsernameQuery("select correo, contrasena, enable from usuario where correo = ?")
                 .authoritiesByUsernameQuery("select u.correo, r.nombre " +
-                                            "from usuario u inner join rol r on r.idrol=u.rol_idrol" +
-                                            " where u.correo=? and u.enable=1");
-     }
+                        "from usuario u inner join rol r on r.idrol=u.rol_idrol" +
+                        " where u.correo=? and u.enable=1");
+    }
 }

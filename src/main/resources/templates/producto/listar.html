@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='lista de productooos')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Lista de productos')">
 </head>
 <body>
 <div id="wrapper">
@@ -14,7 +14,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                Descripcion de Productos
+                Lista de Productos
             </h1>
         </div>
 
@@ -25,8 +25,7 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-action">
-                            ARTESANO
-                            <a class="btn btn-primary right" th:href="@{'/artesano/nuevo'}">agregar</a>
+                            <a class="btn btn-primary right" th:href="@{'/producto/nuevo'}">agregar</a>
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
@@ -34,7 +33,7 @@
                                      role="alert"></div>
 
                                 <table class="table table-striped table-bordered table-hover">
-                                    <thead>
+
                                     <tr class="info">
                                         <th>#</th>
                                         <th class="center">Nombre Producto</th>
@@ -42,9 +41,10 @@
                                         <th class="center">Descripción Producto</th>
                                         <th class="center">Código Desc. Producto</th>
                                         <th class="center">Línea</th>
+                                        <th class="center">Foto</th>
                                     </tr>
-                                    </thead>
-                                    <tbody>
+
+
                                     <tr th:each="producto, info : ${listaProductos}">
                                         <td th:text="${info.index + 1}"></td>
                                         <td th:text="${producto.getNombreproducto()}"></td>
@@ -52,14 +52,13 @@
                                         <td th:text="${producto.getDescripcionproducto()}"></td>
                                         <td th:text="${producto.getCodigodescripcionproducto()}"></td>
                                         <td th:text="${producto.getLinea()}"></td>
-                                        <th class="center"><a href="" class="btn btn-warning" style='width:125px; height:33px'>Ver
-                                            Foto</a></th>
+                                        <th class="center"><a href="" class="btn btn-warning" style='width:125px; height:33px'>Ver</a></th>
                                         <td><a class="btn btn-primary" th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
                                         </td>
                                         <td><a class="btn btn-danger" th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
                                         </td>
                                     </tr>
-                                    </tbody>
+
 
                                 </table>
                             </div>

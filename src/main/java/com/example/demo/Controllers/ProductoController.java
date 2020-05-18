@@ -26,7 +26,7 @@ public class ProductoController {
     }
     @GetMapping("/nuevo")
     public String nuevoProductoFrm(Model model) {
-       return "producto/newFrm";
+       return "producto/editFrm";
     }
 
     @PostMapping("/guardar")
@@ -40,13 +40,13 @@ public class ProductoController {
         return "redirect:/producto";
     }
     @GetMapping("/editar")
-    public String editarProducto(Model model,@RequestParam("id") int id) {
+    public String editarProducto(Model model, @RequestParam("id") int id) {
 
         Optional<Producto> optProduct = productoRepository.findById(id);
 
         if (optProduct.isPresent()) {
             Producto producto = optProduct.get();
-            model.addAttribute("product", producto);
+            model.addAttribute("producto", producto);
             return "producto/editFrm";
         } else {
             return "redirect:/producto";
