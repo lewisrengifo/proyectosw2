@@ -16,11 +16,19 @@ public class TiendaController {
     @Autowired
     TiendaRepository tiendaRepository;
 
+    @GetMapping("lista")
+    public String listar (Model model){
+
+        model.addAttribute("lista", tiendaRepository.findAll());
+
+        return "Tienda/lista";
+    }
+
     @GetMapping("nuevo")
     public String nuevo(@ModelAttribute("tienda") Tienda tienda){
 
 
-        return "tienda/newEdit";
+        return "Tienda/newEdit";
     }
 
     @PostMapping("/guardar")
@@ -42,7 +50,7 @@ public class TiendaController {
         if (opt.isPresent()){
             tienda= opt.get();
             model.addAttribute("tienda", tienda);
-            return "tienda/newEdit";
+            return "Tienda/newEdit";
 
         }else {
             return "redirect:/categoria/lista";

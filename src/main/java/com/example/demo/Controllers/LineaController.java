@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/linea")
+@RequestMapping("linea")
 public class LineaController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class LineaController {
     public String nuevaLinea(@ModelAttribute("linea") Linea linea){
 
 
-        return "linea/newEdit";
+        return "Linea/newEdit";
     }
 
     @PostMapping("/guardar")
@@ -43,7 +43,7 @@ public class LineaController {
         if (opt.isPresent()){
             linea= opt.get();
             model.addAttribute("linea", linea);
-            return "linea/newEdit";
+            return "Linea/newEdit";
 
         }else {
             return "redirect:/categoria/lista";

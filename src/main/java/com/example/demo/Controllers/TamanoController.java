@@ -5,14 +5,12 @@ import com.example.demo.Repository.TamanoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @Controller
+@RequestMapping("tamano")
 public class TamanoController {
 
     @Autowired
@@ -22,7 +20,7 @@ public class TamanoController {
     public String nuevo(@ModelAttribute("tamano") Tamano tamano){
 
 
-        return "tamano/newEdit";
+        return "Tamano/newEdit";
     }
 
     @PostMapping("/guardar")
@@ -44,7 +42,7 @@ public class TamanoController {
         if (opt.isPresent()){
             tamano= opt.get();
             model.addAttribute("tamano", tamano);
-            return "tamano/newEdit";
+            return "Tamano/newEdit";
 
         }else {
             return "redirect:/categoria/lista";
