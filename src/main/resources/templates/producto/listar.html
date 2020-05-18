@@ -55,7 +55,7 @@
                                         <th class="center"><a href="" class="btn btn-warning" style='width:125px; height:33px'>Ver</a></th>
                                         <td><a class="btn btn-primary" th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
                                         </td>
-                                        <td><a class="btn btn-danger" th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
+                                        <td><a class="btn btn-danger" th:href="@{'producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
                                         </td>
                                     </tr>
 
