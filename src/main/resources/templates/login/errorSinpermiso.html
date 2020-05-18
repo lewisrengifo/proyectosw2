@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <title>Acceso Denegado</title>
+</head>
+<body style="background: #ffdad8">
+    <br>
+    <br>
+    <br>
+    <br>
+    <div align="center" width="200px" height="50px">
+        <h1>Acceso Denegado: Usted no puede acceder a este Espacio</h1>
+    </div>
+    <br>
+    <div align="center">
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" class="btn btn-info" value="Ir a Registrarse" />
+        </form>
+    </div>
+</body>
+</html>
