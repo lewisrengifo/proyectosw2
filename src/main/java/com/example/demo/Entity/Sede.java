@@ -10,7 +10,16 @@ public class Sede {
     @Id
     private int idrol;
     private String sede;
-    private int inventariosede;
+
+    public int getIventariosede_idiventariosede() {
+        return iventariosede_idiventariosede;
+    }
+
+    public void setIventariosede_idiventariosede(int iventariosede_idiventariosede) {
+        this.iventariosede_idiventariosede = iventariosede_idiventariosede;
+    }
+
+    private int iventariosede_idiventariosede;
 
     public int getIdrol() {
         return idrol;
@@ -28,11 +37,4 @@ public class Sede {
         this.sede = sede;
     }
 
-    public int getInventariosede() {
-        return inventariosede;
-    }
-
-    public void setInventariosede(int inventariosede) {
-        this.inventariosede = inventariosede;
-    }
 }

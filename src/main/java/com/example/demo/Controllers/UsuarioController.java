@@ -27,7 +27,7 @@ public class UsuarioController {
         return "Usuario/lista";
     }
     @GetMapping("/nuevo")
-    public String nuevoUsuario(Model model){
+    public String nuevoUsuario(Model model, @ModelAttribute Usuario usuario){
         model.addAttribute("listaroles", rolRepository.findAll());
         model.addAttribute("listasedes", sedeRepository.findAll());
         return "Usuario/form";

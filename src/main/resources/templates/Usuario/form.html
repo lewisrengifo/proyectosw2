@@ -4,10 +4,10 @@
 <body>
 <div class="container">
 
-    <h2 th:text="${usuario.id_usuario == 0? 'Nuevo Usuario' : 'Editar Usuario'}">Nuevo/Editar</h2>
+    <h2 th:text="${usuario.idusuario == 0? 'Nuevo Usuario' : 'Editar Usuario'}">Nuevo/Editar</h2>
     <hr/>
     <form method="post" th:action="@{'/usuario/guardar'}" th:object="${usuario}">
-        <input type="hidden" th:field="*{id_usuario}" />
+        <input type="hidden" th:field="*{idusuario}" />
         <div class="form-group">
             <label for="Nombre">Nombre del usuario</label>
             <input type="text" class="form-control" th:field="*{nombre}">
@@ -37,7 +37,7 @@
             </select>
         </div>
         <a th:href="@{'/usuario/lista'}" class="btn btn-danger">Cancelar</a>
-        <button type="submit" class="btn btn-primary" th:text="${usuario.id_usuario == 0? 'Registrar' : 'Actualizar'}">Reg/act</button>
+        <button type="submit" class="btn btn-primary" th:text="${usuario.idusuario == 0? 'Registrar' : 'Actualizar'}">Reg/act</button>
     </form>
 </div>
 </body>
