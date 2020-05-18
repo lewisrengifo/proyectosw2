@@ -49,10 +49,6 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/cambiarestado")
-    public String borrarUsuario(@RequestParam("id") int id, @RequestParam("enable") String ena ,RedirectAttributes redirectAttributes){
-        usuarioRepository.cambiarenable(ena,id);
-        return "Usuario/lista";
-    }
+
 
 }
