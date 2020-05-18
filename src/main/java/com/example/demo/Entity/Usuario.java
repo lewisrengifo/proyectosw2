@@ -6,20 +6,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "usuario")
 public class Usuario implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idusuario;
-    private String nombre;
-    private String apellido;
-    private String dni;
-    private String correo;
-    private String contrasena;
-    private String token;
-    private boolean enable;
-
-
-
     public int getIdusuario() {
         return idusuario;
     }
@@ -28,13 +14,15 @@ public class Usuario implements Serializable {
         this.idusuario = idusuario;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    @Id
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idUsuario")
+    private int idusuario;
+    private String nombre;
+    private String apellido;
+    private String dni;
+    private String telefono;
 
     public String getApellido() {
         return apellido;
@@ -52,6 +40,39 @@ public class Usuario implements Serializable {
         this.dni = dni;
     }
 
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    private String correo;
+    private String contrasena;
+    @Column(nullable = true)
+    private String token;
+    @ManyToOne
+    @JoinColumn(name = "sede_idrol")
+    private Sede sede_idrol;
+    @Column(nullable = true)
+    private boolean enable;
+    @ManyToOne
+    @JoinColumn(name = "rol_idrol")
+    private Rol rol_idrol;
+
+
+
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+
     public String getCorreo() {
         return correo;
     }
@@ -59,6 +80,7 @@ public class Usuario implements Serializable {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+
 
     public String getContrasena() {
         return contrasena;
@@ -76,6 +98,21 @@ public class Usuario implements Serializable {
         this.token = token;
     }
 
+    public Sede getSede_idrol() {
+        return sede_idrol;
+    }
+
+    public void setSede_idrol(Sede sede_idrol) {
+        this.sede_idrol = sede_idrol;
+    }
+
+    public Rol getRol_idrol() {
+        return rol_idrol;
+    }
+
+    public void setRol_idrol(Rol rol_idrol) {
+        this.rol_idrol = rol_idrol;
+    }
     public boolean isEnable() {
         return enable;
     }
@@ -83,5 +120,6 @@ public class Usuario implements Serializable {
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
+
 
 }
