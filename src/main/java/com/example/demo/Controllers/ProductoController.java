@@ -22,13 +22,11 @@ public class ProductoController {
     @GetMapping(value = {"", "/"})
     public String listaProductos(Model model) {
         model.addAttribute("listaProductos", productoRepository.findAll());
-        return "Producto/listar";
+        return "producto/listar";
     }
     @GetMapping("/nuevo")
     public String nuevoProductoFrm(Model model) {
-        ////model.addAttribute("listaCategorias", categoryRepository.findAll());
-        ////model.addAttribute("listaProveedores",supplierRepository.findAll());
-        return "Producto/newFrm";
+       return "producto/newFrm";
     }
 
     @PostMapping("/guardar")
@@ -49,9 +47,7 @@ public class ProductoController {
         if (optProduct.isPresent()) {
             Producto producto = optProduct.get();
             model.addAttribute("product", producto);
-            ///model.addAttribute("listaCategorias", categoryRepository.findAll());
-            ///model.addAttribute("listaProveedores",supplierRepository.findAll());
-            return "Producto/editFrm";
+            return "producto/editFrm";
         } else {
             return "redirect:/producto";
         }
