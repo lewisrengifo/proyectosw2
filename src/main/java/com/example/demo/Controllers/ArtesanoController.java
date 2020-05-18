@@ -20,27 +20,33 @@ public class ArtesanoController {
 
     @Autowired
     ArtesanoRepository artesanoRepository;
+    @Autowired
+    ComunidadRepository comunidadRepository;
 
     @GetMapping("")
     public String listaArtesano(Model model){
         model.addAttribute("listaArtesano",artesanoRepository.findAll());
+        model.addAttribute("listacomunidades",comunidadRepository.findAll());
         return "artesano/lista";
 
     }
 
     @GetMapping("/nuevo")
-    public String nuevoArtesano(@ModelAttribute("artesano") Artesano a){
-
+    public String nuevoArtesano(@ModelAttribute("artesano") Artesano a,Model model){
+        model.addAttribute("listacomunidades",comunidadRepository.findAll());
         return "artesano/newEdit";
     }
 
     @GetMapping("/editar")
     public String editarArtesano(@ModelAttribute("artesano") Artesano artesano,
                                   @RequestParam("id") int id, Model model){
+
         Optional<Artesano> optionalArtesano = artesanoRepository.findById(id);
         if(optionalArtesano.isPresent()){
             artesano = optionalArtesano.get();
             model.addAttribute("artesano",artesano);
+            model.addAttribute("listacomunidades",comunidadRepository.findAll());
+
             return "artesano/newEdit";
         }
         else {
@@ -78,5 +84,14 @@ public class ArtesanoController {
             return "redirect:/artesano";
         }
     }
+
+    @PostMapping("/buscar")
+    public String filtarArtesanoPorComunidad(@RequestParam("idcomunidad") int idcomunidad,Model model){
+
+        model.addAttribute("listaArtesanos",artesanoRepository.filtarPorComunidad(idcomunidad));
+        model.addAttribute("listacomunidades",comunidadRepository.findAll());
+        return "artesano/lista";
+    }
+
 
 }
