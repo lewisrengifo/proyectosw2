@@ -23,13 +23,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("correo")
                 .defaultSuccessUrl("/redirectByRol", true);
 
-        http.logout().logoutSuccessUrl("/artesano/inventario")
+        http.logout().logoutSuccessUrl("/loginForm")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
         ;
 
-        http.authorizeRequests().antMatchers("/categoria","/categoria/**").hasAuthority("Administrador");
-         http.authorizeRequests().antMatchers("/comunidad","/comunidad/**").hasAnyAuthority("Administrador","Gestor principal");
+        http.authorizeRequests().antMatchers("/comunidad","/comunidad/**").hasAuthority("Administrador");
+         http.authorizeRequests().antMatchers("/categoria","/categoria/**").hasAnyAuthority("Administrador","Gestor principal");
          http.authorizeRequests().anyRequest().permitAll();
     }
 
