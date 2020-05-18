@@ -28,4 +28,60 @@ public class Producto {
 
     @Column(name = "foto")
     private String foto;
+
+    public int getIdproducto() {
+        return idproducto;
+    }
+
+    public void setIdproducto(int idproducto) {
+        this.idproducto = idproducto;
+    }
+
+    public String getNombreproducto() {
+        return nombreproducto;
+    }
+
+    public void setNombreproducto(String nombreproducto) {
+        this.nombreproducto = nombreproducto;
+    }
+
+    public String getCodigoproducto() {
+        return codigoproducto;
+    }
+
+    public void setCodigoproducto(String codigoproducto) {
+        this.codigoproducto = codigoproducto;
+    }
+
+    public String getDescripcionproducto() {
+        return descripcionproducto;
+    }
+
+    public void setDescripcionproducto(String descripcionproducto) {
+        this.descripcionproducto = descripcionproducto;
+    }
+
+    public String getCodigodescripcionproducto() {
+        return codigodescripcionproducto;
+    }
+
+    public void setCodigodescripcionproducto(String codigodescripcionproducto) {
+        this.codigodescripcionproducto = codigodescripcionproducto;
+    }
+
+    public int getLinea() {
+        return linea;
+    }
+
+    public void setLinea(int linea) {
+        this.linea = linea;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
 }
