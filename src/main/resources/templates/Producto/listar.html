@@ -105,6 +105,7 @@
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr class="info">
+                                <th>#</th>
                                 <th class="center">Nombre Producto</th>
                                 <th class="center">Código Producto</th>
                                 <th class="center">Descripción Producto</th>
@@ -113,18 +114,18 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="product, info : ${listaProductos}">
+                            <tr th:each="producto, info : ${listaProductos}">
                                 <td th:text="${info.index + 1}"></td>
-                                <td th:text="${product.getNombreproducto()}"></td>
-                                <td th:text="${product.getCodigoproducto()}"></td>
-                                <td th:text="${product.getDescripcionproducto()}"></td>
-                                <td th:text="${product.getCodigodescripcionproducto()}"></td>
-                                <td th:text="${product.getLineaIdLinea()}"></td>
+                                <td th:text="${producto.getNombreproducto()}"></td>
+                                <td th:text="${producto.getCodigoproducto()}"></td>
+                                <td th:text="${producto.getDescripcionproducto()}"></td>
+                                <td th:text="${producto.getCodigodescripcionproducto()}"></td>
+                                <td th:text="${producto.getLinea()}"></td>
                                 <th class="center"><a href="" class="btn btn-warning" style='width:125px; height:33px'>Ver
                                     Foto</a></th>
-                                <td><a class="btn btn-primary" th:href="@{'/producto/editar' + '?id=' + ${product.getIdproducto()}}">Editar</a>
+                                <td><a class="btn btn-primary" th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
                                 </td>
-                                <td><a class="btn btn-danger" th:href="@{'/producto/borrar' + '?id=' + ${product.getIdproducto()}}">Borrar</a>
+                                <td><a class="btn btn-danger" th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
                                 </td>
                             </tr>
                             </tbody>
