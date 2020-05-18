@@ -70,14 +70,14 @@
             <li sec:authorize="hasAnyAuthority('Administrador','Gestor principal')">
                 <a  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Stock</a>
             </li>
-            <li>
-                <a  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Asignacion</a>
+            <li sec:authorize="hasAnyAuthority('Administrador')">
+                <a  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Lista de Usuarios</a>
             </li>
 
             <li sec:authorize="hasAnyAuthority('Administrador')">
                 <a  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Lista de Sedes</a>
             </li>
-            <li sec:authorize="hasAnyAuthority('Gestor principal')">
+            <li sec:authorize="hasAnyAuthority('Gestor principal', 'sede')">
                 <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> descripciton de productos <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>

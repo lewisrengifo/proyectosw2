@@ -28,10 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
         ;
 
-        http.authorizeRequests().antMatchers("/comunidad", "/comunidad/**", "/usuario", "/usuario/**").hasAuthority("Administrador");
-        http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority("Administrador", "Gestor principal");
-        http.authorizeRequests().antMatchers("/producto", "/producto/**").hasAnyAuthority("Administrador", "Gestor principal");
-        http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Administrador", "sede");
+        http.authorizeRequests().antMatchers( "/usuario", "/usuario/**").hasAuthority("Administrador");
+        http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority( "Gestor principal", "sede");
+        http.authorizeRequests().antMatchers("/producto", "/producto/**", "/comunidad", "/comunidad/**").hasAnyAuthority("Gestor principal", "sede");
+        http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Gestor principal", "sede");
         http.authorizeRequests().anyRequest().permitAll();
     }
 
