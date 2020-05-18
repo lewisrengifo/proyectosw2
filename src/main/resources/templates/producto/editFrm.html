@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'producto')"></head>
 <body>
 
 <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
 
 
-<nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'categoria')"></nav>
+<nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'producto')"></nav>
 
 
 <div id="page-wrapper">
@@ -16,37 +16,37 @@
             <div  class="col-md-8">
                 <div class="card">
                     <div class="container">
-                        <h2 th:text="${producto.idproducto == 0? 'Nuevo producto' : 'Editar producto'}">
+                        <h2 th:text="${producto.getIdproducto() == 0? 'Nuevo producto' : 'Editar producto'}">
                             Nuevo/Editar</h2>
                         <hr/>
                         <form method="post" th:action="@{'/producto/guardar'}" th:object="${producto}">
-                            <input type="hidden" th:field="*{idproducto}"/>
+                            <input type="hidden" th:field="*{getIdproducto()}"/>
 
                             <div class="form-group">
                                 <label for="nombreproducto">Nombre producto</label>
-                                <input type="text" class="form-control" th:field="*{nombreproducto}" style="width: 25%">
-                                <div class="text-danger" th:if="${#fields.hasErrors('nombreartesano')}" th:errors="*{nombreartesano}"></div>
+                                <input type="text" class="form-control" th:field="*{getNombreproducto()}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('nombreartesano')}" th:errors="*{getNombreproducto()}"></div>
                             </div>
                             <div class="form-group">
                                 <label for="codigoproducto">Código Producto</label>
-                                <input type="text" class="form-control" th:field="*{codigoproducto}" style="width: 25%">
-                                <div class="text-danger" th:if="${#fields.hasErrors('codigoproducto')}" th:errors="*{codigoproducto}"></div>
+                                <input type="text" class="form-control" th:field="*{getCodigoproducto()}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('codigoproducto')}" th:errors="*{getCodigoproducto()}"></div>
                             </div>
                             <div class="form-group">
                                 <label for="descripcionproducto">Descripción Producto</label>
-                                <input type="text" class="form-control" th:field="*{descripcionproducto}" style="width: 25%">
-                                <div class="text-danger" th:if="${#fields.hasErrors('descripcionproducto')}" th:errors="*{descripcionproducto}"></div>
+                                <input type="text" class="form-control" th:field="*{getDescripcionproducto()}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('descripcionproducto')}" th:errors="*{getDescripcionproducto()}"></div>
                             </div>
                             <div class="form-group">
                                 <label for="codigodescripcionproducto">Código descripción producto</label>
-                                <input type="text" class="form-control" th:field="*{codigodescripcionproducto}" style="width: 25%">
-                                <div class="text-danger" th:if="${#fields.hasErrors('codigodescripcionproducto')}" th:errors="*{codigodescripcionproducto}"></div>
+                                <input type="text" class="form-control" th:field="*{getCodigodescripcionproducto()}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('codigodescripcionproducto')}" th:errors="*{getCodigodescripcionproducto()}"></div>
 
                             </div>
                             <div class="form-group">
                                 <label for="linea">Línea producto</label>
-                                <input type="text" class="form-control" th:field="*{linea}" style="width: 25%">
-                                <div class="text-danger" th:if="${#fields.hasErrors('linea')}" th:errors="*{linea}"></div>
+                                <input type="text" class="form-control" th:field="*{getLinea()}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('linea')}" th:errors="*{getLinea()}"></div>
 
                             </div>
                             <a th:href="@{'/producto'}" class="btn btn-danger">Cancelar</a>
