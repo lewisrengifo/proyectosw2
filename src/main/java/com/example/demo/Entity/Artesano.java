@@ -28,18 +28,18 @@ public class Artesano  {
     @Size(min=2,max = 4, message = "el codigo no puede ser menor a 2 caracteres ni mayor a 4 caracteres")
     private String codigoartesano;
 
-    public Comunidad getComunidad_idcomunidad() {
-        return comunidad_idcomunidad;
+
+     @ManyToOne
+     @JoinColumn(name = "comunidad_idcomunidad")
+    private Comunidad comunidad;
+
+    public Comunidad getComunidad() {
+        return comunidad;
     }
 
-    public void setComunidad_idcomunidad(Comunidad comunidad_idcomunidad) {
-        this.comunidad_idcomunidad = comunidad_idcomunidad;
+    public void setComunidad(Comunidad comunidad) {
+        this.comunidad = comunidad;
     }
-
-    @Column(nullable = false)
-    @ManyToOne
-    @JoinColumn(name = "comunidad_idcomunidad")
-    private Comunidad comunidad_idcomunidad;
 
     public int getIdartesano() {
         return idartesano;

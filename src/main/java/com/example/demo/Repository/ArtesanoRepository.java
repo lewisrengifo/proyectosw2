@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface ArtesanoRepository extends JpaRepository<Artesano,Integer> {
 
-    List<Artesano> findBy(String nombre);
 
     @Query(value = "select * from artesano where nombreartesano = ?1",
             nativeQuery = true)
