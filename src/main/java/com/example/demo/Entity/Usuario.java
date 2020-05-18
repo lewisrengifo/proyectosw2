@@ -1,23 +1,25 @@
 package com.example.demo.Entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table
-public class Usuario {
+@Table(name = "usuario")
+public class Usuario implements Serializable {
     @Id
     @Column(name = "idUsuario")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_usuario;
     private String nombre;
     private String correo;
-    private String contraseña;
+    private String contrasena;
     @Column(nullable = true)
     private String token;
     @ManyToOne
     @JoinColumn(name = "idrol")
     private Sede sede_idrol;
     @Column(nullable = true)
-    private String enable;
+    private boolean enable;
     @ManyToOne
     @JoinColumn(name = "idrol")
     private Rol rol_idrol;
@@ -30,6 +32,7 @@ public class Usuario {
         this.id_usuario = id_usuario;
     }
 
+
     public String getNombre() {
         return nombre;
     }
@@ -37,6 +40,7 @@ public class Usuario {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
 
     public String getCorreo() {
         return correo;
@@ -46,12 +50,13 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public String getContraseña() {
-        return contraseña;
+
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getToken() {
@@ -70,14 +75,6 @@ public class Usuario {
         this.sede_idrol = sede_idrol;
     }
 
-    public String getEnable() {
-        return enable;
-    }
-
-    public void setEnable(String enable) {
-        this.enable = enable;
-    }
-
     public Rol getRol_idrol() {
         return rol_idrol;
     }
@@ -85,4 +82,13 @@ public class Usuario {
     public void setRol_idrol(Rol rol_idrol) {
         this.rol_idrol = rol_idrol;
     }
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+
 }
