@@ -14,4 +14,7 @@ public interface ArtesanoRepository extends JpaRepository<Artesano,Integer> {
     @Query(value = "select * from artesano where nombreartesano = ?1",
             nativeQuery = true)
     List<Artesano> buscarArtPorCompName(String nombre);
+
+    @Query(value="select * from artesano where comunidad_idcomunidad=?1",nativeQuery=true)
+    List<Artesano> filtarPorComunidad(int idcomunidad);
 }

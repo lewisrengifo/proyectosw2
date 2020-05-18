@@ -32,7 +32,6 @@
                                 <label for="codigocomunidad">codigo Comunidad</label>
                                 <input type="text" class="form-control" th:field="*{codigocomunidad}" style="width: 25%">
                                 <div class="text-danger" th:if="${#fields.hasErrors('codigocomunidad')}" th:errors="*{codigocomunidad}"></div>
-
                             </div>
                             <a th:href="@{'/comunidad'}" class="btn btn-danger">Cancelar</a>
                             <button type="submit" class="btn btn-primary"
