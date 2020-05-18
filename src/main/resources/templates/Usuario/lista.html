@@ -14,7 +14,7 @@
             <th>Nombre</th>
             <th>Correo</th>
 
-            <th>Sede</th>
+
 
             <th>Rol</th>
             <th>Estado</th>
@@ -26,13 +26,13 @@
             <td th:text="${info.index + 1}"></td>
             <td th:text="${usuario.nombre}"></td>
             <td th:text="${usuario.correo}"></td>
-            <td th:text="${usuario.sede_idrol}"></td>
 
-            <td th:text="${usuario.rol_idrol}"></td>
+
+            <td th:text="${usuario.rol_idrol.nombre}"></td>
             <td th:text="${usuario.enable}"></td>
 
             <td><a class="btn btn-primary"
-                   th:href="@{'/usuario/editar' + '?id=' + ${usuario.id_usuario}}">Editar</a>
+                   th:href="@{'/usuario/editar' + '?id=' + ${usuario.idusuario}}">Editar</a>
             </td>
 
         </tr>

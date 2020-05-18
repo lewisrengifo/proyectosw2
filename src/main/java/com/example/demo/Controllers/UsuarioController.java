@@ -33,7 +33,12 @@ public class UsuarioController {
         return "Usuario/form";
     }
     @PostMapping("/guardar")
-    public String guardar(Usuario usuario){
+    public String guardar(@ModelAttribute("usuario") Usuario usuario, RedirectAttributes redirectAttributes){
+        if (usuario.getIdusuario() == 0) {
+            redirectAttributes.addFlashAttribute("msg", "Usuario creado exitosamente");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
+        }
         usuarioRepository.save(usuario);
         return "redirect: /usuario";
     }

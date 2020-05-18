@@ -6,31 +6,62 @@ import java.io.Serializable;
 @Entity
 @Table(name = "usuario")
 public class Usuario implements Serializable {
+    public int getIdusuario() {
+        return idusuario;
+    }
+
+    public void setIdusuario(int idusuario) {
+        this.idusuario = idusuario;
+    }
+
     @Id
-    @Column(name = "idUsuario")
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_usuario;
+    @Column(name = "idUsuario")
+    private int idusuario;
     private String nombre;
+    private String apellido;
+    private String dni;
+    private String telefono;
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
     private String correo;
     private String contrasena;
     @Column(nullable = true)
     private String token;
     @ManyToOne
-    @JoinColumn(name = "idrol")
+    @JoinColumn(name = "sede_idrol")
     private Sede sede_idrol;
     @Column(nullable = true)
     private boolean enable;
     @ManyToOne
-    @JoinColumn(name = "idrol")
+    @JoinColumn(name = "rol_idrol")
     private Rol rol_idrol;
 
-    public int getId_usuario() {
-        return id_usuario;
-    }
 
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
-    }
 
 
     public String getNombre() {
