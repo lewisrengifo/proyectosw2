@@ -33,6 +33,7 @@ public class ArtesanoController {
 
     @GetMapping("/nuevo")
     public String nuevoArtesano(@ModelAttribute("artesano") Artesano a,Model model){
+
         model.addAttribute("listacomunidades",comunidadRepository.findAll());
         return "artesano/newEdit";
     }

@@ -48,10 +48,11 @@
                                 <label for="comunidad">ESCOGER LA COMUNIDAD</label>
 
                                     <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
+                                        <option value="0">Seleccionar</option>
                                         <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
                                                 th:text="${co.nombrecomunidad}"
-                                                th:if="${artesano.nombreartesano != null}"
-                                               th:selected="${artesano.comunidad.idcomunidad==co.idcomunidad}"
+                                                th:selected="${artesano.comunidad.getIdcomunidad() == co.idcomunidad}">
+
 
                                         </option>
                                     </select>
