@@ -37,31 +37,32 @@ public class ProductoController {
     LineaRepository lineaRepository;
 
     @GetMapping(value = {"", "/"})
-    public String listaProduct(@RequestParam Map<String,Object> params,Model model) {
+    public String listaProduct(@RequestParam Map<String, Object> params, Model model) {
 
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        PageRequest pageRequest = PageRequest.of(page,10);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Producto> pageProduct = productoServiceApi.getAll(pageRequest);
 
         int totalPage = pageProduct.getTotalPages();
-        if(totalPage > 0 ){
-            List<Integer> pages = IntStream.rangeClosed(1,totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages",pages);
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
         }
 
         model.addAttribute("listaProductos", pageProduct.getContent());
-        model.addAttribute("current",page + 1);
-        model.addAttribute("next",page + 2);
-        model.addAttribute("prev",page);
-        model.addAttribute("last",totalPage);
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
 
         return "producto/listar";
     }
+
     @GetMapping("/nuevo")
-    public String nuevoProductoFrm(Model model ,@ModelAttribute("producto") Producto producto) {
-       return "producto/editFrm";
+    public String nuevoProductoFrm(Model model, @ModelAttribute("producto") Producto producto) {
+        return "producto/editFrm";
     }
 
     @PostMapping("/guardar")
@@ -75,110 +76,71 @@ public class ProductoController {
         productoRepository.save(producto);
         return "redirect:/producto";
     }
+
     @GetMapping("/editar")
     public String editarProducto(Model model, @RequestParam("id") int id, @ModelAttribute("producto") Producto producto) {
 
         Optional<Producto> optProduct = productoRepository.findById(id);
 
         if (optProduct.isPresent()) {
-             producto = optProduct.get();
+            producto = optProduct.get();
             model.addAttribute("producto", producto);
             return "producto/editFrm";
         } else {
             return "redirect:/producto";
         }
     }
+
     @GetMapping("/borrar")
     public String borrarProducto(Model model,
-                                      @RequestParam("id") int id,
-                                      RedirectAttributes attr) {
+                                 @RequestParam("id") int id,
+                                 RedirectAttributes attr) {
 
         Optional<Producto> optProduct = productoRepository.findById(id);
 
         if (optProduct.isPresent()) {
             productoRepository.deleteById(id);
-            attr.addFlashAttribute("msg","Producto borrado exitosamente");
+            attr.addFlashAttribute("msg", "Producto borrado exitosamente");
         }
         return "redirect:/producto";
 
     }
 
     @PostMapping("/search")
-    public String buscarProducto (@RequestParam("search") String busqueda,@RequestParam Map<String,Object> params, Model model){
+    public String buscarProducto(String busca,@RequestParam Map<String, Object> params, Model model) {
 
+        String busqueda = (String) params.get("search");
 
-        String search;
         PageRequest pageRequest;
-        int  page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        Page<Producto> pageProduct ;
+        Page<Producto> pageProduct;
         int totalPage;
-        switch (busqueda) {
-            case "Tradicional":
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
 
 
-                pageRequest = PageRequest.of(page,10);
-                pageProduct = productoServiceApi.getEver1(busqueda,pageRequest);
+
+
+                pageRequest = PageRequest.of(page, 10);
+                pageProduct = productoServiceApi.getEver(busqueda, pageRequest);
                 totalPage = pageProduct.getTotalPages();
-                if(totalPage > 0 ){
-                    List<Integer> pages = IntStream.rangeClosed(1,totalPage).boxed().collect(Collectors.toList());
-                    model.addAttribute("pages",pages);
+                if (totalPage > 0) {
+                    List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                    model.addAttribute("pages", pages);
                 }
+
                 model.addAttribute("busqueda", busqueda);
                 model.addAttribute("listaProductos", pageProduct.getContent());
-                model.addAttribute("current",page + 1);
-                model.addAttribute("next",page + 2);
-                model.addAttribute("prev",page);
-                model.addAttribute("last",totalPage);
-
-
-                break;
-            case "Mosqoy":
-
-
-                pageRequest = PageRequest.of(page,10);
-                pageProduct = productoServiceApi.getEver2(busqueda,pageRequest);
-                totalPage = pageProduct.getTotalPages();
-                if(totalPage > 0 ){
-                    List<Integer> pages = IntStream.rangeClosed(1,totalPage).boxed().collect(Collectors.toList());
-                    model.addAttribute("pages",pages);
-                }
-                model.addAttribute("busqueda", busqueda);
-                model.addAttribute("listaProductos", pageProduct.getContent());
-                model.addAttribute("current",page + 1);
-                model.addAttribute("next",page + 2);
-                model.addAttribute("prev",page);
-                model.addAttribute("last",totalPage);
-                break;
-            case "Fibras":
-
-
-                pageRequest = PageRequest.of(page,10);
-                pageProduct = productoServiceApi.getEver3(busqueda,pageRequest);
-                totalPage = pageProduct.getTotalPages();
-                if(totalPage > 0 ){
-                    List<Integer> pages = IntStream.rangeClosed(1,totalPage).boxed().collect(Collectors.toList());
-                    model.addAttribute("pages",pages);
-                }
-                model.addAttribute("busqueda", busqueda);
-                model.addAttribute("listaProductos", pageProduct.getContent());
-                model.addAttribute("current",page + 1);
-                model.addAttribute("next",page + 2);
-                model.addAttribute("prev",page);
-                model.addAttribute("last",totalPage);
-                break;
-        }
-
+                model.addAttribute("current", page + 1);
+                model.addAttribute("next", page + 2);
+                model.addAttribute("prev", page);
+                model.addAttribute("last", totalPage);
 
         return "producto/listar";
-
-
-
-
-
-
-    }
-
-
+       }
 }
+
+
+
+
+

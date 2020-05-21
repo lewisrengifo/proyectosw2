@@ -7,9 +7,8 @@ import org.springframework.data.domain.Pageable;
 public interface ProductoServiceApi {
 
     Page<Producto> getAll(Pageable pageable);
-    Page<Producto> getEver1(String search ,Pageable pageable);
-    Page<Producto> getEver2(String search ,Pageable pageable);
-    Page<Producto> getEver3(String search ,Pageable pageable);
+    Page<Producto> getEver(String search ,Pageable pageable);
+
 
 
 
