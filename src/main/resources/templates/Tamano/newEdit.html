@@ -36,9 +36,12 @@
 <nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'categoria')"></nav>
 
 <div id="page-wrapper" >
+
+    <h2  class="page-header" th:text="${tamano.idtamano == 0? 'Nuevo Tamaño' : 'editar línea'}">Nuevo/Editar</h2>
+    <hr/>
+
     <div class="container">
-        <h2 th:text="${tamano.idtamano == 0? 'Nuevo Tamaño' : 'editar línea'}">Nuevo/Editar</h2>
-        <hr/>
+
         <form method="post" th:action="@{'/tamano/guardar'}" th:object="${tamano}">
             <input type="hidden" th:field="*{idtamano}" />
             <div class="form-group">

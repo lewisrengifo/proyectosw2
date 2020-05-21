@@ -18,17 +18,29 @@
             </h1>
         </div>
 
+
         <!-- /. COMUNIDAD  -->
         <div id="page-inner">
+            <div class="col-xs-4">
+                <form class="header " method="post" th:action="@{'/producto/search'}">
+                    <input type="text" class="form-control" placeholder="Texto a buscar" name="search">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary " type="submit">Buscar</button>
+                        <a th:href="@{'/producto'}" class="btn btn-outline-danger">Limpiar</a>
+                    </div>
+                </form>
+            </div>
+
+
             <!-- /. COMUNIDAD  -->
-            <div class="row">
-                <div class="col-md-8">
+            <div class="row " >
+                <div class="col-md-8 padding">
                     <div class="card">
                         <div class="card-action">
                             <a class="btn btn-primary right" th:href="@{'/producto/nuevo'}">agregar</a>
                         </div>
                         <div class="card-content">
-                            <div class="table">
+                            <div class="table-responsive">
                                 <div th:if="${msgAr != null}" th:text="${msgAr}" class="alert alert-success"
                                      role="alert"></div>
 
@@ -51,8 +63,8 @@
                                             <td th:text="${producto.getCodigoproducto()}"></td>
                                             <td th:text="${producto.getDescripcionproducto()}"></td>
                                             <td th:text="${producto.getCodigodescripcionproducto()}"></td>
-                                            <td th:text="${producto.getLinea()}"></td>
-                                            <th class="center"><a href="" style='width:125px; height:33px'>Ver</a></th>
+                                            <td th:text="${producto.getLinea().nombrelinea}"></td>
+                                            <th class="center"><a href="" style='width:125px; height:33px'> Ver</a></th>
                                             <td><a th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
                                             </td>
                                             <td><a th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
@@ -66,9 +78,11 @@
 
                                             <ul class="pagination justify-content-center">
                                                 <li class ="page-item" th:classappend="${prev == 0 ? 'disabled': '' }">
-                                                    <a class="page-link" th:href="@{'/producto' + '?page=' + ${prev}} "> Anterior </a>
+                                                    <a class="page-link"  th:if="${busqueda}" th:href="@{'/producto/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
+                                                    <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${prev}} "> Anterior </a>
                                                 <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
-                                                    <a class="page-link" th:href="@{'/producto' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                                    <a class="page-link" th:if="${busqueda}" th:href="@{'/producto/search' + '?page=' + ${page} + '&' + 'search='+ ${busqueda}} " th:text="${page}"  ></a>
+                                                    <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${page}} " th:text="${page}"  ></a>
                                                 </li>
                                                 <li class ="page-item" th:classappend="${current == last ? 'disabled': '' }">
                                                     <a class="page-link" th:href="@{'/producto' + '?page=' + ${next}} "> Siguiente </a>

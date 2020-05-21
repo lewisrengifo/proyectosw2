@@ -18,5 +18,22 @@ public class ProductoService implements ProductoServiceApi {
         return productoRepository.findAll( pageable);
     }
 
+    @Override
+    public Page<Producto> getEver1(String search, Pageable pageable) {
+        return productoRepository.obtenerFiltroProductoTradicional(search, pageable);
+    }
+
+    @Override
+    public Page<Producto> getEver2(String search, Pageable pageable) {
+        return productoRepository.obtenerFiltroProductoMosqoy(search, pageable);
+    }
+
+    @Override
+    public Page<Producto> getEver3(String search, Pageable pageable) {
+        return productoRepository.obtenerFiltroProductoFibras(search, pageable);
+    }
+
+
+
 
 }
