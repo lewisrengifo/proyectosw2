@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='lista de productooos')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Lista de Comunidades')">
 </head>
 <body>
 <div id="wrapper">
@@ -14,18 +14,17 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                Descripcion de Productos
+                Comunidades
             </h1>
         </div>
 
             <!-- /. COMUNIDAD  -->
             <div id="page-inner">
                 <!-- /. COMUNIDAD  -->
-                <div class="row">
-                    <div class="col-md-8">
+                <div class="row " >
+                    <div class="col-md-8 padding">
                         <div class="card">
                             <div class="card-action">
-                                COMUNIDAD
                                 <a class="btn btn-primary right" th:href="@{'/comunidad/nuevo'}">agregar</a>
                             </div>
                             <div class="card-content">
@@ -38,7 +37,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>NOMBRE</th>
-                                            <th>CODIGO</th>
+                                            <th>CÓDIGO</th>
                                             <th></th>
                                             <th></th>
                                         </tr>

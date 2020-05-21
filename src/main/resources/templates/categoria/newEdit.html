@@ -19,9 +19,9 @@
                         <div class="card">
                         <div class="container padding">
 
-                            <hr>
+
                             <div class="alert alert-success" style="width: 40%" role="alert" th:if="${mensajeIgual != null}" th:text="${mensajeIgual}"></div>
-                            <hr/>
+
                             <form method="post" th:action="@{'/categoria/guardar'}" th:object="${categoria}">
                                 <input type="hidden" th:field="*{idcategoria}"/>
                                 <div class="form-group">
@@ -34,8 +34,8 @@
                                     <input type="text" class="form-control" th:field="*{codigocategoria}" style="width: 25%">
                                     <div class="text-danger" th:if="${#fields.hasErrors()}" th:errors="*{codigocategoria}"></div>
                                 </div>
-                                <a th:href="@{'/categoria'}" >Cancelar</a>
-                                <button type="submit"
+                                <a th:href="@{'/categoria'}" class=" btn btn-info" >Cancelar</a>
+                                <button type="submit" class=" btn btn-info rigth"
                                         th:text="${categoria.idcategoria == 0? 'Registrar' : 'Actualizar'}">Reg/act
                                 </button>
                             </form>
