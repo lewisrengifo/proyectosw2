@@ -23,7 +23,7 @@ public class ArtesanoController {
     @Autowired
     ComunidadRepository comunidadRepository;
 
-    @GetMapping("")
+    @GetMapping(value = {"","/"})
     public String listaArtesano(Model model){
         model.addAttribute("listaArtesano",artesanoRepository.findAll());
         model.addAttribute("listacomunidades",comunidadRepository.findAll());

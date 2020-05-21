@@ -13,19 +13,22 @@ public class Artesano  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int idartesano;
-    @Column(nullable = false)
+
     @NotBlank(message = "El texto no puede estar vacio")
-    @Size(max = 45, message = "el nombre no puede poseer más de 45 caracteres")
+    @Size(max = 45, message = "el nombre NO puede poseer más de 45 caracteres")
     private String nombreartesano;
-    @Column(nullable = false)
-    @NotBlank(message = "El texto no puede estar vacio")
-    @Size(max = 45, message = "el apellido paterno no puede poseer más de 45 caracteres")
+
+
+    @NotBlank(message = "El texto NO puede estar vacio")
+    @Size(max = 45, message = "el apellido paterno NO puede poseer más de 45 caracteres")
     private String apellidopaterno;
-    @Size(max = 45, message = "el apellido materno no puede poseer más de 45 caracteres")
+
+    @Size(max = 45, message = "el apellido materno NO puede poseer más de 45 caracteres")
     private String apellidomaterno;
-    @Column(nullable = false)
-    @NotBlank(message = "El texto no puede estar vacio")
-    @Size(min=2,max = 4, message = "el codigo no puede ser menor a 2 caracteres ni mayor a 4 caracteres")
+
+
+    @NotBlank(message = "El texto NO puede estar vacio")
+    @Size(min=2,max = 4, message = "el codigo NO puede ser menor a 2 caracteres ni mayor a 4 caracteres")
     private String codigoartesano;
 
 
