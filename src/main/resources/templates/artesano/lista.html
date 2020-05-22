@@ -26,8 +26,9 @@
                     <div class="card">
                         <div class="form-group">
                             <label for="supplier">ESCOGER LA COMUNIDAD</label>
-                            <form method="post" th:action="@{'/artesano/buscar'}" style="width: 50%" >
-                                <select class="form-control" name="idcomunidad" id="supplier">
+                            <form method="post" th:action="@{'/artesano/filtroComunidad'}" style="width: 50%" >
+                                <select class="form-control" name="filtroComunidad" id="supplier">
+                                    <option value="0"> selecionar</option>
                                     <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
                                             th:text="${co.nombrecomunidad}"
                                             ></option>
@@ -36,6 +37,15 @@
                                 <button type="submit" class="btn btn-primary">filtrar</button>
                             </form>
                         </div>
+
+                        <div>
+                            <form method="post" th:action="@{/artesano/buscador}">
+                                <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar" aria-label="Search" style="width: 40%">
+                                <button type="submit" class="btn btn-primary">buscar</button>
+
+                            </form>
+                        </div>
+
                         <div class="card-action">
                             ARTESANO
                             <a class="btn btn-primary right" th:href="@{'/artesano/nuevo'}">agregar</a>

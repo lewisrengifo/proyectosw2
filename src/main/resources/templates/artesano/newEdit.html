@@ -20,7 +20,8 @@
                         <br>
                         <form method="post" th:action="@{'/artesano/guardar'}" th:object="${artesano}">
                             <input type="hidden" th:field="*{idartesano}"/>
-
+                            <div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                                 role="alert"></div>
                             <div class="form-group">
                                 <label for="nombrearteano">Nombre Artesano</label>
                                     <input type="text" class="form-control" th:field="*{nombreartesano}" style="width: 25%">
