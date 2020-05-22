@@ -75,18 +75,21 @@
                                 <div class="row">
                                         <div class="col-md-4"></div>
                                     <div class="col-md-8">
-
-                                            <ul th:if="${last != 1}" class="pagination justify-content-center">
-                                                <li class ="page-item" th:classappend="${prev == 0 ? 'disabled': '' }">
-                                                    <a class="page-link"  th:if="${busqueda}" th:href="@{'/producto/search' + '?page=' + ${prev}}"> Anterior </a>
+                                        <ul th:if="${last != 1}" class="pagination justify-content-center">
+                                                <li class ="page-item" th:if="${current != 1 }">
+                                                    <a class="page-link"  th:if="${busqueda }" th:href="@{'/producto/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
                                                     <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${prev}} "> Anterior </a>
+                                               </li>
+
                                                 <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
-                                                    <a class="page-link" th:if="${busqueda}" th:href="@{'/producto/search' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                                    <a class="page-link" th:if="${busqueda}" th:href="@{'/producto/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
                                                     <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${page}} " th:text="${page}"  ></a>
                                                 </li>
-                                                <li class ="page-item" th:classappend="${current == last ? 'disabled': '' }">
-                                                    <a class="page-link" th:href="@{'/producto' + '?page=' + ${next}} "> Siguiente </a>
 
+                                                <li class ="page-item" th:if="${current != last }">
+                                                    <a class="page-link"  th:if="${busqueda}" th:href="@{'/producto/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
+                                                    <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${next}} "> Siguiente </a>
+                                                </li>
 
                                             </ul>
 
