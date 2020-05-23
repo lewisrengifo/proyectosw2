@@ -28,7 +28,7 @@ public class Artesano  {
 
 
     @NotBlank(message = "El texto NO puede estar vacio")
-    @Size(min=2,max = 4, message = "el codigo debe tener como mínimo 2 caracteres y máximo 3 caracteres")
+    @Size(min=2,max = 4, message = "el codigo debe tener como mínimo 2 caracteres y máximo 4 caracteres")
     private String codigoartesano;
 
 

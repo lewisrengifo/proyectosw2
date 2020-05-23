@@ -75,27 +75,39 @@ public class ArtesanoController {
                                   RedirectAttributes att, Model model,@RequestParam("comunidad") int idcomunidad) {
 
 
-        if (artesano.getIdartesano()!=0){
-            return agregarArtesanoVerificado(model);
-        }else{
             if (bindingResult.hasErrors()) {
                 model.addAttribute("listacomunidades", comunidadRepository.findAll());
                 return "artesano/newEdit";
             } else {
-                if (artesano.getIdartesano() == 0) {
-                    att.addFlashAttribute("msgAr", "Artesano Creado Exitosamente");
-                } else { att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente"); }
-                artesanoRepository.save(artesano);
-                return "redirect:/artesano";
+                if (artesano.getIdartesano()==0){
+                    return agregarNuevoArtesanoYVerificar(artesano,model,att);
+                }else{
+                    att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
+                    artesanoRepository.save(artesano);
+                    return "redirect:/artesano";
+                }
+
+
             }
-        }
+
     }
 
 
-    public String agregarArtesanoVerificado(Model model){
+    public String agregarNuevoArtesanoYVerificar(Artesano artesano, Model model, RedirectAttributes att){
 
-        model.addAttribute("listacomunidades", comunidadRepository.findAll());
-        return "artesano/lista";
+
+        List<Artesano> byCodigoartesano = artesanoRepository.buscarSucomunidad(artesano.getCodigoartesano());
+
+        if (byCodigoartesano.isEmpty()){
+            att.addFlashAttribute("msgAr","Artesano Creado Exitosamente");
+            artesanoRepository.save(artesano);
+            return "redirect:/artesano";
+        }else {
+            model.addAttribute("msgRepetido","Codigo ya está siendo utilizado");
+            model.addAttribute("listacomunidades", comunidadRepository.findAll());
+            return "artesano/newEdit";
+        }
+
     }
 
     @PostMapping("/filtroComunidad")

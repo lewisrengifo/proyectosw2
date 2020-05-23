@@ -17,10 +17,10 @@ public interface ArtesanoRepository extends JpaRepository<Artesano,Integer> {
 
     List<Artesano> findByComunidad(int comunidad);
 
-    List<Artesano> findByNombreartesano(String buscarArtesano);
-
     List<Artesano> findByNombreartesanoOrApellidomaternoOrApellidopaternoOrCodigoartesano(String nombre, String apellidoPa, String apellidoMa,String codigoArt);
 
-    @Query(value="SELECT * FROM artesano where codigoartesano = ?1 and comunidad_idcomunidad=?2", nativeQuery =true)
-    Artesano buscarCodigoartesanoyComunidad(String codigoArtesano, int idcomunidad);
+    List<Artesano> findByCodigoartesano(String codigoArtesano);
+
+    @Query(value="SELECT * FROM artesano where codigoartesano = ?1", nativeQuery = true)
+    List<Artesano> buscarSucomunidad(String codigo);
 }
