@@ -26,16 +26,7 @@
                     <div class="card">
                         <div class="form-group">
                             <label for="supplier">ESCOGER LA COMUNIDAD</label>
-                            <form method="post" th:action="@{'/artesano/filtroComunidad'}" style="width: 50%" >
-                                <select class="form-control" name="filtroComunidad" id="supplier">
-                                    <option value="0"> selecionar</option>
-                                    <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
-                                            th:text="${co.nombrecomunidad}"
-                                            ></option>
-                                </select>
-                                <BR>
-                                <button type="submit" class="btn btn-primary">filtrar</button>
-                            </form>
+
                         </div>
 
                         <div>
@@ -75,7 +66,7 @@
                                         <td th:text="${a.apellidopaterno}">H</td>
                                         <td th:text="${a.apellidomaterno}">H</td>
                                         <td th:text="${a.codigoartesano}">H</td>
-                                        <td th:text="${a.comunidad.nombrecomunidad}">H</td>
+                                        <td th:text="${a.comunidad.getNombrecomunidad()}">H</td>
                                         <td><a th:href="@{'artesano/editar?id=' + ${a.idartesano}}"> editar</a></td>
                                         <td><a th:href="@{'artesano/borrar?id=' + ${a.idartesano}}">borrar</a></td>
                                     </tr>

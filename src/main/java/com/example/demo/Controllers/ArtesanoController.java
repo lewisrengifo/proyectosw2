@@ -122,15 +122,9 @@ public class ArtesanoController {
     @PostMapping("/buscador")
     public String buscadorSearch(@RequestParam("searchField") String buscador, Model model){
 
-        if (buscador== null){
-            return "artesano/lista";
-        }else{
-
-            model.addAttribute("listaArtesano", artesanoRepository.findByNombreartesanoOrApellidomaternoOrApellidopaternoOrCodigoartesano(buscador,buscador,buscador,buscador));
-            model.addAttribute("listacomunidades", comunidadRepository.findAll());
+            model.addAttribute("listaArtesano", artesanoRepository.buscadorArtesano(buscador));
             return "artesano/lista";
 
-        }
 
     }
 
