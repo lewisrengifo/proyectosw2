@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='lista de productooos')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Tamaños')">
 </head>
 <body>
 <div id="wrapper">
@@ -12,7 +12,11 @@
 
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
-
+        <div class="header">
+            <h1 class="page-header">
+                Tamaños
+            </h1>
+        </div>
         <!-- /. CATEGORIA  -->
         <div id="page-inner">
             <!-- /. CATEGORIA  -->
@@ -20,7 +24,7 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-action">
-                            TIENDA
+
                             <a class="btn btn-primary right" th:href="@{'/tamano/nuevo'}">agregar</a>
                         </div>
                         <div class="card-content">

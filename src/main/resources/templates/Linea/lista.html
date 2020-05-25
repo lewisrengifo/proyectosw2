@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='lista de productooos')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Lista de Línea')">
 </head>
 <body>
 <div id="wrapper">
@@ -12,7 +12,11 @@
 
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
-
+        <div class="header">
+                <h2 class="page-header">
+                    Linea
+                </h2>
+        </div>
         <!-- /. CATEGORIA  -->
         <div id="page-inner">
             <!-- /. CATEGORIA  -->
@@ -20,7 +24,7 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-action">
-                            LINEA
+
                             <a class="btn btn-primary right" th:href="@{'/linea/nuevo'}">agregar</a>
                         </div>
                         <div class="card-content">

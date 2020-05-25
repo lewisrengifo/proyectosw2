@@ -10,16 +10,17 @@
 
 
 <div id="page-wrapper">
+    <h2 class="page-header" th:text="${producto.getIdproducto() == 0? 'Nuevo producto' : 'Editar producto'}">
+        Nuevo/Editar</h2>
     <div id="page-inner">
 
         <div class="row">
             <div  class="col-md-8">
                 <div class="card">
-                    <div class="container">
-                        <h2 th:text="${producto.getIdproducto() == 0? 'Nuevo producto' : 'Editar producto'}">
-                            Nuevo/Editar</h2>
-                        <hr/>
-                        <form method="post" th:action="@{'/producto/guardar'}" th:object="${producto}">
+                    <div class="container padding ">
+
+
+                        <form method="post" th:action="@{'/producto/guardar'}" enctype="multipart/form-data"  th:object="${producto}">
                             <input type="hidden" th:field="*{idproducto}"/>
 
                             <div class="form-group">
@@ -49,8 +50,10 @@
                                 <div class="text-danger" th:if="${#fields.hasErrors('linea')}" th:errors="*{linea}"></div>
 
                             </div>
-                            <a th:href="@{'/producto'}" class="btn btn-danger">Cancelar</a>
-                            <button type="submit" class="btn btn-primary"
+
+
+                            <a th:href="@{'/producto'}" class=" btn btn-info btn-responsive btninter">Cancelar</a>
+                            <button type="submit" class=" btn btn-info btn-responsive btninter rigth"
                                     th:text="${producto.idproducto == 0? 'Registrar' : 'Actualizar'}">Reg/act
                             </button>
                         </form>
