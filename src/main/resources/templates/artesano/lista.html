@@ -21,25 +21,21 @@
         <!-- /. COMUNIDAD  -->
         <div id="page-inner">
             <!-- /. COMUNIDAD  -->
+            <div>
+                <form method="post" th:action="@{/artesano/buscador}">
+                    <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar" aria-label="Search" style="width: 40%">
+                    <button type="submit" class="btn btn-outline-danger">buscar</button>
+                    <a th:href="@{'/artesano'}" class="btn btn-outline-danger">Limpiar</a>
+                </form>
+            </div>
+            <br>
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="form-group">
-                            <label for="supplier">ESCOGER LA COMUNIDAD</label>
-
-                        </div>
-
-                        <div>
-                            <form method="post" th:action="@{/artesano/buscador}">
-                                <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar" aria-label="Search" style="width: 40%">
-                                <button type="submit" class="btn btn-primary">buscar</button>
-
-                            </form>
-                        </div>
 
                         <div class="card-action">
                             ARTESANO
-                            <a class="btn btn-primary right" th:href="@{'/artesano/nuevo'}">agregar</a>
+                            <a class="btn btn-outline-danger right" th:href="@{'/artesano/nuevo'}">agregar</a>
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
@@ -61,7 +57,7 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each="a, info : ${listaArtesano}">
-                                        <td th:text="${info.index +1}">1</td>
+                                        <td th:text="${info.index +1 +prev*5}">1</td>
                                         <td th:text="${a.nombreartesano}">Home</td>
                                         <td th:text="${a.apellidopaterno}">H</td>
                                         <td th:text="${a.apellidomaterno}">H</td>
@@ -72,6 +68,35 @@
                                     </tr>
                                     </tbody>
                                 </table>
+
+                                <br>
+
+
+
+
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+                                     <div th:text="${totalItems}"></div>
+                                        <br>
+
+                                        <ul th:if="${last != 1}" class="pagination justify-content-center">
+
+                                            <li class ="page-item" th:classappend="${prev == 0 ? 'disabled': '' }">
+                                                <a class="page-link"  th:href="@{'/artesano' + '?page=' + ${prev}} "> Anterior </a>
+
+                                            <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                                                <a class="page-link" th:href="@{'/artesano' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                            </li>
+
+                                            <li class ="page-item" th:classappend="${current == last ? 'disabled': '' }">
+                                                <a class="page-link" th:href="@{'/artesano' + '?page=' + ${next}} "> Siguiente </a>
+
+                                        </ul>
+
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

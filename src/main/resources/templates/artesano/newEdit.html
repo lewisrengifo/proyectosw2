@@ -21,7 +21,7 @@
                         <form method="post" th:action="@{'/artesano/guardar'}" th:object="${artesano}">
                             <input type="hidden" th:field="*{idartesano}"/>
                             <div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
-                                 role="alert">
+                                 role="alert" style="width: 40%">
                             </div>
 
                             <br>
@@ -50,7 +50,7 @@
                             <div class="form-group" th:if="${artesano.apellidomaterno== null}">
                                 <label for="comunidad">comunidad</label>
                                 <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
-                                    <option value="0">Seleccionar</option>
+
                                     <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
                                             th:text="${co.nombrecomunidad}">
                                     </option>
@@ -60,14 +60,13 @@
                             <div class="form-group" th:unless="${artesano.apellidomaterno == null}">
                                 <label for="comunidad">comunidad</label>
                                     <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
-                                        <option value="0">Seleccionar</option>
                                         <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
                                                 th:text="${co.nombrecomunidad}"
                                                 th:selected="${artesano.comunidad.getIdcomunidad() == co.idcomunidad}">
                                         </option>
                                     </select>
-                            </div>
 
+                            </div>
 
                             <a th:href="@{'/artesano'}" class="btn btn-danger">Cancelar</a>
                             <button type="submit" class="btn btn-primary"

@@ -2,6 +2,7 @@ package com.example.demo.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -16,14 +17,17 @@ public class Artesano  {
 
     @NotBlank(message = "El texto no puede estar vacio")
     @Size(max = 45, message = "el nombre NO puede poseer más de 45 caracteres")
+    @Pattern(regexp = "[a-zA-Z]",message = "solo se debe ingresar letras")
     private String nombreartesano;
 
 
     @NotBlank(message = "El texto NO puede estar vacio")
     @Size(max = 45, message = "el apellido paterno NO puede poseer más de 45 caracteres")
+    @Pattern(regexp = "[a-zA-Z]",message = "solo se debe ingresar letras")
     private String apellidopaterno;
 
     @Size(max = 45, message = "el apellido materno NO puede poseer más de 45 caracteres")
+    @Pattern(regexp = "[a-zA-Z]",message = "solo se debe ingresar letras")
     private String apellidomaterno;
 
 

@@ -1,37 +1,70 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Dto.ArtesanoServiceApi;
 import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Comunidad;
+import com.example.demo.Entity.Producto;
 import com.example.demo.Repository.ArtesanoRepository;
 import com.example.demo.Repository.ComunidadRepository;
+import com.example.demo.service.ArtesanoService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.jws.WebParam;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/artesano")
 public class ArtesanoController {
 
     @Autowired
+    ArtesanoService artesanoService;
+
+    @Autowired
     ArtesanoRepository artesanoRepository;
     @Autowired
     ComunidadRepository comunidadRepository;
 
-    @GetMapping(value = {"", "/"})
-    public String listaArtesano(Model model) {
-        model.addAttribute("listaArtesano", artesanoRepository.findAll());
-        model.addAttribute("listacomunidades", comunidadRepository.findAll());
-        return "artesano/lista";
+    @GetMapping(value = {"", "/lista"})
+    public String listaArtesano(Model model,@RequestParam Map<String, Object> params) {
+
+        int currentPage = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        Page<Artesano> page = artesanoService.listAll(currentPage);
+            long totalItems = page.getTotalElements();
+            int totalPages = page.getTotalPages();
+
+        if (totalPages > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+            List<Artesano> listaArtesanos = page.getContent();
+
+            model.addAttribute("totalItems", totalItems);
+            model.addAttribute("listaArtesano", listaArtesanos);
+            model.addAttribute("current", currentPage + 1);
+            model.addAttribute("next", currentPage + 2);
+             model.addAttribute("prev", currentPage);
+            model.addAttribute("last", totalPages);
+            return "artesano/lista";
+
 
     }
+
+
 
     @GetMapping("/nuevo")
     public String nuevoArtesano(@ModelAttribute("artesano") Artesano a, Model model) {
@@ -72,38 +105,42 @@ public class ArtesanoController {
 
     @PostMapping("/guardar")
     public String guardarArtesano(@ModelAttribute("artesano") @Valid Artesano artesano, BindingResult bindingResult,
-                                  RedirectAttributes att, Model model,@RequestParam("comunidad") int idcomunidad) {
+                                  RedirectAttributes att, Model model, @RequestParam("comunidad") int idcomunidad) {
 
 
-            if (bindingResult.hasErrors()) {
-                model.addAttribute("listacomunidades", comunidadRepository.findAll());
-                return "artesano/newEdit";
-            } else {
-                if (artesano.getIdartesano()==0){
-                    return agregarNuevoArtesanoYVerificar(artesano,model,att);
-                }else{
-                    att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
-                    artesanoRepository.save(artesano);
-                    return "redirect:/artesano";
+                if (bindingResult.hasErrors()) {
+                    model.addAttribute("listacomunidades", comunidadRepository.findAll());
+                    return "artesano/newEdit";
+                } else {
+                    /*if (artesano.getComunidad() == null) {
+                        model.addAttribute("msgRepetido", "debe selecionar una comunidad");
+                        model.addAttribute("listacomunidades", comunidadRepository.findAll());
+                        return "artesano/newEdit";
+                    } else {*/
+
+                        if (artesano.getIdartesano() == 0) {
+                            return agregarNuevoArtesanoYVerificar(artesano, model, att);
+                        } else {
+                            att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
+                            artesanoRepository.save(artesano);
+                            return "redirect:/artesano";
+                        }
+                   // }
                 }
+     }
 
 
-            }
-
-    }
-
-
-    public String agregarNuevoArtesanoYVerificar(Artesano artesano, Model model, RedirectAttributes att){
+    public String agregarNuevoArtesanoYVerificar(Artesano artesano, Model model, RedirectAttributes att) {
 
 
         List<Artesano> byCodigoartesano = artesanoRepository.buscarSucomunidad(artesano.getCodigoartesano());
 
-        if (byCodigoartesano.isEmpty()){
-            att.addFlashAttribute("msgAr","Artesano Creado Exitosamente");
+        if (byCodigoartesano.isEmpty()) {
+            att.addFlashAttribute("msgAr", "Artesano Creado Exitosamente");
             artesanoRepository.save(artesano);
             return "redirect:/artesano";
-        }else {
-            model.addAttribute("msgRepetido","Codigo ya está siendo utilizado");
+        } else {
+            model.addAttribute("msgRepetido", "Codigo ya está siendo utilizado");
             model.addAttribute("listacomunidades", comunidadRepository.findAll());
             return "artesano/newEdit";
         }
@@ -120,14 +157,13 @@ public class ArtesanoController {
     }
 
     @PostMapping("/buscador")
-    public String buscadorSearch(@RequestParam("searchField") String buscador, Model model){
+    public String buscadorSearch(@RequestParam("searchField") String buscador, Model model) {
 
-            model.addAttribute("listaArtesano", artesanoRepository.buscadorArtesano(buscador));
-            return "artesano/lista";
+        model.addAttribute("listaArtesano", artesanoRepository.buscadorArtesano(buscador));
+        return "artesano/lista";
 
 
     }
-
 
 
 }
