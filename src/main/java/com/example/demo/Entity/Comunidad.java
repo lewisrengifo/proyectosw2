@@ -11,6 +11,7 @@ public class Comunidad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idcomunidad;
+
     @Column(nullable = false)
     @NotBlank(message = "El texto no puede estar vacio")
     @Size(max = 45, message = "el nombre no puede poseer más de 45 caracteres")
