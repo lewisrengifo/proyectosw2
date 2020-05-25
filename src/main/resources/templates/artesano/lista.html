@@ -83,14 +83,19 @@
                                         <ul th:if="${last != 1}" class="pagination justify-content-center">
 
                                             <li class ="page-item" th:classappend="${prev == 0 ? 'disabled': '' }">
-                                                <a class="page-link"  th:href="@{'/artesano' + '?page=' + ${prev}} "> Anterior </a>
+                                                <a class="page-link" th:if="${busqueda!=null}" th:href="@{'/artesano/buscador' + '?page=' + ${prev}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda!=null}" th:href="@{'/artesano' + '?page=' + ${prev}} "> Anterior </a>
 
                                             <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
-                                                <a class="page-link" th:href="@{'/artesano' + '?page=' + ${page}} " th:text="${page}"  ></a>
-                                            </li>
+                                                <a class="page-link" th:if="${busqueda!=null}" th:href="@{'/artesano/buscador' + '?page=' + ${page}} " th:text="${page}"></a>
+                                            <a class="page-link" th:unles="${busqueda!=null}" th:href="@{'/artesano' + '?page=' + ${page}} " th:text="${page}"></a>
+
+                                        </li>
 
                                             <li class ="page-item" th:classappend="${current == last ? 'disabled': '' }">
-                                                <a class="page-link" th:href="@{'/artesano' + '?page=' + ${next}} "> Siguiente </a>
+                                                <a class="page-link" th:if="${busqueda!=null}" th:href="@{'/artesano/buscador' + '?page=' + ${next}} "> Siguiente </a>
+                                                <a class="page-link" th:unles="${busqueda!=null}" th:href="@{'/artesano' + '?page=' + ${next}} "> siguiente </a>
+
 
                                         </ul>
 

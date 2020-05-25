@@ -11,6 +11,7 @@ import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -157,9 +158,27 @@ public class ArtesanoController {
     }
 
     @PostMapping("/buscador")
-    public String buscadorSearch(@RequestParam("searchField") String buscador, Model model) {
+    public String buscadorSearch(@RequestParam("searchField") String buscador,@RequestParam Map<String, Object> params, Model model) {
 
-        model.addAttribute("listaArtesano", artesanoRepository.buscadorArtesano(buscador));
+
+
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        Page<Artesano> pageArtesanos = artesanoService.listSearch(buscador, page);
+        int totalPage = pageArtesanos.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+        model.addAttribute("busqueda", buscador);
+        model.addAttribute("listaArtesano", pageArtesanos.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
+        //model.addAttribute("listaArtesano", artesanoRepository.buscadorArtesano(buscador));
         return "artesano/lista";
 
 

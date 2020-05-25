@@ -23,5 +23,11 @@ public class ArtesanoService {
     }
 
 
+    public Page<Artesano> listSearch(String search, int page){
+        Pageable pageRequest = PageRequest.of(page,5);
+        return artesanoRepository.buscadorArtesano(search,pageRequest);
+    }
+
+
 
 }
