@@ -7,8 +7,8 @@
 
     <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
     <div id="page-wrapper">
-
-        <h2>Lista Usuarios</h2>
+        
+        <h2 class="page-header">Lista Usuarios</h2>
         <div id="page-inner">
             <div class="row">
                 <div class="col-md-8">
@@ -42,7 +42,8 @@
 
 
                                             <td th:text="${usuario.rol_idrol.nombre}"></td>
-                                            <td th:text="${usuario.enable}"></td>
+                                            <td th:if="${usuario.enable == true}" th:text="Activado"></td>
+                                            <td th:if="${usuario.enable == false}" th:text="Desactivado"></td>
 
                                             <td><a class="btn btn-primary"
                                                    th:href="@{'/usuario/editar' + '?id=' + ${usuario.idusuario}}">Editar</a>
