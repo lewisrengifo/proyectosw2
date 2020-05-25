@@ -81,6 +81,7 @@ public class UsuarioController {
             }
         }
         */
+
         usuario.setContrasena(encriptar(usuario.getContrasena()));
         usuarioRepository.save(usuario);
         return "redirect:/usuario/lista";
@@ -88,10 +89,11 @@ public class UsuarioController {
 
     @GetMapping("/editar")
     public String editarUsuario(@ModelAttribute("usuario") Usuario usuario, Model model, @RequestParam("id") int id, RedirectAttributes redirectAttributes) {
-        model.addAttribute("listaroles", rolRepository.findAll());
-        model.addAttribute("listasedes", sedeRepository.findAll());
+
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
+            model.addAttribute("listaroles", rolRepository.findAll());
+            model.addAttribute("listasedes", sedeRepository.findAll());
             usuario = optionalUsuario.get();
             model.addAttribute("usuario", usuario);
             return "Usuario/form";
