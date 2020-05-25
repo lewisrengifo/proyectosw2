@@ -138,6 +138,36 @@ public class ProductoController {
 
         return "producto/listar";
        }
+    @GetMapping("/search")
+    public String buscarProducto(@RequestParam Map<String, Object> params, Model model) {
+
+        String busqueda = (String) params.get("search");
+
+        PageRequest pageRequest;
+
+        Page<Producto> pageProduct;
+        int totalPage;
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+
+        pageRequest = PageRequest.of(page, 10);
+        pageProduct = productoServiceApi.getEver(busqueda, pageRequest);
+        totalPage = pageProduct.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+        model.addAttribute("busqueda", busqueda);
+        model.addAttribute("listaProductos", pageProduct.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
+        return "producto/listar";
+    }
+
 }
 
 

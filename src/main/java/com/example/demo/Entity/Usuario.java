@@ -1,6 +1,7 @@
 package com.example.demo.Entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 
 @Entity
@@ -19,9 +20,18 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idUsuario")
     private int idusuario;
+    @NotBlank(message = "El nombre no debe ser vacío")
+    @Pattern(regexp="[a-zA-Z]{1,45}",message = "Solo aceptan letras")
     private String nombre;
+    @Pattern(regexp="[a-zA-Z]{1,45}",message = "Solo aceptan letras")
+    @NotBlank(message = "El Apellido no debe ser vacío")
     private String apellido;
+    @NotBlank(message = "El DNI no debe ser vacío")
+   // @Pattern(regexp="[0-9] {8}",message = "Solo aceptan numeros o deben ser 8 digitos")
+    //@Size(min=9, max = 9, message = "El DNI debe de ser de 8 digitos")
+    @Pattern(regexp = "[0-9]{8}" ,message = "Solo se aceptan numeros")
     private String dni;
+    //@Pattern(regexp="[0-9] {9}",message = "Solo aceptan letras")
     private String telefono;
 
     public String getApellido() {
@@ -47,7 +57,8 @@ public class Usuario implements Serializable {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-
+    @NotBlank(message = "el correo no debe ser vacio")
+    @Email(message = "ingrese un correo válido")
     private String correo;
     private String contrasena;
     @Column(nullable = true)
@@ -120,6 +131,7 @@ public class Usuario implements Serializable {
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
+
 
 
 }
