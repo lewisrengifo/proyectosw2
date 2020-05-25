@@ -48,21 +48,39 @@ public class UsuarioController {
         }
 
         for (Usuario usuario1 : usuarioRepository.findAll()) {
-            if (usuario1.getDni().equals(usuario.getDni()) || usuario1.getCorreo().equals(usuario.getCorreo())) {
-                if (usuario1.getDni().equals(usuario.getDni())) {
-                    redirectAttributes.addFlashAttribute("msg", "Usuario con DNI existente");
-                    redirectAttributes.addFlashAttribute("usuario", usuario);
-                } if(usuario1.getCorreo().equals(usuario.getCorreo())) {
-                    redirectAttributes.addFlashAttribute("msg2", "Usuario con correo existente");
-                    redirectAttributes.addFlashAttribute("usuario", usuario);
-                } return "redirect:/usuario/nuevo";
+            if (usuario.getIdusuario() == 0) {
+                if (usuario1.getDni().equals(usuario.getDni()) || usuario1.getCorreo().equals(usuario.getCorreo())) {
+                    if (usuario1.getDni().equals(usuario.getDni())) {
+                        redirectAttributes.addFlashAttribute("msg", "Usuario con DNI existente");
+                        redirectAttributes.addFlashAttribute("usuario", usuario);
+                    }
+                    if (usuario1.getCorreo().equals(usuario.getCorreo())) {
+                        redirectAttributes.addFlashAttribute("msg2", "Usuario con correo existente");
+                        redirectAttributes.addFlashAttribute("usuario", usuario);
+                    }
+                    return "redirect:/usuario/nuevo";
 
-            } else if (usuario.getIdusuario() == 0) {
-                redirectAttributes.addFlashAttribute("msg", "Usuario creado exitosamente");
-            } else {
-                redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
+                } else if (usuario.getIdusuario() == 0) {
+                    redirectAttributes.addFlashAttribute("msg", "Usuario creado exitosamente");
+                } else {
+                    redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
+                }
             }
         }
+        /*
+        if (usuario.getIdusuario()==0) {
+            if ((!usuario.isEnable() == true || !usuario.isEnable() == false)) {
+                redirectAttributes.addFlashAttribute("msg", "No son valores booleanos ctmr que chucha inspeccionas");
+                return "Usuario/form";
+            }
+        }
+        if (usuario.getIdusuario()==0) {
+            if ((!usuario.isEnable() == true || !usuario.isEnable() == false)) {
+                redirectAttributes.addFlashAttribute("msg", "No son valores booleanos ctmr que chucha inspeccionas");
+                return "Usuario/form";
+            }
+        }
+        */
         usuario.setContrasena(encriptar(usuario.getContrasena()));
         usuarioRepository.save(usuario);
         return "redirect:/usuario/lista";

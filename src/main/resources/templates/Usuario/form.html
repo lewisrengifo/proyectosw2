@@ -76,7 +76,8 @@
                                         <option th:text="Desactivado" th:selected="*{enable == false}"
                                                 th:value="0"></option>
                                     </select>
-
+                                    <div class="text-danger" th:if="${#fields.hasErrors('enable')}"
+                                         th:errors="*{enable}"></div>
                                 </div>
 
                                 <div class="form-group">
