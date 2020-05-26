@@ -65,23 +65,36 @@ public class UsuarioController {
                 } else {
                     redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
                 }
-            }
-        }
-        /*
-        if (usuario.getIdusuario()==0) {
-            if ((!usuario.isEnable() == true || !usuario.isEnable() == false)) {
-                redirectAttributes.addFlashAttribute("msg", "No son valores booleanos ctmr que chucha inspeccionas");
-                return "Usuario/form";
-            }
-        }
-        if (usuario.getIdusuario()==0) {
-            if ((!usuario.isEnable() == true || !usuario.isEnable() == false)) {
-                redirectAttributes.addFlashAttribute("msg", "No son valores booleanos ctmr que chucha inspeccionas");
-                return "Usuario/form";
-            }
-        }
-        */
+            } else {
+                for (Usuario usuario2 : usuarioRepository.buscarmenosmio(usuario.getIdusuario())) {
+                    if (usuario2.getDni().equals(usuario.getDni()) || usuario2.getCorreo().equals(usuario.getCorreo())) {
+                        if (usuario1.getDni().equals(usuario.getDni())) {
+                            redirectAttributes.addFlashAttribute("msgdni", "El DNI ingresado le pertenece a otra persona");
+                            redirectAttributes.addFlashAttribute("usuario", usuario);
+                        }
+                        if (usuario1.getCorreo().equals(usuario.getCorreo())) {
+                            redirectAttributes.addFlashAttribute("msgcorreo", "El correo ya se encuentra en uso");
+                            redirectAttributes.addFlashAttribute("usuario", usuario);
+                        }
+                        return "redirect:/usuario/lista";
 
+                    } else {
+                        redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
+
+                    }
+
+                }
+            }
+        }
+        try {
+            if (sedeRepository.findByIdrol(usuario.getSede_idrol().getIdrol()) == null) {
+
+            }
+        } catch (NullPointerException e) {
+            redirectAttributes.addFlashAttribute("msgsede", "El usuario no se creó o actualizó debido a que no seleccionó una sede valida");
+
+            return "redirect:/usuario/lista";
+        }
         usuario.setContrasena(encriptar(usuario.getContrasena()));
         usuarioRepository.save(usuario);
         return "redirect:/usuario/lista";
@@ -106,6 +119,15 @@ public class UsuarioController {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         pww = bCryptPasswordEncoder.encode(pww);
         return pww;
+    }
+
+    @PostMapping("/buscador")
+    public String buscadorSearch(@RequestParam("searchField") String buscador, Model model) {
+
+        model.addAttribute("listaUsuarios", usuarioRepository.buscarUsuario(buscador));
+        return "Usuario/lista";
+
+
     }
 
 

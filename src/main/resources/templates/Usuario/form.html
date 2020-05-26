@@ -21,6 +21,8 @@
                                  role="alert"></div>
                             <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success"
                                  role="alert"></div>
+                            <div th:if="${msgsede != null}" th:text="${msgsede}" class="alert alert-success"
+                                 role="alert"></div>
                             <form method="post" th:action="@{'/usuario/guardar'}" th:object="${usuario}">
                                 <input type="hidden" th:field="*{idusuario}"/>
                                 <div class="form-group">
@@ -47,7 +49,7 @@
                                     <div class="text-danger" th:if="${#fields.hasErrors('correo')}"
                                          th:errors="*{correo}"></div>
                                 </div>
-                                <div  class="form-group">
+                                <div class="form-group">
                                     <label for="Contraseña">Contraseña</label>
                                     <input style="width: 88%" type="password" class="form-control"
                                            th:field="*{contrasena}">
@@ -88,6 +90,44 @@
 
                                             ></option>
                                         </select>
+                                    </div>
+                                </div>
+                                <div th:unless="*{sede_idrol!=null }" class="form-group">
+                                    <div th:if="*{rol_idrol!= null}">
+                                        <label for="sede_idrol">Sede</label>
+                                        <select th:if="*{sede_idrol!=0}" style="width: 90%" class="form-control"
+                                                name="sede_idrol" id="sede_idrol">
+                                            <option th:each="sede : ${listasedes}" th:text="|${sede.sede}|"
+                                                    th:value="${sede.idrol}"
+                                            ></option>
+                                        </select>
+                                        <select th:unless="*{sede_idrol!=0}" style="width: 90%" class="form-control"
+                                                name="sede_idrol" id="sede_idrol">
+                                            <option th:each="sede : ${listasedes}" th:text="|${sede.sede}|"
+                                                    th:value="${sede.idrol}"
+                                                    th:selected="${sede.idrol==usuario.sede_idrol.getIdrol()}"
+
+                                            ></option>
+                                        </select>
+                                    </div>
+                                    <div th:unless="*{rol_idrol!=null}">
+                                        <div th:unless="*{sede_idrol!=null}" class="form-group">
+                                            <label for="sede_idrol">Sede</label>
+                                            <select th:if="*{sede_idrol==0}" style="width: 90%" class="form-control"
+                                                    name="sede_idrol" id="sede_idrol">
+                                                <option th:each="sede : ${listasedes}" th:text="|${sede.sede}|"
+                                                        th:value="${sede.idrol}"
+                                                ></option>
+                                            </select>
+                                            <select th:unless="*{sede_idrol==0}" style="width: 90%" class="form-control"
+                                                    name="sede_idrol" id="sede_idrol">
+                                                <option th:each="sede : ${listasedes}" th:text="|${sede.sede}|"
+                                                        th:value="${sede.idrol}"
+
+
+                                                ></option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
