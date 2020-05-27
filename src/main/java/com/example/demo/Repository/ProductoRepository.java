@@ -14,8 +14,8 @@ public interface ProductoRepository extends JpaRepository<Producto,Integer> {
 
 
     @Query(value = "select pr.* from producto pr\n" +
-            "            where pr.nombreproducto = ?1 or pr.codigodescripcionproducto= ?1\n" +
-            "               or pr.codigoproducto= ?1 or pr.linea_idlinea = (select li.idlinea\n" +
+            "            where pr.nombreproducto = ?1 or pr.codigodescripcionproducto= ?1 " +
+            "               or pr.codigoproducto= ?1 or pr.linea_idlinea = (select li.idlinea " +
             "            from linea li\n" +
             "            where li.nombrelinea = ?1)\n" +
             "            order by pr.idproducto",

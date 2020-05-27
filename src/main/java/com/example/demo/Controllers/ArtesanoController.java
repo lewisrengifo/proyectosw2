@@ -106,7 +106,7 @@ public class ArtesanoController {
 
     @PostMapping("/guardar")
     public String guardarArtesano(@ModelAttribute("artesano") @Valid Artesano artesano, BindingResult bindingResult,
-                                  RedirectAttributes att, Model model, @RequestParam("comunidad") int idcomunidad) {
+                                  RedirectAttributes att, Model model, @RequestParam("comunidad") String idcomunidad) {
 
 
                 if (bindingResult.hasErrors()) {
@@ -119,13 +119,15 @@ public class ArtesanoController {
                         return "artesano/newEdit";
                     } else {*/
 
-                        if (artesano.getIdartesano() == 0) {
-                            return agregarNuevoArtesanoYVerificar(artesano, model, att);
-                        } else {
-                            att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
-                            artesanoRepository.save(artesano);
-                            return "redirect:/artesano";
-                        }
+                    if (artesano.getIdartesano() == 0) {
+                        return agregarNuevoArtesanoYVerificar(artesano, model, att);
+                    } else {
+
+                        att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
+                        artesanoRepository.save(artesano);
+                        return "redirect:/artesano";
+                    }
+
                    // }
                 }
      }
@@ -148,30 +150,26 @@ public class ArtesanoController {
 
     }
 
-    @PostMapping("/filtroComunidad")
-    public String filtarArtesanoPorComunidad(@RequestParam("filtroComunidad") int idcomunidad, Model model) {
-
-        model.addAttribute("listaArtesano", artesanoRepository.filtarPorComunidad(idcomunidad));
-        model.addAttribute("listacomunidades", comunidadRepository.findAll());
-        return "artesano/lista";
-
-    }
 
     @PostMapping("/buscador")
-    public String buscadorSearch(@RequestParam("searchField") String buscador,@RequestParam Map<String, Object> params, Model model) {
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
 
+        String busqueda = (String) params.get("searchField");
 
 
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        Page<Artesano> pageArtesanos = artesanoService.listSearch(buscador, page);
+        Page<Artesano> pageArtesanos = artesanoService.listSearch(busqueda, page);
         int totalPage = pageArtesanos.getTotalPages();
+        long totalItems = pageArtesanos.getTotalElements();
+
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
         }
 
-        model.addAttribute("busqueda", buscador);
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("busqueda", busqueda);
         model.addAttribute("listaArtesano", pageArtesanos.getContent());
         model.addAttribute("current", page + 1);
         model.addAttribute("next", page + 2);

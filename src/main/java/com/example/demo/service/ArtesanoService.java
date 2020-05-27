@@ -28,6 +28,4 @@ public class ArtesanoService {
         return artesanoRepository.buscadorArtesano(search,pageRequest);
     }
 
-
-
 }
