@@ -10,6 +10,13 @@
         
         <h2 class="page-header">Lista Usuarios</h2>
         <div id="page-inner">
+            <div>
+                <form method="post" th:action="@{'/usuario/buscador'}">
+                    <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar" aria-label="Search" style="width: 40%">
+                    <button type="submit" class="btn btn-outline-danger">buscar</button>
+                    <a th:href="@{'/usuario/lista'}" class="btn btn-outline-danger">Limpiar</a>
+                </form>
+            </div>
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
@@ -19,6 +26,12 @@
                             <div class="card-content">
                                 <div class="table-responsive">
                                     <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
+                                         role="alert"></div>
+                                    <div th:if="${msgsede != null}" th:text="${msgsede}" class="alert alert-danger"
+                                         role="alert"></div>
+                                    <div th:if="${msgsdni != null}" th:text="${msgdni}" class="alert alert-danger"
+                                         role="alert"></div>
+                                    <div th:if="${msgcorreo != null}" th:text="${msgcorreo}" class="alert alert-danger"
                                          role="alert"></div>
 
 
@@ -30,6 +43,8 @@
 
 
                                             <th>Rol</th>
+                                            <th>DNI</th>
+                                            <th>Sede</th>
                                             <th>Estado</th>
 
                                             <th></th>
@@ -42,6 +57,9 @@
 
 
                                             <td th:text="${usuario.rol_idrol.nombre}"></td>
+                                            <td th:text="${usuario.dni}"></td>
+                                            <td th:if="${usuario.sede_idrol==null}">Sin sede</td>
+                                            <td th:unless="${usuario.sede_idrol==null}" th:text="${usuario.sede_idrol.sede}"></td>
                                             <td th:if="${usuario.enable == true}" th:text="Activado"></td>
                                             <td th:if="${usuario.enable == false}" th:text="Desactivado"></td>
 
