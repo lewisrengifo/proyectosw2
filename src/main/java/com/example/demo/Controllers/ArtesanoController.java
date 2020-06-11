@@ -39,32 +39,31 @@ public class ArtesanoController {
     ComunidadRepository comunidadRepository;
 
     @GetMapping(value = {"", "/lista"})
-    public String listaArtesano(Model model,@RequestParam Map<String, Object> params) {
+    public String listaArtesano(Model model, @RequestParam Map<String, Object> params) {
 
         int currentPage = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
         Page<Artesano> page = artesanoService.listAll(currentPage);
-            long totalItems = page.getTotalElements();
-            int totalPages = page.getTotalPages();
+        long totalItems = page.getTotalElements();
+        int totalPages = page.getTotalPages();
 
         if (totalPages > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
         }
 
-            List<Artesano> listaArtesanos = page.getContent();
+        List<Artesano> listaArtesanos = page.getContent();
 
-            model.addAttribute("totalItems", totalItems);
-            model.addAttribute("listaArtesano", listaArtesanos);
-            model.addAttribute("current", currentPage + 1);
-            model.addAttribute("next", currentPage + 2);
-             model.addAttribute("prev", currentPage);
-            model.addAttribute("last", totalPages);
-            return "artesano/lista";
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("listaArtesano", listaArtesanos);
+        model.addAttribute("current", currentPage + 1);
+        model.addAttribute("next", currentPage + 2);
+        model.addAttribute("prev", currentPage);
+        model.addAttribute("last", totalPages);
+        return "artesano/lista";
 
 
     }
-
 
 
     @GetMapping("/nuevo")
@@ -109,28 +108,33 @@ public class ArtesanoController {
                                   RedirectAttributes att, Model model, @RequestParam("comunidad") String idcomunidad) {
 
 
-                if (bindingResult.hasErrors()) {
-                    model.addAttribute("listacomunidades", comunidadRepository.findAll());
-                    return "artesano/newEdit";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("listacomunidades", comunidadRepository.findAll());
+            return "artesano/newEdit";
+        } else {
+
+            if (artesano.getIdartesano() == 0) {
+                return agregarNuevoArtesanoYVerificar(artesano, model, att);
+            } else {
+
+                Artesano artesanosByCodigo = artesanoRepository.editarArtesanoBuscarCodigo(artesano.getCodigoartesano());
+                if (artesano.getIdartesano() == artesanosByCodigo.getIdartesano()) {
+                    artesanoRepository.save(artesano);
                 } else {
-                    /*if (artesano.getComunidad() == null) {
-                        model.addAttribute("msgRepetido", "debe selecionar una comunidad");
+                    if (artesano.getCodigoartesano().equals(artesanosByCodigo.getCodigoartesano())) {
+                        model.addAttribute("msgRepetido", "Codigo Artesano ya utilizado");
                         model.addAttribute("listacomunidades", comunidadRepository.findAll());
                         return "artesano/newEdit";
-                    } else {*/
-
-                    if (artesano.getIdartesano() == 0) {
-                        return agregarNuevoArtesanoYVerificar(artesano, model, att);
                     } else {
-
                         att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
                         artesanoRepository.save(artesano);
-                        return "redirect:/artesano";
-                    }
 
-                   // }
+                    }
                 }
-     }
+            }
+        }
+        return "redirect:/artesano";
+    }
 
 
     public String agregarNuevoArtesanoYVerificar(Artesano artesano, Model model, RedirectAttributes att) {
