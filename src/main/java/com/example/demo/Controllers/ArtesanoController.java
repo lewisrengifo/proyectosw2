@@ -155,7 +155,7 @@ public class ArtesanoController {
     }
 
 
-    @PostMapping("/buscador")
+    @GetMapping("/buscador")
     public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
 
         String busqueda = (String) params.get("searchField");
