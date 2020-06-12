@@ -1,67 +1,101 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Dto.ArtesanoServiceApi;
 import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Comunidad;
+import com.example.demo.Entity.Producto;
 import com.example.demo.Repository.ArtesanoRepository;
 import com.example.demo.Repository.ComunidadRepository;
+import com.example.demo.service.ArtesanoService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.jws.WebParam;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/artesano")
 public class ArtesanoController {
 
     @Autowired
+    ArtesanoService artesanoService;
+
+    @Autowired
     ArtesanoRepository artesanoRepository;
     @Autowired
     ComunidadRepository comunidadRepository;
 
-    @GetMapping("")
-    public String listaArtesano(Model model){
-        model.addAttribute("listaArtesano",artesanoRepository.findAll());
-        model.addAttribute("listacomunidades",comunidadRepository.findAll());
-        return "artesano/lista";
+    @GetMapping(value = {"", "/lista"})
+    public String listaArtesano(Model model,@RequestParam Map<String, Object> params) {
+
+        int currentPage = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        Page<Artesano> page = artesanoService.listAll(currentPage);
+            long totalItems = page.getTotalElements();
+            int totalPages = page.getTotalPages();
+
+        if (totalPages > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+            List<Artesano> listaArtesanos = page.getContent();
+
+            model.addAttribute("totalItems", totalItems);
+            model.addAttribute("listaArtesano", listaArtesanos);
+            model.addAttribute("current", currentPage + 1);
+            model.addAttribute("next", currentPage + 2);
+             model.addAttribute("prev", currentPage);
+            model.addAttribute("last", totalPages);
+            return "artesano/lista";
+
 
     }
 
-    @GetMapping("/nuevo")
-    public String nuevoArtesano(@ModelAttribute("artesano") Artesano a,Model model){
 
-        model.addAttribute("listacomunidades",comunidadRepository.findAll());
+
+    @GetMapping("/nuevo")
+    public String nuevoArtesano(@ModelAttribute("artesano") Artesano a, Model model) {
+
+        model.addAttribute("listacomunidades", comunidadRepository.findAll());
         return "artesano/newEdit";
     }
 
     @GetMapping("/editar")
     public String editarArtesano(@ModelAttribute("artesano") Artesano artesano,
-                                  @RequestParam("id") int id, Model model){
+                                 @RequestParam("id") int id, Model model) {
 
         Optional<Artesano> optionalArtesano = artesanoRepository.findById(id);
-        if(optionalArtesano.isPresent()){
+        if (optionalArtesano.isPresent()) {
             artesano = optionalArtesano.get();
-            model.addAttribute("artesano",artesano);
-            model.addAttribute("listacomunidades",comunidadRepository.findAll());
+            model.addAttribute("artesano", artesano);
+            model.addAttribute("listacomunidades", comunidadRepository.findAll());
 
             return "artesano/newEdit";
-        }
-        else {
-            return  "redirect:/artesano";
+        } else {
+            return "redirect:/artesano";
         }
 
     }
 
     @GetMapping("/borrar")
     public String borrarArtesano(Model model,
-                                  @RequestParam("id") int id, RedirectAttributes att){
+                                 @RequestParam("id") int id, RedirectAttributes att) {
 
         Optional<Artesano> optionalArtesano = artesanoRepository.findById(id);
-        if(optionalArtesano.isPresent()){
+        if (optionalArtesano.isPresent()) {
             att.addFlashAttribute("msgAr", "Borrado Exitosamente");
             artesanoRepository.deleteById(id);
             return "redirect:/artesano";
@@ -70,28 +104,65 @@ public class ArtesanoController {
     }
 
     @PostMapping("/guardar")
-    public String guardarArtesano(@ModelAttribute("comunidad") @Valid Artesano artesano, BindingResult bindingResult,
-                                   RedirectAttributes att){
+    public String guardarArtesano(@ModelAttribute("artesano") @Valid Artesano artesano, BindingResult bindingResult,
+                                  RedirectAttributes att, Model model, @RequestParam("comunidad") int idcomunidad) {
 
-        if(bindingResult.hasErrors()){
-            return "artesano/newEdit";
-        }else{
-            if (artesano.getIdartesano()==0){
-                att.addFlashAttribute("msgAr","Artesano Creado Exitosamente");
-            }else{
-                att.addFlashAttribute("msgAr","Artesano Actualizado Exitosamente");
-            }
+
+                if (bindingResult.hasErrors()) {
+                    model.addAttribute("listacomunidades", comunidadRepository.findAll());
+                    return "artesano/newEdit";
+                } else {
+                    /*if (artesano.getComunidad() == null) {
+                        model.addAttribute("msgRepetido", "debe selecionar una comunidad");
+                        model.addAttribute("listacomunidades", comunidadRepository.findAll());
+                        return "artesano/newEdit";
+                    } else {*/
+
+                        if (artesano.getIdartesano() == 0) {
+                            return agregarNuevoArtesanoYVerificar(artesano, model, att);
+                        } else {
+                            att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
+                            artesanoRepository.save(artesano);
+                            return "redirect:/artesano";
+                        }
+                   // }
+                }
+     }
+
+
+    public String agregarNuevoArtesanoYVerificar(Artesano artesano, Model model, RedirectAttributes att) {
+
+
+        List<Artesano> byCodigoartesano = artesanoRepository.buscarSucomunidad(artesano.getCodigoartesano());
+
+        if (byCodigoartesano.isEmpty()) {
+            att.addFlashAttribute("msgAr", "Artesano Creado Exitosamente");
             artesanoRepository.save(artesano);
             return "redirect:/artesano";
+        } else {
+            model.addAttribute("msgRepetido", "Codigo ya está siendo utilizado");
+            model.addAttribute("listacomunidades", comunidadRepository.findAll());
+            return "artesano/newEdit";
         }
+
     }
 
-    @PostMapping("/buscar")
-    public String filtarArtesanoPorComunidad(@RequestParam("idcomunidad") int idcomunidad,Model model){
+    @PostMapping("/filtroComunidad")
+    public String filtarArtesanoPorComunidad(@RequestParam("filtroComunidad") int idcomunidad, Model model) {
 
-        model.addAttribute("listaArtesanos",artesanoRepository.filtarPorComunidad(idcomunidad));
-        model.addAttribute("listacomunidades",comunidadRepository.findAll());
+        model.addAttribute("listaArtesano", artesanoRepository.filtarPorComunidad(idcomunidad));
+        model.addAttribute("listacomunidades", comunidadRepository.findAll());
         return "artesano/lista";
+
+    }
+
+    @PostMapping("/buscador")
+    public String buscadorSearch(@RequestParam("searchField") String buscador, Model model) {
+
+        model.addAttribute("listaArtesano", artesanoRepository.buscadorArtesano(buscador));
+        return "artesano/lista";
+
+
     }
 
 
