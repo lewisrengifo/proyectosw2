@@ -18,14 +18,13 @@
             <div  class="col-md-8">
                 <div class="card">
                     <div class="container padding">
-
-
                         <form method="post" th:action="@{'/comunidad/guardar'}" th:object="${comunidad}">
                             <input type="hidden" th:field="*{idcomunidad}"/>
-                            <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger"
-                                 role="alert"></div>
-                            <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger"
-                                 role="alert"></div>
+                            <h4 th:if="${msg1 != null}" th:text="${msg1}" style="color:#FF0000"
+                                 role="alert"></h4>
+                            <h4 th:if="${msg2 != null}" th:text="${msg2}" style="color:#FF0000"
+                                 role="alert"></h4>
+                            <br>
                             <div class="form-group">
                                 <label for="nombrecomunidad">Nombre Comunidad</label>
                                 <input type="text" class="form-control" th:field="*{nombrecomunidad}" style="width: 25%">
