@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Lista de Artesanos')">
 </head>
@@ -47,7 +47,7 @@
 
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
-                                    <tr>
+                                    <tr class="info">
                                         <th>#</th>
                                         <th>NOMBRE</th>
                                         <th>APELLIDO PATERNO</th>
@@ -66,8 +66,8 @@
                                         <td th:text="${a.apellidomaterno}">H</td>
                                         <td th:text="${a.codigoartesano}">H</td>
                                         <td th:text="${a.comunidad.getNombrecomunidad()}">H</td>
-                                        <td><a th:href="@{'artesano/editar?id=' + ${a.idartesano}}"> editar</a></td>
-                                        <td><a th:href="@{'artesano/borrar?id=' + ${a.idartesano}}">borrar</a></td>
+                                        <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'artesano/editar?id=' + ${a.idartesano}}"> editar</a></td>
+                                        <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'artesano/borrar?id=' + ${a.idartesano}}">borrar</a></td>
                                     </tr>
                                     </tbody>
                                 </table>

@@ -24,35 +24,32 @@
 <body>
 
 <nav th:fragment="barrasuperior">
-    <nav class="navbar  navbar-default top-navbar navbar-fixed-top" role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand waves-effect waves-dark" ><i class="large material-icons">track_changes</i> <strong>Moscoy</strong></a>
+            <nav class="navbar  navbar-default top-navbar navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand waves-effect waves-dark" ><i class="large material-icons">track_changes</i> <strong>Moscoy</strong></a>
 
-            <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
-        </div>
+                    <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
+                </div>
 
 
-        <ul class="nav navbar-top-links navbar-right" sec:authorize="isAuthenticated()">
+                <ul class="nav navbar-top-links navbar-right" sec:authorize="isAuthenticated()">
 
-            <li><a class="dropdown-button waves-effect waves-dark" href="" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <span th:text="|Bienvenido ${session.usuario.getNombre()} ${session.usuario.getApellido()}|"></span> <i class="material-icons right">arrow_drop_down</i></a></li>
+                    <li><a class="dropdown-button waves-effect waves-dark" href="" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <span th:text="|Bienvenido ${session.usuario.getNombre()} ${session.usuario.getApellido()} - ${session.usuario.getRol_idrol().getNombre()}|"></span> <i class="material-icons right">arrow_drop_down</i></a></li>
 
-        </ul>
+                </ul>
 
-    </nav>
+            </nav>
                 <!-- Dropdown Structure -->
                 <ul id="dropdown1" class="dropdown-content">
-                    <li><a href="#" class="center">My Perfil</a>
-                    </li>
-
                     <li> <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0 center">
                         <form th:action="@{/logout}" method="post">
-                            <input class="btn btn-link" type="submit" value="(Cerrar Sesión)"/>
+                            <input class="btn btn-link" type="submit" value="Cerrar Sesión"/>
                         </form>
                     </div>
 
@@ -64,8 +61,8 @@
     <div class="sidebar-collapse">
         <ul class="nav" id="main-menu">
 
-            <li sec:authorize="hasAnyAuthority('Administrador')">
-                <a th:href="@{/artesano/inventario}"  class=" waves-effect waves-dark"><i class="fa fa-dashboard"></i> Ver Iventario</a>
+            <li sec:authorize="hasAnyAuthority('Gestor sede','Gestor principal')">
+                <a th:href="@{/inventarioPrincipal}"  class=" waves-effect waves-dark"><i class="fa fa-dashboard"></i> Ver Iventario</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Administrador','Gestor principal')">
                 <a  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Stock</a>
@@ -77,7 +74,7 @@
             <li sec:authorize="hasAnyAuthority('Administrador')">
                 <a  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Lista de Sedes</a>
             </li>
-            <li sec:authorize="hasAnyAuthority('Gestor principal', 'sede')">
+            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')">
                 <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> descripciton de productos <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
@@ -106,7 +103,7 @@
             </li>
 
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal')">
+            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
                 <a href="#" class=" waves-effect waves-dark"><i class="fa fa-sitemap"></i> Ventas <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
@@ -120,15 +117,6 @@
             </li>
 
 
-            <div sec:authorize="isAnonymous()" class="form-inline my-2 my-lg-0">
-                <a class="nav-link" th:href="@{/loginForm}">Iniciar Sesión</a>
-            </div>
-            <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0">
-                <span th:text="|Bienvenido ${session.usuario.getNombre()} ${session.usuario.getApellido()}|"></span>
-                <form th:action="@{/logout}" method="post">
-                    <input class="btn btn-link" type="submit" value="(Cerrar Sesión)"/>
-                </form>
-            </div>
         </ul>
 
     </div>

@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("linea")
+@RequestMapping("/linea")
 public class LineaController {
 
     @Autowired

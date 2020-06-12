@@ -22,10 +22,10 @@
         <div id="page-inner">
             <!-- /. COMUNIDAD  -->
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-action">
-                            COMUNIDAD
+                            INVENTARIO PRINCIPAL
                             <a class="btn btn-primary right" th:href="@{'/comunidad/nuevo'}">agregar</a>
                         </div>
                         <div class="card-content">
@@ -37,21 +37,46 @@
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>INVENTARIO-1</th>
-                                        <th>iventario-2</th>
-                                        <th></th>
-                                        <th></th>
+                                        <th>N° de pedido</th>
+                                        <th>Línea</th>
+                                        <th>Categoría</th>
+                                        <th>Nombre producto</th>
+                                        <th>Descripcion producto</th>
+                                        <th>Tamaño</th>
+                                        <th>Comunidad Perteneciente</th>
+                                        <th>Artesano</th>
+                                        <th>Cantidad</th>
+                                        <th>Tipo</th>
+                                        <th>Fecha</th>
+                                        <th>Color</th>
+                                        <th>Foto</th>
+                                        <th>Costo Tejedor</th>
+                                        <th>Costo Moscoy</th>
+                                        <th>Facilitador</th>
+                                        <th>Codigo generado</th>
+
+
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <!--tr th:each="c, info : ${listaComunidad}">
-                                        <td th:text="${info.index +1}">1</td>
-                                        <td th:text="${c.nombrecomunidad}">Home</td>
-                                        <td th:text="${c.codigocomunidad}">H</td>
-                                        <td><a th:href="@{'comunidad/editar?id=' + ${c.idcomunidad}}"> editar</a></td>
-                                        <td><a th:href="@{'comunidad/borrar?id=' + ${c.idcomunidad}}">borrar</a></td>
-                                    </tr!-->
-
+                                        <td>1</td>
+                                        <td>de31edae</td>
+                                        <td>---</td>
+                                        <td>----</td>
+                                        <td>---</td>
+                                        <td>---</td>
+                                        <td>---</td>
+                                        <td>---</td>
+                                        <td>-----</td>
+                                        <td>----</td>
+                                        <td>----</td>
+                                        <td>----</td>
+                                        <td>------</td>
+                                        <td>------</td>
+                                        <td>------</td>
+                                        <td>-----</td>
+                                        <td>----</td>
+                                        <td>-----</td>
 
                                     </tbody>
                                 </table>
