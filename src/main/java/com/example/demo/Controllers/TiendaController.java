@@ -16,7 +16,7 @@ public class TiendaController {
     @Autowired
     TiendaRepository tiendaRepository;
 
-    @GetMapping("lista")
+    @GetMapping(value = {"lista", ""})
     public String listar (Model model){
 
         model.addAttribute("lista", tiendaRepository.findAll());

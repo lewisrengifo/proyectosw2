@@ -24,7 +24,7 @@
                                 <label for="codigolinea">codigo</label>
                                 <input type="text" class="form-control" th:field="*{codigolinea}" style="width: 25%">
                             </div>
-                            <a th:href="@{'/categoria'}" class=" btn btn-info btn-responsive btninter">Cancelar</a>
+                            <a th:href="@{'/linea'}" class=" btn btn-info btn-responsive btninter">Cancelar</a>
                             <button type="submit" class=" btn btn-info btn-responsive btninter rigth" th:text="${linea.idlinea == 0? 'Registrar' : 'Actualizar'}">Reg/act</button>
                         </form>
                     </div>
