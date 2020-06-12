@@ -1,6 +1,7 @@
 package com.example.demo.Repository;
 
 import com.example.demo.Entity.Comunidad;
+import com.example.demo.Entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
