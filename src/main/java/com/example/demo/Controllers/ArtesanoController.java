@@ -116,9 +116,28 @@ public class ArtesanoController {
             if (artesano.getIdartesano() == 0) {
                 return agregarNuevoArtesanoYVerificar(artesano, model, att);
             } else {
+                //CODIGO ARTESANO MAYUSCULA
+                String codm = artesano.getCodigoartesano().toUpperCase();
+                artesano.setCodigoartesano(codm);
 
                 Artesano artesanosByCodigo = artesanoRepository.editarArtesanoBuscarCodigo(artesano.getCodigoartesano());
+
+
                 if (artesano.getIdartesano() == artesanosByCodigo.getIdartesano()) {
+
+                    //NOMBRE ARTESANO 1°MAYUSCULA
+                    String nom = artesano.getNombreartesano().substring(0,1).toUpperCase() + artesano.getNombreartesano().substring(1).toLowerCase();
+                    artesano.setNombreartesano(nom);
+                    //APELLIDO PATERNO 1°MAYUSCULA
+                    String ape = artesano.getApellidopaterno().substring(0,1).toUpperCase() + artesano.getApellidopaterno().substring(1).toLowerCase();
+                    artesano.setApellidopaterno(ape);
+                    //APELLIDO MATERNO 1°MAYUSCULA
+                    if (artesano.getApellidomaterno().isEmpty()){
+                        artesano.setApellidomaterno(null);
+                    }else{
+                        String mate = artesano.getApellidomaterno().substring(0,1).toUpperCase() + artesano.getApellidomaterno().substring(1).toLowerCase();
+                        artesano.setApellidomaterno(mate);
+                    }
                     artesanoRepository.save(artesano);
                 } else {
                     if (artesano.getCodigoartesano().equals(artesanosByCodigo.getCodigoartesano())) {
@@ -127,7 +146,22 @@ public class ArtesanoController {
                         return "artesano/newEdit";
                     } else {
                         att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
+                        //NOMBRE ARTESANO 1°MAYUSCULA
+                        String nom = artesano.getNombreartesano().substring(0,1).toUpperCase() + artesano.getNombreartesano().substring(1).toLowerCase();
+                        artesano.setNombreartesano(nom);
+                        //APELLIDO PATERNO 1°MAYUSCULA
+                        String ape = artesano.getApellidopaterno().substring(0,1).toUpperCase() + artesano.getApellidopaterno().substring(1).toLowerCase();
+                        artesano.setApellidopaterno(ape);
+                        //APELLIDO MATERNO 1°MAYUSCULA
+                        if (artesano.getApellidomaterno().isEmpty()){
+                            artesano.setApellidomaterno(null);
+                        }else{
+                            String mate = artesano.getApellidomaterno().substring(0,1).toUpperCase() + artesano.getApellidomaterno().substring(1).toLowerCase();
+                            artesano.setApellidomaterno(mate);
+                        }
+
                         artesanoRepository.save(artesano);
+
 
                     }
                 }
@@ -139,11 +173,29 @@ public class ArtesanoController {
 
     public String agregarNuevoArtesanoYVerificar(Artesano artesano, Model model, RedirectAttributes att) {
 
+        //CODIGO ARTESANO MAYUSCULA
+        String codm = artesano.getCodigoartesano().toUpperCase();
+        artesano.setCodigoartesano(codm);
 
         List<Artesano> byCodigoartesano = artesanoRepository.buscarSucomunidad(artesano.getCodigoartesano());
 
         if (byCodigoartesano.isEmpty()) {
             att.addFlashAttribute("msgAr", "Artesano Creado Exitosamente");
+
+            //NOMBRE ARTESANO 1°MAYUSCULA
+            String nom = artesano.getNombreartesano().substring(0,1).toUpperCase() + artesano.getNombreartesano().substring(1).toLowerCase();
+            artesano.setNombreartesano(nom);
+            //APELLIDO PATERNO 1°MAYUSCULA
+            String ape = artesano.getApellidopaterno().substring(0,1).toUpperCase() + artesano.getApellidopaterno().substring(1).toLowerCase();
+            artesano.setApellidopaterno(ape);
+            //APELLIDO MATERNO 1°MAYUSCULA
+            if (artesano.getApellidomaterno().isEmpty()){
+                artesano.setApellidomaterno(null);
+            }else{
+                String mate = artesano.getApellidomaterno().substring(0,1).toUpperCase() + artesano.getApellidomaterno().substring(1).toLowerCase();
+                artesano.setApellidomaterno(mate);
+            }
+
             artesanoRepository.save(artesano);
             return "redirect:/artesano";
         } else {

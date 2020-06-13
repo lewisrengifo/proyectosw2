@@ -30,11 +30,11 @@
             </div>
             <br>
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <div class="card">
 
                         <div class="card-action">
-                            ARTESANO
+
                             <a class="btn btn-outline-danger right" th:href="@{'/artesano/nuevo'}">agregar</a>
                             <br>
                             <br>
@@ -54,8 +54,8 @@
                                         <th>APELLIDO MATERNO</th>
                                         <th>CODIGO</th>
                                         <th>COMUNIDAD</th>
-                                        <th></th>
-                                        <th></th>
+                                        <th sec:authorize="hasAnyAuthority('Gestor principal')"></th>
+                                        <th sec:authorize="hasAnyAuthority('Gestor principal')"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -83,7 +83,7 @@
 
                                         <ul th:if="${last != 1}" class="pagination justify-content-center">
 
-                                            <li class ="page-item" th:classappend="${prev == 0 ? 'disabled': '' }">
+                                            <li  class ="page-item" th:classappend="${prev == 0 ? 'disabled': '' }">
                                                 <a class="page-link" th:if="${busqueda!=null}" th:href="@{'/artesano/buscador' + '?searchField=' + ${busqueda} +'&page=' + ${prev}} "> Anterior </a>
                                                 <a class="page-link" th:unless="${busqueda!=null}" th:href="@{'/artesano' + '?page=' + ${prev}} "> Anterior </a>
 
@@ -91,7 +91,7 @@
                                                 <a class="page-link" th:if="${busqueda!=null}" th:href="@{'/artesano/buscador' + '?searchField=' + ${busqueda}+ '&page=' + ${page}} " th:text="${page}"></a>
                                             <a class="page-link" th:unless="${busqueda!=null}" th:href="@{'/artesano' + '?page=' + ${page}} " th:text="${page}"></a>
 
-                                        </li>
+                                            </li>
 
                                             <li class ="page-item" th:classappend="${current == last ? 'disabled': '' }">
                                                 <a class="page-link" th:if="${busqueda!=null}" th:href="@{'/artesano/buscador' + '?searchField=' + ${busqueda}+ '&page=' + ${next}} "> Siguiente </a>

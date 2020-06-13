@@ -64,8 +64,8 @@
             <li sec:authorize="hasAnyAuthority('Gestor sede','Gestor principal')">
                 <a th:href="@{/inventarioPrincipal}"  class=" waves-effect waves-dark"><i class="fa fa-dashboard"></i> Ver Iventario</a>
             </li>
-            <li sec:authorize="hasAnyAuthority('Administrador','Gestor principal')">
-                <a  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Stock</a>
+            <li sec:authorize="hasAnyAuthority('Gestor sede')">
+                <a  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Administrador')">
                 <a  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Lista de Usuarios</a>
