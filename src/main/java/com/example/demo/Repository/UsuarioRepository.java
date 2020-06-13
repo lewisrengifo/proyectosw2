@@ -22,5 +22,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Query(value = "select * from usuario where idUsuario not in (select u.idUsuario from usuario u where u.idUsuario=?1);", nativeQuery = true)
     List<Usuario> buscarmenosmio(int idusuario);
+
+    @Query(value = "select MAX(usuario.idUsuario) as id from usuario", nativeQuery = true)
+    int ultimoidinsertado();
 }
 
