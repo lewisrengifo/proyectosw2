@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Moscoy')">
+</head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
+
+
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                INVENTARIO PRINCIPAL
+            </h1>
+        </div>
+
+        <!-- /. COMUNIDAD  -->
+        <div id="page-inner">
+            <div>
+                <form method="get" th:action="@{/artesano/buscador}">
+                    <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar" aria-label="Search" style="width: 40%">
+                    <button type="submit" class="btn btn-outline-danger">buscar</button>
+                    <a th:href="@{'/artesano'}" class="btn btn-outline-danger">Limpiar</a>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-action">
+                            <a class="btn btn-primary right" th:href="@{'/comunidad/nuevo'}">agregar</a>
+                        </div>
+                        <div class="card-content">
+                            <div class="table-responsive">
+                                <div th:if="${msgCo != null}" th:text="${msgCo}" class="alert alert-success"
+                                     role="alert"></div>
+
+                                <h2 >Ingresar pedido a inventario</h2>
+                                <br>
+                                <form method="post" th:action="@{'/inventarioPrincipal/guardar'}" th:object="${inventarioProducto}">
+                                    <input type="hidden" th:field="*{idinventario}"/>
+                                    <div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                                         role="alert" style="width: 40%">
+                                    </div>
+
+                                    <br>
+                                    <div class="form-group">
+                                        <label for="nombrearteano">Nombre Artesano</label>
+                                        <input type="text" class="form-control" th:field="*{nombreartesano}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('nombreartesano')}" th:errors="*{nombreartesano}"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="apellidopaterno">Apellido Paterno</label>
+                                        <input type="text" class="form-control" th:field="*{apellidopaterno}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('apellidopaterno')}" th:errors="*{apellidopaterno}"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="apellidomaterno">Apellido Materno</label>
+                                        <input type="text" class="form-control" th:field="*{apellidomaterno}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('apellidomaterno')}" th:errors="*{apellidomaterno}"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="codigoartesano">Codigo Artesano</label>
+                                        <input type="text" class="form-control" th:field="*{codigoartesano}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('codigoartesano')}" th:errors="*{codigoartesano}"></div>
+
+                                    </div>
+
+                                    <div class="form-group" th:if="${artesano.apellidomaterno== null}">
+                                        <label for="comunidad">comunidad</label>
+                                        <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
+
+                                            <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
+                                                    th:text="${co.nombrecomunidad}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group" th:unless="${artesano.apellidomaterno == null}">
+                                        <label for="comunidad">comunidad</label>
+                                        <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
+                                            <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
+                                                    th:text="${co.nombrecomunidad}"
+                                                    th:selected="${artesano.comunidad.getIdcomunidad() == co.idcomunidad}">
+                                            </option>
+                                        </select>
+
+                                    </div>
+
+                                    <a th:href="@{'/artesano'}" class="btn btn-danger">Cancelar</a>
+                                    <button type="submit" class="btn btn-primary"
+                                            th:text="${artesano.idartesano == 0? 'Registrar' : 'Actualizar'}">Reg/act
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+
+</html>

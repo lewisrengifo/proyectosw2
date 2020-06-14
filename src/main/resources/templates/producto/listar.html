@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Lista de productos')">
 </head>
@@ -14,7 +14,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                Lista de Productos
+                Productos
             </h1>
         </div>
 
@@ -65,9 +65,15 @@
                                             <td th:text="${producto.getCodigodescripcionproducto()}"></td>
                                             <td th:text="${producto.getLinea().nombrelinea}"></td>
                                             <th class="center"><a href="" style='width:125px; height:33px'> Ver</a></th>
+<<<<<<< HEAD
                                             <td><a th:href="@{'/producto/verMas' + '?id=' + ${producto.getIdproducto()}}">Ver Mas</a>
                                             </td>
                                             <td><a th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Agregar al carrito</a>
+=======
+                                            <td sec:authorize="hasAnyAuthority('Gestor principal')"  ><a th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
+                                            </td>
+                                            <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
+>>>>>>> e0ce5ca6dbcbd6bd6a18561dcffd894e36f41cae
                                             </td>
                                         </tr>
                                     </tbody>

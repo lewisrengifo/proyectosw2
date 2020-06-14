@@ -49,7 +49,7 @@
                                     <div class="text-danger" th:if="${#fields.hasErrors('correo')}"
                                          th:errors="*{correo}"></div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" th:if="*{idusuario==0}">
                                     <label for="Contraseña">Contraseña</label>
                                     <input style="width: 88%" type="password" class="form-control"
                                            th:field="*{contrasena}">

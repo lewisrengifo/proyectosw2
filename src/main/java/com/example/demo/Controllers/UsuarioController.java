@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Entity.Rol;
 import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.RolRepository;
 import com.example.demo.Repository.SedeRepository;
@@ -40,7 +41,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol")int rol_idrol) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("listaroles", rolRepository.findAll());
             model.addAttribute("listasedes", sedeRepository.findAll());
@@ -95,8 +96,26 @@ public class UsuarioController {
 
             return "redirect:/usuario/lista";
         }
-        usuario.setContrasena(encriptar(usuario.getContrasena()));
-        usuarioRepository.save(usuario);
+        if(usuario.getIdusuario()==0){
+            usuario.setContrasena(encriptar(usuario.getContrasena()));
+
+
+        }else{
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuario.getIdusuario());
+            usuario.setContrasena(optionalUsuario.get().getContrasena());
+        }
+
+
+        //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
+        if(rol_idrol==1){
+
+            usuario.setSede_idrol(null);
+            usuarioRepository.save(usuario);
+        }else {
+            usuarioRepository.save(usuario);
+        }
+
+
         return "redirect:/usuario/lista";
     }
 
