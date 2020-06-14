@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='Iventario Principal')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Inventario Principal')">
 </head>
 <body>
 <div id="wrapper">
@@ -31,7 +31,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-action">
-                            <a class="btn btn-primary right" th:href="@{'/comunidad/nuevo'}">agregar</a>
+                            <a class="btn btn-primary right" th:href="@{'/inventarioPrincipal/agregarInventario'}">agregar</a>
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">

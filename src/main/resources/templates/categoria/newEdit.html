@@ -20,10 +20,15 @@
                         <div class="container padding">
 
 
-                            <div class="alert alert-success" style="width: 40%" role="alert" th:if="${mensajeIgual != null}" th:text="${mensajeIgual}"></div>
+<!--                            <div class="alert alert-success" style="width: 40%" role="alert" th:if="${mensajeIgual != null}" th:text="${mensajeIgual}"></div>-->
 
                             <form method="post" th:action="@{'/categoria/guardar'}" th:object="${categoria}">
                                 <input type="hidden" th:field="*{idcategoria}"/>
+                                <h4 th:if="${msg1 != null}" th:text="${msg1}" style="color:#FF0000"
+                                    role="alert"></h4>
+                                <h4 th:if="${msg2 != null}" th:text="${msg2}" style="color:#FF0000"
+                                    role="alert"></h4>
+                                <br>
                                 <div class="form-group">
                                     <label for="nombrecategoria">Nombre de la categoria</label>
                                     <input type="text" class="form-control" th:field="*{nombrecategoria}" style="width: 25%">

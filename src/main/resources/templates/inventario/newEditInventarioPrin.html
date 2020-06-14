@@ -48,51 +48,101 @@
 
                                     <br>
                                     <div class="form-group">
-                                        <label for="nombrearteano">Nombre Artesano</label>
-                                        <input type="text" class="form-control" th:field="*{nombreartesano}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('nombreartesano')}" th:errors="*{nombreartesano}"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="apellidopaterno">Apellido Paterno</label>
-                                        <input type="text" class="form-control" th:field="*{apellidopaterno}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('apellidopaterno')}" th:errors="*{apellidopaterno}"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="apellidomaterno">Apellido Materno</label>
-                                        <input type="text" class="form-control" th:field="*{apellidomaterno}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('apellidomaterno')}" th:errors="*{apellidomaterno}"></div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="codigoartesano">Codigo Artesano</label>
-                                        <input type="text" class="form-control" th:field="*{codigoartesano}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('codigoartesano')}" th:errors="*{codigoartesano}"></div>
-
+                                        <label for="numeropedido">Número de pedido</label>
+                                        <input type="text" class="form-control" th:field="*{numeropedido}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('numeropedido')}" th:errors="*{numeropedido}"></div>
                                     </div>
 
-                                    <div class="form-group" th:if="${artesano.apellidomaterno== null}">
-                                        <label for="comunidad">comunidad</label>
-                                        <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
+                                    <!-- ELEGIR UN PRODUCTO -->
+                                    <div class="form-group" th:if="${inventarioProducto.color == null}">
+                                        <label for="producto">Producto</label>
+                                        <select class="form-control" name="producto" id="producto" style="width: 40%">
 
-                                            <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
-                                                    th:text="${co.nombrecomunidad}">
+                                            <option th:each=" pro : ${listaproducto}" th:value="${pro.idproducto}"
+                                                    th:text="${pro.nombreproducto}">
                                             </option>
                                         </select>
                                     </div>
+                                    <div class="form-group" th:unless="${inventarioProducto.color == null}">
+                                        <label for="producto">Producto</label>
+                                        <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                            <option th:each=" pro : ${listaproducto}" th:value="${pro.idproducto}"
+                                                    th:text="${pro.nombreproducto}"
+                                                    th:selected="${pro.idproducto==inventarioProducto.getProducto().getIdproducto()}">
 
-                                    <div class="form-group" th:unless="${artesano.apellidomaterno == null}">
-                                        <label for="comunidad">comunidad</label>
-                                        <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
-                                            <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
-                                                    th:text="${co.nombrecomunidad}"
-                                                    th:selected="${artesano.comunidad.getIdcomunidad() == co.idcomunidad}">
                                             </option>
                                         </select>
+                                    </div>
+                                    <!-- FIN -->
+
+                                    <!-- ELEGIR UN CATEGORIA -->
+                                    <div class="form-group" th:if="${inventarioProducto.color == null}">
+                                        <label for="Categoria">Categoria</label>
+                                        <select class="form-control" name="categoria" id="categoria" style="width: 40%">
+                                            <option th:each=" ca : ${listacategoria}" th:value="${ca.idcategoria}"
+                                                    th:text="${ca.nombrecategoria}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" th:unless="${inventarioProducto.color == null}">
+                                        <label for="Categoria">Categoria</label>
+                                        <select class="form-control" name="categoria" id="categoria" style="width: 40%">
+                                            <option th:each=" ca : ${listacategoria}" th:value="${ca.idcategoria}"
+                                                    th:text="${ca.nombrecategoria}"
+                                                    th:selected="${ca.idcategoria==inventarioProducto.getCategoria().getIdcategoria()}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!-- FIN -->
+
+                                    <!-- ELEGIR UN TAMAÑO -->
+                                    <div class="form-group" th:if="${inventarioProducto.color == null}">
+                                        <label for="Tamano">Tamaño</label>
+                                        <select class="form-control" name="tamano" id="tamano" style="width: 40%">
+                                            <option th:each=" ta : ${listatamano}" th:value="${ta.idtamano}"
+                                                    th:text="${ta.nombretamano}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" th:unless="${inventarioProducto.color == null}">
+                                        <label for="tamano">Tamaño</label>
+                                        <select class="form-control" name="tamano" id="tamano" style="width: 40%">
+                                            <option th:each=" ta : ${listatamano}" th:value="${ta.idtamano}"
+                                                    th:text="${ta.nombretamano}"
+                                                    th:selected="${ta.idtamano==inventarioProducto.getTamano().getIdtamano()}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!-- FIN -->
+
+
+                                    <div class="form-group">
+                                        <label for="Cantidad">Cantidad</label>
+                                        <input type="text" class="form-control" th:field="*{cantidad}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="color">Color</label>
+                                        <input type="text" class="form-control" th:field="*{color}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="costomosqoy">Costo Moscoy</label>
+                                        <input type="text" class="form-control" th:field="*{preciomosqoy}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('preciomosqoy')}" th:errors="*{preciomosqoy}"></div>
 
                                     </div>
+                                    <div class="form-group">
+                                        <label for="preciotejedor">Costo Tejedor</label>
+                                        <input type="text" class="form-control" th:field="*{preciotejedor}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('preciotejedor')}" th:errors="*{preciotejedor}"></div>
+                                    </div>
 
-                                    <a th:href="@{'/artesano'}" class="btn btn-danger">Cancelar</a>
+
+
+                                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
                                     <button type="submit" class="btn btn-primary"
-                                            th:text="${artesano.idartesano == 0? 'Registrar' : 'Actualizar'}">Reg/act
+                                            th:text="${inventarioProducto.idinventario == 0? 'Registrar' : 'Actualizar'}">Reg/act
                                     </button>
                                 </form>
                             </div>

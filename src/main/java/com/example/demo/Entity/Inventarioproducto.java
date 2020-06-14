@@ -29,7 +29,9 @@ public class Inventarioproducto {
 
     private int cantidad;
     private String color;
+    @Column(name = "costomosqoy")
     private Double preciomosqoy;
+    @Column(name = "costotejedor")
     private Double preciotejedor;
     @Column(nullable = false)
     private String facilitador;

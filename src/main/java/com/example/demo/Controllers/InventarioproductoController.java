@@ -1,7 +1,10 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Entity.Inventarioproducto;
+import com.example.demo.Repository.CategoriaRepository;
 import com.example.demo.Repository.InventarioproductoRepository;
+import com.example.demo.Repository.ProductoRepository;
+import com.example.demo.Repository.TamanoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,18 +17,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class InventarioproductoController {
 
     @Autowired
+    ProductoRepository productoRepository;
+    @Autowired
+    CategoriaRepository categoriaRepository;
+    @Autowired
+    TamanoRepository tamanoRepository;
+    @Autowired
     InventarioproductoRepository inventarioproductoRepository;
 
     @GetMapping(value = {"","/","/lista"})
     public String listaInventarioProducto(Model model){
 
         //model.addAttribute("listaInventarioProducto", inventarioproductoRepository.findAll());
-
         return "inventario/inventarioPrincipal";
     }
 
     @GetMapping("/agregarInventario")
-    public String agregarInventario(@ModelAttribute("inventarioProducto")Inventarioproducto invPro){
+    public String agregarInventario(@ModelAttribute("inventarioProducto")Inventarioproducto invPro,Model model){
+        model.addAttribute("listaproducto",productoRepository.findAll());
+        model.addAttribute("listacategoria",categoriaRepository.findAll());
+        model.addAttribute("listatamano",tamanoRepository.findAll());
         return "inventario/newEditInventarioPrin";
     }
 

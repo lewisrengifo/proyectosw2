@@ -120,7 +120,8 @@ public class ComunidadController {
                     }
                 }
             }
-            String nom= comunidad.getNombrecomunidad().substring(0, 1).toUpperCase() + comunidad.getNombrecomunidad().substring(1);
+            //String nom= comunidad.getNombrecomunidad().substring(0, 1).toUpperCase() + comunidad.getNombrecomunidad().substring(1);
+            String nom=comunidad.getNombrecomunidad().substring(0, 1).toUpperCase() + comunidad.getNombrecomunidad().substring(1).toLowerCase();
             comunidad.setNombrecomunidad(nom);
             String cod=comunidad.getCodigocomunidad().toUpperCase();
             comunidad.setCodigocomunidad(cod);
