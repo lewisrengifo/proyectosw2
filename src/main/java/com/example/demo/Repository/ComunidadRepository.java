@@ -10,10 +10,14 @@ import java.util.List;
 
 @Repository
 public interface ComunidadRepository extends JpaRepository<Comunidad,Integer> {
+
+    Comunidad findByIdcomunidad(String idcomunidad);
+
     @Query(value = "SELECT * FROM comunidad where comunidad.nombrecomunidad=?1 or comunidad.codigocomunidad=?1"
             , nativeQuery = true)
     List<Comunidad> filtro(String nom);
     @Query(value = "SELECT * FROM comunidad where idcomunidad not in (Select c.idcomunidad from comunidad c where c.idcomunidad=?1);"
             , nativeQuery = true)
     List<Comunidad> mio(int id);
+
 }
