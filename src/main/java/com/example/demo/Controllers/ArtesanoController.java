@@ -11,6 +11,7 @@ import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,32 +39,31 @@ public class ArtesanoController {
     ComunidadRepository comunidadRepository;
 
     @GetMapping(value = {"", "/lista"})
-    public String listaArtesano(Model model,@RequestParam Map<String, Object> params) {
+    public String listaArtesano(Model model, @RequestParam Map<String, Object> params) {
 
         int currentPage = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
         Page<Artesano> page = artesanoService.listAll(currentPage);
-            long totalItems = page.getTotalElements();
-            int totalPages = page.getTotalPages();
+        long totalItems = page.getTotalElements();
+        int totalPages = page.getTotalPages();
 
         if (totalPages > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
         }
 
-            List<Artesano> listaArtesanos = page.getContent();
+        List<Artesano> listaArtesanos = page.getContent();
 
-            model.addAttribute("totalItems", totalItems);
-            model.addAttribute("listaArtesano", listaArtesanos);
-            model.addAttribute("current", currentPage + 1);
-            model.addAttribute("next", currentPage + 2);
-             model.addAttribute("prev", currentPage);
-            model.addAttribute("last", totalPages);
-            return "artesano/lista";
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("listaArtesano", listaArtesanos);
+        model.addAttribute("current", currentPage + 1);
+        model.addAttribute("next", currentPage + 2);
+        model.addAttribute("prev", currentPage);
+        model.addAttribute("last", totalPages);
+        return "artesano/lista";
 
 
     }
-
 
 
     @GetMapping("/nuevo")
@@ -105,38 +105,97 @@ public class ArtesanoController {
 
     @PostMapping("/guardar")
     public String guardarArtesano(@ModelAttribute("artesano") @Valid Artesano artesano, BindingResult bindingResult,
-                                  RedirectAttributes att, Model model, @RequestParam("comunidad") int idcomunidad) {
+                                  RedirectAttributes att, Model model, @RequestParam("comunidad") String idcomunidad) {
 
 
-                if (bindingResult.hasErrors()) {
-                    model.addAttribute("listacomunidades", comunidadRepository.findAll());
-                    return "artesano/newEdit";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("listacomunidades", comunidadRepository.findAll());
+            return "artesano/newEdit";
+        } else {
+
+            if (artesano.getIdartesano() == 0) {
+                return agregarNuevoArtesanoYVerificar(artesano, model, att);
+            } else {
+                //CODIGO ARTESANO MAYUSCULA
+                String codm = artesano.getCodigoartesano().toUpperCase();
+                artesano.setCodigoartesano(codm);
+
+                Artesano artesanosByCodigo = artesanoRepository.editarArtesanoBuscarCodigo(artesano.getCodigoartesano());
+
+
+                if (artesano.getIdartesano() == artesanosByCodigo.getIdartesano()) {
+
+                    //NOMBRE ARTESANO 1°MAYUSCULA
+                    String nom = artesano.getNombreartesano().substring(0,1).toUpperCase() + artesano.getNombreartesano().substring(1).toLowerCase();
+                    artesano.setNombreartesano(nom);
+                    //APELLIDO PATERNO 1°MAYUSCULA
+                    String ape = artesano.getApellidopaterno().substring(0,1).toUpperCase() + artesano.getApellidopaterno().substring(1).toLowerCase();
+                    artesano.setApellidopaterno(ape);
+                    //APELLIDO MATERNO 1°MAYUSCULA
+                    if (artesano.getApellidomaterno().isEmpty()){
+                        artesano.setApellidomaterno(null);
+                    }else{
+                        String mate = artesano.getApellidomaterno().substring(0,1).toUpperCase() + artesano.getApellidomaterno().substring(1).toLowerCase();
+                        artesano.setApellidomaterno(mate);
+                    }
+                    artesanoRepository.save(artesano);
                 } else {
-                    /*if (artesano.getComunidad() == null) {
-                        model.addAttribute("msgRepetido", "debe selecionar una comunidad");
+                    if (artesano.getCodigoartesano().equals(artesanosByCodigo.getCodigoartesano())) {
+                        model.addAttribute("msgRepetido", "Codigo Artesano ya utilizado");
                         model.addAttribute("listacomunidades", comunidadRepository.findAll());
                         return "artesano/newEdit";
-                    } else {*/
-
-                        if (artesano.getIdartesano() == 0) {
-                            return agregarNuevoArtesanoYVerificar(artesano, model, att);
-                        } else {
-                            att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
-                            artesanoRepository.save(artesano);
-                            return "redirect:/artesano";
+                    } else {
+                        att.addFlashAttribute("msgAr", "Artesano Actualizado Exitosamente");
+                        //NOMBRE ARTESANO 1°MAYUSCULA
+                        String nom = artesano.getNombreartesano().substring(0,1).toUpperCase() + artesano.getNombreartesano().substring(1).toLowerCase();
+                        artesano.setNombreartesano(nom);
+                        //APELLIDO PATERNO 1°MAYUSCULA
+                        String ape = artesano.getApellidopaterno().substring(0,1).toUpperCase() + artesano.getApellidopaterno().substring(1).toLowerCase();
+                        artesano.setApellidopaterno(ape);
+                        //APELLIDO MATERNO 1°MAYUSCULA
+                        if (artesano.getApellidomaterno().isEmpty()){
+                            artesano.setApellidomaterno(null);
+                        }else{
+                            String mate = artesano.getApellidomaterno().substring(0,1).toUpperCase() + artesano.getApellidomaterno().substring(1).toLowerCase();
+                            artesano.setApellidomaterno(mate);
                         }
-                   // }
+
+                        artesanoRepository.save(artesano);
+
+
+                    }
                 }
-     }
+            }
+        }
+        return "redirect:/artesano";
+    }
 
 
     public String agregarNuevoArtesanoYVerificar(Artesano artesano, Model model, RedirectAttributes att) {
 
+        //CODIGO ARTESANO MAYUSCULA
+        String codm = artesano.getCodigoartesano().toUpperCase();
+        artesano.setCodigoartesano(codm);
 
         List<Artesano> byCodigoartesano = artesanoRepository.buscarSucomunidad(artesano.getCodigoartesano());
 
         if (byCodigoartesano.isEmpty()) {
             att.addFlashAttribute("msgAr", "Artesano Creado Exitosamente");
+
+            //NOMBRE ARTESANO 1°MAYUSCULA
+            String nom = artesano.getNombreartesano().substring(0,1).toUpperCase() + artesano.getNombreartesano().substring(1).toLowerCase();
+            artesano.setNombreartesano(nom);
+            //APELLIDO PATERNO 1°MAYUSCULA
+            String ape = artesano.getApellidopaterno().substring(0,1).toUpperCase() + artesano.getApellidopaterno().substring(1).toLowerCase();
+            artesano.setApellidopaterno(ape);
+            //APELLIDO MATERNO 1°MAYUSCULA
+            if (artesano.getApellidomaterno().isEmpty()){
+                artesano.setApellidomaterno(null);
+            }else{
+                String mate = artesano.getApellidomaterno().substring(0,1).toUpperCase() + artesano.getApellidomaterno().substring(1).toLowerCase();
+                artesano.setApellidomaterno(mate);
+            }
+
             artesanoRepository.save(artesano);
             return "redirect:/artesano";
         } else {
@@ -147,19 +206,33 @@ public class ArtesanoController {
 
     }
 
-    @PostMapping("/filtroComunidad")
-    public String filtarArtesanoPorComunidad(@RequestParam("filtroComunidad") int idcomunidad, Model model) {
 
-        model.addAttribute("listaArtesano", artesanoRepository.filtarPorComunidad(idcomunidad));
-        model.addAttribute("listacomunidades", comunidadRepository.findAll());
-        return "artesano/lista";
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
 
-    }
+        String busqueda = (String) params.get("searchField");
 
-    @PostMapping("/buscador")
-    public String buscadorSearch(@RequestParam("searchField") String buscador, Model model) {
 
-        model.addAttribute("listaArtesano", artesanoRepository.buscadorArtesano(buscador));
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        Page<Artesano> pageArtesanos = artesanoService.listSearch(busqueda, page);
+        int totalPage = pageArtesanos.getTotalPages();
+        long totalItems = pageArtesanos.getTotalElements();
+
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("busqueda", busqueda);
+        model.addAttribute("listaArtesano", pageArtesanos.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
+        //model.addAttribute("listaArtesano", artesanoRepository.buscadorArtesano(buscador));
         return "artesano/lista";
 
 

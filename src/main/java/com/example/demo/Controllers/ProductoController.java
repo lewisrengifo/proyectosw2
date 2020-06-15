@@ -48,7 +48,9 @@ public class ProductoController {
     @GetMapping(value = {"", "/"})
     public String listaProduct(@RequestParam Map<String, Object> params, Model model) {
 
+
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
 
         PageRequest pageRequest = PageRequest.of(page, 10);
 
