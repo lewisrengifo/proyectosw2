@@ -18,7 +18,6 @@ public class SendMailService {
         return "redirect:/login";
     }
 
-
     @PostMapping("/sendMail")
     public void sendMail(String correoDestino, String correoOrigen, String subject, String bodyMensaje) {
 
@@ -26,8 +25,7 @@ public class SendMailService {
         mailMessage.setFrom(correoOrigen);
         mailMessage.setTo(correoDestino);
         mailMessage.setSubject(subject);
-        mailMessage.setSubject(bodyMensaje);
-
+        mailMessage.setText(bodyMensaje);
         javaMailSender.send(mailMessage);
     }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <title>Cambio de contraseña</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
@@ -9,33 +9,25 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css"  th:href="@{'/css/bootstrap.css'}" >
 </head>
-<body >
 <div class="wrap-login100">
-    <form class="login100-form" th:action="@{/processlogin}" method="post">
-	    <span class="login100-form-title p-b-43">
-						Mosqoy
-        </span>
+    <form class="login100-form" th:action="@{/cambiarContrasenia}" method="post">
+            <span class="login100-form-title p-b-43">
+                            Mosqoy
+            </span>
         <br>
-        <div align="center">
-            <h5 th:if="${param.error}" class="alert alert-danger" style="color:#ff0000">Acceso Denegado</h5>
-        </div>
         <div align="center" th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
 
-        <div class="container" >
-            <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping" name="correo">
-        </div>
-        <br>
         <div class="container">
-            <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="addon-wrapping" name="password">
+            <input type="password" class="form-control" placeholder="token" aria-label="token" aria-describedby="addon-wrapping" name="token">
         </div>
-        <br>
 
-        <div align="center">
-            <a class="nav-link" th:href="@{/olvidoContrasenia}">Olvide mi contraseña</a>
+        <div class="container">
+            <input type="password" class="form-control" placeholder="contrasena" aria-label="contrasena" aria-describedby="addon-wrapping" name="contrasena">
         </div>
         <br>
-        <input type="submit" class="btn btn-info btn-block" value="Iniciar Sesion">
+        <input type="submit" class="btn btn-info btn-block" value="¡Cambiar ya! :)">
     </form >
+
     <div class="login100-more" >
         <img width="99%" th:src="@{'/img/foto.jpg'}">
     </div>
