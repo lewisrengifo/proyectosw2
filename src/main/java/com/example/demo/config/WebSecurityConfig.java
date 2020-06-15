@@ -29,10 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ;
 
         http.authorizeRequests().antMatchers( "/usuario", "/usuario/**").hasAuthority("Administrador");
-        http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority( "Gestor principal", "sede");
-        http.authorizeRequests().antMatchers("/producto", "/producto/**", "/comunidad", "/comunidad/**").hasAnyAuthority("Gestor principal", "sede");
-        http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Gestor principal", "sede");
+        http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority( "Gestor principal", "Gestor de sede");
+        http.authorizeRequests().antMatchers("/producto", "/producto/**", "/comunidad", "/comunidad/**").hasAnyAuthority("Gestor principal", "Gestor de sede");
+        http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Gestor principal", "Gestor de sede");
+        http.authorizeRequests().antMatchers("/login", "/login/**").anonymous();
         http.authorizeRequests().anyRequest().permitAll();
+
     }
 
     @Autowired

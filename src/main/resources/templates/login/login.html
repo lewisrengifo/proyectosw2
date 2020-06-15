@@ -17,9 +17,11 @@
         </span>
         <br>
         <div align="center">
-            <h5 th:if="${param.error}" class="alert alert-danger" style="color:red">Acceso Denegado</h5>
+            <h5 th:if="${param.error}" class="alert alert-danger" style="color:#ff0000">Acceso Denegado</h5>
         </div>
-        <div class="container">
+        <div align="center" th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+
+        <div class="container" >
             <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping" name="correo">
         </div>
         <br>
@@ -29,7 +31,7 @@
         <br>
 
         <div align="center">
-            <a th:action="@{/olvidoContrasenia}"> ¿Olvidaste tu contraseña?</a>
+            <a class="nav-link" th:href="@{/olvidoContrasenia}">Olvide mi contraseña</a>
         </div>
         <br>
         <input type="submit" class="btn btn-info btn-block" value="Iniciar Sesion">
