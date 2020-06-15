@@ -47,24 +47,55 @@ public class CategoriaController {
     public String guardarCategoria(@ModelAttribute("categoria") @Valid Categoria categoria,
                                    BindingResult bindingResult,
                                    RedirectAttributes att, Model model){
-        if (bindingResult.hasErrors()){
+        if(bindingResult.hasErrors()){
             return "categoria/newEdit";
         }else{
-                //if (categoria.getNombrecategoria().equals(
-                  //      categoriaRepository.verificarNombre(categoria.getNombrecategoria()))){
-                    //String mensajeIgual = "El nombre de la categoria ya existe";
-                    //model.addAttribute("mensajeIgual",mensajeIgual);
-                    //return "categoria/newEdit";
-                //}else{
-                    if (categoria.getIdcategoria()==0){
-                        att.addFlashAttribute("msg", "Categoria Creada Exitosamente");
-                    }else{
-                        att.addFlashAttribute("msg", "Categoria Actualizada Exitosamente");
-                    }
-                    categoriaRepository.save(categoria);
-                    return "redirect:/categoria";
-                //}
+            if(categoria.getIdcategoria()==0){
+                for (Categoria com : categoriaRepository.findAll()) {
+                    if (com.getNombrecategoria().equalsIgnoreCase(categoria.getNombrecategoria()) || com.getCodigocategoria().equalsIgnoreCase(categoria.getCodigocategoria())) {
+                        if (com.getNombrecategoria().equalsIgnoreCase(categoria.getNombrecategoria())) {
+                            att.addFlashAttribute("msg1", "Nombre de Categoría ya existe");
+                            att.addFlashAttribute("categoria", categoria);
+                        }
+                        if (com.getCodigocategoria().equalsIgnoreCase(categoria.getCodigocategoria())) {
+                            att.addFlashAttribute("msg2", "Código de Categoría ya existe");
+                            att.addFlashAttribute("categoria", categoria);
+                        }
+                        return "redirect:/categoria/nuevo";
 
+                    } else if (categoria.getIdcategoria() == 0) {
+                        att.addFlashAttribute("msgCo", "Categoria Creada Exitosamente");
+                    } else {
+                        att.addFlashAttribute("msgCo", "Categoria Actualizada Exitosamente");
+                    }
+                }
+            }
+            else{
+                for(Categoria categoria1:categoriaRepository.mio(categoria.getIdcategoria())){
+                    if (categoria1.getNombrecategoria().equalsIgnoreCase(categoria.getNombrecategoria()) || categoria1.getCodigocategoria().equalsIgnoreCase(categoria.getCodigocategoria())) {
+                        if (categoria1.getNombrecategoria().equalsIgnoreCase(categoria.getNombrecategoria())) {
+                            att.addFlashAttribute("msg1", "Nombre de Categoría ya existe");
+                            att.addFlashAttribute("categoria", categoria);
+                        }
+                        if (categoria1.getCodigocategoria().equalsIgnoreCase(categoria.getCodigocategoria())) {
+                            att.addFlashAttribute("msg2", "Codigo de Categoría ya existe");
+                            att.addFlashAttribute("categoria", categoria);
+                        }
+                        return "redirect:/categoria/nuevo";
+
+                    } else if (categoria.getIdcategoria() == 0) {
+                        att.addFlashAttribute("msgCo", "Categoria Creada Exitosamente");
+                    } else {
+                        att.addFlashAttribute("msgCo", "Categoria Actualizada Exitosamente");
+                    }
+                }
+            }
+            String nom= categoria.getNombrecategoria().substring(0, 1).toUpperCase() + categoria.getNombrecategoria().substring(1);
+            categoria.setNombrecategoria(nom);
+            String cod=categoria.getCodigocategoria().toUpperCase();
+            categoria.setCodigocategoria(cod);
+            categoriaRepository.save(categoria);
+            return "redirect:/categoria";
         }
 
 

@@ -7,19 +7,21 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
-public class Categoria {
+public class Categoria implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int idcategoria;
+
     @NotBlank(message = "el campo del texto no puede estar vacio")
     @Size(max = 45,message = "el texto no puede tener más de 45 caracteres")
     private String nombrecategoria;
+
     @NotBlank(message = "el campo del texto no puede estar vacio")
-    @Pattern(regexp="[a-zA-Z]{1}",message = "Solo acepta una letra")
+    @Pattern(regexp="[a-zA-ZÀ\\u00f1\\u00d1]{1}",message = "Solo acepta una letra y sin tílde")
     private String codigocategoria;
 
     public int getIdcategoria() {
