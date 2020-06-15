@@ -21,7 +21,7 @@ public class Categoria implements Serializable {
     private String nombrecategoria;
 
     @NotBlank(message = "el campo del texto no puede estar vacio")
-    @Pattern(regexp="[a-zA-Z]{1}",message = "Solo acepta una letra")
+    @Pattern(regexp="[a-zA-ZÀ]{1}",message = "Solo acepta una letra y sin tílde")
     private String codigocategoria;
 
     public int getIdcategoria() {
