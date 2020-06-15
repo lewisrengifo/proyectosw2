@@ -46,12 +46,23 @@
                             </div>
 
 
-                            <div class="form-group">
+                            <div class="form-group" th:if="${producto.nombreproducto== null}">
                                 <label for="linea">Línea</label>
                                 <select class="form-control" name="linea" id="linea" style="width: 40%">
 
                                     <option th:each="li : ${listaLinea}" th:value="${li.idlinea}"
-                                            th:text="${li.nombrelinea}">
+                                            th:text="${li.nombrelinea}" >
+
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group" th:unless="${producto.nombreproducto== null}">
+                                <label for="linea">Línea</label>
+                                <select class="form-control" name="linea" id="linea" style="width: 40%">
+
+                                    <option th:each="li : ${listaLinea}" th:value="${li.idlinea}"
+                                            th:text="${li.nombrelinea}"  th:selected="${producto.linea.getIdlinea() == li.idlinea}" >
+
                                     </option>
                                 </select>
                             </div>
