@@ -17,13 +17,13 @@ public class Comunidad implements Serializable {
     @Column(nullable = false)
     @NotBlank(message = "El texto no puede estar en blanco")
     /*@Size(max = 45, message = "El nombre no puede exceder más de 45 caracteres")*/
-    @Pattern(regexp="[a-zA-Z]{1,45}",message = "Solo aceptan letras y un maximo de 45 caracteres")
+    @Pattern(regexp="[a-zñÑA-Záéíóú]{1,45}",message = "Solo aceptan letras y un maximo de 45 caracteres")
     private String nombrecomunidad;
 
     @NotBlank(message = "El texto no puede estar en blanco")
     @Column(nullable = false)
     /*@Size(min = 2,max = 2,message = "Debe tener 2 caracteres")*/
-    @Pattern(regexp="[a-zA-Z]{2}",message = "Solo aceptan 2 letras")
+    @Pattern(regexp="[a-zñÑA-Z]{2}",message = "Solo aceptan 2 letras y sin tildes")
     private String codigocomunidad;
 
     public int getIdcomunidad() {
