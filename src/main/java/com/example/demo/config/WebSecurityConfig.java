@@ -28,10 +28,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
         ;
 
-        http.authorizeRequests().antMatchers("/comunidad", "/comunidad/**", "/usuario", "/usuario/**").hasAuthority("Administrador");
-        http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority("Administrador", "Gestor principal");
-        http.authorizeRequests().antMatchers("/producto", "/producto/**").hasAnyAuthority("Administrador", "Gestor principal");
-        http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Administrador", "sede");
+        http.authorizeRequests().antMatchers("/usuario", "/usuario/**").hasAuthority("Administrador");
+        http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority("Gestor principal", "Gestor sede");
+        http.authorizeRequests().antMatchers("/producto", "/producto/**", "/comunidad", "/comunidad/**", "/categoria", "/categoria/**").hasAuthority("Gestor principal");
+        http.authorizeRequests().antMatchers("/artesano", "/artesano/**", "/inventarioPrincipal", "/inventarioPrincipal/**").hasAnyAuthority("Gestor principal", "Gestor sede");
+
+       // http.authorizeRequests().antMatchers("/producto", "/pruducto/").hasAuthority("Gestor sede");
+        // http.authorizeRequests().antMatchers("/categoria").not().hasAuthority("Gestor sede");
+        //http.authorizeRequests().antMatchers("/artesano").hasAuthority("Gestor sede");
+
         http.authorizeRequests().anyRequest().permitAll();
     }
 

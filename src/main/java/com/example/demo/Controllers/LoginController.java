@@ -8,18 +8,32 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
 
-    @GetMapping("/loginForm")
+    @GetMapping(value = {"" ,"/loginForm"})
     public String loginForm(){
         return "login/login";
     }
     @Autowired
     UsuarioRepository usuarioRepository;
+
+    @GetMapping("/olvidoContrenia")
+    public String olvidoContrenia(){
+        return "login/olvidoContrenia";
+    }
+
+    @PostMapping("/recuperarContrasenia")
+    public String recuperarContrasenia(@RequestParam("correo") int correo ){
+
+        return "login/loginForm";
+    }
+
     @GetMapping("/redirectByRol")
     public String redirectByRol(Authentication authentication, HttpSession session){
         String rol = "";
@@ -34,12 +48,14 @@ public class LoginController {
         if(rol.equals("Administrador")){
             return "redirect:/usuario/lista";
         }else {
-            if (rol.equals("sede")){
+            if (rol.equals("Gestor sede")){
                 return "redirect:/artesano";
             }else{
             return "redirect:/categoria";
             }
         }
+
+
     }
 
 

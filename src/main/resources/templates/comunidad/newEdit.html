@@ -10,18 +10,21 @@
 
 
 <div id="page-wrapper">
+    <h2 class="page-header" th:text="${comunidad.idcomunidad == 0? 'Nueva Comunidad' : 'Editar Comunidad'}">
+        Nuevo/Editar</h2>
     <div id="page-inner">
 
         <div class="row">
             <div  class="col-md-8">
                 <div class="card">
-                    <div class="container">
-                        <h2 th:text="${comunidad.idcomunidad == 0? 'Nueva Comunidad' : 'editar Comunidad papu'}">
-                            Nuevo/Editar</h2>
-                        <hr/>
+                    <div class="container padding">
                         <form method="post" th:action="@{'/comunidad/guardar'}" th:object="${comunidad}">
                             <input type="hidden" th:field="*{idcomunidad}"/>
-
+                            <h4 th:if="${msg1 != null}" th:text="${msg1}" style="color:#FF0000"
+                                 role="alert"></h4>
+                            <h4 th:if="${msg2 != null}" th:text="${msg2}" style="color:#FF0000"
+                                 role="alert"></h4>
+                            <br>
                             <div class="form-group">
                                 <label for="nombrecomunidad">Nombre Comunidad</label>
                                 <input type="text" class="form-control" th:field="*{nombrecomunidad}" style="width: 25%">
@@ -29,13 +32,12 @@
 
                             </div>
                             <div class="form-group">
-                                <label for="codigocomunidad">codigo Comunidad</label>
+                                <label for="codigocomunidad">Código Comunidad</label>
                                 <input type="text" class="form-control" th:field="*{codigocomunidad}" style="width: 25%">
                                 <div class="text-danger" th:if="${#fields.hasErrors('codigocomunidad')}" th:errors="*{codigocomunidad}"></div>
-
                             </div>
-                            <a th:href="@{'/comunidad'}" class="btn btn-danger">Cancelar</a>
-                            <button type="submit" class="btn btn-primary"
+                            <a th:href="@{'/comunidad'}" class="btn btn-info btn-responsive ">Cancelar</a>
+                            <button type="submit" class="btn btn-info btn-responsive rigth"
                                     th:text="${comunidad.idcomunidad == 0? 'Registrar' : 'Actualizar'}">Reg/act
                             </button>
                         </form>

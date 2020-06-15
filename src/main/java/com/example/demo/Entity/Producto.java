@@ -33,9 +33,9 @@ public class Producto {
     @Size(max = 3,message = "El código de la descripción del producto no puede tener más de 3 caracteres")
     private String codigodescripcionproducto;
 
-    @Column(name = "linea_idlinea")
-    @NotBlank(message = "La línea no puede estar vacío")
-    private int linea;
+    @ManyToOne
+    @JoinColumn(name = "linea_idlinea")
+    private Linea linea;
 
     @Column(name = "foto")
     private String foto;
@@ -80,11 +80,11 @@ public class Producto {
         this.codigodescripcionproducto = codigodescripcionproducto;
     }
 
-    public int getLinea() {
+    public Linea getLinea() {
         return linea;
     }
 
-    public void setLinea(int linea) {
+    public void setLinea(Linea linea) {
         this.linea = linea;
     }
 
