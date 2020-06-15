@@ -1,11 +1,15 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Dto.UsuarioServiceApi;
 import com.example.demo.Entity.Rol;
 import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.RolRepository;
 import com.example.demo.Repository.SedeRepository;
 import com.example.demo.Repository.UsuarioRepository;
+import com.example.demo.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +19,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.naming.Binding;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
+    @Autowired
+    UsuarioService usuarioService;
     @Autowired
     UsuarioRepository usuarioRepository;
     @Autowired
@@ -27,9 +37,34 @@ public class UsuarioController {
     @Autowired
     SedeRepository sedeRepository;
 
-    @GetMapping("/lista")
-    public String listarUsuarios(Model model) {
-        model.addAttribute("listaUsuarios", usuarioRepository.findAll());
+    @GetMapping(value = {"", "/lista"})
+    public String listarUsuarios(@RequestParam Map<String, Object> params,Model model) {
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        }catch (NumberFormatException e){
+            return "redirect:/usuario/lista";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if(page<0){
+            return "redirect:/usuario/lista";
+        }
+
+        Page<Usuario> pageUsuario = usuarioService.getAll(page);
+        int totalPage = pageUsuario.getTotalPages();
+        long totalItems = pageUsuario.getTotalElements();
+        if(totalPage>0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+        model.addAttribute("listaUsuarios", pageUsuario.getContent());
+        model.addAttribute("totalItems", totalItems);
+
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+        //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
         return "Usuario/lista";
     }
 
@@ -148,6 +183,20 @@ public class UsuarioController {
 
 
     }
+    /*
+    public String findAll(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        Page<Usuario> pageUsuario = usuarioServiceApi.getAll(pageRequest);
+        int totalPage = pageUsuario.getTotalPages();
+        if(totalPage>0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+        model.addAttribute("listaUsuarios", pageUsuario.getContent());
+
+        return "Usuario/lista";
+    }*/
 
 
 }

@@ -20,6 +20,10 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     <link rel="stylesheet" th:href="@{/js/Lightweight-Chart/cssCharts.css}">
 
+
+
+
+
 </head>
 <body>
 
@@ -62,7 +66,7 @@
         <ul class="nav" id="main-menu">
 
             <li sec:authorize="hasAnyAuthority('Gestor sede','Gestor principal')">
-                <a th:href="@{/inventarioPrincipal}"  class=" waves-effect waves-dark"><i class="fa fa-dashboard"></i> Ver Iventario</a>
+                <a th:href="@{/inventarioPrincipal}"  class=" waves-effect waves-dark"><i class="fa fa-dashboard"></i> Ver Inventario</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Gestor sede')">
                 <a  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
@@ -149,6 +153,7 @@
 
         <!-- Custom Js -->
         <script th:src="@{/js/custom-scripts.js}"></script>
+        <script th:src="@{/js/new.js}"></script>
 
     </div>
 
