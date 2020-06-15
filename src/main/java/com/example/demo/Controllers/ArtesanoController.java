@@ -120,7 +120,7 @@ public class ArtesanoController {
 
         Optional<Artesano> optionalArtesano = artesanoRepository.findById(id);
         if (optionalArtesano.isPresent()) {
-            att.addFlashAttribute("msgAr", "Borrado Exitosamente");
+            att.addFlashAttribute("msgAr", "Artesano borrado Exitosamente");
             artesanoRepository.deleteById(id);
             return "redirect:/artesano";
         }
