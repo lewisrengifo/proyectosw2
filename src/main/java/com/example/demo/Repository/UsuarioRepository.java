@@ -15,6 +15,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     public Usuario findByCorreo(String correo);
     @Query(value = "select * from usuario u where u.nombre = ?1 or u.apellido = ?1 or u.dni = ?1 or u.correo=?1 or u.rol_idrol =(select r.idrol from rol r where r.nombre=?1);", nativeQuery = true)
+
     List<Usuario> buscarUsuario(String search);
     Usuario findByIdusuario(int id);
     @Query(value = "select * from usuario u where u.sede_idrol = (select s.idrol from sede s where s.idrol=?1);", nativeQuery = true)
@@ -22,5 +23,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Query(value = "select * from usuario where idUsuario not in (select u.idUsuario from usuario u where u.idUsuario=?1);", nativeQuery = true)
     List<Usuario> buscarmenosmio(int idusuario);
+
+    public Usuario findByToken(String tocken);
+
 }
 
