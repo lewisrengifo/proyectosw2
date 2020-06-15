@@ -20,13 +20,7 @@
 
         <!-- /. COMUNIDAD  -->
         <div id="page-inner">
-            <div>
-                <form method="get" th:action="@{/artesano/buscador}">
-                    <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar" aria-label="Search" style="width: 40%">
-                    <button type="submit" class="btn btn-outline-danger">buscar</button>
-                    <a th:href="@{'/artesano'}" class="btn btn-outline-danger">Limpiar</a>
-                </form>
-            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -53,12 +47,32 @@
                                         <div class="text-danger" th:if="${#fields.hasErrors('numeropedido')}" th:errors="*{numeropedido}"></div>
                                     </div>
 
+                                    <!-- ELEGIR UN LINEA -->
+                                    <div class="form-group" th:if="${inventarioProducto.color == null}">
+                                        <label for="linea">Linea</label>
+                                        <select class="form-control" name="linea" id="linea" style="width: 40%">
+                                            <option th:each=" li : ${listalinea}" th:value="${li.idlinea}"
+                                                    th:text="${li.nombrelinea}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" th:unless="${inventarioProducto.color == null}">
+                                        <label for="linea">Linea</label>
+                                        <select class="form-control" name="linea" id="linea" style="width: 40%">
+                                            <option th:each=" lin : ${listalinea}" th:value="${lin.idlinea}"
+                                                    th:text="${lin.nombrelinea}"
+                                                    th:selected="${lin.idlinea==inventarioProducto.getProducto().getLinea().idlinea}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!-- FIN -->
+
                                     <!-- ELEGIR UN PRODUCTO -->
                                     <div class="form-group" th:if="${inventarioProducto.color == null}">
                                         <label for="producto">Producto</label>
                                         <select class="form-control" name="producto" id="producto" style="width: 40%">
-
-                                            <option th:each=" pro : ${listaproducto}" th:value="${pro.idproducto}"
+                                            <option th:each=" pro : ${listaproducto}"
+                                                    th:value="${pro.idproducto}"
                                                     th:text="${pro.nombreproducto}">
                                             </option>
                                         </select>
@@ -69,11 +83,10 @@
                                             <option th:each=" pro : ${listaproducto}" th:value="${pro.idproducto}"
                                                     th:text="${pro.nombreproducto}"
                                                     th:selected="${pro.idproducto==inventarioProducto.getProducto().getIdproducto()}">
-
                                             </option>
                                         </select>
                                     </div>
-                                    <!-- FIN -->
+                                    <!- FIN -->
 
                                     <!-- ELEGIR UN CATEGORIA -->
                                     <div class="form-group" th:if="${inventarioProducto.color == null}">

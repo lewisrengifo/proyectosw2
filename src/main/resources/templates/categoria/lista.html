@@ -37,8 +37,8 @@
                                         <th>#</th>
                                         <th>NOMBRE</th>
                                         <th>CODIGO</th>
-                                        <th></th>
-                                        <th></th>
+                                        <th sec:authorize="hasAnyAuthority('Gestor principal')"></th>
+                                        <th sec:authorize="hasAnyAuthority('Gestor principal')"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
