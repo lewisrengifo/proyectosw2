@@ -86,15 +86,20 @@ public class LoginController {
         String mensaje;
         Optional<Usuario> optionalUsuario = Optional.ofNullable(usuarioRepository.findByToken(token));
         if (optionalUsuario.isPresent()) {
-            Usuario usuario =new Usuario();
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             String pww = bCryptPasswordEncoder.encode(contrasenia);
             optionalUsuario.get().setContrasena(pww);
             attr.addFlashAttribute("msg", "¡Contraseña cambiada! :D");
+
+            SecureRandom random = new SecureRandom();
+            byte bytes[] = new byte[20];
+            random.nextBytes(bytes);
+            String tokenNuevo = bytes.toString();
+            optionalUsuario.get().setToken(tokenNuevo);
             return "redirect:/loginForm";
         } else {
-            attr.addFlashAttribute("msg", "¡Error en el token! :(");
-            return "redirect:/login/resetearContrasenia";
+            attr.addFlashAttribute("msg", "¡Error en el token o expirado! debes generar otro :(");
+            return "login/resetearContrasenia";
         }
     }
     @GetMapping("/redirectByRol")
