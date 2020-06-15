@@ -39,7 +39,16 @@ public class UsuarioController {
 
     @GetMapping(value = {"", "/lista"})
     public String listarUsuarios(@RequestParam Map<String, Object> params,Model model) {
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        }catch (NumberFormatException e){
+            return "redirect:/usuario/lista";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if(page<0){
+            return "redirect:/usuario/lista";
+        }
 
         Page<Usuario> pageUsuario = usuarioService.getAll(page);
         int totalPage = pageUsuario.getTotalPages();
