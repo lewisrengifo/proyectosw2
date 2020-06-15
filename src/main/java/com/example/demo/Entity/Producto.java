@@ -35,7 +35,6 @@ public class Producto {
 
     @ManyToOne
     @JoinColumn(name = "linea_idlinea")
-    @NotBlank(message = "La línea no puede estar vacío")
     private Linea linea;
 
     @Column(name = "foto")

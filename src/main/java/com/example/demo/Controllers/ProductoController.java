@@ -11,10 +11,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.imageio.ImageIO;
+import javax.validation.Valid;
+import java.awt.image.BufferedImage;
 import java.awt.print.Pageable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -62,19 +71,53 @@ public class ProductoController {
 
     @GetMapping("/nuevo")
     public String nuevoProductoFrm(Model model, @ModelAttribute("producto") Producto producto) {
+        model.addAttribute("listaLinea", lineaRepository.findAll());
         return "producto/editFrm";
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(Producto producto, RedirectAttributes attr) {
-        if (producto.getIdproducto() == 0) {
-            attr.addFlashAttribute("msg", "Producto creado exitosamente");
-        } else {
-            attr.addFlashAttribute("msg", "Producto actualizado exitosamente");
-        }
+    public String guardarProducto(@RequestParam("imageFile") MultipartFile  imageFile , @Valid Producto producto, BindingResult bindingResult
+            , RedirectAttributes attr,Model model) {
 
-        productoRepository.save(producto);
-        return "redirect:/producto";
+
+        String returnValue = "redirect:/producto";
+        Path pathFinal = null;
+        // File  f = null;
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("listaLinea", lineaRepository.findAll());
+            return "producto/editFrm";
+        } else {
+
+            if (producto.getIdproducto() == 0) {
+
+                producto.setFoto(imageFile.getOriginalFilename());
+
+
+                try {
+                    pathFinal = productoServiceApi.saveImage(imageFile, producto);
+                    byte[] bytes = imageFile.getBytes();
+                    Files.write(pathFinal, bytes);
+                    // f = new File(pathFinal.toString());
+                    // BufferedImage image = ImageIO.read(f);
+                    // int height = image.getHeight();
+                    // int width = image.getWidth();
+
+                } catch (Exception e) {
+
+                    attr.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
+                    return "producto/editFrm";
+                }
+
+
+                attr.addFlashAttribute("msg", "Producto creado exitosamente");
+            } else {
+                attr.addFlashAttribute("msg", "Producto actualizado exitosamente");
+            }
+
+            productoRepository.save(producto);
+            return "redirect:/producto";
+        }
     }
 
     @GetMapping("/editar")
@@ -167,6 +210,37 @@ public class ProductoController {
 
         return "producto/listar";
     }
+
+    @PostMapping("/uploadImage")
+    public String uploadImage(@RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes att) {
+        String returnValue = "redirect:/producto";
+        Path pathFinal = null ;
+       // File  f = null;
+        Producto producto = new Producto();
+        producto.setFoto(imageFile.getOriginalFilename());
+
+
+        try {
+            pathFinal =   productoServiceApi.saveImage(imageFile, producto);
+            byte[] bytes = imageFile.getBytes();
+            Files.write(pathFinal, bytes);
+            // f = new File(pathFinal.toString());
+        // BufferedImage image = ImageIO.read(f);
+        // int height = image.getHeight();
+        // int width = image.getWidth();
+
+
+        } catch (Exception e) {
+
+           att.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
+            return "producto/editFrm";
+        }
+
+
+
+        return returnValue;
+    }
+
 
 }
 
