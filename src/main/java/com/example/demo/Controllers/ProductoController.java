@@ -48,9 +48,16 @@ public class ProductoController {
     @GetMapping(value = {"", "/"})
     public String listaProduct(@RequestParam Map<String, Object> params, Model model) {
 
-
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        }catch (NumberFormatException e){
+            return "redirect:/producto";
+        }
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
+        if(page<0){
+            return "redirect:/producto";
+        }
 
         PageRequest pageRequest = PageRequest.of(page, 10);
 

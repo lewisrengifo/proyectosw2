@@ -17,7 +17,7 @@ public class Comunidad implements Serializable {
     @Column(nullable = false)
     @NotBlank(message = "El texto no puede estar en blanco")
     /*@Size(max = 45, message = "El nombre no puede exceder más de 45 caracteres")*/
-    @Pattern(regexp="[a-zA-Z\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras y un maximo de 45 caracteres")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras y un maximo de 45 caracteres")
     private String nombrecomunidad;
 
     @NotBlank(message = "El texto no puede estar en blanco")
