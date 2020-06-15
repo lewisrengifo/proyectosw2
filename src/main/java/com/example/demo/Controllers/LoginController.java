@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LoginController {
 
-    @GetMapping("/loginForm")
+    @GetMapping(value = {"" ,"/loginForm"})
     public String loginForm(){
         return "login/login";
     }
@@ -48,7 +48,7 @@ public class LoginController {
         if(rol.equals("Administrador")){
             return "redirect:/usuario/lista";
         }else {
-            if (rol.equals("sede")){
+            if (rol.equals("Gestor sede")){
                 return "redirect:/artesano";
             }else{
             return "redirect:/categoria";
