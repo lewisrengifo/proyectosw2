@@ -135,11 +135,41 @@ public class ProductoController {
                 return "producto/editFrm";
             } else {
                 if (producto.getIdproducto() == 0) {
+                    for (Producto prod : productoRepository.findAll()) {
+                        if (prod.getCodigoproducto().equalsIgnoreCase(producto.getCodigoproducto())) {
+                            attr.addFlashAttribute("msg", "Código de producto ya existe");
+                            return "redirect:/producto/nuevo";
 
-                    attr.addFlashAttribute("msg", "Producto creado exitosamente");
+                        } else if (producto.getIdproducto() == 0) {
+                            attr.addFlashAttribute("msgCo", "Producto Creado Exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msgCo", "Producto Actualizado Exitosamente");
+                        }
+                    }
                 } else {
-                    attr.addFlashAttribute("msg", "Producto actualizado exitosamente");
+                    for (Producto prod : productoRepository.mio(producto.getIdproducto())) {
+                        if (prod.getCodigoproducto().equalsIgnoreCase(producto.getCodigoproducto())) {
+                            if (prod.getNombreproducto().equalsIgnoreCase(producto.getNombreproducto())) {
+                                attr.addFlashAttribute("msg1", "Nombre de Comunidad ya exite");
+                                attr.addFlashAttribute("comunidad", producto);
+                            }
+                            return "redirect:/producto/nuevo";
+
+                        } else if (producto.getIdproducto() == 0) {
+                            attr.addFlashAttribute("msgCo", "Producto Creado Exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msgCo", "Producto Actualizado Exitosamente");
+                        }
+                    }
                 }
+                String nom = producto.getNombreproducto().substring(0, 1).toUpperCase() + producto.getNombreproducto().substring(1).toLowerCase();
+                producto.setNombreproducto(nom);
+                String nom1 = producto.getDescripcionproducto().substring(0, 1).toUpperCase() + producto.getDescripcionproducto().substring(1).toLowerCase();
+                producto.setDescripcionproducto(nom1);
+                String cod = producto.getCodigoproducto().toUpperCase();
+                producto.setCodigoproducto(cod);
+                String cod1 = producto.getCodigodescripcionproducto().toUpperCase();
+                producto.setCodigodescripcionproducto(cod1);
                 productoRepository.save(producto);
                 return "redirect:/producto";
             }
@@ -149,6 +179,12 @@ public class ProductoController {
             return "producto/editFrm";
         }
 }
+
+
+
+
+
+
 
 
 
