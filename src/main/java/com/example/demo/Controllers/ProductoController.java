@@ -1,11 +1,10 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ProductoServiceApi;
-import com.example.demo.Entity.Linea;
+import com.example.demo.Dto.StorageService;
 import com.example.demo.Entity.Producto;
 import com.example.demo.Repository.LineaRepository;
 import com.example.demo.Repository.ProductoRepository;
-import com.example.demo.service.ProductoService;
 import com.example.demo.service.UploadFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,14 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.imageio.ImageIO;
 import javax.validation.Valid;
-import java.awt.image.BufferedImage;
-import java.awt.print.Pageable;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,6 +41,8 @@ public class ProductoController {
     @Autowired
     LineaRepository lineaRepository;
 
+    @Autowired
+    StorageService storageService;
     @GetMapping(value = {"", "/"})
     public String listaProduct(@RequestParam Map<String, Object> params, Model model) {
 
@@ -86,11 +83,11 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@RequestParam("imageFile") MultipartFile imageFile, @Valid Producto producto, BindingResult bindingResult
+    public String guardarProducto(@RequestParam("archivo") MultipartFile file, @Valid Producto producto, BindingResult bindingResult
             , RedirectAttributes attr, Model model) {
 
 
-        String returnValue = "redirect:/producto";
+        /*String returnValue = "redirect:/producto";
         Path pathFinal = null;
         // File  f = null;
 
@@ -128,7 +125,69 @@ public class ProductoController {
             productoRepository.save(producto);
             return "redirect:/producto";
         }
-    }
+    }*/
+        //Ojala salga xd
+        HashMap<String, String> map = storageService.store(file);
+        if (map.get("estado").equals("exito")) {
+            producto.setFoto(map.get("fileName"));
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("listaLinea", lineaRepository.findAll());
+                return "producto/editFrm";
+            } else {
+                if (producto.getIdproducto() == 0) {
+                    for (Producto prod : productoRepository.findAll()) {
+                        if (prod.getCodigoproducto().equalsIgnoreCase(producto.getCodigoproducto())) {
+                            attr.addFlashAttribute("msg", "Código de producto ya existe");
+                            return "redirect:/producto/nuevo";
+
+                        } else if (producto.getIdproducto() == 0) {
+                            attr.addFlashAttribute("msgCo", "Producto Creado Exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msgCo", "Producto Actualizado Exitosamente");
+                        }
+                    }
+                } else {
+                    for (Producto prod : productoRepository.mio(producto.getIdproducto())) {
+                        if (prod.getCodigoproducto().equalsIgnoreCase(producto.getCodigoproducto())) {
+                            if (prod.getNombreproducto().equalsIgnoreCase(producto.getNombreproducto())) {
+                                attr.addFlashAttribute("msg1", "Nombre de Comunidad ya exite");
+                                attr.addFlashAttribute("comunidad", producto);
+                            }
+                            return "redirect:/producto/nuevo";
+
+                        } else if (producto.getIdproducto() == 0) {
+                            attr.addFlashAttribute("msgCo", "Producto Creado Exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msgCo", "Producto Actualizado Exitosamente");
+                        }
+                    }
+                }
+                String nom = producto.getNombreproducto().substring(0, 1).toUpperCase() + producto.getNombreproducto().substring(1).toLowerCase();
+                producto.setNombreproducto(nom);
+                String nom1 = producto.getDescripcionproducto().substring(0, 1).toUpperCase() + producto.getDescripcionproducto().substring(1).toLowerCase();
+                producto.setDescripcionproducto(nom1);
+                String cod = producto.getCodigoproducto().toUpperCase();
+                producto.setCodigoproducto(cod);
+                String cod1 = producto.getCodigodescripcionproducto().toUpperCase();
+                producto.setCodigodescripcionproducto(cod1);
+                productoRepository.save(producto);
+                return "redirect:/producto";
+            }
+        }
+        else {
+            model.addAttribute("msgFoto",map.get("msgFoto"));
+            return "producto/editFrm";
+        }
+}
+
+
+
+
+
+
+
+
+
 
     @GetMapping("/editar")
     public String editarProducto(Model model, @RequestParam("id") int id, @ModelAttribute("producto") Producto producto) {
@@ -259,6 +318,32 @@ public class ProductoController {
 
         return returnValue;
     }
+    @GetMapping("/foto")
+    public String mostrarFoto(@RequestParam("id")int id, Model model,@ModelAttribute("producto") Producto producto) {
+
+        Optional<Producto> optProduct = productoRepository.findById(id);
+        int total=productoRepository.findAll().size();
+        int pagina=0;
+        int ii=1;
+        int a=0;
+        while(ii<=(total/10)+1){
+            if( (ii-a+10*(ii-1)<=id) && (id<=ii*10) ){
+                pagina=ii;
+                break;
+            }
+            else{
+                a++;
+                ii=ii+1;
+            }
+        }
+        if (optProduct.isPresent()) {
+            producto =optProduct.get();
+            model.addAttribute("producto",producto);
+            model.addAttribute("pagina",pagina);
+        }
+        return "producto/foto";
+    }
+
 
 
 }
