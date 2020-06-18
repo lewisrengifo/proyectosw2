@@ -2,8 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Lista de productos')">
+
 </head>
 <body>
+
 <div id="wrapper">
     <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
 
@@ -11,7 +13,9 @@
 
 
     <!-- /. NAV SIDE  -->
+
     <div id="page-wrapper">
+
         <div class="header">
             <h1 class="page-header">
                 Lista de Productos
@@ -37,7 +41,7 @@
                 <div class="col-md-10 padding">
                     <div class="card">
                         <div class="card-action">
-                            <a class="btn btn-primary right" th:href="@{'/producto/nuevo'}">agregar</a>
+                            <a class="btn btn-primary right" th:href="@{'/producto/nuevo'}">Agregar</a>
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
@@ -56,17 +60,42 @@
                                             <th class="center">Foto</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         <tr th:each="producto, info : ${listaProductos}">
+                                            <!--div class="ventana" id="vent" >
+                                                <br/>
+                                                <img  width="190px" height="160px"   th:src="@{|FotosProyecto/${producto.foto}|}">
+                                                <a href="javascript:cerrar()" id="cerrar">x</a>
+                                            </div-->
                                             <td th:text="${( info.index +1) + (prev)*10}"></td>
                                             <td th:text="${producto.getNombreproducto()}"></td>
                                             <td th:text="${producto.getCodigoproducto()}"></td>
                                             <td th:text="${producto.getDescripcionproducto()}"></td>
                                             <td th:text="${producto.getCodigodescripcionproducto()}"></td>
                                             <td th:text="${producto.getLinea().nombrelinea}"></td>
+                                            <!--td class="center"><a href="javascript:abrir()" >Ver</a></td-->
+                                            <td class="center"><a th:href="@{'/producto/foto' + '?id=' + ${producto.getIdproducto()}}" >Ver</a></td>
+                                            <!--td><a href="#" class="buttonFoto" id="buttonFoto">Ver</a></td-->
+                                            <!--th ><a th:href="@{'/producto/foto' + '?id=' + ${producto.foto}}"  >Ver</a></th-->
 
-                                            <th  class="center"><a id="baton" href="#" style='width:125px; height:33px'> Ver</a>
-                                                <!--Modaal Section -->
+
+
+
+
+
+                                            <!--div class="bg-modal">
+                                                <div class="modal-content">
+                                                    <div class="close">X</div>
+                                                    <img th:src="@{|FotosProyecto/${producto.foto}|}" alt="">
+                                                </div>
+                                            </div-->
+                                            <!--th ><img th:src="@{|FotosProyecto/${producto.foto}|}"></th-->
+
+
+
+                                            <!--th  class="center"><a id="baton" href="#" style='width:125px; height:33px'> Ver</a>
+
 
                                                 <div class="bg-modal-baton">
                                                     <div class="modal-content-baton">
@@ -74,17 +103,16 @@
                                                         <img th:src="@{${'/img/fotosProducto/' + listaProductos[info.index].foto}}" style="width:100%; height:100% " alt=""/>
                                                     </div>
                                                 </div>
-                                            </th>
+                                            </th-->
                                             <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
                                             </td>
                                             <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
                                             </td>
+
                                         </tr>
+
                                     </tbody>
                                 </table>
-
-
-
 
                                 <div class="row">
                                         <div class="col-md-4"></div>
@@ -123,7 +151,17 @@
 <!-- /. WRAPPER  -->
 <!-- JS Scripts-->
 
+
 <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+<script >
+    function abrir() {
+        document.getElementById("vent").style.display="block";
+    }
+    function cerrar() {
+        document.getElementById("vent").style.display="none";
+    }
+
+</script>
 
 </body>
 
