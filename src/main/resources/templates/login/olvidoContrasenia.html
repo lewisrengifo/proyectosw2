@@ -11,13 +11,14 @@
 </head>
 <body >
     <div class="wrap-login100">
-        <form class="login100-form" th:action="@{/recuperarContrasenia}" method="post">
+        <form class="login100-form" th:action="@{'/recuperarContrasenia'}" method="post">
             <span class="login100-form-title p-b-43">
                             Mosqoy
             </span>
             <br>
 
                 <div class="container">
+                    <label>Ingrese correo electrónico:</label>
                     <input type="text" class="form-control" placeholder="correo" aria-label="correo" aria-describedby="addon-wrapping" name="correo">
                 </div>
             <br>

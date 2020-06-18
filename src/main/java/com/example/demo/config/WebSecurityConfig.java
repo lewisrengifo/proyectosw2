@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/producto", "/producto/**", "/comunidad", "/comunidad/**").hasAnyAuthority("Gestor principal", "Gestor de sede");
         http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Gestor principal", "Gestor de sede");
         http.authorizeRequests().antMatchers("/login", "/login/**").permitAll();
-        http.authorizeRequests().antMatchers("/login/resetearContrasenia", "/login/cambiar1/**", "/login/cambiar1").permitAll();
+        http.authorizeRequests().antMatchers("/cambiar1/**", "/cambiar1/", "/cambiarContrasenia").permitAll();
         http.authorizeRequests().anyRequest().permitAll();
 
     }

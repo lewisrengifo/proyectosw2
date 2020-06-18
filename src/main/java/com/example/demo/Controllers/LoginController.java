@@ -38,7 +38,7 @@ public class LoginController {
 
 
     @GetMapping("/olvidoContrasenia")
-    public String olvidoContrasenia(){
+    public String olvidoContrasenia(RedirectAttributes attr){
         return "login/olvidoContrasenia";
     }
 
@@ -81,21 +81,20 @@ public class LoginController {
     }
 
     @GetMapping(value = "/cambiar1/{token}") //formato que espero el usuario coloque en URL
-    public String cambiar1(@PathVariable("token") String token, Model model) {
-        model.addAttribute(token);
+    public String cambiar1(@PathVariable("token") String tokenObtenido, Model model,  RedirectAttributes attr) {
+        Usuario usuario = new Usuario();
+        usuario.setToken(tokenObtenido);
+        model.addAttribute("usuario" , usuario);
         return "login/cambiar1";
     }
 
-    @PostMapping("/login/cambiarContrasenia")
-    public String cambiarContrasenia(RedirectAttributes attr,
-                                    @RequestParam("token") String token,
-                                    @RequestParam("contrasena") String contrasenia) {
-        String subject;
-        String mensaje;
-        Optional<Usuario> optionalUsuario = Optional.ofNullable(usuarioRepository.findByToken(token));
+    @PostMapping("/cambiarContrasenia")
+    public String cambiarContrasenia(Usuario usuario, RedirectAttributes attr) {
+
+        Optional<Usuario> optionalUsuario = Optional.ofNullable(usuarioRepository.findByToken(usuario.getToken()));
         if (optionalUsuario.isPresent()) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            String pww = bCryptPasswordEncoder.encode(contrasenia);
+            String pww = bCryptPasswordEncoder.encode(usuario.getContrasena());
             optionalUsuario.get().setContrasena(pww);
             attr.addFlashAttribute("msg", "¡Contraseña cambiada! :D");
 
@@ -107,7 +106,7 @@ public class LoginController {
             return "redirect:/loginForm";
         } else {
             attr.addFlashAttribute("msg", "¡Error en el token o expirado! debes generar otro :(");
-            return "login/resetearContrasenia";
+            return "/login/olvidoContrasenia";
         }
     }
 
