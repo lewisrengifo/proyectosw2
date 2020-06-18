@@ -61,7 +61,7 @@ public class LoginController {
                 random.nextBytes(bytes);
                 String token = bytes.toString();
                 subject = "Recuperacion de contraseña - Mosqoy";
-                String direccion ="http://localhost:8081/UnaChiqui/cambiar1/";
+                String direccion ="http://localhost:8080/UnaChiqui/cambiar1/";
                 //String direccion = "http://ec2-54-237-112-13.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
                 URL url = new URL(direccion+ token);
                 mensaje = "¡Hola!<br><br>Para reestablecer su contraseña haga click: <a href='"+ direccion +token + "'>AQUÍ</a> <br><br>Atte. Área Una Chiqui</b>";;
