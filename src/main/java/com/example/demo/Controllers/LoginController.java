@@ -70,12 +70,12 @@ public class LoginController {
             }else {
                 subject = "Invitacion de registro - Mosqoy";
                 mensaje = "No está registrado en Mosqoy :(";
-                attr.addFlashAttribute("msg", "¡Correo o contraseña errada! :(");
+                attr.addFlashAttribute("msg2", "¡Correo o contraseña errada! :(");
             }
             sendMailService.sendMail(correoDestino, "saritaatanacioarenas@gmail.com", subject, mensaje);
             return "redirect:/loginForm";
         } else {
-            attr.addFlashAttribute("msg", "¡Ingresa un formato email! :(");
+            attr.addFlashAttribute("msg2", "¡Ingresa un formato email! :(");
             return "redirect:/loginForm";
         }
     }
@@ -95,7 +95,7 @@ public class LoginController {
         if (optionalUsuario.isPresent()) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             if (usuario.getContrasena()==""){
-                attr.addFlashAttribute("msg", "¡Contraseña no puede ser nula! :C");
+                attr.addFlashAttribute("msg2", "¡Contraseña no puede ser nula! :C");
             }else {
                 String pww = bCryptPasswordEncoder.encode(usuario.getContrasena());
                 optionalUsuario.get().setContrasena(pww);
@@ -109,7 +109,7 @@ public class LoginController {
             }
             return "redirect:/loginForm";
         } else {
-            attr.addFlashAttribute("msg", "¡Error en el token o expirado! debes generar otro :(");
+            attr.addFlashAttribute("msg2", "¡Error en el token o expirado! debes generar otro :(");
             return "/login/olvidoContrasenia";
         }
     }
