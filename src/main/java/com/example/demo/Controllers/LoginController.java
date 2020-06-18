@@ -76,10 +76,10 @@ public class LoginController {
             return "redirect:/loginForm";
         } else {
             attr.addFlashAttribute("msg", "¡Ingresa un formato email! :(");
-            return "login/olvidoContrasenia";
+            return "redirect:/loginForm";
         }
     }
-
+    //aquí se ingresa la contraseña
     @GetMapping(value = "/cambiar1/{token}") //formato que espero el usuario coloque en URL
     public String cambiar1(@PathVariable("token") String tokenObtenido, Model model,  RedirectAttributes attr) {
         Usuario usuario = new Usuario();
@@ -94,15 +94,19 @@ public class LoginController {
         Optional<Usuario> optionalUsuario = Optional.ofNullable(usuarioRepository.findByToken(usuario.getToken()));
         if (optionalUsuario.isPresent()) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            String pww = bCryptPasswordEncoder.encode(usuario.getContrasena());
-            optionalUsuario.get().setContrasena(pww);
-            attr.addFlashAttribute("msg", "¡Contraseña cambiada! :D");
+            if (usuario.getContrasena()==""){
+                attr.addFlashAttribute("msg", "¡Contraseña no puede ser nula! :C");
+            }else {
+                String pww = bCryptPasswordEncoder.encode(usuario.getContrasena());
+                optionalUsuario.get().setContrasena(pww);
+                attr.addFlashAttribute("msg", "¡Contraseña cambiada! :D");
 
-            SecureRandom random = new SecureRandom();
-            byte bytes[] = new byte[20];
-            random.nextBytes(bytes);
-            String tokenNuevo = bytes.toString();
-            optionalUsuario.get().setToken(tokenNuevo);
+                SecureRandom random = new SecureRandom();
+                byte bytes[] = new byte[20];
+                random.nextBytes(bytes);
+                String tokenNuevo = bytes.toString();
+                optionalUsuario.get().setToken(tokenNuevo);
+            }
             return "redirect:/loginForm";
         } else {
             attr.addFlashAttribute("msg", "¡Error en el token o expirado! debes generar otro :(");
