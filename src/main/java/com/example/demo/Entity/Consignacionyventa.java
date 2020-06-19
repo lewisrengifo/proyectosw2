@@ -17,7 +17,7 @@ public class Consignacionyventa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idconsignacion;
 
-    private String fechafin;
+    private Date fechafin;
 
     @ManyToOne
     @JoinColumn(name = "artesano_idartesano")
@@ -26,7 +26,7 @@ public class Consignacionyventa {
     @Column(nullable = false)
     private String tipo;
     @Column(nullable = false)
-    private String fechainicio;
+    private Date fechainicio;
 
     public int getIdconsignacion() {
         return idconsignacion;
@@ -36,11 +36,11 @@ public class Consignacionyventa {
         this.idconsignacion = idconsignacion;
     }
 
-    public String getFechafin() {
+    public Date getFechafin() {
         return fechafin;
     }
 
-    public void setFechafin(String fechafin) {
+    public void setFechafin(Date fechafin) {
         this.fechafin = fechafin;
     }
 
@@ -60,11 +60,11 @@ public class Consignacionyventa {
         this.tipo = tipo;
     }
 
-    public String getFechainicio() {
+    public Date getFechainicio() {
         return fechainicio;
     }
 
-    public void setFechainicio(String fechainicio) {
+    public void setFechainicio(Date fechainicio) {
         this.fechainicio = fechainicio;
     }
 }

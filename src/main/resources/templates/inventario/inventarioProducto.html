@@ -39,6 +39,9 @@
 
                                     <li>
                                         <a th:text="${consigYVenta.fechafin}"></a>
+
+                                    <li>
+                                        <a th:text="${consigYVenta.artesano.nombreartesano}"></a>
                                     </li>
 
                                 </div>
@@ -83,7 +86,7 @@
                                     <!- FIN -->
 
                                     <!-- ELEGIR UN CATEGORIA -->
-                                    <div class="form-group" th:if="${inventarioProducto.color == null}">
+                                    <div>
                                         <label for="Categoria">Categoria</label>
                                         <select class="form-control" name="categoria" id="categoria" style="width: 40%">
                                             <option th:each=" ca : ${listacategoria}" th:value="${ca.idcategoria}"
