@@ -32,6 +32,20 @@
                                 <div th:if="${msgCo != null}" th:text="${msgCo}" class="alert alert-success"
                                      role="alert"></div>
 
+                                <div class="form-group" th:object="${consigYVenta}">
+                                    <li>
+                                        <h2 th:text="*{tipo}"></h2>
+                                    </li>
+                                    <li>
+                                        <a th:text="*{fechainicio}"></a>
+                                    </li>
+
+                                    <li>
+                                        <a th:text="${consigYVenta.fechafin}"></a>
+                                    </li>
+
+                                </div>
+
                                 <h2 >Ingresar pedido a inventario</h2>
                                 <br>
                                 <form method="post" th:action="@{'/inventarioPrincipal/guardar'}" th:object="${inventarioProducto}">
@@ -42,26 +56,17 @@
 
                                     <br>
                                     <div class="form-group">
-                                        <label for="numeropedido">Número de pedido</label>
+                                        <label>Número de pedido</label>
                                         <input type="text" class="form-control" th:field="*{numeropedido}" style="width: 25%">
                                         <div class="text-danger" th:if="${#fields.hasErrors('numeropedido')}" th:errors="*{numeropedido}"></div>
                                     </div>
 
                                     <!-- ELEGIR UN LINEA -->
-                                    <div class="form-group" th:if="${inventarioProducto.color == null}">
+                                    <div class="form-group" >
                                         <label for="linea">Linea</label>
                                         <select class="form-control" name="linea" id="linea" style="width: 40%">
                                             <option th:each=" li : ${listalinea}" th:value="${li.idlinea}"
                                                     th:text="${li.nombrelinea}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" th:unless="${inventarioProducto.color == null}">
-                                        <label for="linea">Linea</label>
-                                        <select class="form-control" name="linea" id="linea" style="width: 40%">
-                                            <option th:each=" lin : ${listalinea}" th:value="${lin.idlinea}"
-                                                    th:text="${lin.nombrelinea}"
-                                                    th:selected="${lin.idlinea==inventarioProducto.getProducto().getLinea().idlinea}">
                                             </option>
                                         </select>
                                     </div>
@@ -77,15 +82,7 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="form-group" th:unless="${inventarioProducto.color == null}">
-                                        <label for="producto">Producto</label>
-                                        <select class="form-control" name="producto" id="producto" style="width: 40%">
-                                            <option th:each=" pro : ${listaproducto}" th:value="${pro.idproducto}"
-                                                    th:text="${pro.nombreproducto}"
-                                                    th:selected="${pro.idproducto==inventarioProducto.getProducto().getIdproducto()}">
-                                            </option>
-                                        </select>
-                                    </div>
+
                                     <!- FIN -->
 
                                     <!-- ELEGIR UN CATEGORIA -->
@@ -94,15 +91,6 @@
                                         <select class="form-control" name="categoria" id="categoria" style="width: 40%">
                                             <option th:each=" ca : ${listacategoria}" th:value="${ca.idcategoria}"
                                                     th:text="${ca.nombrecategoria}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" th:unless="${inventarioProducto.color == null}">
-                                        <label for="Categoria">Categoria</label>
-                                        <select class="form-control" name="categoria" id="categoria" style="width: 40%">
-                                            <option th:each=" ca : ${listacategoria}" th:value="${ca.idcategoria}"
-                                                    th:text="${ca.nombrecategoria}"
-                                                    th:selected="${ca.idcategoria==inventarioProducto.getCategoria().getIdcategoria()}">
                                             </option>
                                         </select>
                                     </div>
@@ -117,36 +105,27 @@
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="form-group" th:unless="${inventarioProducto.color == null}">
-                                        <label for="tamano">Tamaño</label>
-                                        <select class="form-control" name="tamano" id="tamano" style="width: 40%">
-                                            <option th:each=" ta : ${listatamano}" th:value="${ta.idtamano}"
-                                                    th:text="${ta.nombretamano}"
-                                                    th:selected="${ta.idtamano==inventarioProducto.getTamano().getIdtamano()}">
-                                            </option>
-                                        </select>
-                                    </div>
                                     <!-- FIN -->
 
 
                                     <div class="form-group">
-                                        <label for="Cantidad">Cantidad</label>
+                                        <label >Cantidad</label>
                                         <input type="text" class="form-control" th:field="*{cantidad}" style="width: 25%">
                                         <div class="text-danger" th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="color">Color</label>
+                                        <label >Color</label>
                                         <input type="text" class="form-control" th:field="*{color}" style="width: 25%">
                                         <div class="text-danger" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="costomosqoy">Costo Moscoy</label>
+                                        <label >Costo Moscoy</label>
                                         <input type="text" class="form-control" th:field="*{preciomosqoy}" style="width: 25%">
                                         <div class="text-danger" th:if="${#fields.hasErrors('preciomosqoy')}" th:errors="*{preciomosqoy}"></div>
 
                                     </div>
                                     <div class="form-group">
-                                        <label for="preciotejedor">Costo Tejedor</label>
+                                        <label >Costo Tejedor</label>
                                         <input type="text" class="form-control" th:field="*{preciotejedor}" style="width: 25%">
                                         <div class="text-danger" th:if="${#fields.hasErrors('preciotejedor')}" th:errors="*{preciotejedor}"></div>
                                     </div>
@@ -154,9 +133,7 @@
 
 
                                     <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary"
-                                            th:text="${inventarioProducto.idinventario == 0? 'Registrar' : 'Actualizar'}">Reg/act
-                                    </button>
+                                    <button    type="submit" class="btn btn-primary">Guardar</button>
                                 </form>
                             </div>
                         </div>

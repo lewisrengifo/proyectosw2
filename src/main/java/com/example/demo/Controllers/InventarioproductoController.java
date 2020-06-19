@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -35,13 +36,20 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/agregarInventario")
-    public String agregarInventario(@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model){
+    public String consignacionYVenta(@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model){
+        model.addAttribute("listaArtesano",artesanoRepository.findAll());
+        return "inventario/consigYventa";
+    }
+
+    @PostMapping("/agregarProductoInventario")
+    public String ingresarDescripionInventario(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
         model.addAttribute("listalinea",lineaRepository.findAll());
         model.addAttribute("listaproducto",productoRepository.findAll());
         model.addAttribute("listacategoria",categoriaRepository.findAll());
-        model.addAttribute("listaArtesano",artesanoRepository.findAll());
         model.addAttribute("listatamano",tamanoRepository.findAll());
-        return "inventario/consigYventa";
+        model.addAttribute("consigYVenta",consigYventa);
+        return "inventario/inventarioProducto";
     }
 
 
