@@ -40,19 +40,19 @@ public class InventarioproductoController {
         return "inventario/consigYventa";
     }
 
-    @GetMapping("/agregarConsigVenta")
+    @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
        // model.addAttribute("listalinea",lineaRepository.findAll());
         //model.addAttribute("listaproducto",productoRepository.findAll());
        // model.addAttribute("listacategoria",categoriaRepository.findAll());
         //model.addAttribute("listatamano",tamanoRepository.findAll());
-        //model.addAttribute("consigYVenta",consigYventa);
+        model.addAttribute("consigYVenta",consigYventa);
 
         return generarProductos(model,invPro,consigYventa);
     }
 
-    //@GetMapping("/ingresarProductos")
+    @GetMapping("/ingresarProductos")
     public String generarProductos( Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                     @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
         model.addAttribute("listalinea",lineaRepository.findAll());

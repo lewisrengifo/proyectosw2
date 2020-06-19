@@ -62,7 +62,7 @@
 
                                 <h2 >Consignacion / venta</h2>
                                 <br>
-                                <form method="get" th:action="@{'/inventarioPrincipal/agregarConsigVenta'}" th:object="${consigYVenta}">
+                                <form method="post" th:action="@{'/inventarioPrincipal/agregarConsigVenta'}" th:object="${consigYVenta}">
                                     <input type="hidden" th:field="*{idconsignacion}"/>
                                     <!--div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
