@@ -17,4 +17,8 @@ public class UsuarioService {
         Pageable pageable1 = PageRequest.of(pageNumber, 5);
         return usuarioRepository.findAll(pageable1);
     }
+    public Page<Usuario> buscador(String search, Integer pages){
+        Pageable pageable2 = PageRequest.of(pages, 5);
+        return usuarioRepository.buscarUsuario(search, pageable2);
+    }
 }

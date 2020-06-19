@@ -2,10 +2,12 @@ package com.example.demo.Repository;
 
 
 import com.example.demo.Entity.Usuario;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Repository
@@ -14,10 +16,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Usuario cambiarenable(String enable, int id);
 
     public Usuario findByCorreo(String correo);
-    @Query(value = "select * from usuario u where u.nombre = ?1 or u.apellido = ?1 or u.dni = ?1 or u.correo=?1 or u.rol_idrol =(select r.idrol from rol r where r.nombre=?1);", nativeQuery = true)
-
-    List<Usuario> buscarUsuario(String search);
-    Usuario findByIdusuario(int id);
+    @Query(value = "SELECT * FROM usuario u where u.nombre like %?1% or u.apellido like %?1% or u.correo like %?1% or u.sede_idrol =(select idrol from sede where sede like %?1%) or u.rol_idrol=(select idrol from rol where nombre like %?1%)", countQuery= "SELECT count(*) FROM usuario u where u.nombre like %?1% or u.apellido like %?1% or u.correo like %?1% or u.sede_idrol =(select idrol from sede where sede like %?1%) or u.rol_idrol=(select idrol from rol where nombre like %?1%)" ,nativeQuery = true)
+    Page<Usuario> buscarUsuario(String search, Pageable page);
+    //Usuario findByIdusuario(int id);
     @Query(value = "select * from usuario u where u.sede_idrol = (select s.idrol from sede s where s.idrol=?1);", nativeQuery = true)
     List<Usuario> buscarsedeexistente(int idsede);
 

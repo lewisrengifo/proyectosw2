@@ -65,18 +65,18 @@
     <div class="sidebar-collapse">
         <ul class="nav" id="main-menu">
 
-            <li sec:authorize="hasAnyAuthority('Gestor sede','Gestor principal')">
+            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Administrador')">
                 <a th:href="@{/inventarioPrincipal}"  class=" waves-effect waves-dark"><i class="fa fa-dashboard"></i> Ver Inventario</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Gestor sede')">
                 <a  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Administrador')">
-                <a  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Lista de Usuarios</a>
+                <a th:href="@{'/usuario'}"  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de Usuarios</a>
             </li>
 
             <li sec:authorize="hasAnyAuthority('Administrador')">
-                <a  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Lista de Sedes</a>
+                <a th:href="@{'/usuario/listasedes'}"  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Gestion de Sedes</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')">
                 <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> descripciton de productos <span class="fa arrow"></span></a>
