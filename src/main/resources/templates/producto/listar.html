@@ -74,9 +74,36 @@
                                             <td th:text="${producto.getDescripcionproducto()}"></td>
                                             <td th:text="${producto.getCodigodescripcionproducto()}"></td>
                                             <td th:text="${producto.getLinea().nombrelinea}"></td>
-                                            <td class="center"><a th:href="@{'/producto/foto' + '?id=' + ${producto.getIdproducto()}}" >Ver</a></td>
+                                            <!--td class="center"><a th:href="@{'/producto/foto' + '?id=' + ${producto.getIdproducto()}}" >Ver</a></td-->
 
-
+                                            <td><button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#ID_PRODUCTO" th:data-target="${producto.idproducto}">
+                                                Ver foto
+                                            </button></td>
+                                            <!-- Modal -->
+                                            <div class="modal fade" th:id="${producto.idproducto}"
+                                                 id="ID_PRODUCTO" tabindex="-1" role="dialog"
+                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="exampleModalLabel">Producto: ABCD</h5>
+                                                            <button type="button" class="close"
+                                                                    data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <img th:src="@{|/FotosProyecto/${producto.foto}|}"/>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
 
