@@ -23,6 +23,8 @@ public interface ProductoRepository extends JpaRepository<Producto,Integer> {
                         , nativeQuery = true)
     Page<Producto> obtenerFiltroProducto(String search , Pageable pageable);
 
-
+    @Query(value = "SELECT * FROM producto where idproducto not in (Select p.idproducto from producto p where p.idproducto=?1);"
+            , nativeQuery = true)
+    List<Producto> mio(int id);
 
 }
