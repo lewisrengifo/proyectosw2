@@ -1,6 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ProductoServiceApi;
+import com.example.demo.Entity.Linea;
 import com.example.demo.Entity.Producto;
 import com.example.demo.Repository.LineaRepository;
 import com.example.demo.Repository.ProductoRepository;
@@ -85,8 +86,8 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@RequestParam("imageFile") MultipartFile  imageFile , @Valid Producto producto, BindingResult bindingResult
-            , RedirectAttributes attr,Model model) {
+    public String guardarProducto(@RequestParam("imageFile") MultipartFile imageFile, @Valid Producto producto, BindingResult bindingResult
+            , RedirectAttributes attr, Model model) {
 
 
         String returnValue = "redirect:/producto";
@@ -115,6 +116,7 @@ public class ProductoController {
                 } catch (Exception e) {
 
                     attr.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
+                    model.addAttribute("listaLinea", lineaRepository.findAll());
                     return "producto/editFrm";
                 }
 
@@ -137,6 +139,7 @@ public class ProductoController {
         if (optProduct.isPresent()) {
             producto = optProduct.get();
             model.addAttribute("producto", producto);
+            model.addAttribute("listaLinea", lineaRepository.findAll());
             return "producto/editFrm";
         } else {
             return "redirect:/producto";
@@ -159,7 +162,7 @@ public class ProductoController {
     }
 
     @PostMapping("/search")
-    public String buscarProducto(String busca,@RequestParam Map<String, Object> params, Model model) {
+    public String buscarProducto(String busca, @RequestParam Map<String, Object> params, Model model) {
 
         String busqueda = (String) params.get("search");
 
@@ -167,29 +170,38 @@ public class ProductoController {
 
         Page<Producto> pageProduct;
         int totalPage;
+
+
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/producto";
+        }
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
+        if (page < 0) {
+            return "redirect:/producto";
+        }
 
 
+        pageRequest = PageRequest.of(page, 10);
+        pageProduct = productoServiceApi.getEver(busqueda, pageRequest);
+        totalPage = pageProduct.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
 
-
-                pageRequest = PageRequest.of(page, 10);
-                pageProduct = productoServiceApi.getEver(busqueda, pageRequest);
-                totalPage = pageProduct.getTotalPages();
-                if (totalPage > 0) {
-                    List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-                    model.addAttribute("pages", pages);
-                }
-
-                model.addAttribute("busqueda", busqueda);
-                model.addAttribute("listaProductos", pageProduct.getContent());
-                model.addAttribute("current", page + 1);
-                model.addAttribute("next", page + 2);
-                model.addAttribute("prev", page);
-                model.addAttribute("last", totalPage);
+        model.addAttribute("busqueda", busqueda);
+        model.addAttribute("listaProductos", pageProduct.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
 
         return "producto/listar";
-       }
+    }
+
     @GetMapping("/search")
     public String buscarProducto(@RequestParam Map<String, Object> params, Model model) {
 
@@ -223,28 +235,27 @@ public class ProductoController {
     @PostMapping("/uploadImage")
     public String uploadImage(@RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes att) {
         String returnValue = "redirect:/producto";
-        Path pathFinal = null ;
-       // File  f = null;
+        Path pathFinal = null;
+        // File  f = null;
         Producto producto = new Producto();
         producto.setFoto(imageFile.getOriginalFilename());
 
 
         try {
-            pathFinal =   productoServiceApi.saveImage(imageFile, producto);
+            pathFinal = productoServiceApi.saveImage(imageFile, producto);
             byte[] bytes = imageFile.getBytes();
             Files.write(pathFinal, bytes);
             // f = new File(pathFinal.toString());
-        // BufferedImage image = ImageIO.read(f);
-        // int height = image.getHeight();
-        // int width = image.getWidth();
+            // BufferedImage image = ImageIO.read(f);
+            // int height = image.getHeight();
+            // int width = image.getWidth();
 
 
         } catch (Exception e) {
 
-           att.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
+            att.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
             return "producto/editFrm";
         }
-
 
 
         return returnValue;

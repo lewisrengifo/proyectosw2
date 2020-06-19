@@ -6,6 +6,7 @@ import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.RolRepository;
 import com.example.demo.Repository.SedeRepository;
 import com.example.demo.Repository.UsuarioRepository;
+import com.example.demo.service.SendMailService;
 import com.example.demo.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,8 @@ public class UsuarioController {
     RolRepository rolRepository;
     @Autowired
     SedeRepository sedeRepository;
+    @Autowired
+    SendMailService sendMailService;
 
     @GetMapping(value = {"", "/lista"})
     public String listarUsuarios(@RequestParam Map<String, Object> params,Model model) {
@@ -132,8 +135,10 @@ public class UsuarioController {
             return "redirect:/usuario/lista";
         }
         if(usuario.getIdusuario()==0){
-            usuario.setContrasena(encriptar(usuario.getContrasena()));
 
+            //aca se envia la contraseña generada..
+            sendMailService.sendMail(usuario.getCorreo(), "saritaatanacioarenas@gmail.com", "Envio de contraseña", "La contraseña es: " + usuario.getContrasena());
+            usuario.setContrasena(encriptar(usuario.getContrasena()));
 
         }else{
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuario.getIdusuario());

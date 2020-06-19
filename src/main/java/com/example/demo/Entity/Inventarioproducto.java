@@ -1,10 +1,17 @@
 package com.example.demo.Entity;
 
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+
+
+import javax.persistence.*;
+
 import java.util.Date;
 
 @Entity
 @Table(name = "inventarioproducto")
+
 
 public class Inventarioproducto {
 

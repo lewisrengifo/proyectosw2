@@ -1,15 +1,13 @@
 package com.example.demo.Entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
+@Table(name = "categoria")
 public class Categoria implements Serializable {
 
     @Id
@@ -21,7 +19,7 @@ public class Categoria implements Serializable {
     private String nombrecategoria;
 
     @NotBlank(message = "el campo del texto no puede estar vacio")
-    @Pattern(regexp="[a-zA-ZÀ]{1}",message = "Solo acepta una letra y sin tílde")
+    @Pattern(regexp="[a-zA-ZÀ\\u00f1\\u00d1]{1}",message = "Solo acepta una letra y sin tílde")
     private String codigocategoria;
 
     public int getIdcategoria() {

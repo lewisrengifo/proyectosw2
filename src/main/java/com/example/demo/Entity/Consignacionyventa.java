@@ -1,6 +1,10 @@
 package com.example.demo.Entity;
 
 import javax.persistence.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 import java.util.Date;
 
 @Entity
