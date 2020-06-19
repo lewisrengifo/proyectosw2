@@ -11,8 +11,10 @@ public class Sede implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idrol")
     private int idrol;
-    @Column( name = "sede",nullable = false)
+    @Column(name = "sede", nullable = false)
     private String sede;
+    @Column(name = "iventariosede_idiventariosede")
+    private Integer iventariosede_idiventariosede;
 
     public Integer getIventariosede_idiventariosede() {
         return iventariosede_idiventariosede;
@@ -21,10 +23,6 @@ public class Sede implements Serializable {
     public void setIventariosede_idiventariosede(Integer iventariosede_idiventariosede) {
         this.iventariosede_idiventariosede = iventariosede_idiventariosede;
     }
-    @Column(name = "iventariosede_idiventariosede")
-    private Integer iventariosede_idiventariosede;
-
-
 
 
     public int getIdrol() {
