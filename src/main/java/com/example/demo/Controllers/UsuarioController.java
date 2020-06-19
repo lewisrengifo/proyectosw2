@@ -83,7 +83,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
+    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                          RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
         if (bindingResult.hasErrors()) {
             model.addAttribute("listaroles", rolRepository.findAll());
             model.addAttribute("listasedes", sedeRepository.findAll());
@@ -173,9 +174,9 @@ public class UsuarioController {
             } else {
                 usuarioRepository.save(usuario);
             }
-            return "redirect:/usuario/lista";
         }
-    }}
+        return "redirect:/usuario/lista";
+    }
 
     @GetMapping("/editar")
     public String editarUsuario(@ModelAttribute("usuario") Usuario usuario, Model model, @RequestParam("id") int id, RedirectAttributes redirectAttributes) {
