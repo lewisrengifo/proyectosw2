@@ -41,23 +41,16 @@ public class InventarioproductoController {
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+        model.addAttribute("listalinea",lineaRepository.findAll());
+        model.addAttribute("listaproducto",productoRepository.findAll());
+        model.addAttribute("listacategoria",categoriaRepository.findAll());
+        model.addAttribute("listatamano",tamanoRepository.findAll());
+        model.addAttribute("consigYVenta",consigYventa);
 
-        Consignacionyventa saveConsigVenta = consignacionyventaRepository.save(consigYventa);
-        return generarProductos(model,invPro,saveConsigVenta);
+        return "inventario/inventarioProducto";
     }
 
-    @GetMapping("/ingresarProductos")
-    public String generarProductos( Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                    @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
-        model.addAttribute("listalinea",lineaRepository.findAll());
-         model.addAttribute("listaproducto",productoRepository.findAll());
-          model.addAttribute("listacategoria",categoriaRepository.findAll());
-         model.addAttribute("listatamano",tamanoRepository.findAll());
-         model.addAttribute("consigYVenta",consigYventa);
 
-         return "inventario/inventarioProducto";
-
-     }
 
 
 
