@@ -7,8 +7,13 @@ import com.example.demo.Repository.LineaRepository;
 import com.example.demo.Repository.ProductoRepository;
 import com.example.demo.service.UploadFileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -344,6 +351,21 @@ public class ProductoController {
         return "producto/foto";
     }
 
+    /*@GetMapping("/fotoProducto")
+    public String darArchivo(@RequestParam("id")int id){
+
+        return"producto/fotoProducto";
+    }*/
+    @GetMapping(value = "/fotoProducto", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<FileSystemResource> getFile(@RequestParam("id")int id) throws IOException {
+        Optional<Producto> optProduct = productoRepository.findById(id);
+        Producto producto=optProduct.get();
+        File file = new File("C:\\FotosProyecto\\"+ producto.getFoto());
+        HttpHeaders respHeaders = new HttpHeaders();
+        return new ResponseEntity<FileSystemResource>(
+                new FileSystemResource(file), respHeaders, HttpStatus.OK
+        );
+    }
 
 
 }
