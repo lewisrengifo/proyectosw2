@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Lista de Comunidades')">
 </head>
@@ -41,8 +41,8 @@
                                             <th class="center-align"  >#</th>
                                             <th class="center-align" >NOMBRE</th>
                                             <th class="center-align" >CÓDIGO</th>
-                                            <th></th>
-                                            <th></th>
+                                            <th sec:authorize="hasAnyAuthority('Gestor principal')"  ></th>
+                                            <th sec:authorize="hasAnyAuthority('Gestor principal')" ></th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -50,8 +50,8 @@
                                             <td class="center-align" th:text="${info.index +1}">1</td>
                                             <td class="center-align" th:text="${c.nombrecomunidad}">Home</td>
                                             <td class="center-align" th:text="${c.codigocomunidad}">H</td>
-                                            <td class="center-align"><a th:href="@{'comunidad/editar?id=' + ${c.idcomunidad}}"> Editar</a></td>
-                                            <td class="center-align"><a th:href="@{'comunidad/borrar?id=' + ${c.idcomunidad}}">Borrar</a></td>
+                                            <td sec :authorize="hasAnyAuthority('Gestor principal')" class="center-align"><a th:href="@{'comunidad/editar?id=' + ${c.idcomunidad}}"> Editar</a></td>
+                                            <td sec:authorize="hasAnyAuthority('Gestor principal')" class="center-align"><a th:href="@{'comunidad/borrar?id=' + ${c.idcomunidad}}">Borrar</a></td>
                                         </tr>
                                         </tbody>
                                     </table>

@@ -8,6 +8,7 @@ import com.example.demo.Repository.ArtesanoRepository;
 import com.example.demo.Repository.ComunidadRepository;
 import com.example.demo.service.ArtesanoService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,13 +41,24 @@ public class ArtesanoController {
 
     @GetMapping(value = {"", "/lista"})
     public String listaArtesano(Model model, @RequestParam Map<String, Object> params) {
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        }catch (NumberFormatException e){
+            return "redirect:/artesano/lista";
+        }
 
         int currentPage = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
+        if(currentPage <0){
+            return "redirect:/artesano/lista";
+        }
         Page<Artesano> page = artesanoService.listAll(currentPage);
         long totalItems = page.getTotalElements();
         int totalPages = page.getTotalPages();
 
+      //  if (currentPage<0 ) {
+        //    currentPage = 0;
+        //}
         if (totalPages > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
@@ -63,6 +75,18 @@ public class ArtesanoController {
         return "artesano/lista";
 
 
+    }
+    
+    public boolean isNumeric(String cadena){
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+        return resultado;
     }
 
 
@@ -96,7 +120,7 @@ public class ArtesanoController {
 
         Optional<Artesano> optionalArtesano = artesanoRepository.findById(id);
         if (optionalArtesano.isPresent()) {
-            att.addFlashAttribute("msgAr", "Borrado Exitosamente");
+            att.addFlashAttribute("msgAr", "Artesano borrado Exitosamente");
             artesanoRepository.deleteById(id);
             return "redirect:/artesano";
         }
@@ -210,10 +234,20 @@ public class ArtesanoController {
     @GetMapping("/buscador")
     public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
 
-        String busqueda = (String) params.get("searchField");
 
+
+        String busqueda = (String) params.get("searchField");
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        }catch (NumberFormatException e){
+            return "redirect:/artesano/lista";
+        }
 
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if(page <0){
+            return "redirect:/artesano/lista";
+        }
 
         Page<Artesano> pageArtesanos = artesanoService.listSearch(busqueda, page);
         int totalPage = pageArtesanos.getTotalPages();

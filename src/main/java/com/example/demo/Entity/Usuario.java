@@ -21,9 +21,9 @@ public class Usuario implements Serializable {
     @Column(name = "idUsuario")
     private int idusuario;
     @NotBlank(message = "El nombre no debe ser vacío")
-    @Pattern(regexp="[a-zA-Z ]{1,45}",message = "Solo aceptan letras")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String nombre;
-    @Pattern(regexp="[a-zA-Z ]{1,45}",message = "Solo aceptan letras")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     @NotBlank(message = "El Apellido no debe ser vacío")
     private String apellido;
     @NotBlank(message = "El DNI no debe ser vacío")
@@ -64,10 +64,19 @@ public class Usuario implements Serializable {
     @Column(nullable = true)
     private String token;
     @ManyToOne
-    @JoinColumn(name = "sede_idrol")
-    private Sede sede_idrol;
+    @JoinColumn(name = "sede_idsede")
+    private Sede sede_idsede;
     @Column(nullable = true)
     private boolean enable;
+
+    public Sede getSede_idsede() {
+        return sede_idsede;
+    }
+
+    public void setSede_idsede(Sede sede_idsede) {
+        this.sede_idsede = sede_idsede;
+    }
+
     @ManyToOne
     @JoinColumn(name = "rol_idrol")
     private Rol rol_idrol;
@@ -107,14 +116,6 @@ public class Usuario implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public Sede getSede_idrol() {
-        return sede_idrol;
-    }
-
-    public void setSede_idrol(Sede sede_idrol) {
-        this.sede_idrol = sede_idrol;
     }
 
     public Rol getRol_idrol() {
