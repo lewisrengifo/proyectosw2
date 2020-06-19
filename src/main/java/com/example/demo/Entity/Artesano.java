@@ -17,13 +17,13 @@ public class Artesano  {
 
     @NotBlank(message = "El texto no puede estar vacio")
     //@Size(max = 45, message = "el nombre NO puede poseer más de 45 caracteres")
-    @Pattern(regexp = "[a-zA-Z]{1,45}",message = "solo se debe ingresar letras y un maximo de 45 caracteres")
+    @Pattern(regexp = "[a-zA-Z\\u00f1\\u00d1]{1,45}",message = "solo se debe ingresar letras y un maximo de 45 caracteres")
     private String nombreartesano;
 
 
     @NotBlank(message = "El texto NO puede estar vacio")
     //@Size(max = 45, message = "el apellido paterno NO puede poseer más de 45 caracteres")
-    @Pattern(regexp = "[a-zA-Z]{1,45}",message = "solo se debe ingresar letras y un máximo de 45 caracteres")
+    @Pattern(regexp = "[a-zA-Z\\u00f1\\u00d1]{1,45}",message = "solo se debe ingresar letras y un máximo de 45 caracteres")
     private String apellidopaterno;
 
     @Size(max = 45, message = "el apellido materno NO puede poseer más de 45 caracteres")
@@ -33,7 +33,7 @@ public class Artesano  {
 
     @NotBlank(message = "El texto NO puede estar vacio")
     //@Size(min=2,max = 4, message = "el codigo debe tener como mínimo 2 caracteres y máximo 4 caracteres")
-    @Pattern(regexp = "[a-zA-Z]{2,4}",message = "solo se debe ingresar letras, minimo 2 y maximo 4 caracteres")
+    @Pattern(regexp = "[a-zA-Z\\u00f1\\u00d1]{2,4}",message = "solo se debe ingresar letras, minimo 2 y maximo 4 caracteres")
     private String codigoartesano;
 
 

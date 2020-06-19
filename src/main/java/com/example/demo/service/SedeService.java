@@ -1,7 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.Entity.Sede;
 import com.example.demo.Entity.Usuario;
-import com.example.demo.Repository.UsuarioRepository;
+import com.example.demo.Repository.SedeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,16 +10,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UsuarioService {
+public class SedeService {
     @Autowired
-    UsuarioRepository usuarioRepository;
-
-    public Page<Usuario> getAll(int pageNumber){
+    SedeRepository sedeRepository;
+    public Page<Sede> getAll(int pageNumber){
         Pageable pageable1 = PageRequest.of(pageNumber, 5);
-        return usuarioRepository.findAll(pageable1);
+        return sedeRepository.findAll(pageable1);
     }
-    public Page<Usuario> buscador(String search, Integer pages){
+    public Page<Sede> buscador(String search, Integer pages){
         Pageable pageable2 = PageRequest.of(pages, 5);
-        return usuarioRepository.buscarUsuario(search, pageable2);
+        return sedeRepository.buscarSede(search, pageable2);
     }
+
 }

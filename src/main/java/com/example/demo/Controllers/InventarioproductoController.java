@@ -1,10 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Entity.Inventarioproducto;
-import com.example.demo.Repository.CategoriaRepository;
-import com.example.demo.Repository.InventarioproductoRepository;
-import com.example.demo.Repository.ProductoRepository;
-import com.example.demo.Repository.TamanoRepository;
+import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/inventarioPrincipal")
 public class InventarioproductoController {
 
+    @Autowired
+    LineaRepository lineaRepository;
     @Autowired
     ProductoRepository productoRepository;
     @Autowired
@@ -34,6 +33,7 @@ public class InventarioproductoController {
 
     @GetMapping("/agregarInventario")
     public String agregarInventario(@ModelAttribute("inventarioProducto")Inventarioproducto invPro,Model model){
+        model.addAttribute("listalinea",lineaRepository.findAll());
         model.addAttribute("listaproducto",productoRepository.findAll());
         model.addAttribute("listacategoria",categoriaRepository.findAll());
         model.addAttribute("listatamano",tamanoRepository.findAll());
