@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import sun.util.calendar.BaseCalendar;
+
 import javax.persistence.*;
 
 import javax.validation.constraints.NotBlank;
@@ -14,7 +16,8 @@ public class Consignacionyventa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idconsignacion;
-    private Date fechafin;
+
+    private String fechafin;
 
     @ManyToOne
     @JoinColumn(name = "artesano_idartesano")
@@ -23,7 +26,7 @@ public class Consignacionyventa {
     @Column(nullable = false)
     private String tipo;
     @Column(nullable = false)
-    private Date fechainicio;
+    private String fechainicio;
 
     public int getIdconsignacion() {
         return idconsignacion;
@@ -33,11 +36,11 @@ public class Consignacionyventa {
         this.idconsignacion = idconsignacion;
     }
 
-    public Date getFechafin() {
+    public String getFechafin() {
         return fechafin;
     }
 
-    public void setFechafin(Date fechafin) {
+    public void setFechafin(String fechafin) {
         this.fechafin = fechafin;
     }
 
@@ -57,11 +60,11 @@ public class Consignacionyventa {
         this.tipo = tipo;
     }
 
-    public Date getFechainicio() {
+    public String getFechainicio() {
         return fechainicio;
     }
 
-    public void setFechainicio(Date fechainicio) {
+    public void setFechainicio(String fechainicio) {
         this.fechainicio = fechainicio;
     }
 }
