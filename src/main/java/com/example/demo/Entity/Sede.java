@@ -21,7 +21,7 @@ public class Sede implements Serializable {
     public void setIventariosede_idiventariosede(Integer iventariosede_idiventariosede) {
         this.iventariosede_idiventariosede = iventariosede_idiventariosede;
     }
-
+    @Column(name = "iventariosede_idiventariosede")
     private Integer iventariosede_idiventariosede;
 
 
