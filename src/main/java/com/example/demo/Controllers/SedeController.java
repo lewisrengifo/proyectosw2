@@ -25,7 +25,7 @@ public class SedeController {
     SedeRepository sedeRepository;
     @Autowired
     SedeService sedeService;
-    @GetMapping(value = {"", "lista"})
+    @GetMapping(value = {"", "/lista"})
     public String listarSedes(@RequestParam Map<String, Object> params, Model model){
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;

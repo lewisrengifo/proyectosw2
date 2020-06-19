@@ -20,11 +20,11 @@
                             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
                                  role="alert"></div>
 
-                            <form method="post" th:action="@{/sede/guardar}" th:object="${sede}">
+                            <form method="post" th:action="@{'/sede/guardar'}" th:object="${sede}">
                                 <input type="hidden" th:field="*{idrol}"/>
                                 <div class="form-group">
                                     <label for="Nombre">Nombre de la sede</label>
-                                    <input type="text" style="width: 88%" class="form-control" th:field="${sede.sede}">
+                                    <input type="text" style="width: 88%" class="form-control" th:field="*{sede}">
 
                                 </div>
 
