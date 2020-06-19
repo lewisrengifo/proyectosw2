@@ -130,7 +130,7 @@ public class UsuarioController {
             }
         }
         try {
-            if (sedeRepository.findByIdrol(usuario.getSede_idrol().getIdrol()) == null) {
+            if (sedeRepository.findById(usuario.getSede_idsede().getIdsede()) == null) {
 
             }
         } catch (NullPointerException e) {
@@ -161,7 +161,7 @@ public class UsuarioController {
         //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
         if (rol_idrol == 1) {
 
-            usuario.setSede_idrol(null);
+            usuario.setSede_idsede(null);
             usuarioRepository.save(usuario);
         } else {
             usuarioRepository.save(usuario);

@@ -55,11 +55,11 @@
                                     </tr>
                                     <tr th:each="sede, info : ${listSedes}">
                                         <td th:text="${info.index + 1}"></td>
-                                        <td th:text="${sede.sede}"></td>
+                                        <td th:text="${sede.nombre}"></td>
 
 
                                         <td><a class="btn btn-primary"
-                                               th:href="@{'/sede/editar' + '?id=' + ${sede.idrol}}">Editar</a>
+                                               th:href="@{'/sede/editar' + '?id=' + ${sede.idsede}}">Editar</a>
                                         </td>
 
                                     </tr>
@@ -74,7 +74,7 @@
 
                                             <li class="page-item" th:classappend="${prev == 0 ? 'disabled': '' }">
                                                 <a th:if="${searchField==null}" class="page-link"
-                                                   th:href="@{'/usuario' + '?page=' + ${prev}} ">
+                                                   th:href="@{'/sede' + '?page=' + ${prev}} ">
                                                     Anterior </a>
                                                 <a th:if="${searchField!=null}" class="page-link"
                                                    th:href="@{'/usuario/buscador' + '?searchField=' +${searchField}+ '&page==' + ${prev}} ">
@@ -82,16 +82,16 @@
 
                                             <li class="page-item" th:each="page:${page}"
                                                 th:classappend="${current == page ? 'active' : ''}">
-                                                <a th:if="${searchField==null}" class="page-link" th:href="@{'/usuario' + '?page=' + ${page}} "
+                                                <a th:if="${searchField==null}" class="page-link" th:href="@{'/sede' + '?page=' + ${page}} "
                                                    th:text="${page}"></a>
-                                                <a th:if="${searchField!=null}" class="page-link" th:href="@{'/usuario/buscador' + '?searchField=' +${searchField}+ '&page=' + ${page}} "
+                                                <a th:if="${searchField!=null}" class="page-link" th:href="@{'/sede/buscador' + '?searchField=' +${searchField}+ '&page=' + ${page}} "
                                                    th:text="${page}"></a>
                                             </li>
 
                                             <li class="page-item" th:classappend="${current == last ? 'disabled': '' }">
-                                                <a th:if="${searchField==null}" class="page-link" th:href="@{'/usuario' + '?page=' + ${next}} ">
+                                                <a th:if="${searchField==null}" class="page-link" th:href="@{'/sede' + '?page=' + ${next}} ">
                                                     Siguiente </a>
-                                                <a th:if="${searchField!=null}" class="page-link" th:href="@{'/usuario/buscador' + '?searchField=' +${searchField}+ '&page=' + ${next}} ">
+                                                <a th:if="${searchField!=null}" class="page-link" th:href="@{'/sede/buscador' + '?searchField=' +${searchField}+ '&page=' + ${next}} ">
                                                     Siguiente </a>
 
                                         </ul>

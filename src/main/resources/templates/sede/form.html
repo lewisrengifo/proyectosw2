@@ -14,38 +14,40 @@
                     <div class="card">
                         <div class="container">
 
-                            <h2 th:text="${sede.idrol == 0? 'Nuevo Sede' : 'Editar sede'}">
+                            <h2 th:text="${sede.idsede == 0? 'Nuevo Sede' : 'Editar sede'}">
                                 Nuevo/Editar</h2>
                             <hr/>
                             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
                                  role="alert"></div>
 
                             <form method="post" th:action="@{'/sede/guardar'}" th:object="${sede}">
-                                <input type="hidden" th:field="*{idrol}"/>
+                                <input type="hidden" th:field="*{idsede}"/>
                                 <div class="form-group">
                                     <label for="Nombre">Nombre de la sede</label>
-                                    <input type="text" style="width: 88%" class="form-control" th:field="*{sede}">
+                                    <input type="text" style="width: 88%" class="form-control" th:field="*{nombre}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('nombre')}"
+                                         th:errors="*{nombre}"></div>
 
                                 </div>
 
                                 <a th:href="@{'/sede/lista'}" class="btn btn-danger">Cancelar</a>
 
                                 <button type="submit" class="btn btn-primary"
-                                        th:text="${sede.idrol == 0? 'Registrar' : 'Actualizar'}">
+                                        th:text="${sede.idsede == 0? 'Registrar' : 'Actualizar'}">
                                     Reg/act
                                 </button>
 
                             </form>
                             <br>
-                            </form>
+
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+</div>
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
 
 </body>
 </html>

@@ -1,6 +1,8 @@
 package com.example.demo.Entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.stream.IntStream;
 
@@ -9,36 +11,26 @@ import java.util.stream.IntStream;
 public class Sede implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idrol")
-    private int idrol;
-    @Column(name = "sede", nullable = false)
-    private String sede;
-    @Column(name = "iventariosede_idiventariosede")
-    private Integer iventariosede_idiventariosede;
+    @Column(name = "idsede")
+    private int idsede;
+    @Column(name = "nombre", nullable = false)
+    @NotBlank(message = "El nombre no debe ser vacío")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
+    private String nombre;
 
-    public Integer getIventariosede_idiventariosede() {
-        return iventariosede_idiventariosede;
+    public int getIdsede() {
+        return idsede;
     }
 
-    public void setIventariosede_idiventariosede(Integer iventariosede_idiventariosede) {
-        this.iventariosede_idiventariosede = iventariosede_idiventariosede;
+    public void setIdsede(int idsede) {
+        this.idsede = idsede;
     }
 
-
-    public int getIdrol() {
-        return idrol;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setIdrol(int idrol) {
-        this.idrol = idrol;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
-
-    public String getSede() {
-        return sede;
-    }
-
-    public void setSede(String sede) {
-        this.sede = sede;
-    }
-
 }

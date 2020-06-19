@@ -17,5 +17,9 @@ public class SedeService {
         Pageable pageable1 = PageRequest.of(pageNumber, 5);
         return sedeRepository.findAll(pageable1);
     }
+    public Page<Sede> buscador(String search, Integer pages){
+        Pageable pageable2 = PageRequest.of(pages, 5);
+        return sedeRepository.buscarSede(search, pageable2);
+    }
 
 }
