@@ -6,10 +6,7 @@ import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/inventarioPrincipal")
@@ -26,6 +23,8 @@ public class InventarioproductoController {
     @Autowired
     ArtesanoRepository artesanoRepository;
     @Autowired
+    ConsignacionyventaRepository consignacionyventaRepository;
+    @Autowired
     InventarioproductoRepository inventarioproductoRepository;
 
     @GetMapping(value = {"","/","/lista"})
@@ -41,16 +40,30 @@ public class InventarioproductoController {
         return "inventario/consigYventa";
     }
 
-    @PostMapping("/agregarProductoInventario")
-    public String ingresarDescripionInventario(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+    @GetMapping("/agregarConsigVenta")
+    public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
-        model.addAttribute("listalinea",lineaRepository.findAll());
-        model.addAttribute("listaproducto",productoRepository.findAll());
-        model.addAttribute("listacategoria",categoriaRepository.findAll());
-        model.addAttribute("listatamano",tamanoRepository.findAll());
-        model.addAttribute("consigYVenta",consigYventa);
-        return "inventario/inventarioProducto";
+       // model.addAttribute("listalinea",lineaRepository.findAll());
+        //model.addAttribute("listaproducto",productoRepository.findAll());
+       // model.addAttribute("listacategoria",categoriaRepository.findAll());
+        //model.addAttribute("listatamano",tamanoRepository.findAll());
+        //model.addAttribute("consigYVenta",consigYventa);
+
+        return generarProductos(model,invPro,consigYventa);
     }
+
+    //@GetMapping("/ingresarProductos")
+    public String generarProductos( Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+                                    @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+        model.addAttribute("listalinea",lineaRepository.findAll());
+         model.addAttribute("listaproducto",productoRepository.findAll());
+          model.addAttribute("listacategoria",categoriaRepository.findAll());
+         model.addAttribute("listatamano",tamanoRepository.findAll());
+         model.addAttribute("consigYVenta",consigYventa);
+
+         return "inventario/inventarioProducto";
+
+     }
 
 
 
