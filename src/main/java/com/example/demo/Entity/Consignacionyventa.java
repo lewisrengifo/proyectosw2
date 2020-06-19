@@ -35,6 +35,13 @@ public class Consignacionyventa {
         this.idconsignacion = idconsignacion;
     }
 
+    public Date getFechafin() {
+        return fechafin;
+    }
+
+    public void setFechafin(Date fechafin) {
+        this.fechafin = fechafin;
+    }
 
 
     public Artesano getArtesano() {
@@ -53,13 +60,6 @@ public class Consignacionyventa {
         this.tipo = tipo;
     }
 
-    public Date getFechafin() {
-        return fechafin;
-    }
-
-    public void setFechafin(Date fechafin) {
-        this.fechafin = fechafin;
-    }
 
     public Date getFechainicio() {
         return fechainicio;

@@ -63,7 +63,7 @@
                                 <h2 >Consignacion / venta</h2>
                                 <br>
                                 <form method="post" th:action="@{'/inventarioPrincipal/agregarConsigVenta'}" th:object="${consigYVenta}">
-                                    <input type="hidden" th:field="*{idconsignacion}"/>
+
                                     <!--div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
                                     </div-->
@@ -84,20 +84,20 @@
                                     <div class="form-group">
                                         <label >Fecha Inicio</label>
                                         <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div>
+                                        <!--div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div-->
                                     </div>
                                     <!--Fecha FIN-->
                                     <div class="form-group">
                                         <label >Fecha fin</label>
                                         <input type="text" class="form-control" th:field="*{fechafin}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('fechafin')}" th:errors="*{fechafin}"></div>
+                                        <!--div class="text-danger" th:if="${#fields.hasErrors('fechafin')}" th:errors="*{fechafin}"></div-->
                                     </div>
 
 
-                                    <!-- ELEGIR UN ARTESANO -->
+                                    <!-- ELEGIR UN ARTESANO / COMUNIDAD -->
                                     <div class="form-group">
-                                        <label for="producto">Artesano / Comunidad </label>
-                                        <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                        <label for="artesano">Artesano / Comunidad </label>
+                                        <select class="form-control" name="artesano" id="artesano" style="width: 40%">
                                             <option th:each=" ar : ${listaArtesano}"
                                                     th:value="${ar.idartesano}"
                                                     th:text="${ar.nombreartesano} + ' '+ ${ar.apellidopaterno} + ' '+ ${ar.apellidomaterno} + ' / '+ ${ar.comunidad.nombrecomunidad}">
