@@ -1,6 +1,5 @@
 package com.example.demo.Entity;
 
-import sun.util.calendar.BaseCalendar;
 
 import javax.persistence.*;
 
@@ -45,6 +44,7 @@ public class Consignacionyventa {
         this.fechafin = fechafin;
     }
 
+
     public Artesano getArtesano() {
         return artesano;
     }
@@ -60,6 +60,7 @@ public class Consignacionyventa {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
 
     public Date getFechainicio() {
         return fechainicio;
