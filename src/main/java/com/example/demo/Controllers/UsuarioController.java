@@ -44,7 +44,7 @@ public class UsuarioController {
     SendMailService sendMailService;
 
     @GetMapping(value = {"", "/lista"})
-    public String listarUsuarios(@RequestParam Map<String, Object> params,Model model) {
+    public String listarUsuarios(@RequestParam Map<String, Object> params,Model model, @ModelAttribute("searchField") String searchField) {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         }catch (NumberFormatException e){
@@ -61,7 +61,7 @@ public class UsuarioController {
         long totalItems = pageUsuario.getTotalElements();
         if(totalPage>0){
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
+            model.addAttribute("page", pages);
         }
         model.addAttribute("listaUsuarios", pageUsuario.getContent());
         model.addAttribute("totalItems", totalItems);
@@ -70,6 +70,7 @@ public class UsuarioController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
+
         //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
         return "Usuario/lista";
     }
@@ -144,7 +145,7 @@ public class UsuarioController {
             byte bytes[] = new byte[20];
             random.nextBytes(bytes);
             String token = bytes.toString();
-            String direccion ="http://localhost:8081/UnaChiqui/cambiar1/";
+            String direccion ="http://localhost:8080/UnaChiqui/cambiar1/";
             //String direccion = "http://ec2-54-237-112-13.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
             URL url = new URL(direccion+ token);
             String mensaje = "¡Hola!<br><br>Para cambiar su contraseña haga click: <a href='"+ direccion +token + "'>AQUÍ</a> <br><br>Atte. Área Una Chiqui</b>";;
@@ -188,12 +189,43 @@ public class UsuarioController {
         return pww;
     }
 
-    @PostMapping("/buscador")
-    public String buscadorSearch(@RequestParam("searchField") String buscador, Model model) {
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador) {
+        if(textbuscador.isEmpty()){
+            att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-        model.addAttribute("listaUsuarios", usuarioRepository.buscarUsuario(buscador));
-        return "Usuario/lista";
+            return "redirect:/usuario/lista";
+        }else {
 
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            }catch (NumberFormatException e){
+                return "redirect:/usuario/lista";
+            }
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            if(page<0){
+                return "redirect:/usuario/lista";
+            }
+
+            Page<Usuario> pageUsuario1 = usuarioService.buscador(textbuscador, page);
+            int totalPage = pageUsuario1.getTotalPages();
+            long totalItems = pageUsuario1.getTotalElements();
+            if(totalPage>0){
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                model.addAttribute("page", pages);
+            }
+            model.addAttribute("listaUsuarios", pageUsuario1.getContent());
+            model.addAttribute("totalItems", totalItems);
+
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+            model.addAttribute("searchField", textbuscador);
+            //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
+            return "Usuario/lista";
+        }
 
     }
     /*
