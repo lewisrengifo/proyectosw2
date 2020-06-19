@@ -1,26 +1,31 @@
 package com.example.demo.Entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.stream.IntStream;
 
 @Entity
 @Table(name = "sede")
 public class Sede implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idrol")
     private int idrol;
+    @Column( name = "sede",nullable = false)
     private String sede;
 
-    public int getIventariosede_idiventariosede() {
+    public Integer getIventariosede_idiventariosede() {
         return iventariosede_idiventariosede;
     }
 
-    public void setIventariosede_idiventariosede(int iventariosede_idiventariosede) {
+    public void setIventariosede_idiventariosede(Integer iventariosede_idiventariosede) {
         this.iventariosede_idiventariosede = iventariosede_idiventariosede;
     }
 
-    private int iventariosede_idiventariosede;
+    private Integer iventariosede_idiventariosede;
+
+
+
 
     public int getIdrol() {
         return idrol;
