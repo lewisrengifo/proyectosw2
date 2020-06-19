@@ -20,7 +20,7 @@ public class Inventarioproducto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int idinventario;
-    private String numeropedido;
+
 
     @ManyToOne
     @JoinColumn(name = "producto_idproducto")
@@ -58,14 +58,6 @@ public class Inventarioproducto {
 
     public void setIdinventario(int idinventario) {
         this.idinventario = idinventario;
-    }
-
-    public String getNumeropedido() {
-        return numeropedido;
-    }
-
-    public void setNumeropedido(String numeropedido) {
-        this.numeropedido = numeropedido;
     }
 
     public Producto getProducto() {

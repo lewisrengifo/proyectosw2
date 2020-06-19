@@ -16,6 +16,8 @@ public class Consignacionyventa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idconsignacion;
 
+    private String numeropedido;
+
     @ManyToOne
     @JoinColumn(name = "artesano_idartesano")
     private Artesano artesano;
@@ -27,6 +29,14 @@ public class Consignacionyventa {
     private Date fechainicio;
 
     private Date fechafin;
+
+    public String getNumeropedido() {
+        return numeropedido;
+    }
+
+    public void setNumeropedido(String numeropedido) {
+        this.numeropedido = numeropedido;
+    }
 
     public int getIdconsignacion() {
         return idconsignacion;
