@@ -17,16 +17,17 @@ public class Consignacionyventa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idconsignacion;
 
-    private Date fechafin;
-
     @ManyToOne
     @JoinColumn(name = "artesano_idartesano")
     private Artesano artesano;
 
     @Column(nullable = false)
     private String tipo;
+
     @Column(nullable = false)
     private Date fechainicio;
+
+    private Date fechafin;
 
     public int getIdconsignacion() {
         return idconsignacion;

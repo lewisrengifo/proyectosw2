@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+
 @Controller
 @RequestMapping("/inventarioPrincipal")
 public class InventarioproductoController {
@@ -46,6 +49,22 @@ public class InventarioproductoController {
         model.addAttribute("listacategoria",categoriaRepository.findAll());
         model.addAttribute("listatamano",tamanoRepository.findAll());
         model.addAttribute("consigYVenta",consigYventa);
+
+        return "inventario/inventarioProducto";
+    }
+
+
+
+    @GetMapping("/agregarProducto")
+    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, HttpSession session){
+
+        
+        Consignacionyventa consigYventa1 = consigYventa;
+        invPro.setConsignacionyventa(consigYventa1);
+
+
+
 
         return "inventario/inventarioProducto";
     }
