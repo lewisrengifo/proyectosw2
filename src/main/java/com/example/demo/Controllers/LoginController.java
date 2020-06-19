@@ -116,7 +116,7 @@ public class LoginController {
         Usuario usuario = usuarioRepository.findByCorreo(username);
         session.setAttribute("usuario",usuario);
         ArrayList<Inventarioproducto> listProductoPedido = new ArrayList<>();
-        session.setAttribute("listaProductosPedido",listProductoPedido);
+        session.setAttribute("listaProductosEnPedido",listProductoPedido);
         if(rol.equals("Administrador")){
             return "redirect:/usuario/lista";
         }else {
