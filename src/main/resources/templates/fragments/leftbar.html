@@ -80,7 +80,7 @@
             </li>
             <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')">
                 <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> descripciton de productos <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
+                <ul class="nav nav-second-level desProductos">
                     <li>
                         <a th:href="@{/categoria}" >Categoria</a>
                     </li>
@@ -129,6 +129,11 @@
 
     <div th:fragment="scriptsAbajo">
 
+        <script>
+            $('.desProductos').collapse({
+                toggle: false
+            })
+        </script>
 
         <!-- jQuery Js -->
         <script th:src="@{/js/jquery-1.10.2.js}"></script>

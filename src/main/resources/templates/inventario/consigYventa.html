@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Moscoy')">
+
+</head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
+
+
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                INVENTARIO PRINCIPAL
+            </h1>
+        </div>
+
+        <!--  COMUNIDAD  -->
+        <div id="page-inner">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="table-responsive">
+                                <!--div th:if="${msgCo != null}" th:text="${msgCo}" class="alert alert-success"
+                                     role="alert"></div-->
+
+                                <h2 >Consignacion / venta</h2>
+                                <br>
+                                <form method="post" th:action="@{'/inventarioPrincipal/guardar'}" th:object="${consigYVenta}">
+                                    <input type="hidden" th:field="*{idconsignacion}"/>
+                                    <!--div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                                         role="alert" style="width: 40%">
+                                    </div-->
+
+                                    <br>
+
+                                    <!-- TIPO(CONSIGNACION O VENTA) -->
+                                    <div class="form-group">
+                                        <label>tipo</label>
+                                        <select class="form-control" style="width: 40%" th:field="*{tipo}" >
+                                            <option VALUE="consignacion"> Consignacion </option>
+                                            <option value="comprado"> Comprado </option>
+                                        </select>
+                                    </div>
+                                    <!- FIN -->
+
+                                    <!-- Fecha Inicio-->
+                                    <div class="form-group">
+                                        <label >Fecha Inicio</label>
+                                        <input type="date" class="form-control" th:field="*{fechainicio}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div>
+                                    </div>
+                                    <!--Fecha FIN-->
+                                    <div class="form-group">
+                                        <label >Fecha fin</label>
+                                        <input type="date" class="form-control" th:field="*{fechafin}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechafin')}" th:errors="*{fechafin}"></div>
+                                    </div>
+
+
+                                    <!-- ELEGIR UN ARTESANO -->
+                                    <div class="form-group">
+                                        <label for="producto">Producto</label>
+                                        <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                            <option th:each=" ar : ${listaArtesano}"
+                                                    th:value="${ar.idartesano}"
+                                                    th:text="${ar.nombreartesano} + ' '+ ${ar.apellidopaterno} + ' '+ ${ar.apellidomaterno} + ' / '+ ${ar.comunidad.nombrecomunidad}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!- FIN -->
+
+                                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
+                                    <a type="submit" class="btn btn-primary">siguiente</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class InventarioproductoController {
     @Autowired
     TamanoRepository tamanoRepository;
     @Autowired
+    ArtesanoRepository artesanoRepository;
+    @Autowired
     InventarioproductoRepository inventarioproductoRepository;
 
     @GetMapping(value = {"","/","/lista"})
@@ -32,12 +35,13 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/agregarInventario")
-    public String agregarInventario(@ModelAttribute("inventarioProducto")Inventarioproducto invPro,Model model){
+    public String agregarInventario(@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model){
         model.addAttribute("listalinea",lineaRepository.findAll());
         model.addAttribute("listaproducto",productoRepository.findAll());
         model.addAttribute("listacategoria",categoriaRepository.findAll());
+        model.addAttribute("listaArtesano",artesanoRepository.findAll());
         model.addAttribute("listatamano",tamanoRepository.findAll());
-        return "inventario/newEditInventarioPrin";
+        return "inventario/consigYventa";
     }
 
 
