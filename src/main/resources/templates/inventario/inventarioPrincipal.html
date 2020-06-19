@@ -64,8 +64,9 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <td>1</td>
-                                        <td>de31edae</td>
+                                    <tr th:each="a,info: ${listaInventarioPrincipal}">
+                                        <td th:text="${info.index +1}" >1</td>
+                                        <td th:text="${a.consignacionyventa}" >de31edae</td>
                                         <td>---</td>
                                         <td>----</td>
                                         <td>---</td>
@@ -82,7 +83,7 @@
                                         <td>-----</td>
                                         <td>----</td>
                                         <td>-----</td>
-
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
