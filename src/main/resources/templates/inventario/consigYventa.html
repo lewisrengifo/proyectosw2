@@ -45,7 +45,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                INVENTARIO PRINCIPAL
+                INVENTARIOooooooo
             </h1>
         </div>
 
@@ -82,7 +82,7 @@
 
                                     <!-- Fecha Inicio-->
                                     <div class="form-group">
-                                        <label >Fecha Inicio</label>
+                                        <label for="fechainicio">Fecha Inicio</label>
                                         <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%">
                                         <!--div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div-->
                                     </div>
@@ -100,7 +100,7 @@
                                         <select class="form-control" name="artesano" id="artesano" style="width: 40%">
                                             <option th:each=" ar : ${listaArtesano}"
                                                     th:value="${ar.idartesano}"
-                                                    th:text="${ar.nombreartesano} + ' '+ ${ar.apellidopaterno} + ' '+ ${ar.apellidomaterno} + ' / '+ ${ar.comunidad.nombrecomunidad}">
+                                                    th:text="${ar.comunidad.nombrecomunidad}">
                                             </option>
                                         </select>
                                     </div>
