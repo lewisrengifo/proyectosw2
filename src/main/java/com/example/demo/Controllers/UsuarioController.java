@@ -209,6 +209,7 @@ public class UsuarioController {
                 return "redirect:/usuario/lista";
             }
 
+
             Page<Usuario> pageUsuario1 = usuarioService.buscador(textbuscador, page);
             int totalPage = pageUsuario1.getTotalPages();
             long totalItems = pageUsuario1.getTotalElements();
