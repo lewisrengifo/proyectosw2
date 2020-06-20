@@ -52,31 +52,36 @@
                                 </table>
                             </div>
 
+
                                 <h2 >Ingresar pedido a inventario</h2>
                                 <br>
-                                <form method="post" th:action="@{'/inventarioPrincipal/guardar'}" th:object="${inventarioProducto}">
+                                <form method="post" th:action="@{'/inventarioPrincipal/agregarProducto'}" th:object="${inventarioProducto}">
                                     <input type="hidden" th:field="*{idinventario}"/>
                                     <div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
                                     </div>
 
-                                    <br>
-                                    <div class="form-group">
-                                        <label>Número de pedido</label>
-                                        <input type="text" class="form-control" th:field="*{numeropedido}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('numeropedido')}" th:errors="*{numeropedido}"></div>
-                                    </div>
+                                    <table class="form-group tab-content" th:object="${consigYVenta}">
+                                        <thead>
+                                        <tr>
+                                            <th># pedido</th>
+                                            <th>tipo</th>
+                                            <th>fecha inicio</th>
+                                            <th>fecha fin</th>
+                                            <th>artesano / comunidad</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <td th:text="*{numeropedido}"></td>
+                                        <td th:text="*{tipo}"></td>
+                                        <td  th:text="*{fechainicio}">de31edae</td>
+                                        <td th:text="*{fechafin}">---</td>
+                                        <td th:text="*{artesano.nombreartesano}"></td>
+                                        </tbody>
 
-                                    <!-- ELEGIR UN LINEA -->
-                                    <div class="form-group" >
-                                        <label for="linea">Linea</label>
-                                        <select class="form-control" name="linea" id="linea" style="width: 40%">
-                                            <option th:each=" li : ${listalinea}" th:value="${li.idlinea}"
-                                                    th:text="${li.nombrelinea}">
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <!-- FIN -->
+                                    </table>
+
+                                    <br>
 
                                     <!-- ELEGIR UN PRODUCTO -->
                                     <div class="form-group" th:if="${inventarioProducto.color == null}">
@@ -84,7 +89,7 @@
                                         <select class="form-control" name="producto" id="producto" style="width: 40%">
                                             <option th:each=" pro : ${listaproducto}"
                                                     th:value="${pro.idproducto}"
-                                                    th:text="${pro.nombreproducto}">
+                                                    th:text="${pro.nombreproducto} + '/ '+ ${pro.linea.getNombrelinea()}">
                                             </option>
                                         </select>
                                     </div>
@@ -103,7 +108,7 @@
                                     <!-- FIN -->
 
                                     <!-- ELEGIR UN TAMAÑO -->
-                                    <div class="form-group" th:if="${inventarioProducto.color == null}">
+                                    <div class="form-group">
                                         <label for="Tamano">Tamaño</label>
                                         <select class="form-control" name="tamano" id="tamano" style="width: 40%">
                                             <option th:each=" ta : ${listatamano}" th:value="${ta.idtamano}"
@@ -138,8 +143,11 @@
 
 
 
-                                    <a th:href="@{'/inventarioPrincipal/agregarInventario'}" class="btn btn-danger">Cancelar</a>
-                                    <button    type="submit" class="btn btn-primary">Guardar</button>
+
+                                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
+                                    <button    type="submit" class="btn btn-primary">+ producto</button>
+                                    <a th:href="@{'/inventarioPrincipal/confirmarPedido'}" class="btn btn-info">Finalizar Pedido</a>
+
                                 </form>
                             </div>
                         </div>

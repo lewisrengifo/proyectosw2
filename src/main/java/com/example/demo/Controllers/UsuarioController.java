@@ -83,7 +83,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
+    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                          RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
         if (bindingResult.hasErrors()) {
             model.addAttribute("listaroles", rolRepository.findAll());
             model.addAttribute("listasedes", sedeRepository.findAll());
@@ -163,11 +164,33 @@ public class UsuarioController {
         //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
         if (rol_idrol == 1) {
 
-            usuario.setSede_idsede(null);
-            usuarioRepository.save(usuario);
-        } else {
-            usuarioRepository.save(usuario);
-        }
+                //aca se envia la contraseña generada..
+                SecureRandom random = new SecureRandom();
+                byte bytes[] = new byte[20];
+                random.nextBytes(bytes);
+                String token = bytes.toString();
+                String direccion = "http://localhost:8080/UnaChiqui/cambiar1/";
+                //String direccion = "http://ec2-54-237-112-13.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
+                URL url = new URL(direccion + token);
+                String mensaje = "¡Hola!<br><br>Para cambiar su contraseña haga click: <a href='" + direccion + token + "'>AQUÍ</a> <br><br>Atte. Área Una Chiqui</b>";
+                ;
+
+                sendMailService.sendMail(usuario.getCorreo(), "saritaatanacioarenas@gmail.com", "Envio de contraseña", mensaje);
+                usuario.setContrasena(encriptar(usuario.getContrasena()));
+                usuario.setToken(token);
+            } else {
+                Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuario.getIdusuario());
+                usuario.setContrasena(optionalUsuario.get().getContrasena());
+            }
+            //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
+            if (rol_idrol == 1) {
+
+                usuario.setSede_idsede(null);
+                usuarioRepository.save(usuario);
+            } else {
+                usuarioRepository.save(usuario);
+            }
+
         return "redirect:/usuario/lista";
     }
 

@@ -8,6 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/inventarioPrincipal")
 public class InventarioproductoController {
@@ -27,6 +32,8 @@ public class InventarioproductoController {
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
 
+
+
     @GetMapping(value = {"","/","/lista"})
     public String listaInventarioProducto(Model model){
         model.addAttribute("listaInventarioPrincipal", inventarioproductoRepository.findAll());
@@ -41,7 +48,8 @@ public class InventarioproductoController {
 
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, HttpSession session){
+
 
         model.addAttribute("listalinea",lineaRepository.findAll());
         model.addAttribute("listaproducto",productoRepository.findAll());
@@ -50,6 +58,35 @@ public class InventarioproductoController {
         model.addAttribute("consigYVenta",consigYventa);
 
         return "inventario/inventarioProducto";
+    }
+
+
+
+    @PostMapping("/agregarProducto")
+    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, HttpSession session){
+
+        List<Inventarioproducto> listaProductosEnPedido = (List<Inventarioproducto>) session.getAttribute("listaProductosEnPedido");
+
+        Consignacionyventa consigYventa1 = consigYventa;
+        Inventarioproducto invPro1 = invPro;
+
+        invPro1.setConsignacionyventa(consigYventa1);
+
+        listaProductosEnPedido.add(invPro1);
+
+        session.setAttribute("listaProductosEnPedido",listaProductosEnPedido);
+
+        model.addAttribute("inventarioProducto",invPro = null);
+        model.addAttribute("consigYVenta",consigYventa);
+        return "inventario/inventarioProducto";
+    }
+
+    @PostMapping("/confirmarPedido")
+    public String confirmacionPedidos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+                                      @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, HttpSession session){
+
+        return "inventario/confirmarpedido";
     }
 
 
