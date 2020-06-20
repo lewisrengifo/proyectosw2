@@ -66,22 +66,22 @@
                                     <tbody>
                                     <tr th:each="a,info: ${listaInventarioPrincipal}">
                                         <td th:text="${info.index +1}" >1</td>
-                                        <td th:text="${a.consignacionyventa}" >de31edae</td>
-                                        <td>---</td>
-                                        <td>----</td>
-                                        <td>---</td>
-                                        <td>---</td>
-                                        <td>---</td>
-                                        <td>---</td>
-                                        <td>-----</td>
-                                        <td>----</td>
-                                        <td>----</td>
-                                        <td>----</td>
-                                        <td>------</td>
-                                        <td>------</td>
-                                        <td>------</td>
-                                        <td>-----</td>
-                                        <td>----</td>
+                                        <td th:text="${a.consignacionyventa.numeropedido}" >de31edae</td>
+                                        <td  >no hay línea en entidad</td>
+                                        <td th:text="${a.categoria.getNombrecategoria()}" >----</td>
+                                        <td th:text="${a.producto.nombreproducto}" >---</td>
+                                        <td th:text="${a.producto.descripcionproducto}" >---</td>
+                                        <td th:text="${a.tamano}" >---</td>
+                                        <td th:text="${a.consignacionyventa.artesano.comunidad.nombrecomunidad}" >---</td>
+                                        <td th:text="${a.consignacionyventa.artesano.nombreartesano}" >-----</td>
+                                        <td th:text="${a.cantidad}" >----</td>
+                                        <td th:text="${a.consignacionyventa.tipo}" >----</td>
+                                        <td th:text="${a.consignacionyventa.fechainicio}" >----</td>
+                                        <td th:text="${a.color}" >------</td>
+                                        <td th:text="${a.preciotejedor}">------</td>
+                                        <td th:text="${a.preciomosqoy}">------</td>
+                                        <td th:text="${a.facilitador}">-----</td>
+                                        <td th:text="${a.codigogenerado}" >----</td>
                                         <td>-----</td>
                                     </tr>
                                     </tbody>
