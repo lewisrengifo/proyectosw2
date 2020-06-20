@@ -138,6 +138,7 @@ public class UsuarioController {
 
             return "redirect:/usuario/lista";
         }
+<<<<<<< HEAD
         if (usuario.getIdusuario() == 0) {
 
             //aca se envia la contraseña generada..
@@ -155,6 +156,15 @@ public class UsuarioController {
             usuario.setContrasena(encriptar(usuario.getContrasena()));
             usuario.setToken(token);
         } else {
+=======
+        if(usuario.getIdusuario()==0){
+
+            //aca se envia la contraseña generada..
+            sendMailService.sendMail(usuario.getCorreo(), "saritaatanacioarenas@gmail.com", "Envio de contraseña", "La contraseña es: " + usuario.getContrasena());
+            usuario.setContrasena(encriptar(usuario.getContrasena()));
+
+        }else{
+>>>>>>> 5fb75324c9ebd2ddf75bfe33db94b5310c48608a
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuario.getIdusuario());
             usuario.setContrasena(optionalUsuario.get().getContrasena());
         }
