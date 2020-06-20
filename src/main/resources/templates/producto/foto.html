@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Foto</title>
+
+    <style>
+        body{
+            background: rgb(224, 232, 245);
+        }
+    </style>
+
+</head>
+<body>
+    <div align="center">
+        <h2 style="font-size: 50px" th:text="|Foto del Producto  ${producto.nombreproducto}|"></h2>
+        <img  class="ventana" width="500px" height="400px" th:src="@{|/FotosProyecto/${producto.foto}|}">
+        <br>
+        <br>
+        <a th:href="@{'/producto' + '?page=' + ${pagina}} " style="font-size: 25px" >Regresar</a>
+
+    </div>
+
+</body>
+</html>
