@@ -93,48 +93,7 @@ public class ProductoController {
     public String guardarProducto(@RequestParam("archivo") MultipartFile file, @Valid Producto producto, BindingResult bindingResult
             , RedirectAttributes attr, Model model) {
 
-
-        /*String returnValue = "redirect:/producto";
-        Path pathFinal = null;
-        // File  f = null;
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("listaLinea", lineaRepository.findAll());
-            return "producto/editFrm";
-        } else {
-
-            if (producto.getIdproducto() == 0) {
-
-                producto.setFoto(imageFile.getOriginalFilename());
-
-
-                try {
-                    pathFinal = productoServiceApi.saveImage(imageFile, producto);
-                    byte[] bytes = imageFile.getBytes();
-                    Files.write(pathFinal, bytes);
-                    // f = new File(pathFinal.toString());
-                    // BufferedImage image = ImageIO.read(f);
-                    // int height = image.getHeight();
-                    // int width = image.getWidth();
-
-                } catch (Exception e) {
-
-                    attr.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
-                    model.addAttribute("listaLinea", lineaRepository.findAll());
-                    return "producto/editFrm";
-                }
-
-
-                attr.addFlashAttribute("msg", "Producto creado exitosamente");
-            } else {
-                attr.addFlashAttribute("msg", "Producto actualizado exitosamente");
-            }
-
-            productoRepository.save(producto);
-            return "redirect:/producto";
-        }
-    }*/
-        //Ojala salga xd
+       //Ojala salga xd
         HashMap<String, String> map = storageService.store(file);
         if (map.get("estado").equals("exito")) {
             producto.setFoto(map.get("fileName"));
