@@ -28,7 +28,7 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-action">
-                            <a class="btn btn-primary mt-4 mb-4" th:href="@{'/sede/nuevo'}">Nueva Sede</a>
+                            <a class="btn btn-outline-danger" th:href="@{'/sede/nuevo'}">Nueva Sede</a>
                             <div th:text="|Total de sedes : ${totalItems}|"></div>
                         </div>
                         <div class="card-content">
@@ -58,7 +58,7 @@
                                         <td th:text="${sede.nombre}"></td>
 
 
-                                        <td><a class="btn btn-primary"
+                                        <td><a class="btn btn-outline-danger"
                                                th:href="@{'/sede/editar' + '?id=' + ${sede.idsede}}">Editar</a>
                                         </td>
 
