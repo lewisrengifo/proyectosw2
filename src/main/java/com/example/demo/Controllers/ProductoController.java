@@ -90,8 +90,8 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@RequestParam("archivo") MultipartFile file, @Valid Producto producto, BindingResult bindingResult
-            , RedirectAttributes attr, Model model) {
+    public String guardarProducto(@RequestParam("archivo") MultipartFile file, BindingResult bindingResult
+            , RedirectAttributes attr, @ModelAttribute ("producto") @Valid Producto producto, Model model) {
 
        //Ojala salga xd
         HashMap<String, String> map = storageService.store(file);
@@ -143,6 +143,7 @@ public class ProductoController {
         }
         else {
             model.addAttribute("msgFoto",map.get("msgFoto"));
+            model.addAttribute("listaLinea", lineaRepository.findAll());
             return "producto/editFrm";
         }
 }

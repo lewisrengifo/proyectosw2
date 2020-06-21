@@ -28,8 +28,7 @@ public class Producto {
 
     @Column(name = "descripcionproducto")
     @NotBlank(message = "La descripción del producto no puede estar vacio")
-    //@Size(max = 45,message = "La descripción del producto no puede tener más de 45 caracteres")
-    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "En la descripcíon solo se aceptan letras")
+    @Size(max = 45,message = "La descripción del producto no puede tener más de 45 caracteres")
     private String descripcionproducto;
 
     @Column(name = "codigodescripcionproducto")
