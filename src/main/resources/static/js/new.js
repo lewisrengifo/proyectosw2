@@ -1,7 +1,7 @@
-document.getElementById('baton').addEventListener("click", function() {
-    document.querySelector('.bg-modal-baton').style.display = 'flex';
+document.getElementById('buttonFoto').addEventListener("click", function() {
+    document.querySelector('.bg-modal').style.display='flex';
 });
-document.querySelector('.close-baton').addEventListener('click',function() {
-    document.querySelector('.bg-modal-baton').style.display = 'none';
+document.querySelector('.close').addEventListener('click',function() {
+    document.querySelector('.bg-modal').style.display='none';
 
 });
