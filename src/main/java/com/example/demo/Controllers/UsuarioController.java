@@ -44,7 +44,7 @@ public class UsuarioController {
     SendMailService sendMailService;
 
     @GetMapping(value = {"", "/lista"})
-    public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField) {
+    public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField,RedirectAttributes attr) {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         } catch (NumberFormatException e) {
@@ -61,7 +61,17 @@ public class UsuarioController {
         long totalItems = pageUsuario.getTotalElements();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            if (page > pages.size() -1){
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/usuario/lista";
+            }
+
             model.addAttribute("page", pages);
+        }else{
+            attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+            return "redirect:/usuario/lista";
         }
         model.addAttribute("listaUsuarios", pageUsuario.getContent());
         model.addAttribute("totalItems", totalItems);
@@ -191,7 +201,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador) {
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador,RedirectAttributes attr) {
         if (textbuscador.isEmpty()) {
             att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
@@ -215,7 +225,18 @@ public class UsuarioController {
             long totalItems = pageUsuario1.getTotalElements();
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() -1){
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/usuario/lista";
+                }
+
+
                 model.addAttribute("page", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/usuario/lista";
             }
             model.addAttribute("listaUsuarios", pageUsuario1.getContent());
             model.addAttribute("totalItems", totalItems);
