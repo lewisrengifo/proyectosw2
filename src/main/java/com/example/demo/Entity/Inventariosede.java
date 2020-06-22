@@ -23,6 +23,18 @@ public class Inventariosede {
     @Column
     private String estado;
 
+    @ManyToOne
+    @JoinColumn(name = "sede_idsede")
+    private Sede sede;
+
+    public Sede getSede() {
+        return sede;
+    }
+
+    public void setSede(Sede sede) {
+        this.sede = sede;
+    }
+
     public int getIdiventariosede() {
         return idiventariosede;
     }
