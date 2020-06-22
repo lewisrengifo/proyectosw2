@@ -25,7 +25,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-action">
-                            <a class="btn btn-primary right" th:href="@{'/comunidad/nuevo'}">agregar</a>
+                            <a class="btn btn-outline-danger" th:href="@{'/comunidad/nuevo'}">agregar</a>
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
@@ -153,8 +153,8 @@
 
 
 
-                                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary"
+                                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-outline-danger">Cancelar</a>
+                                    <button type="submit" class="btn btn-outline-danger"
                                             th:text="${inventarioProducto.idinventario == 0? 'Registrar' : 'Actualizar'}">Reg/act
                                     </button>
                                 </form>

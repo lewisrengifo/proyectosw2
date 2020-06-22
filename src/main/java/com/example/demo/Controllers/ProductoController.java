@@ -128,6 +128,7 @@ public class ProductoController {
                 } catch (Exception e) {
 
                     attr.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
+                    model.addAttribute("listaLinea", lineaRepository.findAll());
                     return "producto/editFrm";
                 }
 
