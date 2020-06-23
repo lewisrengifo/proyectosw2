@@ -21,4 +21,8 @@ public class UsuarioService {
         Pageable pageable2 = PageRequest.of(pages, 5);
         return usuarioRepository.buscarUsuario(search, pageable2);
     }
+    public Page<Usuario> getAllActivos(int pageNumber){
+        Pageable pageable1 = PageRequest.of(pageNumber, 5);
+        return usuarioRepository.usuariosactivos(pageable1);
+    }
 }

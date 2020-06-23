@@ -26,12 +26,17 @@
                 </form>
                 <br>
             </div>
+            <div>
+                <a class="btn btn-primary mt-4 mb-4" th:href="@{'/usuario/listaractivos'}">Listar Usuario activos</a>
+            </div>
+            <br>
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-action">
                             <a class="btn btn-primary mt-4 mb-4" th:href="@{'/usuario/nuevo'}">Nuevo Usuario</a>
                             <div th:text="|Total de usuarios : ${totalItems}|"></div>
+                            <br>
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
