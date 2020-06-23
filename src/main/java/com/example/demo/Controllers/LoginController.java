@@ -34,7 +34,7 @@ public class LoginController {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    @GetMapping(value = {"","/loginForm"})
+    @GetMapping(value={"/loginForm",""})
     public String loginForm(RedirectAttributes attr){
         return "login/login";
     }
@@ -64,8 +64,8 @@ public class LoginController {
                 random.nextBytes(bytes);
                 String token = bytes.toString();
                 subject = "Recuperacion de contraseña - Mosqoy";
-                //String direccion ="http://localhost:8080/UnaChiqui/cambiar1/";
-                String direccion = "http://ec2-54-237-112-13.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
+                String direccion ="http://localhost:8080/UnaChiqui/cambiar1/";
+                //String direccion = "http://ec2-100-25-22-199.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
                 URL url = new URL(direccion+ token);
                 mensaje = "¡Hola!<br><br>Para reestablecer su contraseña haga click: <a href='"+ direccion +token + "'>AQUÍ</a> <br><br>Atte. Área Una Chiqui</b>";;
                 attr.addFlashAttribute("msg", "¡Contraseña temporal enviada al correo! :D");

@@ -51,7 +51,7 @@ public class ProductoController {
     @Autowired
     StorageService storageService;
     @GetMapping(value = {"", "/"})
-    public String listaProduct(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+    public String listaProduct(@RequestParam Map<String, Object> params, Model model) {
 
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
@@ -71,15 +71,7 @@ public class ProductoController {
         int totalPage = pageProduct.getTotalPages();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            if (page > pages.size() -1){
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
-
-                return "redirect:/producto";
-            }
             model.addAttribute("pages", pages);
-        }else{
-
-            return "redirect:/producto";
         }
 
         model.addAttribute("listaProductos", pageProduct.getContent());
@@ -98,51 +90,10 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@RequestParam("archivo") MultipartFile file, @Valid Producto producto, BindingResult bindingResult
-            , RedirectAttributes attr, Model model) {
+    public String guardarProducto(@RequestParam("archivo") MultipartFile file, BindingResult bindingResult
+            , RedirectAttributes attr, @ModelAttribute ("producto") @Valid Producto producto, Model model) {
 
-
-        /*String returnValue = "redirect:/producto";
-        Path pathFinal = null;
-        // File  f = null;
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("listaLinea", lineaRepository.findAll());
-            return "producto/editFrm";
-        } else {
-
-            if (producto.getIdproducto() == 0) {
-
-                producto.setFoto(imageFile.getOriginalFilename());
-
-
-                try {
-                    pathFinal = productoServiceApi.saveImage(imageFile, producto);
-                    byte[] bytes = imageFile.getBytes();
-                    Files.write(pathFinal, bytes);
-                    // f = new File(pathFinal.toString());
-                    // BufferedImage image = ImageIO.read(f);
-                    // int height = image.getHeight();
-                    // int width = image.getWidth();
-
-                } catch (Exception e) {
-
-                    attr.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
-                    model.addAttribute("listaLinea", lineaRepository.findAll());
-                    return "producto/editFrm";
-                }
-
-
-                attr.addFlashAttribute("msg", "Producto creado exitosamente");
-            } else {
-                attr.addFlashAttribute("msg", "Producto actualizado exitosamente");
-            }
-
-            productoRepository.save(producto);
-            return "redirect:/producto";
-        }
-    }*/
-        //Ojala salga xd
+       //Ojala salga xd
         HashMap<String, String> map = storageService.store(file);
         if (map.get("estado").equals("exito")) {
             producto.setFoto(map.get("fileName"));
@@ -192,6 +143,7 @@ public class ProductoController {
         }
         else {
             model.addAttribute("msgFoto",map.get("msgFoto"));
+            model.addAttribute("listaLinea", lineaRepository.findAll());
             return "producto/editFrm";
         }
 }
@@ -236,17 +188,10 @@ public class ProductoController {
     }
 
     @PostMapping("/search")
-    public String buscarProducto(String busca, @RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
-
-
+    public String buscarProducto(String busca, @RequestParam Map<String, Object> params, Model model) {
 
         String busqueda = (String) params.get("search");
 
-        if (busqueda.isEmpty()) {
-            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
-
-            return "redirect:/producto";
-        }
         PageRequest pageRequest;
 
         Page<Producto> pageProduct;
@@ -268,22 +213,9 @@ public class ProductoController {
         pageRequest = PageRequest.of(page, 10);
         pageProduct = productoServiceApi.getEver(busqueda, pageRequest);
         totalPage = pageProduct.getTotalPages();
-        if (pageProduct.getTotalElements()==0){
-
-            return "redirect:/producto";
-        }
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            if (page > pages.size() -1){
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
-
-                return "redirect:/producto";
-            }
             model.addAttribute("pages", pages);
-
-        }else{
-            return "redirect:/producto";
-
         }
 
         model.addAttribute("busqueda", busqueda);
@@ -292,13 +224,12 @@ public class ProductoController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
-        model.addAttribute("searchField", busqueda);
 
         return "producto/listar";
     }
 
     @GetMapping("/search")
-    public String buscarProducto(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+    public String buscarProducto(@RequestParam Map<String, Object> params, Model model) {
 
         String busqueda = (String) params.get("search");
 
@@ -314,19 +245,7 @@ public class ProductoController {
         totalPage = pageProduct.getTotalPages();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            if (page > pages.size() -1){
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
-
-                return "redirect:/producto";
-            }
-
-
-
             model.addAttribute("pages", pages);
-        }else{
-            attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
-
-            return "redirect:/producto";
         }
 
         model.addAttribute("busqueda", busqueda);
@@ -335,13 +254,38 @@ public class ProductoController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
-        model.addAttribute("searchField", busqueda);
-
 
         return "producto/listar";
     }
 
+    @PostMapping("/uploadImage")
+    public String uploadImage(@RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes att) {
+        String returnValue = "redirect:/producto";
+        Path pathFinal = null;
+        // File  f = null;
+        Producto producto = new Producto();
+        producto.setFoto(imageFile.getOriginalFilename());
 
+
+        try {
+            pathFinal = productoServiceApi.saveImage(imageFile, producto);
+            byte[] bytes = imageFile.getBytes();
+            Files.write(pathFinal, bytes);
+            // f = new File(pathFinal.toString());
+            // BufferedImage image = ImageIO.read(f);
+            // int height = image.getHeight();
+            // int width = image.getWidth();
+
+
+        } catch (Exception e) {
+
+            att.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
+            return "producto/editFrm";
+        }
+
+
+        return returnValue;
+    }
     @GetMapping("/foto")
     public String mostrarFoto(@RequestParam("id")int id, Model model,@ModelAttribute("producto") Producto producto) {
 
