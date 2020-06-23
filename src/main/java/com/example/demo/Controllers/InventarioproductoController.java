@@ -61,21 +61,23 @@ public class InventarioproductoController {
         Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
 
         model.addAttribute("listalinea",lineaRepository.findAll());
-        model.addAttribute("listaproducto",productoRepository.findAll());
-        model.addAttribute("listacategoria",categoriaRepository.findAll());
+        model.addAttribute("listaproducto",productoRepository.findAll());model.addAttribute("listacategoria",categoriaRepository.findAll());
         model.addAttribute("listatamano",tamanoRepository.findAll());
       model.addAttribute("consigYventa1",ultimaConsigOventa.get());
-
         return "inventario/inventarioProducto";
     }
 
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, HttpSession session){
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
 
-        List<Inventarioproducto> listaProductosEnPedido = (List<Inventarioproducto>) session.getAttribute("listaProductosEnPedido");
+        Consignacionyventa ultimaConsigOventa = consignacionyventaRepository.findTopByOrderByIdconsignacionDesc();
+        invPro.setConsignacionyventa(ultimaConsigOventa);
+        invPro.setCodigogenerado("gaa");
+        inventarioproductoRepository.save(invPro);
 
-        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
+
+        // Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
         //Date fechatudei = new Date();
         /*
        invPro.setFechainicio(fechatudei);
@@ -88,11 +90,8 @@ public class InventarioproductoController {
         }
         */
 
-      invPro.setConsignacionyventa(ultimaConsigOventa.get());
-      //inventarioproductoRepository.save(invPro);
-        listaProductosEnPedido.add(invPro);
-        session.setAttribute("listaProductosEnPedido",listaProductosEnPedido);
-        return "redirect:/inventarioPrincipal";
+      //invPro.setConsignacionyventa(ultimaConsigOventa.get());
+        return "redirect:/inventarioPrincipal/sgteProductos";
     }
 
     @PostMapping("/confirmarPedido")
