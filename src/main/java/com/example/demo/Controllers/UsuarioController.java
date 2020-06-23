@@ -44,7 +44,7 @@ public class UsuarioController {
     SendMailService sendMailService;
 
     @GetMapping(value = {"", "/lista"})
-    public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField) {
+    public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField,RedirectAttributes attr) {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         } catch (NumberFormatException e) {
@@ -61,7 +61,17 @@ public class UsuarioController {
         long totalItems = pageUsuario.getTotalElements();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            if (page > pages.size() -1){
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/usuario/lista";
+            }
+
             model.addAttribute("page", pages);
+        }else{
+            attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+            return "redirect:/usuario/lista";
         }
         model.addAttribute("listaUsuarios", pageUsuario.getContent());
         model.addAttribute("totalItems", totalItems);
@@ -114,7 +124,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
+    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                          RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
         if (bindingResult.hasErrors()) {
             model.addAttribute("listaroles", rolRepository.findAll());
             model.addAttribute("listasedes", sedeRepository.findAll());
@@ -169,6 +180,7 @@ public class UsuarioController {
 
             return "redirect:/usuario/lista";
         }
+
         if (usuario.getIdusuario() == 0) {
 
             //aca se envia la contraseña generada..
@@ -186,17 +198,19 @@ public class UsuarioController {
             usuario.setContrasena(encriptar(usuario.getContrasena()));
             usuario.setToken(token);
         } else {
+
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuario.getIdusuario());
             usuario.setContrasena(optionalUsuario.get().getContrasena());
         }
-        //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
-        if (rol_idrol == 1) {
+            //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
+            if (rol_idrol == 1) {
 
-            usuario.setSede_idsede(null);
-            usuarioRepository.save(usuario);
-        } else {
-            usuarioRepository.save(usuario);
-        }
+                usuario.setSede_idsede(null);
+                usuarioRepository.save(usuario);
+            } else {
+                usuarioRepository.save(usuario);
+            }
+
         return "redirect:/usuario/lista";
     }
 
@@ -222,7 +236,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador) {
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador,RedirectAttributes attr) {
         if (textbuscador.isEmpty()) {
             att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
@@ -246,7 +260,18 @@ public class UsuarioController {
             long totalItems = pageUsuario1.getTotalElements();
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() -1){
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/usuario/lista";
+                }
+
+
                 model.addAttribute("page", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/usuario/lista";
             }
             model.addAttribute("listaUsuarios", pageUsuario1.getContent());
             model.addAttribute("totalItems", totalItems);
