@@ -73,10 +73,11 @@ public class InventarioproductoController {
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                            @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, HttpSession session){
+        Consignacionyventa ultimaConsigOventa = consignacionyventaRepository.findTopByOrderByIdconsignacionDesc();
+        invPro.setConsignacionyventa(ultimaConsigOventa);
 
-        List<Inventarioproducto> listaProductosEnPedido = (List<Inventarioproducto>) session.getAttribute("listaProductosEnPedido");
 
-        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
+
         //Date fechatudei = new Date();
         /*
        invPro.setFechainicio(fechatudei);
@@ -88,12 +89,9 @@ public class InventarioproductoController {
             invPro.setCodigogenerado(appe1.toString());
         }
         */
-
-      invPro.setConsignacionyventa(ultimaConsigOventa.get());
-      //inventarioproductoRepository.save(invPro);
-        listaProductosEnPedido.add(invPro);
-        session.setAttribute("listaProductosEnPedido",listaProductosEnPedido);
-        return "redirect:/inventarioPrincipal";
+        invPro.setCodigogenerado("cualquierhuevada");
+        inventarioproductoRepository.save(invPro);
+        return "redirect:inventarioPrincipal/sgteProductos";
     }
 
     @PostMapping("/confirmarPedido")

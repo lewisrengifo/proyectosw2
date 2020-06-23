@@ -32,28 +32,29 @@
                                 <div class="form-group" th:object="${consigYVenta}">
 
 
-                                <table class="table table-striped table-bordered table-hover">
-                                    <thead>
-                                    <tr class="info">
-                                        <th>Tipo</th>
-                                        <th>Fecha Inicio</th>
-                                        <th>Fecha fin</th>
-                                        <th>Comunidad</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr >
-                                        <td th:text="*{tipo}">Home</td>
-                                        <td th:text="*{fechainicio}">H</td>
-                                        <td th:text="${consigYVenta.fechafin}"></td>
-                                        <td th:text="${consigYVenta.artesano.comunidad.getNombrecomunidad()}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                        <tr class="info">
+                                            <th>Tipo</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Fecha fin</th>
+                                            <th>Comunidad</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td th:text="*{tipo}">Home</td>
+                                            <td th:text="*{fechainicio}">H</td>
+                                            <td th:text="${consigYVenta.fechafin}"></td>
+                                            <td th:text="${consigYventa1.artesano.nombreartesano} + ' ' + ${consigYventa1.artesano.apellidopaterno}"></td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
 
-                                <h2 >Ingresar pedido a inventario</h2>
+                                <h2>Ingresar pedido a inventario</h2>
                                 <table class="form-group tab-content">
                                     <thead>
                                     <tr>
@@ -67,21 +68,22 @@
                                     <tbody>
                                     <td th:text="${consigYventa1.numeropedido}"></td>
                                     <td th:text="${consigYventa1.tipo}"></td>
-                                    <td  th:text="${consigYventa1.fechainicio}">de31edae</td>
+                                    <td th:text="${consigYventa1.fechainicio}">de31edae</td>
                                     <td th:text="${consigYventa1.fechafin}">---</td>
                                     <td th:text="${consigYventa1.artesano.nombreartesano} + ' ' + ${consigYventa1.artesano.apellidopaterno}"></td>
                                     </tbody>
 
                                 </table>
                                 <br>
-                                <form method="post" th:action="@{'/inventarioPrincipal/agregarProducto'}" th:object="${inventarioProducto}">
+                                <form method="post" th:action="@{'/inventarioPrincipal/agregarProducto'}"
+                                      th:object="${inventarioProducto}">
                                     <input type="hidden" th:field="*{idinventario}"/>
                                     <!--div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
                                     </div-->
                                     <br>
                                     <!-- ELEGIR UN PRODUCTO -->
-                                    <div class="form-group" >
+                                    <div class="form-group">
                                         <label for="producto">Producto</label>
                                         <select class="form-control" name="producto" id="producto" style="width: 40%">
                                             <option th:each=" pro : ${listaproducto}"
@@ -117,31 +119,40 @@
 
 
                                     <div class="form-group">
-                                        <label >Cantidad</label>
-                                        <input type="text" class="form-control" th:field="*{cantidad}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></div>
+                                        <label>Cantidad</label>
+                                        <input type="text" class="form-control" th:field="*{cantidad}"
+                                               style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('cantidad')}"
+                                             th:errors="*{cantidad}"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label >Color</label>
+                                        <label>Color</label>
                                         <input type="text" class="form-control" th:field="*{color}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
+                                        <div class="text-danger" th:if="${#fields.hasErrors('color')}"
+                                             th:errors="*{color}"></div>
                                     </div>
                                     <div class="form-group">
-                                        <label >Costo Moscoy</label>
-                                        <input type="text" class="form-control" th:field="*{preciomosqoy}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('preciomosqoy')}" th:errors="*{preciomosqoy}"></div>
+                                        <label>Costo Moscoy</label>
+                                        <input type="text" class="form-control" th:field="*{preciomosqoy}"
+                                               style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('preciomosqoy')}"
+                                             th:errors="*{preciomosqoy}"></div>
 
                                     </div>
                                     <div class="form-group">
-                                        <label >Costo Tejedor</label>
-                                        <input type="text" class="form-control" th:field="*{preciotejedor}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('preciotejedor')}" th:errors="*{preciotejedor}"></div>
+                                        <label>Costo Tejedor</label>
+                                        <input type="text" class="form-control" th:field="*{preciotejedor}"
+                                               style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('preciotejedor')}"
+                                             th:errors="*{preciotejedor}"></div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label >Facilitador</label>
-                                        <input type="text" class="form-control" th:field="*{facilitador}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('facilitador')}" th:errors="*{facilitador}"></div>
+                                        <label>Facilitador</label>
+                                        <input type="text" class="form-control" th:field="*{facilitador}"
+                                               style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('facilitador')}"
+                                             th:errors="*{facilitador}"></div>
                                     </div>
                                     <!--div class="form-group">
                                         <label >codigo Genererado</label>
@@ -156,8 +167,9 @@
 
 
                                     <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
-                                    <button    type="submit" class="btn btn-primary">+ producto</button>
-                                    <a th:href="@{'/inventarioPrincipal/confirmarPedido'}" class="btn btn-info">Finalizar Pedido</a>
+                                    <button type="submit" class="btn btn-primary">+ producto</button>
+                                    <a th:href="@{'/inventarioPrincipal/confirmarPedido'}" class="btn btn-info">Finalizar
+                                        Pedido</a>
 
                                 </form>
                             </div>
