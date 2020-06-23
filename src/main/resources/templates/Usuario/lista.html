@@ -97,30 +97,45 @@
                                         <ul th:if="${last != 1}" class="pagination justify-content-center">
 
                                             <li class="page-item" th:classappend="${prev == 0 ? 'disabled': '' }">
-                                                <a th:if="${searchField.isEmpty()}" class="page-link"
+                                                <a th:if="${searchField.isEmpty()&&listaactivos.equals('falsooo')}"
+                                                   class="page-link"
                                                    th:href="@{'/usuario' + '?page=' + ${prev}} ">
                                                     Anterior </a>
-                                                <a th:unless="${searchField.isEmpty()}" class="page-link"
+                                                <a th:if="${!searchField.isEmpty()&&listaactivos.equals('falsooo')}"
+                                                   class="page-link"
                                                    th:href="@{'/usuario/buscador' + '?searchField=' +${searchField}+ '&page==' + ${prev}} ">
+                                                    Anterior </a>
+                                                <a th:if="${listaactivos.equals('verdadero')}"
+                                                   class="page-link"
+                                                   th:href="@{'/usuario/listaractivos' + '?page=' + ${prev}} ">
                                                     Anterior </a>
 
                                             <li class="page-item" th:each="page:${page}"
                                                 th:classappend="${current == page ? 'active' : ''}">
-                                                <a th:if="${searchField.isEmpty()}" class="page-link"
+                                                <a th:if="${searchField.isEmpty()&&listaactivos.equals('falsooo')}"
+                                                   class="page-link"
                                                    th:href="@{'/usuario' + '?page=' + ${page}} "
                                                    th:text="${page}"></a>
-                                                <a th:unless="${searchField.isEmpty()}" class="page-link"
+                                                <a th:if="${!searchField.isEmpty()&&listaactivos.equals('falsooo')}"
+                                                   class="page-link"
                                                    th:href="@{'/usuario/buscador' + '?searchField=' +${searchField}+ '&page=' + ${page}} "
+                                                   th:text="${page}"></a>
+                                                <a th:if="${listaactivos.equals('verdadero')}"
+                                                   class="page-link"
+                                                   th:href="@{'/usuario/listaractivos' + '?page=' + ${page}} "
                                                    th:text="${page}"></a>
 
                                             </li>
 
                                             <li class="page-item" th:classappend="${current == last ? 'disabled': '' }">
-                                                <a th:if="${searchField.isEmpty()}" class="page-link"
+                                                <a th:if="${searchField.isEmpty()&&listaactivos.equals('falsooo')}" class="page-link"
                                                    th:href="@{'/usuario' + '?page=' + ${next}} ">
                                                     Siguiente </a>
-                                                <a th:unless="${searchField.isEmpty()}" class="page-link"
+                                                <a th:if="${!searchField.isEmpty()&&listaactivos.equals('falsooo')}" class="page-link"
                                                    th:href="@{'/usuario/buscador' + '?searchField=' +${searchField}+ '&page=' + ${next}} ">
+                                                    Siguiente </a>
+                                                <a th:if="${listaactivos.equals('verdadero')}" class="page-link"
+                                                   th:href="@{'/usuario/listaractivos' + '?page=' + ${next}} ">
                                                     Siguiente </a>
 
                                         </ul>

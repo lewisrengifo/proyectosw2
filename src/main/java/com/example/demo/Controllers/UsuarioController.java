@@ -80,6 +80,8 @@ public class UsuarioController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
+        String listaactivos = "falsooo";
+        model.addAttribute("listaactivos", listaactivos);
 
         //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
         return "Usuario/lista";
@@ -111,6 +113,8 @@ public class UsuarioController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
+        String listaactivos = "verdadero";
+        model.addAttribute("listaactivos", listaactivos);
 
         //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
         return "Usuario/lista";
@@ -281,6 +285,9 @@ public class UsuarioController {
             model.addAttribute("prev", page);
             model.addAttribute("last", totalPage);
             model.addAttribute("searchField", textbuscador);
+            String listaactivos = "falsooo";
+            model.addAttribute("listaactivos", listaactivos);
+
             //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
             return "Usuario/lista";
         }
