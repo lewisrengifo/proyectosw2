@@ -1,20 +1,23 @@
 package com.example.demo.Entity;
 
+
 import javax.persistence.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "consignacionyventa")
-public class Consignacionyventa {
+public class Consignacionyventa implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idconsignacion;
-    private Date fechafin;
+
+    private String numeropedido;
 
     @ManyToOne
     @JoinColumn(name = "artesano_idartesano")
@@ -22,8 +25,19 @@ public class Consignacionyventa {
 
     @Column(nullable = false)
     private String tipo;
+
     @Column(nullable = false)
     private Date fechainicio;
+
+    private Date fechafin;
+
+    public String getNumeropedido() {
+        return numeropedido;
+    }
+
+    public void setNumeropedido(String numeropedido) {
+        this.numeropedido = numeropedido;
+    }
 
     public int getIdconsignacion() {
         return idconsignacion;
@@ -41,6 +55,7 @@ public class Consignacionyventa {
         this.fechafin = fechafin;
     }
 
+
     public Artesano getArtesano() {
         return artesano;
     }
@@ -56,6 +71,7 @@ public class Consignacionyventa {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
 
     public Date getFechainicio() {
         return fechainicio;

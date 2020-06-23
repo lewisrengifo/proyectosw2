@@ -19,7 +19,8 @@
                 <div class="card">
                     <div class="container padding ">
 
-
+                        <div th:if="${msgFoto != null}" th:text="${msgFoto}" class="alert alert-danger"
+                             role="alert"></div>
                         <form method="post" th:action="@{'/producto/guardar'}" enctype="multipart/form-data"  th:object="${producto}">
                             <input type="hidden" th:field="*{idproducto}"/>
 
@@ -70,8 +71,8 @@
 
                             <div>
 
-                                <label for="foto">Foto del producto</label>
-                                <input  class="form-control" type = "file" name ="imageFile" style="width: 40%">
+                                <label for="archivo">Foto del producto</label>
+                                <input  class="form-control" type = "file" name ="archivo" id="archivo" style="width: 40%">
 
 
                             </div>

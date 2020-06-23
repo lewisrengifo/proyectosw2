@@ -13,16 +13,15 @@ import java.util.List;
 public interface ProductoRepository extends JpaRepository<Producto,Integer> {
 
 
-    @Query(value = "select pr.* from producto pr\n" +
-            "            where pr.nombreproducto = ?1 or pr.codigodescripcionproducto= ?1 " +
-            "               or pr.codigoproducto= ?1 or pr.linea_idlinea = (select li.idlinea " +
-            "            from linea li\n" +
-            "            where li.nombrelinea = ?1)\n" +
-            "            order by pr.idproducto",
-            countQuery = "SELECT count(*) FROM producto pro where pro.linea_idlinea = (select li.idlinea from linea li where li.nombrelinea = ?1);"
+    @Query(value = "SELECT * FROM producto p where p.nombreproducto like %?1% or p.codigoproducto like %?1% or p.descripcionproducto like %?1%\n" +
+            "                            or p.codigodescripcionproducto like %?1% or p.linea_idlinea= (select linea_idlinea from linea where nombrelinea like %?1%)",
+            countQuery = "SELECT count(*)  From producto p where p.nombreproducto like %?1% or p.codigoproducto like '%scd%' or p.descripcionproducto like %?1%\n" +
+                    "                              or p.codigodescripcionproducto like %?1% or p.linea_idlinea= (select linea_idlinea from linea where nombrelinea like %?1%);"
                         , nativeQuery = true)
     Page<Producto> obtenerFiltroProducto(String search , Pageable pageable);
 
-
+    @Query(value = "SELECT * FROM producto where idproducto not in (Select p.idproducto from producto p where p.idproducto=?1);"
+            , nativeQuery = true)
+    List<Producto> mio(int id);
 
 }

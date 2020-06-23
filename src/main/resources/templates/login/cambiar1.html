@@ -11,7 +11,7 @@
 </head>
 <body >
     <div class="wrap-login100">
-        <form class="login100-form" th:action="@{'/recuperarContrasenia'}" method="post">
+        <form class="login100-form" th:action="@{'/cambiarContrasenia'}" method="post">
             <span class="login100-form-title p-b-43">
                             Mosqoy
             </span>
@@ -19,12 +19,17 @@
             <div align="center" th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
             <div align="center" th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger" role="alert"></div>
 
-                <div class="container">
-                    <label>Ingrese correo electrónico:</label>
-                    <input type="text" class="form-control" placeholder="correo" aria-label="correo" aria-describedby="addon-wrapping" name="correo">
-                </div>
+            <div class="form-group">
+                <label for="contrasena">Ingrese contraseña nueva:</label>
+                <input th:value="${usuario.contrasena}" placeholder="Contraseña nueva" type="password" class="form-control" name="contrasena" id="contrasena">
+            </div>
+
+            <div class="form-group">
+                <label for="token"></label>
+                <input type="hidden" th:value="${usuario.token}" class="form-control" name="token" id="token">
+            </div>
             <br>
-            <input type="submit" class="btn btn-info btn-block" value="Enviame una nueva a mi correo :)">
+            <input type="submit" class="btn btn-info btn-block" value="Cambiar contraseña ahora :)">
         </form >
 
         <div class="login100-more" >

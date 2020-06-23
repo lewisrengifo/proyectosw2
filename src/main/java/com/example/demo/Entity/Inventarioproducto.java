@@ -7,20 +7,21 @@ import javax.validation.constraints.NotBlank;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "inventarioproducto")
 
 
-public class Inventarioproducto {
+public class Inventarioproducto implements Serializable {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int idinventario;
-    private String numeropedido;
+
 
     @ManyToOne
     @JoinColumn(name = "producto_idproducto")
@@ -49,7 +50,6 @@ public class Inventarioproducto {
     @JoinColumn(name = "consignacionyventa_idconsignacion")
     private Consignacionyventa consignacionyventa;
 
-    @Column(nullable = false)
     private Date fechainicio;
 
     public int getIdinventario() {
@@ -58,14 +58,6 @@ public class Inventarioproducto {
 
     public void setIdinventario(int idinventario) {
         this.idinventario = idinventario;
-    }
-
-    public String getNumeropedido() {
-        return numeropedido;
-    }
-
-    public void setNumeropedido(String numeropedido) {
-        this.numeropedido = numeropedido;
     }
 
     public Producto getProducto() {

@@ -2,11 +2,13 @@ package com.example.demo.Entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "producto")
-public class Producto {
+public class Producto  implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,22 +17,26 @@ public class Producto {
 
     @Column(name = "nombreproducto")
     @NotBlank(message = "El nombre del producto no puede estar vacío")
-    @Size(max = 45,message = "El nombre del producto no puede tener más de 45 caracteres")
+    //@Size(max = 45,message = "El nombre del producto no puede tener más de 45 caracteres")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String nombreproducto;
 
     @Column(name = "codigoproducto")
     @NotBlank(message = "El código del producto no puede estar vacío")
-    @Size(max = 3,message = "El código del producto no puede tener más de 3 caracteres")
+    //@Size(max = 3,message = "El código del producto no puede tener más de 3 caracteres")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,3}",message = "Solo aceptan letras y debe de tener solo 3 caracteres")
     private String codigoproducto;
 
     @Column(name = "descripcionproducto")
     @NotBlank(message = "La descripción del producto no puede estar vacio")
-    @Size(max = 45,message = "La descripción del producto no puede tener más de 45 caracteres")
+    //@Size(max = 45,message = "La descripción del producto no puede tener más de 45 caracteres")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "En la descripcíon solo se aceptan letras")
     private String descripcionproducto;
 
     @Column(name = "codigodescripcionproducto")
     @NotBlank(message = "El código de la descripción del producto no puede estar vacio")
-    @Size(max = 3,message = "El código de la descripción del producto no puede tener más de 3 caracteres")
+    //@Size(max = 3,message = "El código de la descripción del producto no puede tener más de 3 caracteres")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,3}",message = "Solo aceptan letras y debe de tener solo 3 caracteres")
     private String codigodescripcionproducto;
 
     @ManyToOne
