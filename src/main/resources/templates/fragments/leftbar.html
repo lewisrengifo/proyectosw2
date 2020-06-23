@@ -75,7 +75,7 @@
                 <a th:href="@{'/usuario'}"  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de Usuarios</a>
             </li>
 
-            <li sec:authorize="hasAnyAuthority('Administrador','Gestor principal')">
+            <li sec:authorize="hasAnyAuthority('Gestor principal')">
                 <a th:href="@{'/sede'}"  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Gestion de Sedes</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')">

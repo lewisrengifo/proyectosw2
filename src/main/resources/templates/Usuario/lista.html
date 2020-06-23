@@ -81,7 +81,7 @@
 
                                         <td th:text="${usuario.rol_idrol.nombre}"></td>
                                         <td th:text="${usuario.dni}"></td>
-                                        <td th:if="${usuario.sede_idsede==null}">Sin sede</td>
+                                        <td th:if="${usuario.sede_idsede==null}">---</td>
                                         <td th:unless="${usuario.sede_idsede==null}"
                                             th:text="${usuario.sede_idsede.nombre}"></td>
                                         <td th:if="${usuario.enable == true}" th:text="Activado"></td>

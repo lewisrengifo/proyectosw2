@@ -240,7 +240,7 @@ public class UsuarioController {
             usuario.setContrasena(optionalUsuario.get().getContrasena());
         }
             //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
-            if (rol_idrol == 1) {
+            if (rol_idrol == 1||rol_idrol==2) {
 
                 usuario.setSede_idsede(null);
                 usuarioRepository.save(usuario);
