@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.DataFormatException;
 
 @Controller
 @RequestMapping("/inventarioPrincipal")
@@ -47,19 +49,25 @@ public class InventarioproductoController {
 
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, HttpSession session){
+                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
 
+        consignacionyventaRepository.save(consigYventa);
+       return "redirect:/inventarioPrincipal/sgteProductos";
+    }
+
+    @GetMapping("/sgteProductos")
+    public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+                                        @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
 
         model.addAttribute("listalinea",lineaRepository.findAll());
         model.addAttribute("listaproducto",productoRepository.findAll());
         model.addAttribute("listacategoria",categoriaRepository.findAll());
         model.addAttribute("listatamano",tamanoRepository.findAll());
-        model.addAttribute("consigYVenta",consigYventa);
+      model.addAttribute("consigYventa1",ultimaConsigOventa.get());
 
         return "inventario/inventarioProducto";
     }
-
-
 
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
@@ -67,24 +75,29 @@ public class InventarioproductoController {
 
         List<Inventarioproducto> listaProductosEnPedido = (List<Inventarioproducto>) session.getAttribute("listaProductosEnPedido");
 
-        Consignacionyventa consigYventa1 = consigYventa;
-        Inventarioproducto invPro1 = invPro;
+        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
+        //Date fechatudei = new Date();
+        /*
+       invPro.setFechainicio(fechatudei);
+        if(ultimaConsigOventa.get().getTipo().equals("consignacion")){
+            StringBuilder appe = new StringBuilder().append(invPro.getColor()).append(invPro.getCategoria());
+            invPro.setCodigogenerado(appe.toString());
+        }else{
+            StringBuilder appe1 = new StringBuilder().append(invPro.getColor()).append(invPro.getCategoria()).append(invPro.getFacilitador());
+            invPro.setCodigogenerado(appe1.toString());
+        }
+        */
 
-        invPro1.setConsignacionyventa(consigYventa1);
-
-        listaProductosEnPedido.add(invPro1);
-
+      invPro.setConsignacionyventa(ultimaConsigOventa.get());
+      //inventarioproductoRepository.save(invPro);
+        listaProductosEnPedido.add(invPro);
         session.setAttribute("listaProductosEnPedido",listaProductosEnPedido);
-
-        model.addAttribute("inventarioProducto",invPro = null);
-        model.addAttribute("consigYVenta",consigYventa);
-        return "inventario/inventarioProducto";
+        return "redirect:/inventarioPrincipal";
     }
 
     @PostMapping("/confirmarPedido")
     public String confirmacionPedidos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                      @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, HttpSession session){
-
+                                      @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
         return "inventario/confirmarpedido";
     }
 

@@ -7,13 +7,14 @@ import javax.validation.constraints.NotBlank;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "inventarioproducto")
 
 
-public class Inventarioproducto {
+public class Inventarioproducto implements Serializable {
 
 
     @Id
@@ -49,7 +50,6 @@ public class Inventarioproducto {
     @JoinColumn(name = "consignacionyventa_idconsignacion")
     private Consignacionyventa consignacionyventa;
 
-    @Column(nullable = false)
     private Date fechainicio;
 
     public int getIdinventario() {
