@@ -38,6 +38,7 @@ public class InventarioproductoController {
 
     @GetMapping(value = {"","/","/lista"})
     public String listaInventarioProducto(Model model){
+        model.addAttribute("listaInventarioPrincipal", inventarioproductoRepository.findAll());
         return "inventario/inventarioPrincipal";
     }
 

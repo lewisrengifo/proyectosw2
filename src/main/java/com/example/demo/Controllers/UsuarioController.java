@@ -139,33 +139,28 @@ public class UsuarioController {
 
             return "redirect:/usuario/lista";
         }
+
         if (usuario.getIdusuario() == 0) {
 
             //aca se envia la contraseña generada..
-            sendMailService.sendMail(usuario.getCorreo(), "saritaatanacioarenas@gmail.com", "Envio de contraseña", "La contraseña es: " + usuario.getContrasena());
+            SecureRandom random = new SecureRandom();
+            byte bytes[] = new byte[20];
+            random.nextBytes(bytes);
+            String token = bytes.toString();
+            String direccion = "http://localhost:8080/UnaChiqui/cambiar1/";
+            //String direccion = "http://ec2-54-237-112-13.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
+            URL url = new URL(direccion + token);
+            String mensaje = "¡Hola!<br><br>Para cambiar su contraseña haga click: <a href='" + direccion + token + "'>AQUÍ</a> <br><br>Atte. Área Una Chiqui</b>";
+            ;
+
+            sendMailService.sendMail(usuario.getCorreo(), "saritaatanacioarenas@gmail.com", "Envio de contraseña", mensaje);
             usuario.setContrasena(encriptar(usuario.getContrasena()));
-
+            usuario.setToken(token);
         } else {
-            if (usuario.getIdusuario() == 0) {
 
-                //aca se envia la contraseña generada..
-                SecureRandom random = new SecureRandom();
-                byte bytes[] = new byte[20];
-                random.nextBytes(bytes);
-                String token = bytes.toString();
-                String direccion = "http://localhost:8080/UnaChiqui/cambiar1/";
-                //String direccion = "http://ec2-54-237-112-13.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
-                URL url = new URL(direccion + token);
-                String mensaje = "¡Hola!<br><br>Para cambiar su contraseña haga click: <a href='" + direccion + token + "'>AQUÍ</a> <br><br>Atte. Área Una Chiqui</b>";
-                ;
-
-                sendMailService.sendMail(usuario.getCorreo(), "saritaatanacioarenas@gmail.com", "Envio de contraseña", mensaje);
-                usuario.setContrasena(encriptar(usuario.getContrasena()));
-                usuario.setToken(token);
-            } else {
-                Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuario.getIdusuario());
-                usuario.setContrasena(optionalUsuario.get().getContrasena());
-            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuario.getIdusuario());
+            usuario.setContrasena(optionalUsuario.get().getContrasena());
+        }
             //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
             if (rol_idrol == 1) {
 
@@ -174,7 +169,7 @@ public class UsuarioController {
             } else {
                 usuarioRepository.save(usuario);
             }
-        }
+
         return "redirect:/usuario/lista";
     }
 
@@ -217,6 +212,7 @@ public class UsuarioController {
             if (page < 0) {
                 return "redirect:/usuario/lista";
             }
+
 
             Page<Usuario> pageUsuario1 = usuarioService.buscador(textbuscador, page);
             int totalPage = pageUsuario1.getTotalPages();

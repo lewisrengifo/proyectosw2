@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Moscoy')">
 </head>
@@ -28,6 +28,29 @@
                         <div class="card-content">
                             <div class="table-responsive">
 
+
+                                <div class="form-group" th:object="${consigYVenta}">
+
+
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th>Tipo</th>
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha fin</th>
+                                        <th>Comunidad</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr >
+                                        <td th:text="*{tipo}">Home</td>
+                                        <td th:text="*{fechainicio}">H</td>
+                                        <td th:text="${consigYVenta.fechafin}"></td>
+                                        <td th:text="${consigYVenta.artesano.comunidad.getNombrecomunidad()}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
 
                                 <h2 >Ingresar pedido a inventario</h2>
@@ -131,9 +154,11 @@
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div>
                                     </div-->
 
+
                                     <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
                                     <button    type="submit" class="btn btn-primary">+ producto</button>
                                     <a th:href="@{'/inventarioPrincipal/confirmarPedido'}" class="btn btn-info">Finalizar Pedido</a>
+
                                 </form>
                             </div>
                         </div>
