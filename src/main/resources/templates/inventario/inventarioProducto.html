@@ -54,37 +54,34 @@
 
 
                                 <h2 >Ingresar pedido a inventario</h2>
+                                <table class="form-group tab-content">
+                                    <thead>
+                                    <tr>
+                                        <th># pedido</th>
+                                        <th>tipo</th>
+                                        <th>fecha inicio</th>
+                                        <th>fecha fin</th>
+                                        <th>artesano / comunidad</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <td th:text="${consigYventa1.numeropedido}"></td>
+                                    <td th:text="${consigYventa1.tipo}"></td>
+                                    <td  th:text="${consigYventa1.fechainicio}">de31edae</td>
+                                    <td th:text="${consigYventa1.fechafin}">---</td>
+                                    <td th:text="${consigYventa1.artesano.nombreartesano} + ' ' + ${consigYventa1.artesano.apellidopaterno}"></td>
+                                    </tbody>
+
+                                </table>
                                 <br>
                                 <form method="post" th:action="@{'/inventarioPrincipal/agregarProducto'}" th:object="${inventarioProducto}">
                                     <input type="hidden" th:field="*{idinventario}"/>
-                                    <div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                                    <!--div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
-                                    </div>
-
-                                    <table class="form-group tab-content" th:object="${consigYVenta}">
-                                        <thead>
-                                        <tr>
-                                            <th># pedido</th>
-                                            <th>tipo</th>
-                                            <th>fecha inicio</th>
-                                            <th>fecha fin</th>
-                                            <th>artesano / comunidad</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <td th:text="*{numeropedido}"></td>
-                                        <td th:text="*{tipo}"></td>
-                                        <td  th:text="*{fechainicio}">de31edae</td>
-                                        <td th:text="*{fechafin}">---</td>
-                                        <td th:text="*{artesano.nombreartesano}"></td>
-                                        </tbody>
-
-                                    </table>
-
+                                    </div-->
                                     <br>
-
                                     <!-- ELEGIR UN PRODUCTO -->
-                                    <div class="form-group" th:if="${inventarioProducto.color == null}">
+                                    <div class="form-group" >
                                         <label for="producto">Producto</label>
                                         <select class="form-control" name="producto" id="producto" style="width: 40%">
                                             <option th:each=" pro : ${listaproducto}"
@@ -141,7 +138,21 @@
                                         <div class="text-danger" th:if="${#fields.hasErrors('preciotejedor')}" th:errors="*{preciotejedor}"></div>
                                     </div>
 
-
+                                    <div class="form-group">
+                                        <label >Facilitador</label>
+                                        <input type="text" class="form-control" th:field="*{facilitador}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('facilitador')}" th:errors="*{facilitador}"></div>
+                                    </div>
+                                    <!--div class="form-group">
+                                        <label >codigo Genererado</label>
+                                        <input type="text" class="form-control" th:field="*{codigogenerado}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('codigogenerado')}" th:errors="*{codigogenerado}"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label >Fecha Inicio</label>
+                                        <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div>
+                                    </div-->
 
 
                                     <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
