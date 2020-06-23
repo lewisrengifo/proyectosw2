@@ -38,6 +38,7 @@ public class InventarioproductoController {
 
     @GetMapping(value = {"","/","/lista"})
     public String listaInventarioProducto(Model model){
+        model.addAttribute("listaInventarioPrincipal", inventarioproductoRepository.findAll());
         return "inventario/inventarioPrincipal";
     }
 
@@ -50,8 +51,8 @@ public class InventarioproductoController {
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+     consignacionyventaRepository.save(consigYventa);
 
-        consignacionyventaRepository.save(consigYventa);
        return "redirect:/inventarioPrincipal/sgteProductos";
     }
 
@@ -61,11 +62,9 @@ public class InventarioproductoController {
         Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
 
         model.addAttribute("listalinea",lineaRepository.findAll());
-        model.addAttribute("listaproducto",productoRepository.findAll());
-        model.addAttribute("listacategoria",categoriaRepository.findAll());
+        model.addAttribute("listaproducto",productoRepository.findAll());model.addAttribute("listacategoria",categoriaRepository.findAll());
         model.addAttribute("listatamano",tamanoRepository.findAll());
       model.addAttribute("consigYventa1",ultimaConsigOventa.get());
-
         return "inventario/inventarioProducto";
     }
 
@@ -74,15 +73,11 @@ public class InventarioproductoController {
                                            @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
 
 
-
-
-
-
-
-
         //List<Inventarioproducto> listaProductosEnPedido = (List<Inventarioproducto>) session.getAttribute("listaProductosEnPedido");
 
         //Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
+
+
         //Date fechatudei = new Date();
         /*
        invPro.setFechainicio(fechatudei);
@@ -94,12 +89,13 @@ public class InventarioproductoController {
             invPro.setCodigogenerado(appe1.toString());
         }
         */
+        Consignacionyventa ultimaConsigOventa = consignacionyventaRepository.findTopByOrderByIdconsignacionDesc();
+        invPro.setConsignacionyventa(ultimaConsigOventa);
 
-      //invPro.setConsignacionyventa(ultimaConsigOventa.get());
-      //inventarioproductoRepository.save(invPro);
-        //listaProductosEnPedido.add(invPro);
-        //session.setAttribute("listaProductosEnPedido",listaProductosEnPedido);
-        return "redirect:/inventarioPrincipal";
+        invPro.setCodigogenerado("cualquierhuevada");
+        inventarioproductoRepository.save(invPro);
+        return "redirect:/inventarioPrincipal/sgteProductos";
+
     }
 
     @PostMapping("/confirmarPedido")

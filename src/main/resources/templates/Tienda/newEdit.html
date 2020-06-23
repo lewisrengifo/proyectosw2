@@ -45,10 +45,10 @@
                 <label for="nombre">Nombre </label>
                 <input type="text" class="form-control" th:field="*{nombre}">
             </div>
-            <a th:href="@{'/FALTADEFINIR'}" class="btn btn-danger">Cancelar</a>
+            <a th:href="@{'/FALTADEFINIR'}" class="btn btn-outline-danger">Cancelar</a>
             <!--  falta definir dónde será la vista prinpipal respecto a esta tabla.
             Esto aparece cuando se requiere registrar un producto-->
-            <button type="submit" class="btn btn-primary" th:text="${tienda.idtienda == 0? 'Registrar' : 'Actualizar'}">Reg/act</button>
+            <button type="submit" class="btn btn-outline-danger" th:text="${tienda.idtienda == 0? 'Registrar' : 'Actualizar'}">Reg/act</button>
         </form>
     </div>
 
