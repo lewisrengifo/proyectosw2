@@ -80,6 +80,8 @@
     padding: 0px 10px 0px 0px;
 }
 
+ul.desProductos li a:hover{color: red;}
+
 .ventana{
     background-color: #0f9d58;
     width: 30%;

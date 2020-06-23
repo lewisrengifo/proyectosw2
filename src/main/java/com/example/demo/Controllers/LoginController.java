@@ -1,4 +1,5 @@
 package com.example.demo.Controllers;
+import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.UsuarioRepository;
 import com.example.demo.service.SendMailService;
@@ -17,6 +18,8 @@ import javax.xml.bind.Element;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -124,7 +127,8 @@ public class LoginController {
         String username = authentication.getName();
         Usuario usuario = usuarioRepository.findByCorreo(username);
         session.setAttribute("usuario",usuario);
-
+        ArrayList<Inventarioproducto> listProductoPedido = new ArrayList<>();
+        session.setAttribute("listaProductosEnPedido",listProductoPedido);
         if(rol.equals("Administrador")){
             return "redirect:/usuario/lista";
         }else {

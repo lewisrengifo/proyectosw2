@@ -90,7 +90,7 @@ public class CategoriaController {
                     }
                 }
             }
-            String nom= categoria.getNombrecategoria().substring(0, 1).toUpperCase() + categoria.getNombrecategoria().substring(1);
+            String nom= categoria.getNombrecategoria().substring(0, 1).toUpperCase() + categoria.getNombrecategoria().substring(1).toLowerCase();
             categoria.setNombrecategoria(nom);
             String cod=categoria.getCodigocategoria().toUpperCase();
             categoria.setCodigocategoria(cod);

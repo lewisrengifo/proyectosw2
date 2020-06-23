@@ -1,35 +1,43 @@
 package com.example.demo.Entity;
 
+
 import javax.persistence.*;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "consignacionyventa")
-public class Consignacionyventa {
+public class Consignacionyventa implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idconsignacion;
 
-    @Column
-    @NotBlank(message = "La fecha fin no puede estar en blanco")
-    private Date fechafin;
+    private String numeropedido;
 
     @ManyToOne
     @JoinColumn(name = "artesano_idartesano")
-    @NotBlank(message = "El texto no puede estar en blanco")
     private Artesano artesano;
 
     @Column(nullable = false)
-    @NotBlank(message = "El tipo no puede estar en blanco")
-    @Pattern(regexp="[a-zA-Z]{1,15}",message = "Solo aceptan letras y un maximo de 15 caracteres")
     private String tipo;
 
     @Column(nullable = false)
-    @NotBlank(message = "La fecha de inicio no puede estar en blanco")
     private Date fechainicio;
+
+    private Date fechafin;
+
+    public String getNumeropedido() {
+        return numeropedido;
+    }
+
+    public void setNumeropedido(String numeropedido) {
+        this.numeropedido = numeropedido;
+    }
 
     public int getIdconsignacion() {
         return idconsignacion;
@@ -47,6 +55,7 @@ public class Consignacionyventa {
         this.fechafin = fechafin;
     }
 
+
     public Artesano getArtesano() {
         return artesano;
     }
@@ -62,6 +71,7 @@ public class Consignacionyventa {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
 
     public Date getFechainicio() {
         return fechainicio;
