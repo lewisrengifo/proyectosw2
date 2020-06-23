@@ -71,11 +71,18 @@ public class InventarioproductoController {
 
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, HttpSession session){
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
 
-        List<Inventarioproducto> listaProductosEnPedido = (List<Inventarioproducto>) session.getAttribute("listaProductosEnPedido");
 
-        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
+
+
+
+
+
+
+        //List<Inventarioproducto> listaProductosEnPedido = (List<Inventarioproducto>) session.getAttribute("listaProductosEnPedido");
+
+        //Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
         //Date fechatudei = new Date();
         /*
        invPro.setFechainicio(fechatudei);
@@ -88,10 +95,10 @@ public class InventarioproductoController {
         }
         */
 
-      invPro.setConsignacionyventa(ultimaConsigOventa.get());
+      //invPro.setConsignacionyventa(ultimaConsigOventa.get());
       //inventarioproductoRepository.save(invPro);
-        listaProductosEnPedido.add(invPro);
-        session.setAttribute("listaProductosEnPedido",listaProductosEnPedido);
+        //listaProductosEnPedido.add(invPro);
+        //session.setAttribute("listaProductosEnPedido",listaProductosEnPedido);
         return "redirect:/inventarioPrincipal";
     }
 
