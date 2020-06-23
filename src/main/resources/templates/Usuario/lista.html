@@ -27,7 +27,12 @@
                 <br>
             </div>
             <div>
-                <a class="btn btn-primary mt-4 mb-4" th:href="@{'/usuario/listaractivos'}">Listar Usuario activos</a>
+                <a class="btn btn-primary mt-4 mb-4" th:href="@{'/usuario/listaractivos'}">Listar Usuarios activados</a>
+            </div>
+            <br>
+            <div>
+                <a class="btn btn-primary mt-4 mb-4" th:href="@{'/usuario/listardesactivados'}">Listar Usuarios
+                    desactivados</a>
             </div>
             <br>
             <div class="row">
@@ -109,6 +114,10 @@
                                                    class="page-link"
                                                    th:href="@{'/usuario/listaractivos' + '?page=' + ${prev}} ">
                                                     Anterior </a>
+                                                <a th:if="${listaactivos.equals('desactivados')}"
+                                                   class="page-link"
+                                                   th:href="@{'/usuario/listardesactivados' + '?page=' + ${prev}} ">
+                                                    Anterior </a>
 
                                             <li class="page-item" th:each="page:${page}"
                                                 th:classappend="${current == page ? 'active' : ''}">
@@ -124,18 +133,27 @@
                                                    class="page-link"
                                                    th:href="@{'/usuario/listaractivos' + '?page=' + ${page}} "
                                                    th:text="${page}"></a>
+                                                <a th:if="${listaactivos.equals('desactivados')}"
+                                                   class="page-link"
+                                                   th:href="@{'/usuario/listardesactivados' + '?page=' + ${page}} "
+                                                   th:text="${page}"></a>
 
                                             </li>
 
                                             <li class="page-item" th:classappend="${current == last ? 'disabled': '' }">
-                                                <a th:if="${searchField.isEmpty()&&listaactivos.equals('falsooo')}" class="page-link"
+                                                <a th:if="${searchField.isEmpty()&&listaactivos.equals('falsooo')}"
+                                                   class="page-link"
                                                    th:href="@{'/usuario' + '?page=' + ${next}} ">
                                                     Siguiente </a>
-                                                <a th:if="${!searchField.isEmpty()&&listaactivos.equals('falsooo')}" class="page-link"
+                                                <a th:if="${!searchField.isEmpty()&&listaactivos.equals('falsooo')}"
+                                                   class="page-link"
                                                    th:href="@{'/usuario/buscador' + '?searchField=' +${searchField}+ '&page=' + ${next}} ">
                                                     Siguiente </a>
                                                 <a th:if="${listaactivos.equals('verdadero')}" class="page-link"
                                                    th:href="@{'/usuario/listaractivos' + '?page=' + ${next}} ">
+                                                    Siguiente </a>
+                                                <a th:if="${listaactivos.equals('desactivados')}" class="page-link"
+                                                   th:href="@{'/usuario/listardesactivados' + '?page=' + ${next}} ">
                                                     Siguiente </a>
 
                                         </ul>

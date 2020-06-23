@@ -119,6 +119,39 @@ public class UsuarioController {
         //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
         return "Usuario/lista";
     }
+        @GetMapping(value = {"/listardesactivados"})
+    public String listarUsuariosDesactivados(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField) {
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/usuario/lista";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if (page < 0) {
+            return "redirect:/usuario/lista";
+        }
+
+        Page<Usuario> pageUsuario = usuarioService.getAllDesactivados(page);
+        int totalPage = pageUsuario.getTotalPages();
+        long totalItems = pageUsuario.getTotalElements();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("page", pages);
+        }
+        model.addAttribute("listaUsuarios", pageUsuario.getContent());
+        model.addAttribute("totalItems", totalItems);
+
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+        String listaactivos = "desactivados";
+        model.addAttribute("listaactivos", listaactivos);
+
+        //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
+        return "Usuario/lista";
+    }
 
     @GetMapping("/nuevo")
     public String nuevoUsuario(Model model, @ModelAttribute Usuario usuario) {

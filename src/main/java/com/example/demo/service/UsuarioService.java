@@ -25,4 +25,8 @@ public class UsuarioService {
         Pageable pageable1 = PageRequest.of(pageNumber, 5);
         return usuarioRepository.usuariosactivos(pageable1);
     }
+    public Page<Usuario> getAllDesactivados(int pageNumber){
+        Pageable pageable1 = PageRequest.of(pageNumber, 5);
+        return usuarioRepository.usuariosdesactivados(pageable1);
+    }
 }
