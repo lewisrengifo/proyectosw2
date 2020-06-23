@@ -28,12 +28,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
         ;
 
-        http.authorizeRequests().antMatchers( "/usuario", "/usuario/**", "/sede", "/sede/**").hasAuthority("Administrador");
+        http.authorizeRequests().antMatchers( "/sede", "/sede/**").hasAnyAuthority("Administrador", "Gestor principal");
+        http.authorizeRequests().antMatchers( "/usuario", "/usuario/**").hasAuthority("Administrador");
+        //http.authorizeRequests().antMatchers( "/sede", "/sede/**").hasAuthority("Gestor sede");
         //http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority( "Gestor principal", "Gestor de sede");
-        http.authorizeRequests().antMatchers("/producto", "/producto/**", "/comunidad", "/comunidad/**").hasAnyAuthority("Gestor principal", "Gestor de sede");
-        http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Gestor principal", "Gestor de sede");
+        http.authorizeRequests().antMatchers("/producto", "/producto/**", "/comunidad", "/comunidad/**").hasAnyAuthority("Gestor principal", "Gestor sede");
+        http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Gestor principal", "Gestor sede");
         http.authorizeRequests().antMatchers("/login", "/login/**").permitAll();
         http.authorizeRequests().antMatchers("/cambiar1/**", "/cambiar1/", "/cambiarContrasenia").permitAll();
+
         http.authorizeRequests().anyRequest().permitAll();
 
     }

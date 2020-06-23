@@ -3,7 +3,9 @@ package com.example.demo.Controllers;
 import com.example.demo.Entity.Sede;
 import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.SedeRepository;
+import com.example.demo.Repository.UsuarioRepository;
 import com.example.demo.service.SedeService;
+import com.example.demo.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,10 @@ public class SedeController {
     SedeRepository sedeRepository;
     @Autowired
     SedeService sedeService;
+    @Autowired
+    UsuarioRepository usuarioRepository;
+    @Autowired
+    UsuarioService usuarioService;
 
     @GetMapping(value = {"", "/lista"})
     public String listarSedes(@RequestParam Map<String, Object> params, Model model) {

@@ -3,10 +3,11 @@ package com.example.demo.Entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "linea")
-public class Linea {
+public class Linea implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
