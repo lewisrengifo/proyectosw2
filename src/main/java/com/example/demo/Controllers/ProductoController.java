@@ -133,12 +133,13 @@ public class ProductoController {
             return "redirect:/producto";
         }
     }*/
-        //Ojala salga xd
+        ///////////////////////////////////////////////////
         HashMap<String, String> map = storageService.store(file);
         if (map.get("estado").equals("exito")) {
             producto.setFoto(map.get("fileName"));
             if (bindingResult.hasErrors()) {
                 model.addAttribute("listaLinea", lineaRepository.findAll());
+
                 return "producto/editFrm";
             } else {
                 if (producto.getIdproducto() == 0) {
@@ -183,18 +184,10 @@ public class ProductoController {
         }
         else {
             model.addAttribute("msgFoto",map.get("msgFoto"));
+            model.addAttribute("listaLinea", lineaRepository.findAll());
             return "producto/editFrm";
         }
 }
-
-
-
-
-
-
-
-
-
 
     @GetMapping("/editar")
     public String editarProducto(Model model, @RequestParam("id") int id, @ModelAttribute("producto") Producto producto) {
@@ -205,6 +198,7 @@ public class ProductoController {
             producto = optProduct.get();
             model.addAttribute("producto", producto);
             model.addAttribute("listaLinea", lineaRepository.findAll());
+
             return "producto/editFrm";
         } else {
             return "redirect:/producto";
