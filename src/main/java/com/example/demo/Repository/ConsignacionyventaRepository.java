@@ -12,4 +12,5 @@ public interface ConsignacionyventaRepository extends JpaRepository <Consignacio
     int ultimoConsiyVentaIngresado();
 
     Consignacionyventa findTopByOrderByIdconsignacionDesc();
+
 }

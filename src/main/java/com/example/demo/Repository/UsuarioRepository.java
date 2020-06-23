@@ -32,6 +32,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     int ultimoidinsertado();
 
     public Usuario findByToken(String tocken);
+    @Query(value="SELECT * FROM usuario where enable =1", nativeQuery=true)
+    Page<Usuario> usuariosactivos(Pageable page);
+    @Query(value="SELECT * FROM usuario where enable =0", nativeQuery=true)
+    Page<Usuario> usuariosdesactivados(Pageable page);
 
 }
 

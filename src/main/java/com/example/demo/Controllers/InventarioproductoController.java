@@ -51,8 +51,8 @@ public class InventarioproductoController {
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+     consignacionyventaRepository.save(consigYventa);
 
-        consignacionyventaRepository.save(consigYventa);
        return "redirect:/inventarioPrincipal/sgteProductos";
     }
 
@@ -71,14 +71,10 @@ public class InventarioproductoController {
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                            @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
-
         Consignacionyventa ultimaConsigOventa = consignacionyventaRepository.findTopByOrderByIdconsignacionDesc();
         invPro.setConsignacionyventa(ultimaConsigOventa);
-        invPro.setCodigogenerado("gaa");
-        inventarioproductoRepository.save(invPro);
 
 
-        // Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
         //Date fechatudei = new Date();
         /*
        invPro.setFechainicio(fechatudei);
@@ -91,8 +87,10 @@ public class InventarioproductoController {
         }
         */
 
-      //invPro.setConsignacionyventa(ultimaConsigOventa.get());
+        invPro.setCodigogenerado("cualquierhuevada");
+        inventarioproductoRepository.save(invPro);
         return "redirect:/inventarioPrincipal/sgteProductos";
+
     }
 
     @PostMapping("/confirmarPedido")
