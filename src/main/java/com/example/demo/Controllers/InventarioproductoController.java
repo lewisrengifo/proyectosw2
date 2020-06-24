@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,19 +76,37 @@ public class InventarioproductoController {
         invPro.setConsignacionyventa(ultimaConsigOventa);
 
 
-        //Date fechatudei = new Date();
-        /*
-       invPro.setFechainicio(fechatudei);
-        if(ultimaConsigOventa.get().getTipo().equals("consignacion")){
-            StringBuilder appe = new StringBuilder().append(invPro.getColor()).append(invPro.getCategoria());
-            invPro.setCodigogenerado(appe.toString());
-        }else{
-            StringBuilder appe1 = new StringBuilder().append(invPro.getColor()).append(invPro.getCategoria()).append(invPro.getFacilitador());
-            invPro.setCodigogenerado(appe1.toString());
-        }
-        */
+        Date fechatudei = new Date();
 
-        invPro.setCodigogenerado("cualquierhuevada");
+       invPro.setFechainicio(fechatudei);
+        if(ultimaConsigOventa.getTipo().equals("consignacion")){
+            String lineac = invPro.getProducto().getLinea().getCodigolinea();
+            String categoriac = invPro.getCategoria().getCodigocategoria();
+            String productoc = invPro.getProducto().getCodigoproducto();
+            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+            String tamano = invPro.getTamano().getCodigotamano();
+            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+            String artesanoC = invPro.getConsignacionyventa().getArtesano().getCodigoartesano();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+            //OBTENER EL MES
+            simpleDateFormat = new SimpleDateFormat("MMMM");
+            String mesC= simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+            //OBTENER EL AÑO
+            simpleDateFormat = new SimpleDateFormat("YYYY");
+            String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+            String totalCodigoGenerado = lineac+categoriac+productoc
+                    +descriccionC+tamano+comunidadC+artesanoC+mesC+yearco;
+            invPro.setCodigogenerado(totalCodigoGenerado);
+        }else{
+            String lineac = invPro.getProducto().getLinea().getCodigolinea();
+            String categoriac = invPro.getCategoria().getCodigocategoria();
+            String productoc = invPro.getProducto().getCodigoproducto();
+            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+            String tamano = invPro.getTamano().getCodigotamano();
+            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+            String totalCodigoGenerado = lineac+categoriac+productoc+descriccionC+tamano+comunidadC;
+            invPro.setCodigogenerado(totalCodigoGenerado);
+        }
         inventarioproductoRepository.save(invPro);
         return "redirect:/inventarioPrincipal/sgteProductos";
 

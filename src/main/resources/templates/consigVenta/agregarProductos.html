@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Moscoy')">
+</head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
+
+
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                INVENTARIO PRINCIPAL
+            </h1>
+        </div>
+
+        <!-- /. COMUNIDAD  -->
+        <div id="page-inner">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-content">
+
+                            <div class="table-responsive">
+
+                                <h2>Ingresar pedido a inventario</h2>
+                                <br>
+                                <!-- FORMULARIO DE AGREGAR PRODUCTOS-->
+                                <form method="post" th:action="@{'/ConsignacionVenta/agregarProducto'}"
+                                      th:object="${inventarioProducto}">
+                                    <input type="hidden" th:field="*{idinventario}"/>
+                                    <!--div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                                         role="alert" style="width: 40%">
+                                    </div-->
+                                    <br>
+                                    <br>
+                                    <!-- ELEGIR UN TAMAÑO -->
+                                    <div class="form-group">
+                                        <label for="Tamano">N° Pedido</label>
+                                        <select class="form-control" name="consignacionyventa" id="consignacionyventa" style="width: 40%">
+                                            <option th:each=" cv : ${listaPedidosCv}" th:value="${cv.idconsignacion}"
+                                                    th:text="${cv.numeropedido}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!-- FIN -->
+
+                                    <!-- ELEGIR UN PRODUCTO -->
+                                    <div class="form-group">
+                                        <label for="producto">Producto</label>
+                                        <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                            <option th:each=" pro : ${listaproducto}"
+                                                    th:value="${pro.idproducto}"
+                                                    th:text="${pro.nombreproducto} + '/ '+ ${pro.linea.getNombrelinea()}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!- FIN -->
+
+                                    <!-- ELEGIR UN CATEGORIA -->
+                                    <div>
+                                        <label for="Categoria">Categoria</label>
+                                        <select class="form-control" name="categoria" id="categoria" style="width: 40%">
+                                            <option th:each=" ca : ${listacategoria}" th:value="${ca.idcategoria}"
+                                                    th:text="${ca.nombrecategoria}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!-- FIN -->
+
+                                    <!-- ELEGIR UN TAMAÑO -->
+                                    <div class="form-group">
+                                        <label for="Tamano">Tamaño</label>
+                                        <select class="form-control" name="tamano" id="tamano" style="width: 40%">
+                                            <option th:each=" ta : ${listatamano}" th:value="${ta.idtamano}"
+                                                    th:text="${ta.nombretamano}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <!-- FIN -->
+
+                                    <div class="form-group">
+                                        <label>Cantidad</label>
+                                        <input type="text" class="form-control" th:field="*{cantidad}"
+                                               style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('cantidad')}"
+                                             th:errors="*{cantidad}"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Color</label>
+                                        <input type="text" class="form-control" th:field="*{color}" style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Costo Moscoy</label>
+                                        <input type="text" class="form-control" th:field="*{preciomosqoy}"
+                                               style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('preciomosqoy')}" th:errors="*{preciomosqoy}"></div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Costo Tejedor</label>
+                                        <input type="text" class="form-control" th:field="*{preciotejedor}"
+                                               style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('preciotejedor')}" th:errors="*{preciotejedor}"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Facilitador</label>
+                                        <input type="text" class="form-control" th:field="*{facilitador}"
+                                               style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('facilitador')}" th:errors="*{facilitador}"></div>
+                                    </div>
+
+                                    <a th:href="@{'/ConsignacionVenta'}" class="btn btn-danger">Cancelar</a>
+                                    <button type="submit" class="btn btn-primary">+ producto</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+
+</html>
