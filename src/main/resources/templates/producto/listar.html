@@ -49,7 +49,7 @@
                 <div class="col-md-10 padding">
                     <div class="card">
                         <div class="card-action">
-                            <a class="btn btn-primary right" th:href="@{'/producto/nuevo'}">Agregar</a>
+                            <a  class="btn btn-outline-danger" th:href="@{'/producto/nuevo'}">Agregar</a>
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
@@ -82,16 +82,15 @@
                                             <td th:text="${producto.getDescripcionproducto()}"></td>
                                             <td th:text="${producto.getCodigodescripcionproducto()}"></td>
                                             <td th:text="${producto.getLinea().nombrelinea}"></td>
-<<<<<<< HEAD
+
                                             <th class="center"><a href="" style='width:125px; height:33px'> Ver</a></th>
-<<<<<<< HEAD
+
                                             <td><a th:href="@{'/producto/verMas' + '?id=' + ${producto.getIdproducto()}}">Ver Mas</a>
                                             </td>
                                             <td><a th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Agregar al carrito</a>
-=======
+
                                             <td sec:authorize="hasAnyAuthority('Gestor principal')"  ><a th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
-=======
-                                            <!--td class="center"><a th:href="@{'/producto/foto' + '?id=' + ${producto.getIdproducto()}}" >Ver</a></td-->
+                                   <!--td class="center"><a th:href="@{'/producto/foto' + '?id=' + ${producto.getIdproducto()}}" >Ver</a></td-->
 
                                             <!--Otra forma(1)--============================-->
                                             <td class="center" >
@@ -185,10 +184,10 @@
                                                 </div>
                                             </th-->
                                             <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
->>>>>>> 09d9cdb94aa92e5dae35ed7344526c28644cbef7
+
                                             </td>
                                             <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
->>>>>>> e0ce5ca6dbcbd6bd6a18561dcffd894e36f41cae
+
                                             </td>
 
                                         </tr>
