@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface RolRepository extends JpaRepository<Rol, Integer> {
-    @Query(value="SELECT * FROM rol where nombre='Gestor principal'", nativeQuery=true)
+    @Query(value="SELECT * FROM rol where nombre='Gestor principal' or nombre='Comun'", nativeQuery=true)
     List<Rol> rolgestorprincipal();
     @Query(value="SELECT * FROM rol where nombre='Gestor sede'", nativeQuery=true)
     List<Rol> rolgestorsede();
