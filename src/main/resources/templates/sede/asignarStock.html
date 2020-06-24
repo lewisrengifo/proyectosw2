@@ -57,7 +57,7 @@
 
                                     <div class="form-group" >
                                         <label for="sede_idsede">Seleccione la sede</label>
-                                        <select class="form-control" name="sede_idsede" id="sede_idsede" style="width: 40%">
+                                        <select class="form-control" name="sede" id="sede" style="width: 40%">
                                             <option th:each=" x : ${listaSede}"
                                                     th:value="${x.idsede}"
                                                     th:text="${x.nombre}">
@@ -71,7 +71,7 @@
                                     <!-- ELEGIR UN PRODUCTO -->
                                     <div class="form-group" >
                                         <label for="producto">Producto/Cantidad Disponible - Precio de venta</label>
-                                        <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                        <select class="form-control" name="inventarioproductoidinventario" id="producto" style="width: 40%">
                                             <option th:each=" pro : ${inventario}"
                                                     th:value="${pro.idinventario}"
                                                     th:text="${pro.producto.nombreproducto} + '/ '+ ' '+ ${pro.cantidad} + ' '+'-' + ${pro.preciomosqoy}">
@@ -103,7 +103,7 @@
 
                                     <a th:href="@{'/sede/lista'}" class="btn btn-danger">Cancelar</a>
                                     <button    type="submit" class="btn btn-primary">+ producto</button>
-                                    <a th:href="@{'/inventarioSede/confirmarStock'}" class="btn btn-info">Enviar Stock</a>
+
 
                                 </form>
                             </div>

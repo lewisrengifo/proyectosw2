@@ -22,6 +22,7 @@
 
                             <form method="post" th:action="@{'/sede/guardar'}" th:object="${sede}">
                                 <input type="hidden" th:field="*{idsede}"/>
+                                <input th:if="${usuariodelasede!=null}" type="hidden" th:field="${usuariodelasede.idusuario}"/>
                                 <div class="form-group">
                                     <label for="Nombre">Nombre de la sede</label>
                                     <input type="text" style="width: 88%" class="form-control" th:field="*{nombre}">
@@ -33,7 +34,7 @@
                                 <a th:href="@{'/sede/lista'}" class="btn btn-outline-danger">Cancelar</a>
 
                                 <button type="submit" class="btn btn-outline-danger"
-                                        th:text="${sede.idsede == 0? 'Registrar' : 'Actualizar'}">
+                                        th:text="${sede.idsede == 0? 'Registrar sede y asignar un gestor de sede' : 'Actualizar'}">
                                     Reg/act
                                 </button>
 

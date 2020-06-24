@@ -13,4 +13,7 @@ public interface SedeRepository extends JpaRepository<Sede, Integer> {
     //Sede findByIdrol(int idsede);
     @Query(value="SELECT * FROM sede where nombre like %?1%", nativeQuery= true)
     Page<Sede> buscarSede(String search, Pageable page);
+
+    Sede  findTopByOrderByIdsedeDesc();
+
 }

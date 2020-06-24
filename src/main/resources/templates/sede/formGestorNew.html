@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+    <!--/. NAV TOP  -->
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'categoria')"></nav>
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="container">
+
+                            <h2 th:text="${usuario.idusuario == 0? 'Nuevo Usuario' : 'Editar Usuario'}">
+                                Nuevo/Editar</h2>
+                            <hr/>
+                            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
+                                 role="alert"></div>
+                            <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success"
+                                 role="alert"></div>
+                            <div th:if="${msgsede != null}" th:text="${msgsede}" class="alert alert-success"
+                                 role="alert"></div>
+                            <form method="get" th:action="@{'/sede/guardarGestorNew'}" th:object="${usuario}">
+                                <input type="hidden" th:field="*{idusuario}"/>
+                                <div class="form-group">
+                                    <label for="enable">Seleccionar Usuario Disponible</label>
+
+
+                                    <select style="width: 90%" class="form-control"
+                                            name="usuario" id="usuario">
+                                        <option th:each="usuario : ${listausuariosdisponibles}"
+                                                th:text="|${usuario.nombre}|"
+                                                th:value="${usuario.idusuario}"
+
+                                        ></option>
+
+                                    </select>
+                                </div>
+
+                                    <a th:href="@{'/sede/lista'}" class="btn btn-danger">Cancelar</a>
+
+                                    <button type="submit" class="btn btn-primary"
+                                            th:text="${usuario.idusuario == 0? 'Registrar' : 'Actualizar'}">
+                                        Reg/act
+                                    </button>
+
+                            </form>
+                            <br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+</html>

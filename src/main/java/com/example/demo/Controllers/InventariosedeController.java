@@ -2,15 +2,13 @@ package com.example.demo.Controllers;
 
 import com.example.demo.Entity.Inventariosede;
 import com.example.demo.Entity.Sede;
+import com.example.demo.Repository.InventarioSedeRepository;
 import com.example.demo.Repository.InventarioproductoRepository;
 import com.example.demo.Repository.SedeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/inventarioSede")
@@ -20,7 +18,8 @@ public class InventariosedeController {
     InventarioproductoRepository inventarioproductoRepository;
     @Autowired
     SedeRepository sedeRepository;
-
+    @Autowired
+    InventarioSedeRepository inventarioSedeRepository;
     @GetMapping("/asignarStock")
     public String asignarStock(Model model, @ModelAttribute("sede") Sede sede,
                                @ModelAttribute("inventariosede") Inventariosede inventariosede){
@@ -30,11 +29,15 @@ public class InventariosedeController {
         return "sede/asignarStock";
     }
 
+    @PostMapping("/agregarStock")
+    public String agregarStock(Model model,@ModelAttribute("inventariosede") Inventariosede inventariosede, @ModelAttribute("sede") Sede sede){
+        Inventariosede invs = new Inventariosede();
 
-    public String confirmarStock(Model model){
+        invs = inventariosede;
+        inventariosede.setEstado("Enviado");
+        inventarioSedeRepository.save(inventariosede);
 
-
-        return "";
+        return "redirect:/inventarioSede/asignarStock";
     }
 
 }
