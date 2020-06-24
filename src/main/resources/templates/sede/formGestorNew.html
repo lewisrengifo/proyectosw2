@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Gestor de sede')"></head>
 <body>
 <div id="wrapper">
     <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
     <!--/. NAV TOP  -->
 
-    <nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'categoria')"></nav>
+    <nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'Gestor de sede')"></nav>
     <div id="page-wrapper">
         <div id="page-inner">
             <div class="row">
@@ -14,7 +14,7 @@
                     <div class="card">
                         <div class="container">
 
-                            <h2 th:text="${usuario.idusuario == 0? 'Nuevo Usuario' : 'Editar Usuario'}">
+                            <h2 th:text="${usuario.idusuario == 0? 'Seleccionar Gestor de Sede' : 'Editar Usuario'}">
                                 Nuevo/Editar</h2>
                             <hr/>
                             <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
@@ -25,6 +25,8 @@
                                  role="alert"></div>
                             <form method="get" th:action="@{'/sede/guardarGestorNew'}" th:object="${usuario}">
                                 <input type="hidden" th:field="*{idusuario}"/>
+                                <input type="hidden" th:name="idsede" th:value="${sede.idsede}">
+
                                 <div class="form-group">
                                     <label for="enable">Seleccionar Usuario Disponible</label>
 
