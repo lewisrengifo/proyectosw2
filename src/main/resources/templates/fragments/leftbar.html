@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="cabecera(titulo)">
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+    <title th:text="${titulo}" ></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/materialize/css/materialize.min.css}" media="screen,projection" />
+    <!-- Bootstrap Styles-->
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+    <!-- FontAwesome Styles-->
+    <link th:href="@{/css/font-awesome.css}" rel="stylesheet" />
+    <!-- Morris Chart Styles-->
+    <link th:href="@{/js/morris/morris-0.4.3.min.css}" rel="stylesheet" />
+    <!-- Custom Styles-->
+    <link th:href="@{/css/custom-styles.css}" rel="stylesheet" />
+    <!-- Google Fonts-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" th:href="@{/js/Lightweight-Chart/cssCharts.css}">
+
+
+
+
+
+</head>
+<body>
+
+<nav th:fragment="barrasuperior">
+            <nav class="navbar  navbar-default top-navbar navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand waves-effect waves-dark" ><i class="large material-icons">track_changes</i> <strong>Moscoy</strong></a>
+
+                    <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
+                </div>
+
+
+                <ul class="nav navbar-top-links navbar-right" sec:authorize="isAuthenticated()">
+
+                    <li><a class="dropdown-button waves-effect waves-dark" href="" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <span th:text="|Bienvenido ${session.usuario.getNombre()} ${session.usuario.getApellido()} - ${session.usuario.getRol_idrol().getNombre()}|"></span> <i class="material-icons right">arrow_drop_down</i></a></li>
+
+                </ul>
+
+            </nav>
+                <!-- Dropdown Structure -->
+                <ul id="dropdown1" class="dropdown-content">
+                    <li> <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0 center">
+                        <form th:action="@{/logout}" method="post">
+                            <input class="btn btn-link" type="submit" value="Cerrar Sesión"/>
+                        </form>
+                    </div>
+
+                    </li>
+                </ul>
+</nav>
+
+<nav class="navbair-default navbar-side" role="navigation" th:fragment="barraizquierda">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="main-menu">
+
+            <li sec:authorize="hasAnyAuthority('Gestor principal')">
+                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Inventario Principal <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ">
+                    <li>
+                        <a th:href="@{/inventarioPrincipal}"  >Inventario de Productos</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/ConsignacionVenta}">Consignacion / Venta</a>
+                    </li>
+                </ul>
+
+            </li>
+            <li sec:authorize="hasAnyAuthority('Gestor principal')">
+                <a  th:href="@{/inventarioSede}"  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
+            </li>
+            <li sec:authorize="hasAnyAuthority('Administrador')">
+                <a th:href="@{'/usuario'}"  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de Usuarios</a>
+            </li>
+
+            <li sec:authorize="hasAnyAuthority('Gestor principal')">
+                <a th:href="@{'/sede'}"  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Gestion de Sedes</a>
+            </li>
+            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')">
+                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> descripciton de productos <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ">
+                    <li>
+                        <a th:href="@{/categoria}" >Categoria</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/linea}">Línea</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/producto}">Producto</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/tamano}">Tamaño</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/tienda}">Tienda</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/comunidad}" >Comunidad</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/artesano}">Artesano</a>
+                    </li>
+                </ul>
+
+            </li>
+
+
+            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
+                <a href="#" class=" waves-effect waves-dark"><i class="fa fa-sitemap"></i> Ventas <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="#">Lista de Ventas</a>
+                    </li>
+                    <li>
+                        <a href="#">Realizar Ventas</a>
+                    </li>
+
+                </ul>
+            </li>
+
+
+        </ul>
+
+    </div>
+
+</nav>
+
+    <div th:fragment="scriptsAbajo">
+
+
+        <!-- jQuery Js -->
+        <script th:src="@{/js/jquery-1.10.2.js}"></script>
+
+        <!-- Bootstrap Js -->
+        <script th:src="@{/js/bootstrap.min.js}"></script>
+
+        <script th:src="@{/materialize/js/materialize.min.js}"></script>
+
+        <!-- Metis Menu Js -->
+        <script th:src="@{/js/jquery.metisMenu.js}"></script>
+        <!-- Morris Chart Js -->
+        <script th:src="@{/js/morris/raphael-2.1.0.min.js}"></script>
+        <script th:src="@{/js/morris/morris.js}"></script>
+
+
+        <script th:src="@{/js/easypiechart.js}"></script>
+        <script th:src="@{/js/easypiechart-data.js}"></script>
+
+        <script th:src="@{/js/Lightweight-Chart/jquery.chart.js}"></script>
+
+
+        <!-- Custom Js -->
+        <script th:src="@{/js/custom-scripts.js}"></script>
+
+
+    </div>
+
+
+</body>
+</html>

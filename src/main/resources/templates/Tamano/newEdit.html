@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<body>
+
+
+<nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+
+<nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'producto')"></nav>
+
+
+<div id="page-wrapper" >
+
+    <h2  class="page-header" th:text="${tamano.idtamano == 0? 'Nuevo Tamaño' : 'Editar Tamaño'}">Nuevo/Editar</h2>
+
+    <div id="page-inner">
+        <div class="row">
+            <div  class="col-md-8">
+                <div class="card">
+                    <div class="container padding ">
+                        <form method="post" th:action="@{'/tamano/guardar'}" th:object="${tamano}">
+                                <input type="hidden" th:field="*{idtamano}" />
+                                <div class="form-group">
+                                    <label for="nombretamano">Nombre </label>
+                                    <input type="text" class="form-control" th:field="*{nombretamano}"style="width: 25%">
+                                </div>
+                                <div class="form-group">
+                                    <label for="codigotamano">Código</label>
+                                    <input type="text" class="form-control" th:field="*{codigotamano}" style="width: 25%">
+                                </div>
+                                <a th:href="@{'/tamano'}" class=" btn btn-info btn-responsive ">Cancelar</a>
+                                <!--  falta definir dónde será la vista prinpipal respecto a esta tabla.
+                                Esto aparece cuando se requiere registrar un producto-->
+                            <button type="submit" class=" btn btn-info btn-responsive rigth"
+                                    th:text="${tamano.idtamano == 0? 'Registrar' : 'Actualizar'}">Reg/act
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+</body>
+</html>

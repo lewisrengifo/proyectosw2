@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<body>
+
+<nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+
+<nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'producto')"></nav>
+<div id="page-wrapper" >
+    <h2 class="page-header" th:text="${linea.idlinea == 0? 'Nueva línea' : 'editar línea'}">Nuevo/Editar</h2>
+    <div id="page-inner">
+        <div class="row">
+            <div  class="col-md-8">
+                <div class="card">
+                    <div class="container padding ">
+                        <form method="post" th:action="@{'/linea/guardar'}" th:object="${linea}">
+                            <input type="hidden" th:field="*{idlinea}" />
+                            <div class="form-group">
+                                <label for="nombrelinea">Nombre </label>
+                                <input type="text" class="form-control" th:field="*{nombrelinea}" style="width: 25%">
+                            </div>
+                            <div class="form-group">
+                                <label for="codigolinea">codigo</label>
+                                <input type="text" class="form-control" th:field="*{codigolinea}" style="width: 25%">
+                            </div>
+                            <a th:href="@{'/linea'}" class="btn btn-outline-danger">Cancelar</a>
+                            <button type="submit" class="btn btn-outline-danger"th:text="${linea.idlinea == 0? 'Registrar' : 'Actualizar'}">Reg/act</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+</html>

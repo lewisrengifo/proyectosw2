@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<body>
+
+<nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+
+<nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
+
+
+<div id="page-wrapper">
+    <div id="page-inner">
+
+        <div class="row">
+            <div  class="col-md-8">
+                <div class="card">
+                    <div class="container">
+                        <h2 th:text="${artesano.idartesano == 0? 'Nuevo artesano' : 'editar artesano'}">Nuevo/Editar</h2>
+                        <br>
+                        <form method="post" th:action="@{'/artesano/guardar'}" th:object="${artesano}">
+                            <input type="hidden" th:field="*{idartesano}"/>
+                            <div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                                 role="alert" style="width: 40%">
+                            </div>
+
+                            <br>
+                            <div class="form-group">
+                                <label for="nombrearteano">Nombre Artesano</label>
+                                    <input type="text" class="form-control" th:field="*{nombreartesano}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('nombreartesano')}" th:errors="*{nombreartesano}"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="apellidopaterno">Apellido Paterno</label>
+                                <input type="text" class="form-control" th:field="*{apellidopaterno}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('apellidopaterno')}" th:errors="*{apellidopaterno}"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="apellidomaterno">Apellido Materno</label>
+                                <input type="text" class="form-control" th:field="*{apellidomaterno}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('apellidomaterno')}" th:errors="*{apellidomaterno}"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="codigoartesano">Codigo Artesano</label>
+                                <input type="text" class="form-control" th:field="*{codigoartesano}" style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('codigoartesano')}" th:errors="*{codigoartesano}"></div>
+
+                            </div>
+
+                            <div class="form-group" th:if="${artesano.apellidomaterno== null}">
+                                <label for="comunidad">comunidad</label>
+                                <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
+
+                                    <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
+                                            th:text="${co.nombrecomunidad}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" th:unless="${artesano.apellidomaterno == null}">
+                                <label for="comunidad">comunidad</label>
+                                    <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
+                                        <option th:each="co : ${listacomunidades}" th:value="${co.idcomunidad}"
+                                                th:text="${co.nombrecomunidad}"
+                                                th:selected="${artesano.comunidad.getIdcomunidad() == co.idcomunidad}">
+                                        </option>
+                                    </select>
+
+                            </div>
+
+                            <a th:href="@{'/artesano'}" class="btn btn-outline-danger">Cancelar</a>
+                            <button type="submit" class="btn btn-outline-danger"
+                                    th:text="${artesano.idartesano == 0? 'Registrar' : 'Actualizar'}">Reg/act
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+
+
+</body>
+</html>

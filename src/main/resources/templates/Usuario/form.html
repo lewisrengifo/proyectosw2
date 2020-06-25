@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+    <!--/. NAV TOP  -->
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'categoria')"></nav>
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="container">
+
+                            <h2 th:text="${usuario.idusuario == 0? 'Nuevo Usuario' : 'Editar Usuario'}">
+                                Nuevo/Editar</h2>
+                            <hr/>
+                            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
+                                 role="alert"></div>
+                            <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success"
+                                 role="alert"></div>
+                            <div th:if="${msgsede != null}" th:text="${msgsede}" class="alert alert-success"
+                                 role="alert"></div>
+                            <form method="post" th:action="@{'/usuario/guardar'}" th:object="${usuario}">
+                                <input type="hidden" th:field="*{idusuario}"/>
+                                <div class="form-group">
+                                    <label for="Nombre">Nombre del usuario</label>
+                                    <input type="text" style="width: 88%" class="form-control" th:field="*{nombre}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('nombre')}"
+                                         th:errors="*{nombre}"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Apellido">Apellido del usuario</label>
+                                    <input style="width: 88%" type="text" class="form-control" th:field="*{apellido}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('apellido')}"
+                                         th:errors="*{apellido}"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="DNI">DNI del usuario</label>
+                                    <input style="width: 88%" type="text" class="form-control" th:field="*{dni}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('dni')}"
+                                         th:errors="*{dni}"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Correo">Correo</label>
+                                    <input style="width: 88%" type="text" class="form-control" th:field="*{correo}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('correo')}"
+                                         th:errors="*{correo}"></div>
+                                </div>
+                                <div class="form-group" th:if="*{idusuario==0}">
+                                    <label for="Contraseña">Contraseña</label>
+                                    <input style="width: 88%" type="password" class="form-control"
+                                           th:field="*{contrasena}">
+                                </div>
+
+<!--        sedeeeeess  -->
+                                <!--
+                                                                <div th:if="*{sede_idsede!=null }" class="form-group">
+                                                                    <div th:if="*{rol_idrol.getIdrol()!= 1}">
+                                                                        <label for="sede_idrol">Sede</label>
+                                                                        <select th:if="*{sede_idsede==0}" style="width: 90%" class="form-control"
+                                                                                name="sede_idsede" id="sede_idsede">
+                                                                            <option th:each="sede : ${listasedes}" th:text="|${sede.nombre}|"
+                                                                                    th:value="${sede.idsede}"
+                                                                            ></option>
+                                                                        </select>
+                                                                        <select th:unless="*{sede_idsede==0}" style="width: 90%" class="form-control"
+                                                                                name="sede_idsede" id="sede_idsede">
+                                                                            <option th:each="sede : ${listasedes}" th:text="|${sede.nombre}|"
+                                                                                    th:value="${sede.idsede}"
+                                                                                    th:selected="${sede.idsede==usuario.sede_idsede.getIdsede()}"
+
+                                                                            ></option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div th:unless="*{sede_idsede!=null}" class="form-group">
+                                                                        <label for="sede_idsede">Sede</label>
+                                                                        <select th:if="*{sede_idsede==0}" style="width: 90%" class="form-control"
+                                                                                name="sede_idsede" id="sede_idsede">
+                                                                            <option th:each="sede : ${listasedes}" th:text="|${sede.nombre}|"
+                                                                                    th:value="${sede.nombre}"
+                                                                            ></option>
+                                                                        </select>
+                                                                        <select th:unless="*{sede_idsede==0}" style="width: 90%" class="form-control"
+                                                                                name="sede_idsede" id="sede_idsede">
+                                                                            <option th:each="sede : ${listasedes}" th:text="|${sede.nombre}|"
+                                                                                    th:value="${sede.idsede}"
+
+
+                                                                            ></option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div th:unless="*{sede_idsede!=null }" class="form-group">
+                                                                    <div th:if="*{rol_idrol!= null}">
+                                                                        <label for="sede_idsede">Sede</label>
+                                                                        <select th:if="*{sede_idsede!=0}" style="width: 90%" class="form-control"
+                                                                                name="sede_idsede" id="sede_idsede">
+                                                                            <option th:each="sede : ${listasedes}" th:text="|${sede.nombre}|"
+                                                                                    th:value="${sede.idsede}"
+                                                                            ></option>
+                                                                        </select>
+                                                                        <select th:unless="*{sede_idsede!=0}" style="width: 90%" class="form-control"
+                                                                                name="sede_idsede" id="sede_idsede">
+                                                                            <option th:each="sede : ${listasedes}" th:text="|${sede.nombre}|"
+                                                                                    th:value="${sede.idsede}"
+                                                                                    th:selected="${sede.idsede==usuario.sede_idsede.getIdsede()}"
+
+                                                                            ></option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div th:unless="*{rol_idrol!=null}">
+                                                                        <div th:unless="*{sede_idsede!=null}" class="form-group">
+                                                                            <label for="sede_idsede">Sede</label>
+                                                                            <select th:if="*{sede_idsede==0}" style="width: 90%" class="form-control"
+                                                                                    name="sede_idsede" id="sede_idsede">
+                                                                                <option th:each="sede : ${listasedes}" th:text="|${sede.nombre}|"
+                                                                                        th:value="${sede.idsede}"
+                                                                                ></option>
+                                                                            </select>
+                                                                            <select th:unless="*{sede_idsede==0}" style="width: 90%" class="form-control"
+                                                                                    name="sede_idsede" id="sede_idsede">
+                                                                                <option th:each="sede : ${listasedes}" th:text="|${sede.nombre}|"
+                                                                                        th:value="${sede.idsede}"
+
+
+                                                                                ></option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                       sedeeeeess  -->
+
+                                <div class="form-group">
+                                    <label for="enable">Definir estado</label>
+
+
+                                    <select style="width: 90%" th:if="*{idusuario==0}" class="form-control"
+                                            name="enable" id="enable">
+                                        <option th:value="1">Activado</option>
+                                        <option th:value="0">Desactivado</option>
+                                    </select>
+                                    <select style="width: 90%" th:unless="*{idusuario==0}" class="form-control"
+                                            name="enable" id="enable">
+
+                                        <option th:text="Activado" th:selected="*{enable == true}"
+                                                th:value="1"></option>
+                                        <option th:text="Desactivado" th:selected="*{enable == false}"
+                                                th:value="0"></option>
+                                    </select>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('enable')}"
+                                         th:errors="*{enable}"></div>
+                                </div>
+
+
+                                <div th:if="*{rol_idrol!=null}" class="form-group">
+                                    <label for="rol_idrol">Rol</label>
+
+
+                                    <select style="width: 90%" class="form-control" name="rol_idrol" id="rol_idrol">
+                                        <option th:each="rol : ${listaroles}" th:text="|${rol.nombre}|"
+
+                                                th:value="${rol.idrol}"
+                                                th:selected="${rol.idrol==usuario.rol_idrol.getIdrol()}"
+                                        ></option>
+                                    </select>
+
+                                </div>
+                                <div th:unless="*{rol_idrol!=null}" class="form-group">
+                                    <label for="rol_idrol">Rol</label>
+                                    <select style="width: 90%" class="form-control" name="rol_idrol" id="rol_idrol">
+                                        <option th:each="rol : ${listaroles}" th:text="|${rol.nombre}|"
+
+                                                th:value="${rol.idrol}"
+
+                                        ></option>
+                                    </select>
+                                </div>
+
+                                <a th:href="@{'/usuario/lista'}" class="btn btn-danger">Cancelar</a>
+
+                                <button type="submit" class="btn btn-primary"
+                                        th:text="${usuario.idusuario == 0? 'Registrar' : 'Actualizar'}">
+                                    Reg/act
+                                </button>
+
+                            </form>
+                            <br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+</html>
+

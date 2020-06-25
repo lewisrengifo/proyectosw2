@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<body>
+
+
+<nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+<!--/. NAV TOP  -->
+
+<nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'categoria')"></nav>
+
+        <div id="page-wrapper">
+            <h2 class="page-header" th:text="${categoria.idcategoria == 0? 'Nueva Categoria' : 'Editar Categoria'}">
+                Nuevo/Editar</h2>
+            <div id="page-inner">
+
+                <div class="row">
+                    <div  class="col-md-8">
+                        <div class="card">
+                        <div class="container padding">
+
+
+<!--                            <div class="alert alert-success" style="width: 40%" role="alert" th:if="${mensajeIgual != null}" th:text="${mensajeIgual}"></div>-->
+
+                            <form method="post" th:action="@{'/categoria/guardar'}" th:object="${categoria}">
+                                <input type="hidden" th:field="*{idcategoria}"/>
+                                <h4 th:if="${msg1 != null}" th:text="${msg1}" style="color:#FF0000"
+                                    role="alert"></h4>
+                                <h4 th:if="${msg2 != null}" th:text="${msg2}" style="color:#FF0000"
+                                    role="alert"></h4>
+                                <br>
+                                <div class="form-group">
+                                    <label for="nombrecategoria">Nombre de la categoria</label>
+                                    <input type="text" class="form-control" th:field="*{nombrecategoria}" style="width: 25%">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('nombrecategoria')}" th:errors="*{nombrecategoria}"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="codigocategoria">codigo</label>
+                                    <input type="text" class="form-control" th:field="*{codigocategoria}" style="width: 25%">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('codigocategoria')}" th:errors="*{codigocategoria}"></div>
+                                </div>
+                                <a th:href="@{'/categoria'}" class="btn btn-outline-danger" >Cancelar</a>
+                                <button type="submit" class="btn btn-outline-danger"
+                                        th:text="${categoria.idcategoria == 0? 'Registrar' : 'Actualizar'}">Reg/act
+                                </button>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+
+</body>
+</html>
