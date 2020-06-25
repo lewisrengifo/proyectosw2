@@ -34,7 +34,7 @@ public class LoginController {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    @GetMapping(value = {"","/loginForm"})
+    @GetMapping(value={"/loginForm",""})
     public String loginForm(RedirectAttributes attr){
         return "login/login";
     }

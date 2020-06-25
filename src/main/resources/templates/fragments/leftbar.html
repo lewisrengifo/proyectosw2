@@ -77,14 +77,14 @@
                 </ul>
 
             </li>
-            <li sec:authorize="hasAnyAuthority('Gestor sede')">
-                <a  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
+            <li sec:authorize="hasAnyAuthority('Gestor principal')">
+                <a  th:href="@{/inventarioSede}"  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Administrador')">
                 <a th:href="@{'/usuario'}"  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de Usuarios</a>
             </li>
 
-            <li sec:authorize="hasAnyAuthority('Administrador','Gestor principal')">
+            <li sec:authorize="hasAnyAuthority('Gestor principal')">
                 <a th:href="@{'/sede'}"  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Gestion de Sedes</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')">
@@ -163,11 +163,12 @@
         <script th:src="@{/js/easypiechart-data.js}"></script>
 
         <script th:src="@{/js/Lightweight-Chart/jquery.chart.js}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
         <!-- Custom Js -->
         <script th:src="@{/js/custom-scripts.js}"></script>
-        <script th:src="@{/js/new.js}"></script>
+
 
     </div>
 

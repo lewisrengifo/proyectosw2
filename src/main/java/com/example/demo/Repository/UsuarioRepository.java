@@ -1,14 +1,18 @@
 package com.example.demo.Repository;
 
 
+import com.example.demo.Dto.UsuarioSedeDto;
 import com.example.demo.Entity.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -36,6 +40,23 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Page<Usuario> usuariosactivos(Pageable page);
     @Query(value="SELECT * FROM usuario where enable =0", nativeQuery=true)
     Page<Usuario> usuariosdesactivados(Pageable page);
+    @Query(value = "SELECT * FROM usuario where rol_idrol = 3", nativeQuery = true)
+    Page<Usuario> gestoresSede(Pageable page);
+    @Query(value = "SELECT * FROM usuario where sede_idsede =?1", nativeQuery = true)
+    Usuario usuariodelasede(int it);
+    @Query(value = "SELECT u.idUsuario as usuariodelasede FROM usuario u inner join sede s on s.idsede=u.sede_idsede where s.idsede=?1", nativeQuery = true)
+    UsuarioSedeDto usuariodelasedeint(int idsede);
+    @Query(value="SELECT * from usuario where rol_idrol = 4", nativeQuery= true)
+    List<Usuario> usuariosDisponibles();
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE usuario u SET u.sede_idsede = :idsede, u.rol_idrol = :idrol WHERE (u.idUsuario = :iduser);", nativeQuery = true)
+    void actualizarRolSede(@Param("idsede") int sede,@Param("idrol") int rol,@Param("iduser") int idUsuario);
+    @Transactional
+    @Modifying
+    @Query(value= "UPDATE usuario SET sede_idsede = NULL, rol_idrol = '4' WHERE (idUsuario = :idusuario);", nativeQuery = true)
+    void actualizarGestorSede(@Param("idusuario") int idusuario);
+
 
 }
 
