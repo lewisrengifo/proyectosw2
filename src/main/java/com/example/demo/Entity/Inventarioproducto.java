@@ -2,12 +2,10 @@ package com.example.demo.Entity;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-
-
+import javax.validation.constraints.*;
 import javax.persistence.*;
-
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -35,14 +33,25 @@ public class Inventarioproducto implements Serializable {
     @JoinColumn(name = "tamano_idtamano")
     private Tamano tamano;
 
+    @Pattern(regexp = "[0-9]{4}" ,message = "Solo se aceptan números")
     private int cantidad;
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo se aceptan letras")
     private String color;
+
+    @Digits(integer = 6, fraction = 2)
+    @Min(value = 1, message = "Solo se permiten números positivos")
     @Column(name = "costomosqoy")
-    private Double preciomosqoy;
+    private BigDecimal preciomosqoy;
+
+    @Digits(integer = 6, fraction = 2)
+    @Min(value = 1, message = "Solo se permiten números positivos")
     @Column(name = "costotejedor")
-    private Double preciotejedor;
+    private BigDecimal preciotejedor;
+
     @Column(nullable = false)
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo se aceptan letras")
     private String facilitador;
+
     @Column(nullable = false)
     private String codigogenerado;
 
@@ -100,21 +109,13 @@ public class Inventarioproducto implements Serializable {
         this.color = color;
     }
 
-    public Double getPreciomosqoy() {
-        return preciomosqoy;
-    }
+    public BigDecimal getPreciomosqoy() {return preciomosqoy;}
 
-    public void setPreciomosqoy(Double preciomosqoy) {
-        this.preciomosqoy = preciomosqoy;
-    }
+    public void setPreciomosqoy(BigDecimal preciomosqoy) {this.preciomosqoy = preciomosqoy;}
 
-    public Double getPreciotejedor() {
-        return preciotejedor;
-    }
+    public BigDecimal getPreciotejedor() {return preciotejedor;}
 
-    public void setPreciotejedor(Double preciotejedor) {
-        this.preciotejedor = preciotejedor;
-    }
+    public void setPreciotejedor(BigDecimal preciotejedor) {this.preciotejedor = preciotejedor;}
 
     public String getFacilitador() {
         return facilitador;

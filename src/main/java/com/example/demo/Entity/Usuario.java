@@ -29,7 +29,7 @@ public class Usuario implements Serializable {
     @NotBlank(message = "El DNI no debe ser vacío")
    // @Pattern(regexp="[0-9] {8}",message = "Solo aceptan numeros o deben ser 8 digitos")
     //@Size(min=9, max = 9, message = "El DNI debe de ser de 8 digitos")
-    @Pattern(regexp = "[0-9]{8}" ,message = "Solo se aceptan numeros")
+    @Pattern(regexp = "[0-9]{8}" ,message = "Solo se aceptan números")
     private String dni;
     //@Pattern(regexp="[0-9] {9}",message = "Solo aceptan letras")
     private String telefono;
