@@ -38,16 +38,9 @@
                                     <!--div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
                                     </div-->
-                                    <br>
-                                    <br>
                                     <!-- ELEGIR UN TAMAÑO -->
                                     <div class="form-group">
-                                        <label for="Tamano">N° Pedido</label>
-                                        <select class="form-control" name="consignacionyventa" id="consignacionyventa" style="width: 40%">
-                                            <option th:each=" cv : ${listaPedidosCv}" th:value="${cv.idconsignacion}"
-                                                    th:text="${cv.numeropedido}">
-                                            </option>
-                                        </select>
+                                        <text th:text="'°N pedido : '+ ${consigYventa1.getNumeropedido()} ">N° Pedido</text>
                                     </div>
                                     <!-- FIN -->
 
@@ -118,6 +111,7 @@
                                                style="width: 25%">
                                         <div class="text-danger" th:if="${#fields.hasErrors('facilitador')}" th:errors="*{facilitador}"></div>
                                     </div>
+                                    <input type="hidden" class="form-control" name="idconsignacionVenta" th:value="${consigYventa1.getIdconsignacion()}" >
 
                                     <a th:href="@{'/ConsignacionVenta'}" class="btn btn-danger">Cancelar</a>
                                     <button type="submit" class="btn btn-primary">+ producto</button>

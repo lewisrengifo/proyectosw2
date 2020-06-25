@@ -139,10 +139,8 @@
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div>
                                     </div-->
 
-
-                                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
                                     <button type="submit" class="btn btn-primary">+ producto</button>
-                                    <a th:href="@{'/inventarioPrincipal/confirmarPedido'}" class="btn btn-info">Finalizar
+                                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-info">Finalizar
                                         Pedido</a>
 
                                 </form>

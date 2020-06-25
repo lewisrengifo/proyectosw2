@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -34,33 +36,57 @@ public class ConsignacionventaController {
     }
 
     @GetMapping("/agregarProductosCV")
-    public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro){
+    public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro, @RequestParam("id") int id){
+
+        Optional<Consignacionyventa> consigVentabyId = consignacionyventaRepository.findById(id);
 
         model.addAttribute("listalinea",lineaRepository.findAll());
         model.addAttribute("listaproducto",productoRepository.findAll());
         model.addAttribute("listacategoria",categoriaRepository.findAll());
         model.addAttribute("listatamano",tamanoRepository.findAll());
-        model.addAttribute("listaPedidosCv",consignacionyventaRepository.findAll());
+
+        model.addAttribute("consigYventa1",consigVentabyId.get());
         return "consigVenta/agregarProductos";
     }
 
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model,
-                                           @ModelAttribute("inventarioProducto") Inventarioproducto invPro){
+                                           @ModelAttribute("inventarioProducto") Inventarioproducto invPro,@RequestParam("idconsignacionVenta") int id ){
 
-        //Date fechatudei = new Date();
-        /*
-       invPro.setFechainicio(fechatudei);
+        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
+        invPro.setConsignacionyventa(ultimaConsigOventa.get());
+        Date fechatudei = new Date();
+
+        invPro.setFechainicio(fechatudei);
         if(ultimaConsigOventa.get().getTipo().equals("consignacion")){
-            StringBuilder appe = new StringBuilder().append(invPro.getColor()).append(invPro.getCategoria());
-            invPro.setCodigogenerado(appe.toString());
+            String lineac = invPro.getProducto().getLinea().getCodigolinea();
+            String categoriac = invPro.getCategoria().getCodigocategoria();
+            String productoc = invPro.getProducto().getCodigoproducto();
+            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+            String tamano = invPro.getTamano().getCodigotamano();
+            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+            String artesanoC = invPro.getConsignacionyventa().getArtesano().getCodigoartesano();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+            //OBTENER EL MES
+            simpleDateFormat = new SimpleDateFormat("MMMM");
+            String mesC= simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+            //OBTENER EL AÑO
+            simpleDateFormat = new SimpleDateFormat("YYYY");
+            String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+            String totalCodigoGenerado = lineac+categoriac+productoc
+                    +descriccionC+tamano+comunidadC+artesanoC+mesC+yearco;
+            invPro.setCodigogenerado(totalCodigoGenerado);
         }else{
-            StringBuilder appe1 = new StringBuilder().append(invPro.getColor()).append(invPro.getCategoria()).append(invPro.getFacilitador());
-            invPro.setCodigogenerado(appe1.toString());
+            String lineac = invPro.getProducto().getLinea().getCodigolinea();
+            String categoriac = invPro.getCategoria().getCodigocategoria();
+            String productoc = invPro.getProducto().getCodigoproducto();
+            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+            String tamano = invPro.getTamano().getCodigotamano();
+            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+            String totalCodigoGenerado = lineac+categoriac+productoc+descriccionC+tamano+comunidadC;
+            invPro.setCodigogenerado(totalCodigoGenerado);
         }
-        */
 
-        invPro.setCodigogenerado("cualquierhuevada");
         inventarioproductoRepository.save(invPro);
         return "redirect:/ConsignacionVenta";
 
