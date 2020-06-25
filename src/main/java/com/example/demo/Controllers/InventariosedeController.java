@@ -1,9 +1,6 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Entity.Artesano;
-import com.example.demo.Entity.Inventarioproducto;
-import com.example.demo.Entity.Inventariosede;
-import com.example.demo.Entity.Sede;
+import com.example.demo.Entity.*;
 import com.example.demo.Repository.InventarioSedeRepository;
 import com.example.demo.Repository.InventarioproductoRepository;
 import com.example.demo.Repository.SedeRepository;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,10 +50,12 @@ public class InventariosedeController {
     }
 
     @GetMapping(value = {"", "/lista"})
-    public String listaInventarioSede(Model model) {
+    public String listaInventarioSede(Model model, HttpSession session) {
 
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+           String miSede =  usuario.getSede_idsede().getNombre();
 
-        model.addAttribute("listaInventarioSede",inventarioSedeRepository.findAll());
+        model.addAttribute("listaInventarioSede",inventarioSedeRepository.obtenerInvDeMiSede(miSede));
 
 
         return "/inventario/inventariosede";
