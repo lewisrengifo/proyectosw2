@@ -65,19 +65,19 @@
     <div class="sidebar-collapse">
         <ul class="nav" id="main-menu">
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal')">
+            <li sec:authorize="hasAnyAuthority('Gestor principal','Administrador')">
                 <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Inventario Principal <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level ">
                     <li>
                         <a th:href="@{/inventarioPrincipal}"  >Inventario de Productos</a>
                     </li>
-                    <li>
+                    <li sec:authorize="hasAnyAuthority('Gestor principal')">
                         <a th:href="@{/ConsignacionVenta}">Consignacion / Venta</a>
                     </li>
                 </ul>
 
             </li>
-            <li sec:authorize="hasAnyAuthority('Gestor principal')">
+            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
                 <a  th:href="@{'/inventarioSede'}"  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Administrador')">
