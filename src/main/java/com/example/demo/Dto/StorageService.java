@@ -1,6 +1,7 @@
 package com.example.demo.Dto;
 
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,13 +20,15 @@ public class StorageService {
     //Se detalla donde estaran guardadas las imagenes
     String fileLocation = "C:/FotosProyecto/";
 
+
+
     //Este metodo hace la logica de guardar la imagen y lo devuelve como un hashmap
     public HashMap<String,String> store (MultipartFile file){
         HashMap<String,String> map = new HashMap<>();
 
         //Aqui obtenemos el nombre del archivo con su extension
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
+        //fileName=encriptar(fileName)+".jpg";
         //Validamos si el archivo esta vacio
         try{
             if(file.isEmpty()){

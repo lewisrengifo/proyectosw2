@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,7 +188,10 @@ public class ProductoController {
                 String cod = producto.getCodigoproducto().toUpperCase();
                 producto.setCodigoproducto(cod);
                 String cod1 = producto.getCodigodescripcionproducto().toUpperCase();
-                producto.setCodigodescripcionproducto(cod1);
+                //===================================================//
+
+
+                //==================================================//
                 productoRepository.save(producto);
                 return "redirect:/producto";
             }
@@ -196,7 +201,8 @@ public class ProductoController {
             model.addAttribute("listaLinea", lineaRepository.findAll());
             return "producto/editFrm";
         }
-}
+    }
+
 
     @GetMapping("/editar")
     public String editarProducto(Model model, @RequestParam("id") int id, @ModelAttribute("producto") Producto producto) {
@@ -378,6 +384,11 @@ public class ProductoController {
         );
     }
 
+    public String encriptar(String pww) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        pww = bCryptPasswordEncoder.encode(pww);
+        return pww;
+    }
 
 }
 
