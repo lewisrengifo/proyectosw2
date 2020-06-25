@@ -74,7 +74,7 @@ public class InventariosedeController {
 
         PageRequest pageRequest = PageRequest.of(page, 10);
 
-        Page<Inventariosede> pageProduct = productoServiceApi.getEverInvs(miSede, pageRequest);
+        Page<Inventariosede> pageProduct = inventarioSedeRepository.findAll(pageRequest);
 
         int totalPage = pageProduct.getTotalPages();
         if (totalPage > 0) {
@@ -98,6 +98,52 @@ public class InventariosedeController {
         return "inventario/inventariosede";
 
     }
+
+    @GetMapping(value = {"/listarInvMiSede"})
+    public String listaInventarioMiSede(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        String miSede =  usuario.getSede_idsede().getNombre();
+
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/inventarioSede/listarInvMiSede";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if (page < 0) {
+            return "redirect:/inventarioSede/listarInvMiSede";
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, 10);
+
+        Page<Inventariosede> pageProduct = productoServiceApi.getEverInvs(miSede, pageRequest);
+
+        int totalPage = pageProduct.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            if (page > pages.size() - 1) {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioSede/listarInvMiSede";
+            }
+            model.addAttribute("pages", pages);
+        } else {
+
+            return "redirect:/inventarioSede/listarInvMiSede";
+        }
+
+        model.addAttribute("listaInventarioSede", pageProduct.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+        return "inventario/inventariomisede";
+
+    }
+
+
 
 
 
