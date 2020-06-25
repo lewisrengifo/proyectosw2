@@ -20,18 +20,20 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
     <link rel="stylesheet" th:href="@{/js/Lightweight-Chart/cssCharts.css}">
 
-    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
+
             $("#comprado").click(function () {
                 $("#artesano_compra").hide();
-                $("#fechafin").val(null);
+                document.getElementById("fechafin").value = "01/01/1890";
+                //$("#fechafin").textContent("12/12/3000");
             });
             $("#consignacion").click(function () {
                 $("#artesano_compra").show();
             });
         });
-    </script-->
+    </script>
 
 
 </head>
@@ -88,18 +90,16 @@
                                     <div class="form-group">
 
                                         <label>Fecha Inicio</label>
-                                        <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%">
+                                        <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%" placeholder="formato:dia/mes/año">
 
                                         <!--div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div-->
-
                                     </div>
                                     <!--Fecha FIN-->
                                     <div class="form-group" id="artesano_compra">
                                         <label>Fecha fin</label>
-                                        <input type="text" class="form-control" th:field="*{fechafin}"
-                                               style="width: 25%" placeholder="formato:dia/mes/año" id="fechafin">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('fechafin')}"
-                                             th:errors="*{fechafin}"></div>
+                                        <input type="text" class="form-control" th:name="*{fechafin}"
+                                               style="width: 25%" placeholder="formato:dia/mes/año" id="fechafin" >
+
                                     </div>
 
 

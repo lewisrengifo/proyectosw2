@@ -1,19 +1,23 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Repository.*;
+import com.example.demo.service.InventarioPrincipalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.zip.DataFormatException;
 
 @Controller
@@ -34,17 +38,51 @@ public class InventarioproductoController {
     ConsignacionyventaRepository consignacionyventaRepository;
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
+    @Autowired
+    InventarioPrincipalService inventarioPrincipalService;
 
 
 
     @GetMapping(value = {"","/","/lista"})
-    public String listaInventarioProducto(Model model){
-        model.addAttribute("listaInventarioPrincipal", inventarioproductoRepository.findAll());
+    public String listaInventarioProducto(Model model,@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params){
+
+        int currentPage = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
+        long totalItems = page.getTotalElements();
+        int totalPages = page.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+        List<Inventarioproducto> listaInventarioPrincipal = page.getContent();
+
+
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("listaInventarioPrincipal", listaInventarioPrincipal);
+        model.addAttribute("current", currentPage + 1);
+        model.addAttribute("next", currentPage + 2);
+        model.addAttribute("prev", currentPage);
+        model.addAttribute("last", totalPages);
         return "inventario/inventarioPrincipal";
     }
 
     @GetMapping("/agregarInventario")
     public String consignacionYVenta(@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model){
+        /*String fecha = "01/01/1999";
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        Date fechaDate = null;
+
+        try {
+            fechaDate = formato.parse(fecha);
+            consigYventa.setFechafin();
+        }
+        catch (ParseException ex)
+        {
+
+        }*/
+
         model.addAttribute("listaArtesano",artesanoRepository.findAll());
         return "inventario/consigYventa";
     }
@@ -119,7 +157,34 @@ public class InventarioproductoController {
     }
 
 
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
 
+        String busqueda = (String) params.get("searchField");
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        Page<Inventarioproducto> pageInvPrincipal = inventarioPrincipalService.listSearch(busqueda, page);
+        int totalPage = pageInvPrincipal.getTotalPages();
+        long totalItems = pageInvPrincipal.getTotalElements();
+
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+
+
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("busqueda", busqueda);
+        model.addAttribute("listaArtesano", pageInvPrincipal.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
+
+        return "inventario/consigYventa";
+    }
 
 
 
