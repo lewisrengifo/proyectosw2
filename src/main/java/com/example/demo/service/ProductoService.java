@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.Dto.ProductoServiceApi;
+import com.example.demo.Entity.Inventariosede;
 import com.example.demo.Entity.Producto;
+import com.example.demo.Repository.InventarioSedeRepository;
 import com.example.demo.Repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,8 @@ import java.nio.file.Paths;
 public class ProductoService implements ProductoServiceApi {
     @Autowired
     private ProductoRepository productoRepository;
+    @Autowired
+    InventarioSedeRepository inventarioSedeRepository;
 
     @Override
     public Page<Producto> getAll(Pageable pageable) {
@@ -28,21 +32,8 @@ public class ProductoService implements ProductoServiceApi {
         return productoRepository.obtenerFiltroProducto(search, pageable);
     }
 
-    @Override
-    public Path saveImage(MultipartFile imageFile, Producto producto) throws Exception {
-        String pathProducto = null;
 
 
-        Path currentPath = Paths.get(".");
-        Path absolutePath = currentPath.toAbsolutePath();
-        pathProducto = (absolutePath + "/src/main/resources/static/img/fotosProducto/");
-        byte[] bytes = imageFile.getBytes();
-        Path path = Paths.get(pathProducto + imageFile.getOriginalFilename());
-
-
-
-        return path ;
-    }
 
 
 
