@@ -133,9 +133,9 @@ public class LoginController {
             return "redirect:/usuario/lista";
         }else {
             if (rol.equals("Gestor sede")){
-                return "redirect:/artesano";
+                return "redirect:/inventarioSede/listarInvMiSede";
             }else{
-            return "redirect:/categoria";
+            return "redirect:/inventarioPrincipal";
             }
         }
 

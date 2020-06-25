@@ -24,8 +24,8 @@
         <!-- /. Tabla de Comunidad  -->
                     <div class="col-md-8 padding">
                         <div class="card">
-                            <div th:if="${!listaComunidad.isEmpty()}"  class="card-action">
-                                <a class="btn btn-outline-danger" th:href="@{'/comunidad/nuevo'}">Agregar</a>
+                            <div th:if="${!listaComunidad.isEmpty()}"  class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
+                                <a class="btn btn-outline-danger" th:href="@{'/comunidad/nuevo'}" >Agregar</a>
                             </div>
                             <div class="card-content">
                                 <div class="table-responsive">
@@ -50,7 +50,7 @@
                                             <td class="center-align" th:text="${info.index +1}">1</td>
                                             <td class="center-align" th:text="${c.nombrecomunidad}">Home</td>
                                             <td class="center-align" th:text="${c.codigocomunidad}">H</td>
-                                            <td sec :authorize="hasAnyAuthority('Gestor principal')" class="center-align"><a th:href="@{'comunidad/editar?id=' + ${c.idcomunidad}}"> Editar</a></td>
+                                            <td sec:authorize="hasAnyAuthority('Gestor principal')" class="center-align"><a th:href="@{'comunidad/editar?id=' + ${c.idcomunidad}}"> Editar</a></td>
                                             <td sec:authorize="hasAnyAuthority('Gestor principal')" class="center-align"><a th:href="@{'comunidad/borrar?id=' + ${c.idcomunidad}}">Borrar</a></td>
                                         </tr>
                                         </tbody>

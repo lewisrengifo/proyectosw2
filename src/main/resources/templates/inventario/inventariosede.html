@@ -7,7 +7,7 @@
         $(document).ready(function () {
 
             $("#recibido").click(function () {
-                $("#bottttton").style.display='block';
+                $("#bottttton").style.display = 'block';
             });
         });
     </script>
@@ -18,7 +18,6 @@
     <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
 
     <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
-
 
 
     <!-- /. NAV SIDE  -->
@@ -41,8 +40,7 @@
                             <div class="table-responsive">
 
 
-
-                                <table  class="table table-striped table-bordered table-hover">
+                                <table class="table table-striped table-bordered table-hover">
                                     <thead>
 
                                     <tr class="info">
@@ -55,33 +53,33 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr  th:each="inv : ${listaInventarioSede}">
+                                    <tr th:each="inv : ${listaInventarioSede}">
 
 
-                                    <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
-                                    <td th:text="${inv.stock}">de31edae</td>
-                                    <td th:text="${inv.getFechallegada()}">---</td>
-                                    <td th:text="${inv.sede.nombre}"></td>
+                                        <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
+                                        <td th:text="${inv.stock}">de31edae</td>
+                                        <td th:text="${inv.getFechallegada()}">---</td>
+                                        <td th:text="${inv.sede.nombre}"></td>
+                                        <td th:text="${inv.getEstado()}"></td>
 
+                                        <!--
+                                        <td><select class="form-control" name="estado" id="estado" style="width: 41%">
+                                            <option id="enviado" value="enviado" selected th:text="${inv.getEstado()}">
+                                            </option>
+                                            <option id="recibido" th:text="|recibido por sede|"
+                                                    th:value="|recibido por sede|">
+                                            </option>
 
+                                        </select>
+                                        -->
 
-
-                                    <td> <select class="form-control" name="estado" id="estado" style="width: 41%">
-                                                <option id="enviado" value="enviado" selected th:text="${inv.getEstado()}">
-                                                </option>
-                                                <option   id="recibido" th:text="|recibido por sede|"
-                                                          th:value="|recibido por sede|">
-                                                </option>
-
-                                            </select>
-
-                                        <form method="post" th:action="@{''}">
-                                        <button  style="display: none" id="bottttton" type="submit" class=" btn btn-info btn-responsive btninter rigth"
+                                            <form method="post" th:action="@{''}">
+                                                <button style="display: none" id="bottttton" type="submit"
+                                                        class=" btn btn-info btn-responsive btninter rigth"
                                                 >Enviar
-                                        </button>
-                                        </form>
+                                                </button>
+                                            </form>
                                         </td>
-
 
 
                                     </tr>
@@ -89,9 +87,6 @@
                                     </tbody>
 
                                 </table>
-
-
-
 
 
                                 </form>

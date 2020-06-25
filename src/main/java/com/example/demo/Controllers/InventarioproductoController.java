@@ -181,13 +181,13 @@ public class InventarioproductoController {
 
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("busqueda", busqueda);
-        model.addAttribute("listaArtesano", pageInvPrincipal.getContent());
+        model.addAttribute("listaInventarioPrincipal", pageInvPrincipal.getContent());
         model.addAttribute("current", page + 1);
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
 
-        return "inventario/consigYventa";
+        return "inventario/inventarioPrincipal";
     }
 
 
