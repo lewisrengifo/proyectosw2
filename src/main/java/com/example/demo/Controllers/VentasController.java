@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 
+
 import com.example.demo.Dto.ProductoServiceApi;
 import com.example.demo.Entity.Comunidad;
 import com.example.demo.Entity.Inventarioproducto;
@@ -7,6 +8,7 @@ import com.example.demo.Entity.Producto;
 import com.example.demo.Entity.ProductoVenta;
 import com.example.demo.Repository.InventarioproductoRepository;
 import com.example.demo.Repository.ProductoRepository;
+import com.example.demo.Repository.VentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,11 +24,23 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.example.demo.Entity.Artesano;
+import com.example.demo.Entity.Producto;
+import com.example.demo.Repository.ProductoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
 @Controller
 @RequestMapping("/venta")
 public class VentasController {
 
     @Autowired
+
     ProductoServiceApi productoServiceApi;
 
     @Autowired
@@ -34,6 +48,14 @@ public class VentasController {
 
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
+    @Autowired
+    VentaRepository ventaRepository;
+
+    @GetMapping("/listaVentas")
+    public String listarVentas(Model model){
+        model.addAttribute("listaVentas", ventaRepository.findAll());
+        return "venta/ventaLista";
+    }
 
     @GetMapping(value = {"", "/listaProductosStock"}) //url en la web
     public String listaProductosStock(Model model, RedirectAttributes attr, @ModelAttribute ProductoVenta productoVenta) {
@@ -159,16 +181,15 @@ public class VentasController {
         totalPage = pageProduct.getTotalPages();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            if (page > pages.size() -1){
+            if (page > pages.size() - 1) {
                 attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
                 return "redirect:/venta";
             }
 
 
-
             model.addAttribute("pages", pages);
-        }else{
+        } else {
             attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
             return "redirect:/venta";
@@ -185,5 +206,15 @@ public class VentasController {
 
         return "venta/listaProductosStock";
     }
+   // ProductoRepository productoRepository;
+/*
+    @GetMapping(value = {"", "/venta"})
+    public String listaArtesano(@ModelAttribute("producto") Producto producto, Model model){
+        model.addAttribute("listaArtesano", productoRepository.findAll());
+        return "redirect:/venta/venta";
+
+    }
+
+ */
 
 }
