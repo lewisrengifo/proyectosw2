@@ -107,7 +107,7 @@ public class SedeController {
                 //usuarioRepository.actualizarSededelGestor(usuariodelasededb.getUsuariodelasede());
                 sedeRepository.save(sede);
 
-                return "/sede/formGestorNew";
+                return "sede/formGestorNew";
             }
 
         }
@@ -134,7 +134,7 @@ public class SedeController {
         model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
         //int idsederec = idsede;
         model.addAttribute("sede", sede);
-        return "/sede/formGestorNew";
+        return "sede/formGestorNew";
     }
     @PostMapping("/guardarGestor")
     public String guardarGestor(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
