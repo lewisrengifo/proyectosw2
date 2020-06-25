@@ -21,19 +21,21 @@
     <link rel="stylesheet" th:href="@{/js/Lightweight-Chart/cssCharts.css}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
+
+    <!--script>
         $(document).ready(function () {
 
             $("#comprado").click(function () {
+                $("#fechafin").val("01/01/1890");
                 $("#artesano_compra").hide();
-                document.getElementById("fechafin").value = "01/01/1890";
-                //$("#fechafin").textContent("12/12/3000");
+               // document.getElementById("fechafin").value = "01/01/1890";
+
             });
             $("#consignacion").click(function () {
                 $("#artesano_compra").show();
             });
         });
-    </script>
+    </script-->
 
 
 </head>
@@ -97,9 +99,8 @@
                                     <!--Fecha FIN-->
                                     <div class="form-group" id="artesano_compra">
                                         <label>Fecha fin</label>
-                                        <input type="text" class="form-control" th:name="*{fechafin}"
-                                               style="width: 25%" placeholder="formato:dia/mes/año" id="fechafin" >
-
+                                        <input type="text" class="form-control" th:field="*{fechafin}"
+                                               style="width: 25%" placeholder="formato:dia/mes/año" value="01/01/1890">
                                     </div>
 
 
@@ -110,7 +111,6 @@
                                             <option th:each=" ar : ${listaArtesano}"
                                                     th:value="${ar.idartesano}"
                                                     th:text="${ar.nombreartesano} + ' '+ ${ar.apellidopaterno} + ' '+ ${ar.apellidomaterno} + ' / '+ ${ar.comunidad.nombrecomunidad}">
-<
                                             </option>
                                         </select>
                                     </div>
