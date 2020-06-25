@@ -155,7 +155,7 @@ public class UsuarioController {
 
     @GetMapping("/nuevo")
     public String nuevoUsuario(Model model, @ModelAttribute Usuario usuario) {
-        model.addAttribute("listaroles", rolRepository.findAll());
+        model.addAttribute("listaroles", rolRepository.rolgestorprincipal());
         model.addAttribute("listasedes", sedeRepository.findAll());
         return "Usuario/form";
     }
@@ -164,7 +164,7 @@ public class UsuarioController {
     public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                           RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("listaroles", rolRepository.findAll());
+           model.addAttribute("listaroles", rolRepository.rolgestorprincipal());
             model.addAttribute("listasedes", sedeRepository.findAll());
             return "Usuario/form";
         }
@@ -208,15 +208,7 @@ public class UsuarioController {
                 }
             }
         }
-        try {
-            if (sedeRepository.findById(usuario.getSede_idsede().getIdsede()) == null) {
 
-            }
-        } catch (NullPointerException e) {
-            redirectAttributes.addFlashAttribute("msgsede", "El usuario no se creó o actualizó debido a que no seleccionó una sede valida");
-
-            return "redirect:/usuario/lista";
-        }
 
         if (usuario.getIdusuario() == 0) {
 
@@ -240,13 +232,17 @@ public class UsuarioController {
             usuario.setContrasena(optionalUsuario.get().getContrasena());
         }
             //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
-            if (rol_idrol == 1) {
+            //if (rol_idrol == 1||rol_idrol==2) {
 
+               // usuario.setSede_idsede(null);
+                //usuarioRepository.save(usuario);
+            //} else {
+                //Rol rol = new Rol();
+                //rol.setIdrol(2);
+                //usuario.setRol_idrol(rol);
                 usuario.setSede_idsede(null);
                 usuarioRepository.save(usuario);
-            } else {
-                usuarioRepository.save(usuario);
-            }
+           // }
 
         return "redirect:/usuario/lista";
     }

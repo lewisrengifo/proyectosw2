@@ -23,7 +23,7 @@
                                  role="alert"></div>
                             <div th:if="${msgsede != null}" th:text="${msgsede}" class="alert alert-success"
                                  role="alert"></div>
-                            <form method="post" th:action="@{'/usuario/guardar'}" th:object="${usuario}">
+                            <form method="post" th:action="@{'/sede/guardarGestor'}" th:object="${usuario}">
                                 <input type="hidden" th:field="*{idusuario}"/>
                                 <div class="form-group">
                                     <label for="Nombre">Nombre del usuario</label>
@@ -55,7 +55,7 @@
                                            th:field="*{contrasena}">
                                 </div>
 
-<!--        sedeeeeess  -->
+                                <!--        sedeeeeess  -->
                                 <!--
                                                                 <div th:if="*{sede_idsede!=null }" class="form-group">
                                                                     <div th:if="*{rol_idrol.getIdrol()!= 1}">
@@ -200,4 +200,3 @@
 
 </body>
 </html>
-

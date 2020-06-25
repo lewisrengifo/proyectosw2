@@ -62,6 +62,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nombre</th>
+                                        <th>Apellido</th>
                                         <th>Correo</th>
 
 
@@ -76,12 +77,13 @@
                                     <tr th:each="usuario, info : ${listaUsuarios}">
                                         <td th:text="${info.index + 1 + prev*5}"></td>
                                         <td th:text="${usuario.nombre}"></td>
+                                        <td th:text="${usuario.apellido}"></td>
                                         <td th:text="${usuario.correo}"></td>
 
 
                                         <td th:text="${usuario.rol_idrol.nombre}"></td>
                                         <td th:text="${usuario.dni}"></td>
-                                        <td th:if="${usuario.sede_idsede==null}">Sin sede</td>
+                                        <td th:if="${usuario.sede_idsede==null}">---</td>
                                         <td th:unless="${usuario.sede_idsede==null}"
                                             th:text="${usuario.sede_idsede.nombre}"></td>
                                         <td th:if="${usuario.enable == true}" th:text="Activado"></td>
