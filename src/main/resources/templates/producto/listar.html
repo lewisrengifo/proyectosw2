@@ -48,7 +48,7 @@
             <div class="row " >
                 <div class="col-md-10 padding">
                     <div class="card">
-                        <div class="card-action">
+                        <div class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
                             <a class="btn btn-primary right" th:href="@{'/producto/nuevo'}">Agregar</a>
                         </div>
                         <div class="card-content">

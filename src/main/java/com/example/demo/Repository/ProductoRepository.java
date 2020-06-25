@@ -15,7 +15,7 @@ public interface ProductoRepository extends JpaRepository<Producto,Integer> {
 
     @Query(value = "SELECT * FROM producto p where p.nombreproducto like %?1% or p.codigoproducto like %?1% or p.descripcionproducto like %?1%\n" +
             "                            or p.codigodescripcionproducto like %?1% or p.linea_idlinea= (select linea_idlinea from linea where nombrelinea like %?1%)",
-            countQuery = "SELECT count(*)  From producto p where p.nombreproducto like %?1% or p.codigoproducto like '%scd%' or p.descripcionproducto like %?1%\n" +
+            countQuery = "SELECT count(*)  From producto p where p.nombreproducto like %?1% or p.codigoproducto like %?1% or p.descripcionproducto like %?1%\n" +
                     "                              or p.codigodescripcionproducto like %?1% or p.linea_idlinea= (select linea_idlinea from linea where nombrelinea like %?1%);"
                         , nativeQuery = true)
     Page<Producto> obtenerFiltroProducto(String search , Pageable pageable);

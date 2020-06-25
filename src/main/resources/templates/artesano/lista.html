@@ -33,7 +33,7 @@
                 <div class="col-md-10">
                     <div class="card">
 
-                        <div class="card-action">
+                        <div class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
 
                             <a class="btn btn-outline-danger"th:href="@{'/artesano/nuevo'}">agregar</a>
                             <br>
