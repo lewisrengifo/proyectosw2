@@ -194,7 +194,7 @@ public class InventarioproductoController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
-        
+
         return "inventario/consigYventa";
     }
 
