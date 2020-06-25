@@ -90,15 +90,18 @@ public class InventarioproductoController {
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
-     consignacionyventaRepository.save(consigYventa);
 
-       return "redirect:/inventarioPrincipal/sgteProductos";
+        System.out.println(consigYventa);
+        Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
+         int idultimo = save.getIdconsignacion();
+
+        return "redirect:/inventarioPrincipal/sgteProductos/"+idultimo;
     }
 
-    @GetMapping("/sgteProductos")
+    @GetMapping("/sgteProductos/{idultimo}")
     public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                        @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
-        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
+                                        @ModelAttribute("consigYVenta") Consignacionyventa consigYventa,@PathVariable("idultimo") int id){
+        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
 
         model.addAttribute("listalinea",lineaRepository.findAll());
         model.addAttribute("listaproducto",productoRepository.findAll());model.addAttribute("listacategoria",categoriaRepository.findAll());
@@ -109,19 +112,21 @@ public class InventarioproductoController {
 
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa,@RequestParam("idconsignacionVenta") int id){
+
+        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
+        invPro.setConsignacionyventa(ultimaConsigOventa.get());
 
 
         //List<Inventarioproducto> listaProductosEnPedido = (List<Inventarioproducto>) session.getAttribute("listaProductosEnPedido");
 
         //Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
 
-        Consignacionyventa ultimaConsigOventa = consignacionyventaRepository.findTopByOrderByIdconsignacionDesc();
-        invPro.setConsignacionyventa(ultimaConsigOventa);
         Date fechatudei = new Date();
 
        invPro.setFechainicio(fechatudei);
-        if(ultimaConsigOventa.getTipo().equals("consignacion")){
+        if(ultimaConsigOventa.get().getTipo().equals("consignacion")){
             String lineac = invPro.getProducto().getLinea().getCodigolinea();
             String categoriac = invPro.getCategoria().getCodigocategoria();
             String productoc = invPro.getProducto().getCodigoproducto();
@@ -154,7 +159,7 @@ public class InventarioproductoController {
 
 
         inventarioproductoRepository.save(invPro);
-        return "redirect:/inventarioPrincipal/sgteProductos";
+        return "redirect:/inventarioPrincipal/sgteProductos/"+ultimaConsigOventa.get().getIdconsignacion();
 
     }
 
@@ -189,7 +194,6 @@ public class InventarioproductoController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
-
 
         return "inventario/consigYventa";
     }

@@ -130,12 +130,10 @@
                                         <div class="text-danger" th:if="${#fields.hasErrors('facilitador')}"
                                              th:errors="*{facilitador}"></div>
                                     </div>
+
+                                        <input type="hidden" class="form-control" name="idconsignacionVenta" th:value="${consigYventa1.getIdconsignacion()}" >
+
                                     <!--div class="form-group">
-                                        <label >codigo Genererado</label>
-                                        <input type="text" class="form-control" th:field="*{codigogenerado}" style="width: 25%">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('codigogenerado')}" th:errors="*{codigogenerado}"></div>
-                                    </div>
-                                    <div class="form-group">
                                         <label >Fecha Inicio</label>
                                         <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%">
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div>
