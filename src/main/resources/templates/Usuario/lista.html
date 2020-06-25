@@ -62,6 +62,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nombre</th>
+                                        <th>Apellido</th>
                                         <th>Correo</th>
 
 
@@ -76,6 +77,7 @@
                                     <tr th:each="usuario, info : ${listaUsuarios}">
                                         <td th:text="${info.index + 1 + prev*5}"></td>
                                         <td th:text="${usuario.nombre}"></td>
+                                        <td th:text="${usuario.apellido}"></td>
                                         <td th:text="${usuario.correo}"></td>
 
 

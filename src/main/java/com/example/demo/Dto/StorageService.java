@@ -17,7 +17,7 @@ import java.util.HashMap;
 @Component
 public class StorageService {
     //Se detalla donde estaran guardadas las imagenes
-    String fileLocation = "C:/FotosProyecto/";
+    String fileLocation = "/home/ec2-user/FotosProyecto/";
 
     //Este metodo hace la logica de guardar la imagen y lo devuelve como un hashmap
     public HashMap<String,String> store (MultipartFile file){

@@ -50,22 +50,28 @@
                                      role="alert"></div>
                                 <div th:if="${msgcorreo != null}" th:text="${msgcorreo}" class="alert alert-danger"
                                      role="alert"></div>
+                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-danger"
+                                     role="alert"></div>
 
 
                                 <table class="table table-striped table-bordered table-hover">
                                     <tr class="info">
                                         <th>#</th>
-                                        <th>Nombre</th>
+                                        <th>Nombre de la sede</th>
+                                        <th>Gestor acargo de la sede</th>
                                         <th></th>
+
+
                                     </tr>
                                     <tr th:each="sede, info : ${listSedes}">
                                         <td th:text="${info.index + 1}"></td>
-                                        <td th:text="${sede.nombre}"></td>
-
-                                        <td><a class="btn btn-outline-danger right"
-
-                                               th:href="@{'/sede/editar' + '?id=' + ${sede.idsede}}">Editar</a>
+                                        <td th:text="${sede.sede_idsede.nombre}"></td>
+                                        <td th:text="${sede.nombre}+ ' ' + ${sede.apellido}"></td>
+                                        <td><a class="btn btn-outline-danger"
+                                               th:href="@{'/sede/editar' + '?id=' + ${sede.sede_idsede.idsede}}">Editar</a>
                                         </td>
+
+
                                     </tr>
                                 </table>
                                 <div class="row">
