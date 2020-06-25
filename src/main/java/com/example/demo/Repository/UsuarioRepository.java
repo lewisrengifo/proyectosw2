@@ -22,7 +22,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     public Usuario findByCorreo(String correo);
 
-    @Query(value = "SELECT u.* FROM usuario u, rol r where u.nombre like %?1% and u.rol_idrol= r.idrol or u.apellido like %?1% and u.rol_idrol= r.idrol or u.correo like %?1% and u.rol_idrol= r.idrol or u.sede_idsede =(select idsede from sede where nombre like %?1%) and u.rol_idrol=r.idrol or r.nombre like %?1% and u.rol_idrol= r.idrol", countQuery = "SELECT count(*) FROM usuario u, rol r where u.nombre like %?1% and u.rol_idrol= r.idrol or u.apellido like %?1% and u.rol_idrol= r.idrol or u.correo like %?1% and u.rol_idrol= r.idrol or u.sede_idsede =(select idsede from sede where nombre like %?1%) and u.rol_idrol=r.idrol or r.nombre like %?1% and u.rol_idrol= r.idrol", nativeQuery = true)
+    @Query(value = "SELECT u.* FROM usuario u, rol r where u.nombre like %?1% and u.rol_idrol= r.idrol or u.apellido like %?1% and u.rol_idrol= r.idrol or u.correo like %?1% and u.rol_idrol= r.idrol or u.sede_idsede =(select idsede from sede where nombre like %?1%) and u.rol_idrol=r.idrol or r.nombre like %?1% and u.rol_idrol= r.idrol",
+            countQuery = "SELECT count(*) FROM usuario u, rol r where u.nombre like %?1% and u.rol_idrol= r.idrol or u.apellido like %?1% and u.rol_idrol= r.idrol or u.correo like %?1% and u.rol_idrol= r.idrol or u.sede_idsede =(select idsede from sede where nombre like %?1%) " +
+                    "and u.rol_idrol=r.idrol or r.nombre like %?1% and u.rol_idrol= r.idrol", nativeQuery = true)
     Page<Usuario> buscarUsuario(String search, Pageable page);
 
     //Usuario findByIdusuario(int id);

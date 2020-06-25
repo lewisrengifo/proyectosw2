@@ -77,9 +77,11 @@
                 </ul>
 
             </li>
+
             <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
                 <a  th:href="@{'/inventarioSede'}"  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
-            </li>
+
+
             <li sec:authorize="hasAnyAuthority('Administrador')">
                 <a th:href="@{'/usuario'}"  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de Usuarios</a>
             </li>
