@@ -13,6 +13,8 @@ public interface ProductoServiceApi {
     Page<Producto> getAll(Pageable pageable);
     Page<Producto> getEver(String search ,Pageable pageable);
 
+    Page<Inventariosede> getEverInvs(String search, Pageable pageable) ;
+
 
 
 

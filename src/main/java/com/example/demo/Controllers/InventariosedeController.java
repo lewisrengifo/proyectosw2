@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Dto.ProductoServiceApi;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.InventarioSedeRepository;
 import com.example.demo.Repository.InventarioproductoRepository;
@@ -21,6 +22,9 @@ import java.util.stream.IntStream;
 @Controller
 @RequestMapping("/inventarioSede")
 public class InventariosedeController {
+
+    @Autowired
+    ProductoServiceApi productoServiceApi;
 
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
@@ -70,7 +74,7 @@ public class InventariosedeController {
 
         PageRequest pageRequest = PageRequest.of(page, 10);
 
-        Page<Inventariosede> pageProduct = inventarioSedeRepository.obtenerInvDeMiSede(miSede, pageRequest);
+        Page<Inventariosede> pageProduct = productoServiceApi.getEverInvs(miSede, pageRequest);
 
         int totalPage = pageProduct.getTotalPages();
         if (totalPage > 0) {
@@ -86,7 +90,7 @@ public class InventariosedeController {
             return "redirect:/inventarioSede";
         }
 
-        model.addAttribute("listaInventarioPrincipal", pageProduct.getContent());
+        model.addAttribute("listaInventarioSede", pageProduct.getContent());
         model.addAttribute("current", page + 1);
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
