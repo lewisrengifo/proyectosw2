@@ -112,16 +112,11 @@ public class InventarioproductoController {
 
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-
                                            @ModelAttribute("consigYVenta") Consignacionyventa consigYventa,@RequestParam("idconsignacionVenta") int id){
 
         Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
         invPro.setConsignacionyventa(ultimaConsigOventa.get());
 
-
-        //List<Inventarioproducto> listaProductosEnPedido = (List<Inventarioproducto>) session.getAttribute("listaProductosEnPedido");
-
-        //Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(consignacionyventaRepository.ultimoConsiyVentaIngresado());
 
         Date fechatudei = new Date();
 
@@ -154,9 +149,6 @@ public class InventarioproductoController {
             String totalCodigoGenerado = lineac+categoriac+productoc+descriccionC+tamano+comunidadC;
             invPro.setCodigogenerado(totalCodigoGenerado);
         }
-
-
-
 
         inventarioproductoRepository.save(invPro);
         return "redirect:/inventarioPrincipal/sgteProductos/"+ultimaConsigOventa.get().getIdconsignacion();
