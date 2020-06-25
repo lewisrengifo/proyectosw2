@@ -58,7 +58,7 @@ public class InventariosedeController {
         model.addAttribute("listaInventarioSede",inventarioSedeRepository.findAll());
 
 
-        return "/inventario/inventariosede";
+        return "inventario/inventariosede";
     }
 
 
