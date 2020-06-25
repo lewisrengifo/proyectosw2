@@ -34,10 +34,9 @@ public class InventariosedeController {
     InventarioSedeRepository inventarioSedeRepository;
 
 
-
     @GetMapping("/asignarStock")
     public String asignarStock(Model model, @ModelAttribute("sede") Sede sede,
-                               @ModelAttribute("inventariosede") Inventariosede inventariosede){
+                               @ModelAttribute("inventariosede") Inventariosede inventariosede) {
 
         model.addAttribute("inventario", inventarioproductoRepository.findAll());
         model.addAttribute("listaSede", sedeRepository.findAll());
@@ -45,7 +44,7 @@ public class InventariosedeController {
     }
 
     @PostMapping("/agregarStock")
-    public String agregarStock(Model model,@ModelAttribute("inventariosede") Inventariosede inventariosede, @ModelAttribute("sede") Sede sede){
+    public String agregarStock(Model model, @ModelAttribute("inventariosede") Inventariosede inventariosede, @ModelAttribute("sede") Sede sede) {
         Inventariosede invs = new Inventariosede();
 
         invs = inventariosede;
@@ -59,7 +58,7 @@ public class InventariosedeController {
     public String listaInventarioSede(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        String miSede =  usuario.getSede_idsede().getNombre();
+        // String miSede =  usuario.getSede_idsede().getNombre();
 
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
@@ -98,15 +97,13 @@ public class InventariosedeController {
         return "inventario/inventariosede";
 
 
-       
-
     }
 
     @GetMapping(value = {"/listarInvMiSede"})
     public String listaInventarioMiSede(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        String miSede =  usuario.getSede_idsede().getNombre();
+        String miSede = usuario.getSede_idsede().getNombre();
 
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
@@ -145,9 +142,6 @@ public class InventariosedeController {
         return "inventario/inventariomisede";
 
     }
-
-
-
 
 
 }
