@@ -72,18 +72,18 @@
 
                                     <tbody>
                                     <tr th:each="inventarioproducto, info : ${listaProductosStock}">
-                                        <form method="post" th:action="@{'/venta/agregarAlCarrito'}" enctype="multipart/form-data">
+                                        <form method="post" th:action="@{'/venta/agregarAlCarrito'}" enctype="multipart/form-data" th:object="${productoVenta}">
                                             <td th:text="${( info.index +1) + (prev)*10}"></td>
                                             <td th:text="${inventarioproducto.getProducto().getNombreproducto()}"></td>
                                             <td th:text="${inventarioproducto.getProducto().getCodigoproducto()}"></td>
                                             <td th:text="${inventarioproducto.getProducto().getDescripcionproducto()}"></td>
                                             <td th:text="${inventarioproducto.getPreciomosqoy()}"></td>
                                             <td th:text="${inventarioproducto.getProducto().getLinea()}"></td>
-                                            <td><a input type="text" class="form-control" th:field="${inventarioproducto.cantidad}" style="width: 25%"></a>
+                                            <td><a input type="text" class="form-control" th:field="${productoVenta.cantidad}" style="width: 25%"></a>
 
-                                            <td><a input type="text" class="form-control" th:value="${inventarioproducto}" style="width: 25%">Enviar al carrito</a>
+                                            <td><a input type="text" class="form-control" th:value="${inventarioproducto==productoVenta}" style="width: 25%">Enviar al carrito</a>
                                             </td>
-                                            <button type="submit" class=" btn btn-info btn-responsive btninter rigth" th:text="${inventarioproducto.cantidad == '' && (inventarioproducto.cantidad) > 0?  ${msgAr}=='Agregado con exito al carrito': ${msgAr}=='No se puede agregar, ingrese un valor válido'}">Agregar</button>
+                                            <button type="submit" class=" btn btn-info btn-responsive btninter rigth" th:text="${productoVenta.cantidad == '' && (productoVenta.cantidad) > 0?  ${msgAr}=='Agregado con exito al carrito': ${msgAr}=='No se puede agregar, ingrese un valor válido'}">Agregar</button>
                                             </button>
 
                                         </form>

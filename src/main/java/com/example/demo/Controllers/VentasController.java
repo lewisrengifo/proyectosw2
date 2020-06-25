@@ -1,6 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ProductoServiceApi;
+import com.example.demo.Entity.Comunidad;
 import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Entity.Producto;
 import com.example.demo.Entity.ProductoVenta;
@@ -18,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -35,10 +35,12 @@ public class VentasController {
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
 
-    @GetMapping(value = {"", "/"})
-    public String listaProductosStock(Model model, RedirectAttributes attr) {
-        model.addAttribute("listaProductosStock", inventarioproductoRepository.findAll());
-        return"venta/ventaLista";
+    @GetMapping(value = {"", "/listaProductosStock"}) //url en la web
+    public String listaProductosStock(Model model, RedirectAttributes attr, @ModelAttribute ProductoVenta productoVenta) {
+        List<Inventarioproducto> listaStock = inventarioproductoRepository.findAll();
+        model.addAttribute("productoVenta", productoVenta);
+        model.addAttribute("listaProductosStock", listaStock);
+        return "venta/listaProductosStock"; //Dirección del html en el directorio
     }
 
     public ArrayList<ProductoVenta> obtenerCarrito(HttpServletRequest request) {
@@ -55,6 +57,7 @@ public class VentasController {
 
     @PostMapping(value = "/agregar")
     public String agregarAlCarrito(@ModelAttribute Inventarioproducto inventarioproducto, HttpServletRequest request, RedirectAttributes redirectAttrs) {
+
         ArrayList<ProductoVenta> carrito = this.obtenerCarrito(request);
         Inventarioproducto inventarioproducto1 = inventarioproductoRepository.findByProducto(inventarioproducto.getProducto());
         boolean encontrado = false;
@@ -66,7 +69,7 @@ public class VentasController {
             }
         }
         this.guardarCarrito(carrito, request);
-        return "venta/ventaLista";
+        return "venta/listaProductosStock";
     }
 
     @GetMapping(value = {"/venta"})
@@ -98,7 +101,7 @@ public class VentasController {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         } catch (NumberFormatException e) {
-            return "redirect:/venta/ventaLista";
+            return "redirect:/venta";
         }
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
@@ -136,7 +139,7 @@ public class VentasController {
         model.addAttribute("last", totalPage);
         model.addAttribute("searchField", busqueda);
 
-        return "venta/ventaLista";
+        return "venta/listaProductosStock";
     }
 
     @GetMapping("/search")
@@ -180,7 +183,7 @@ public class VentasController {
         model.addAttribute("searchField", busqueda);
 
 
-        return "venta/ventaLista";
+        return "venta/listaProductosStock";
     }
 
 }
