@@ -592,13 +592,13 @@ line-height: 1.428571429;
 	display:none;
 } 
  #page-wrapper {
-position: relative;
+position: absolute;
 top: 59px;
  }
  }
  @media(max-width:480px) {
  #page-wrapper {
-position: relative;
+position: absolute;
 top: 93px;
  }
 .page-header small {

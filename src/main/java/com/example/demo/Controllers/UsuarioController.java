@@ -20,6 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.naming.Binding;
 import javax.validation.Valid;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,24 +44,34 @@ public class UsuarioController {
     SendMailService sendMailService;
 
     @GetMapping(value = {"", "/lista"})
-    public String listarUsuarios(@RequestParam Map<String, Object> params,Model model) {
+    public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField,RedirectAttributes attr) {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return "redirect:/usuario/lista";
         }
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        if(page<0){
+        if (page < 0) {
             return "redirect:/usuario/lista";
         }
 
         Page<Usuario> pageUsuario = usuarioService.getAll(page);
         int totalPage = pageUsuario.getTotalPages();
         long totalItems = pageUsuario.getTotalElements();
-        if(totalPage>0){
+        if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
+            if (page > pages.size() -1){
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/usuario/lista";
+            }
+
+            model.addAttribute("page", pages);
+        }else{
+            attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+            return "redirect:/usuario/lista";
         }
         model.addAttribute("listaUsuarios", pageUsuario.getContent());
         model.addAttribute("totalItems", totalItems);
@@ -67,21 +80,91 @@ public class UsuarioController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
+        String listaactivos = "falsooo";
+        model.addAttribute("listaactivos", listaactivos);
+
+        //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
+        return "Usuario/lista";
+    }
+    @GetMapping(value = {"/listaractivos"})
+    public String listarUsuariosActivos(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField) {
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/usuario/lista";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if (page < 0) {
+            return "redirect:/usuario/lista";
+        }
+
+        Page<Usuario> pageUsuario = usuarioService.getAllActivos(page);
+        int totalPage = pageUsuario.getTotalPages();
+        long totalItems = pageUsuario.getTotalElements();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("page", pages);
+        }
+        model.addAttribute("listaUsuarios", pageUsuario.getContent());
+        model.addAttribute("totalItems", totalItems);
+
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+        String listaactivos = "verdadero";
+        model.addAttribute("listaactivos", listaactivos);
+
+        //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
+        return "Usuario/lista";
+    }
+        @GetMapping(value = {"/listardesactivados"})
+    public String listarUsuariosDesactivados(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField) {
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/usuario/lista";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if (page < 0) {
+            return "redirect:/usuario/lista";
+        }
+
+        Page<Usuario> pageUsuario = usuarioService.getAllDesactivados(page);
+        int totalPage = pageUsuario.getTotalPages();
+        long totalItems = pageUsuario.getTotalElements();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("page", pages);
+        }
+        model.addAttribute("listaUsuarios", pageUsuario.getContent());
+        model.addAttribute("totalItems", totalItems);
+
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+        String listaactivos = "desactivados";
+        model.addAttribute("listaactivos", listaactivos);
+
         //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
         return "Usuario/lista";
     }
 
     @GetMapping("/nuevo")
     public String nuevoUsuario(Model model, @ModelAttribute Usuario usuario) {
-        model.addAttribute("listaroles", rolRepository.findAll());
+        model.addAttribute("listaroles", rolRepository.rolgestorprincipal());
         model.addAttribute("listasedes", sedeRepository.findAll());
         return "Usuario/form";
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol")int rol_idrol) {
+    public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                          RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("listaroles", rolRepository.findAll());
+           model.addAttribute("listaroles", rolRepository.rolgestorprincipal());
             model.addAttribute("listasedes", sedeRepository.findAll());
             return "Usuario/form";
         }
@@ -125,36 +208,41 @@ public class UsuarioController {
                 }
             }
         }
-        try {
-            if (sedeRepository.findByIdrol(usuario.getSede_idrol().getIdrol()) == null) {
 
-            }
-        } catch (NullPointerException e) {
-            redirectAttributes.addFlashAttribute("msgsede", "El usuario no se creó o actualizó debido a que no seleccionó una sede valida");
 
-            return "redirect:/usuario/lista";
-        }
-        if(usuario.getIdusuario()==0){
+        if (usuario.getIdusuario() == 0) {
 
             //aca se envia la contraseña generada..
-            sendMailService.sendMail(usuario.getCorreo(), "saritaatanacioarenas@gmail.com", "Envio de contraseña", "La contraseña es: " + usuario.getContrasena());
-            usuario.setContrasena(encriptar(usuario.getContrasena()));
+            SecureRandom random = new SecureRandom();
+            byte bytes[] = new byte[20];
+            random.nextBytes(bytes);
+            String token = bytes.toString();
+            String direccion = "http://localhost:8080/UnaChiqui/cambiar1/";
+            //String direccion = "http://ec2-54-237-112-13.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
+            URL url = new URL(direccion + token);
+            String mensaje = "¡Hola!<br><br>Para cambiar su contraseña haga click: <a href='" + direccion + token + "'>AQUÍ</a> <br><br>Atte. Área Una Chiqui</b>";
+            ;
 
-        }else{
+            sendMailService.sendMail(usuario.getCorreo(), "saritaatanacioarenas@gmail.com", "Envio de contraseña", mensaje);
+            usuario.setContrasena(encriptar(usuario.getContrasena()));
+            usuario.setToken(token);
+        } else {
+
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuario.getIdusuario());
             usuario.setContrasena(optionalUsuario.get().getContrasena());
         }
+            //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
+            //if (rol_idrol == 1||rol_idrol==2) {
 
-
-        //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
-        if(rol_idrol==1){
-
-            usuario.setSede_idrol(null);
-            usuarioRepository.save(usuario);
-        }else {
-            usuarioRepository.save(usuario);
-        }
-
+               // usuario.setSede_idsede(null);
+                //usuarioRepository.save(usuario);
+            //} else {
+                //Rol rol = new Rol();
+                //rol.setIdrol(2);
+                //usuario.setRol_idrol(rol);
+                usuario.setSede_idsede(null);
+                usuarioRepository.save(usuario);
+           // }
 
         return "redirect:/usuario/lista";
     }
@@ -170,7 +258,7 @@ public class UsuarioController {
             model.addAttribute("usuario", usuario);
             return "Usuario/form";
         } else {
-            return "redirect: /usuario/lista";
+            return "redirect:/usuario/lista";
         }
     }
 
@@ -180,12 +268,58 @@ public class UsuarioController {
         return pww;
     }
 
-    @PostMapping("/buscador")
-    public String buscadorSearch(@RequestParam("searchField") String buscador, Model model) {
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador,RedirectAttributes attr) {
+        if (textbuscador.isEmpty()) {
+            att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-        model.addAttribute("listaUsuarios", usuarioRepository.buscarUsuario(buscador));
-        return "Usuario/lista";
+            return "redirect:/usuario/lista";
+        } else {
 
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/usuario/lista";
+            }
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            if (page < 0) {
+                return "redirect:/usuario/lista";
+            }
+
+
+            Page<Usuario> pageUsuario1 = usuarioService.buscador(textbuscador, page);
+            int totalPage = pageUsuario1.getTotalPages();
+            long totalItems = pageUsuario1.getTotalElements();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() -1){
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/usuario/lista";
+                }
+
+
+                model.addAttribute("page", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/usuario/lista";
+            }
+            model.addAttribute("listaUsuarios", pageUsuario1.getContent());
+            model.addAttribute("totalItems", totalItems);
+
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+            model.addAttribute("searchField", textbuscador);
+            String listaactivos = "falsooo";
+            model.addAttribute("listaactivos", listaactivos);
+
+            //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
+            return "Usuario/lista";
+        }
 
     }
     /*

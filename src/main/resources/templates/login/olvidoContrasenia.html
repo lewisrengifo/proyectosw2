@@ -11,13 +11,16 @@
 </head>
 <body >
     <div class="wrap-login100">
-        <form class="login100-form" th:action="@{/recuperarContrasenia}" method="post">
+        <form class="login100-form" th:action="@{'/recuperarContrasenia'}" method="post">
             <span class="login100-form-title p-b-43">
                             Mosqoy
             </span>
             <br>
+            <div align="center" th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+            <div align="center" th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger" role="alert"></div>
 
                 <div class="container">
+                    <label>Ingrese correo electrónico:</label>
                     <input type="text" class="form-control" placeholder="correo" aria-label="correo" aria-describedby="addon-wrapping" name="correo">
                 </div>
             <br>

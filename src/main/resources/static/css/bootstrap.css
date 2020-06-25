@@ -79,4 +79,27 @@
     cursor: pointer;
     padding: 0px 10px 0px 0px;
 }
+ul.desProductos li a:hover{color: red;}
+
+.ventana{
+    background-color: #0f9d58;
+    width: 30%;
+    color: rgba(255,255,255,1);
+    font-family: Arial;
+    font-size: 18px;
+    text-align: center;
+    min-height: 200px;
+    border-radius: 22px;
+    position: relative;
+    left: 30%;
+    top: 20%;
+    display: none;
+
+}
+#cerrar{
+    color: black;
+    position: absolute;
+    right: 10px;
+    top: 1px;
+}
 
