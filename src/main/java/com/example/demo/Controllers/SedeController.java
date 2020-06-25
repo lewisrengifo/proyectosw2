@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Dto.UsuarioSedeDto;
 import com.example.demo.Entity.Sede;
 import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.RolRepository;
@@ -84,7 +85,8 @@ public class SedeController {
     }
 
     @PostMapping("/guardar")
-    public String guardarSede(@ModelAttribute("sede") @Valid Sede sede , BindingResult bindingResult, RedirectAttributes redirectAttributes, @ModelAttribute("usuariodelasede") Usuario usuariodelasede, Model model) {
+    public String guardarSede(@ModelAttribute("sede") @Valid Sede sede , BindingResult bindingResult, RedirectAttributes redirectAttributes, @ModelAttribute("usuariodelasede") Usuario usuariodelasede, Model model,
+    @ModelAttribute("idsede") int idsede, @ModelAttribute("usuario") Usuario usuario) {
         if (bindingResult.hasErrors()) {
             return "sede/form";
 
@@ -95,9 +97,17 @@ public class SedeController {
                 return "redirect:/sede/agregargestor";
             } else {
                 redirectAttributes.addFlashAttribute("msg", "La sede se actualizó correctamente");
-                model.addAttribute(usuariodelasede);
+                //model.addAttribute(usuariodelasede);
+                idsede = sede.getIdsede();
+                UsuarioSedeDto usuariodelasededb =usuarioRepository.usuariodelasedeint(sede.getIdsede());
+                usuarioRepository.actualizarGestorSede(usuariodelasededb.getUsuariodelasede());
+                model.addAttribute("sede", sede);
+                model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
+               // model.addAttribute("usuario");
+                //usuarioRepository.actualizarSededelGestor(usuariodelasededb.getUsuariodelasede());
                 sedeRepository.save(sede);
-                return "/sede/formGestor";
+
+                return "/sede/formGestorNew";
             }
 
         }
@@ -110,8 +120,8 @@ public class SedeController {
         if (optionalSede.isPresent()) {
             sede = optionalSede.get();
             model.addAttribute(sede);
-            usuariodelasede=usuarioRepository.usuariodelasede(id);
-            model.addAttribute(usuariodelasede);
+            //usuariodelasede=usuarioRepository.usuariodelasede(id);
+            //model.addAttribute(usuariodelasede);
             return "sede/form";
         } else {
             return "redirect:/sede/lista";
@@ -119,9 +129,11 @@ public class SedeController {
 
     }
     @GetMapping("/agregargestor")
-    public String agregarGestor(Model model, @ModelAttribute("usuario") Usuario usuario){
+    public String agregarGestor(Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("sede") Sede sede){
         //model.addAttribute("listaroles", rolRepository.rolgestorsede());
         model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
+        //int idsederec = idsede;
+        model.addAttribute("sede", sede);
         return "/sede/formGestorNew";
     }
     @PostMapping("/guardarGestor")
@@ -269,10 +281,29 @@ public class SedeController {
         return pww;
     }
     @GetMapping("/guardarGestorNew")
-    public String guardarGestorNew(@RequestParam("usuario") int idsuario){
-        int idsede = sedeRepository.findTopByOrderByIdsedeDesc().getIdsede();
-        int iduser = idsuario;
-        usuarioRepository.actualizarRolSede(idsede, 3, iduser);
+    public String guardarGestorNew(@RequestParam("usuario") int idsuario, @RequestParam("idsede") int idsede){
+            int idsederec = idsede;
+            if(idsederec==0){
+                int idsededb = sedeRepository.findTopByOrderByIdsedeDesc().getIdsede();
+                int iduser = idsuario;
+                usuarioRepository.actualizarRolSede(idsededb, 3, iduser);
+            }else{
+                int iduser = idsuario;
+                usuarioRepository.actualizarRolSede(idsederec, 3, iduser);
+            }
+
+
+            //usuarioRepository.actualizarRolSede(idsuario, 3, idsede);
+
+
         return "redirect:/sede/lista";
+    }
+    @GetMapping("/editarGestorNew")
+    public String editarGestorNew(@RequestParam("usuario") int idsuario){
+        return "";
+    }
+    @ModelAttribute
+    public void provideIdsede(Model model){
+        model.addAttribute("idsede", new Integer(1));
     }
 }
