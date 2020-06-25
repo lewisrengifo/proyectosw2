@@ -32,6 +32,12 @@ public class ProductoService implements ProductoServiceApi {
         return productoRepository.obtenerFiltroProducto(search, pageable);
     }
 
+    @Override
+        public Page<Inventariosede> getEverInvs(String search, Pageable pageable) {
+            return inventarioSedeRepository.obtenerInvDeMiSede(search, pageable);
+
+    }
+
 
 
 
