@@ -68,7 +68,7 @@ public class InventariosedeController {
             return "redirect:/inventarioSede";
         }
 
-        PageRequest pageRequest = PageRequest.of(page, 10);
+        PageRequest pageRequest = PageRequest.of(page, 5);
 
         Page<Inventariosede> pageProduct = inventarioSedeRepository.obtenerInvDeMiSede(miSede, pageRequest);
 
