@@ -37,12 +37,12 @@ public class Inventarioproducto implements Serializable {
     @Digits(integer = 6, fraction = 2)
     @Min(value = 1, message = "Solo se permiten números positivos")
     @Column(name = "costomosqoy")
-    private BigDecimal preciomosqoy;
+    private Double preciomosqoy;
 
     @Digits(integer = 6, fraction = 2)
     @Min(value = 1, message = "Solo se permiten números positivos")
     @Column(name = "costotejedor")
-    private BigDecimal preciotejedor;
+    private Double preciotejedor;
 
     @Column(nullable = false)
     @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo se aceptan letras")
@@ -61,7 +61,7 @@ public class Inventarioproducto implements Serializable {
 
     }
 
-   public Inventarioproducto(Producto producto, Categoria categoria, Tamano tamano, String color, BigDecimal preciomosqoy) {
+   public Inventarioproducto(Producto producto, Categoria categoria, Tamano tamano, String color, Double preciomosqoy) {
         this.producto= producto;
         this.categoria = categoria;
         this.tamano = tamano;
@@ -117,13 +117,21 @@ public class Inventarioproducto implements Serializable {
         this.color = color;
     }
 
-    public BigDecimal getPreciomosqoy() {return preciomosqoy;}
+    public Double getPreciomosqoy() {
+        return preciomosqoy;
+    }
 
-    public void setPreciomosqoy(BigDecimal preciomosqoy) {this.preciomosqoy = preciomosqoy;}
+    public void setPreciomosqoy(Double preciomosqoy) {
+        this.preciomosqoy = preciomosqoy;
+    }
 
-    public BigDecimal getPreciotejedor() {return preciotejedor;}
+    public Double getPreciotejedor() {
+        return preciotejedor;
+    }
 
-    public void setPreciotejedor(BigDecimal preciotejedor) {this.preciotejedor = preciotejedor;}
+    public void setPreciotejedor(Double preciotejedor) {
+        this.preciotejedor = preciotejedor;
+    }
 
     public String getFacilitador() {
         return facilitador;

@@ -6,11 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.Dto.ProductoServiceApi;
-import com.example.demo.Entity.Inventarioproducto;
-import com.example.demo.Entity.Producto;
-import com.example.demo.Entity.ProductoVenta;
+
+import com.example.demo.Entity.*;
 import com.example.demo.Repository.InventarioproductoRepository;
 import com.example.demo.Repository.ProductoRepository;
+import com.example.demo.Repository.ProductoVentaRepository;
+import com.example.demo.Repository.VentasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,13 +35,19 @@ public class VentasController {
     ProductoServiceApi productoServiceApi;
 
     @Autowired
+    VentasRepository ventasRepository;
+
+    @Autowired
     ProductoRepository productoRepository;
+
+    @Autowired
+    ProductoVentaRepository productoVentaRepository;
 
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
 
     @GetMapping(value = {"", "/listaProductosStock"}) //url en la web
-    public String listaProductosStock(Model model, RedirectAttributes attr, @ModelAttribute ProductoVenta productoVenta) {
+    public String listaProductosStock(Model model, RedirectAttributes attr, @ModelAttribute ProductoVenta productoVenta, HttpServletRequest request) {
         List<Inventarioproducto> listaStock = inventarioproductoRepository.findAll();
         model.addAttribute("productoVenta", productoVenta);
         model.addAttribute("listaProductosStock", listaStock);
@@ -60,31 +67,69 @@ public class VentasController {
     }
 
     @PostMapping(value = "/agregar")
-    public String agregarAlCarrito(@ModelAttribute Inventarioproducto inventarioproducto, HttpServletRequest request, RedirectAttributes redirectAttrs) {
+    public String agregarAlCarrito(@ModelAttribute Inventarioproducto inventarioproducto, HttpServletRequest request,
+                                   RedirectAttributes redirectAttrs, @ModelAttribute ProductoVenta productoVenta) {
 
         ArrayList<ProductoVenta> carrito = this.obtenerCarrito(request);
-        Inventarioproducto inventarioproducto1 = inventarioproductoRepository.findByProducto(inventarioproducto.getProducto());
         boolean encontrado = false;
         for (ProductoVenta productosCarrito : carrito) {
-            if (productosCarrito.getCodigogenerado() == inventarioproducto1.getCodigogenerado()){
-                productosCarrito.aumentarCantidad();
-                encontrado = true;
+            if (productosCarrito.getCodigogenerado() == inventarioproducto.getCodigogenerado()){
+                productosCarrito.aumentarCantidad(productoVenta.getCantidad());
+                encontrado  = true;
                 break;
             }
         }
+
+        if (!encontrado) {
+            carrito.add(new ProductoVenta(inventarioproducto.getProducto(), inventarioproducto.getCategoria(), inventarioproducto.getTamano(), inventarioproducto.getColor(), inventarioproducto.getPreciomosqoy(),productoVenta.getCantidad()));
+        }
         this.guardarCarrito(carrito, request);
-        return "venta/listaProductosStock";
+        return "redirect:/venta/";
     }
 
-    @GetMapping(value = {"/venta"})
-        public String vender(Model model, @ModelAttribute("inventarioproducto") Inventarioproducto inventarioproducto, HttpServletRequest request) {
-        model.addAttribute("inventarioproducto", new Producto());
-        float total = 0;
-        ArrayList<ProductoVenta> carrito = this.obtenerCarrito(request);
-        for (ProductoVenta p: carrito) total += p.getTotal();
+    @GetMapping(value = {"/verListaCarrito"})
+        public String verCarrito(Model model, @ModelAttribute("inventarioproducto") Inventarioproducto inventarioproducto, HttpServletRequest request) {
+        model.addAttribute("inventarioproducto", new Inventarioproducto());
+        double total = 0;
+        ArrayList<ProductoVenta> carritoLista = this.obtenerCarrito(request);
+        for (ProductoVenta pd: carritoLista) total += pd.getTotal();
         model.addAttribute("total", total);
-        return "venta/venta";
+        model.addAttribute("carritoLista", carritoLista);
+        return "venta/verCarrito";
         }
+
+    private void limpiarCarrito(HttpServletRequest request) {
+        this.guardarCarrito(new ArrayList<>(), request);
+    }
+
+    @PostMapping(value = "/terminar")
+    public String terminarVenta(HttpServletRequest request, RedirectAttributes redirectAttrs) {
+        ArrayList<ProductoVenta> carrito = this.obtenerCarrito(request);
+        if (carrito == null || carrito.size() <= 0) {
+            return "redirect:/venta/";
+        }
+        Ventas ventas = ventasRepository.save(new Ventas());
+        ////////////////////////////////POR REVISAR///////////////////////////////
+        for (ProductoVenta productoParaVender : carrito) {
+            // Obtener el producto fresco desde la base de datos
+            //Inventarioproducto pv = inventarioproductoRepository.findById(productoParaVender.getId()).orElse(null);
+            //if (pv == null) continue; // Si es nulo o no existe, ignoramos el siguiente código con continue
+            // Le restamos existencia
+            //p.restarExistencia(productoParaVender.getCantidad());
+            // Lo guardamos con la existencia ya restada
+            //inventarioproductoRepository.save(pv);
+            // Creamos un nuevo producto que será el que se guarda junto con la venta
+            //ProductoVenta productoVenta = new ProductoVenta(productoParaVender.getCantidad(), productoParaVender.getPrecio(), productoParaVender.getNombre(), productoParaVender.getCodigo(), v);
+            // Y lo guardamos
+            //productoVentaRepository.save(productoVenta);
+        }
+        ////////////////////////////////POR REVISAR///////////////////////////////
+        this.limpiarCarrito(request);
+        redirectAttrs
+                .addFlashAttribute("mensaje", "Venta realizada correctamente")
+                .addFlashAttribute("clase", "success");
+        return "redirect:/venta/verCarrito";
+    }
 
     @PostMapping("/search")
     public String buscarProducto(String busca, @RequestParam Map<String, Object> params, Model model, RedirectAttributes attr) {

@@ -2,6 +2,7 @@ package com.example.demo.Entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "ventas")
@@ -37,9 +38,20 @@ public class Ventas {
     @JoinColumn(name = "tienda_idtienda")
     private Tienda tienda;
 
-    @ManyToOne
-    @JoinColumn(name = "iventariosede_idiventariosede")
-    private Inventariosede inventariosede;
+    @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
+    private Set<ProductoVenta> productoVenta;
+    //@ManyToOne
+    //@JoinColumn(name = "iventariosede_idiventariosede")
+    //private Inventariosede inventariosede;
+
+    public Set<ProductoVenta> getProductoVenta() {
+        return productoVenta;
+    }
+
+    public void setProductoVenta(Set<ProductoVenta> productoVenta) {
+        this.productoVenta = productoVenta;
+    }
+
 
     public int getIdventas() {
         return idventas;
@@ -113,11 +125,9 @@ public class Ventas {
         this.tienda = tienda;
     }
 
-    public Inventariosede getInventariosede() {
-        return inventariosede;
-    }
+    //public Inventariosede getInventariosede() {
+      //  return inventariosede;
+    //}
 
-    public void setInventariosede(Inventariosede inventariosede) {
-        this.inventariosede = inventariosede;
-    }
+    //public void setInventariosede(Inventariosede inventariosede) { this.inventariosede = inventariosede;    }
 }
