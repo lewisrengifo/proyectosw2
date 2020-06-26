@@ -61,7 +61,7 @@ public class Inventarioproducto implements Serializable {
 
     }
 
-   public Inventarioproducto(Producto producto, Categoria categoria, Tamano tamano, String color, Double preciomosqoy) {
+   public Inventarioproducto(Producto producto, Categoria categoria, Tamano tamano, String color, BigDecimal preciomosqoy) {
         this.producto= producto;
         this.categoria = categoria;
         this.tamano = tamano;

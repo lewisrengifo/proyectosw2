@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import java.math.BigDecimal;
+
 public class ProductoVenta extends Inventarioproducto {
 
     @Override
@@ -13,7 +15,7 @@ public class ProductoVenta extends Inventarioproducto {
 
     }
 
-    public ProductoVenta(Producto producto, Categoria categoria, Tamano tamano, String color, Double preciomosqoy) {
+    public ProductoVenta(Producto producto, Categoria categoria, Tamano tamano, String color, BigDecimal preciomosqoy) {
        super(producto, categoria, tamano,color, preciomosqoy);
        this.cantidad = cantidad;
     }
