@@ -1,6 +1,5 @@
 package com.example.demo.Entity;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import javax.persistence.*;
@@ -9,11 +8,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "inventarioproducto")
-
-
+@Table(name="inventarioproducto")
 public class Inventarioproducto implements Serializable {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,6 +56,18 @@ public class Inventarioproducto implements Serializable {
     private Consignacionyventa consignacionyventa;
 
     private Date fechainicio;
+
+    public Inventarioproducto(){
+
+    }
+
+   public Inventarioproducto(Producto producto, Categoria categoria, Tamano tamano, String color, Double preciomosqoy) {
+        this.producto= producto;
+        this.categoria = categoria;
+        this.tamano = tamano;
+        this.color = color;
+       this.preciomosqoy = preciomosqoy;
+   }
 
     public int getIdinventario() {
         return idinventario;
