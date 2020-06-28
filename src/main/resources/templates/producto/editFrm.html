@@ -15,69 +15,62 @@
     <div id="page-inner">
 
         <div class="row">
-            <div  class="col-md-8">
+            <div class="col-md-8">
                 <div class="card">
                     <div class="container padding ">
 
-                        <div th:if="${msgFoto != null}" th:text="${msgFoto}" class="alert alert-danger"
-                             role="alert"></div>
-                        <form method="post" th:action="@{'/producto/guardar'}" enctype="multipart/form-data"  th:object="${producto}">
+                        <form method="post" th:action="@{'/producto/guardar'}" enctype="multipart/form-data"
+                              th:object="${producto}">
                             <input type="hidden" th:field="*{idproducto}"/>
-
+                            <div th:if="${msgFoto != null}" th:text="${msgFoto}" class="alert alert-danger"
+                                 role="alert"></div>
                             <div class="form-group">
                                 <label for="nombreproducto">Nombre producto</label>
                                 <input type="text" class="form-control" th:field="*{nombreproducto}" style="width: 25%">
-                                <div class="text-danger" th:if="${#fields.hasErrors('nombreproducto')}" th:errors="*{nombreproducto}"></div>
+                                <div class="text-danger" th:if="${#fields.hasErrors('nombreproducto')}"
+                                     th:errors="*{nombreproducto}"></div>
                             </div>
                             <div class="form-group">
                                 <label for="codigoproducto">Código Producto</label>
                                 <input type="text" class="form-control" th:field="*{codigoproducto}" style="width: 25%">
-                                <div class="text-danger" th:if="${#fields.hasErrors('codigoproducto')}" th:errors="*{codigoproducto}"></div>
+                                <div class="text-danger" th:if="${#fields.hasErrors('codigoproducto')}"
+                                     th:errors="*{codigoproducto}"></div>
                             </div>
                             <div class="form-group">
                                 <label for="descripcionproducto">Descripción Producto</label>
-                                <input type="text" class="form-control" th:field="*{descripcionproducto}" style="width: 25%">
-                                <div class="text-danger" th:if="${#fields.hasErrors('descripcionproducto')}" th:errors="*{descripcionproducto}"></div>
+                                <input type="text" class="form-control" th:field="*{descripcionproducto}"
+                                       style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('descripcionproducto')}"
+                                     th:errors="*{descripcionproducto}"></div>
                             </div>
                             <div class="form-group">
                                 <label for="codigodescripcionproducto">Código descripción producto</label>
-                                <input type="text" class="form-control" th:field="*{codigodescripcionproducto}" style="width: 25%">
-                                <div class="text-danger" th:if="${#fields.hasErrors('codigodescripcionproducto')}" th:errors="*{codigodescripcionproducto}"></div>
-
+                                <input type="text" class="form-control" th:field="*{codigodescripcionproducto}"
+                                       style="width: 25%">
+                                <div class="text-danger" th:if="${#fields.hasErrors('codigodescripcionproducto')}"
+                                     th:errors="*{codigodescripcionproducto}"></div>
                             </div>
-
-
                             <div class="form-group" th:if="${producto.nombreproducto== null}">
                                 <label for="linea">Línea</label>
                                 <select class="form-control" name="linea" id="linea" style="width: 40%">
-
                                     <option th:each="li : ${listaLinea}" th:value="${li.idlinea}"
-                                            th:text="${li.nombrelinea}" >
-
+                                            th:text="${li.nombrelinea}">
                                     </option>
                                 </select>
                             </div>
                             <div class="form-group" th:unless="${producto.nombreproducto== null}">
                                 <label for="linea">Línea</label>
                                 <select class="form-control" name="linea" id="linea" style="width: 40%">
-
                                     <option th:each="li : ${listaLinea}" th:value="${li.idlinea}"
-                                            th:text="${li.nombrelinea}"  th:selected="${producto.linea.getIdlinea() == li.idlinea}" >
-
+                                            th:text="${li.nombrelinea}"
+                                            th:selected="${producto.linea.getIdlinea() == li.idlinea}">
                                     </option>
                                 </select>
                             </div>
-
-
-                            <div th:if="${producto.foto== null}" >
+                            <div>
                                 <label for="archivo">Foto del producto</label>
-                                <input  class="form-control" type = "file" name ="archivo" id="archivo" style="width: 40%">
+                                <input class="form-control" type="file" name="archivo" id="archivo" style="width: 40%">
                             </div>
-                            <div th:unless="${producto.foto== null}">
-                                <label for="archivo">Foto del producto Editar</label>
-                                <input  class="form-control" type = "file" name ="archivo" id="archivo" style="width: 40%">
-                            </div>
-
 
                             <a th:href="@{'/producto'}" class=" btn btn-info btn-responsive btninter">Cancelar</a>
                             <button type="submit" class=" btn btn-info btn-responsive btninter rigth"
@@ -93,7 +86,6 @@
 
 
 <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
-
 
 
 </body>
