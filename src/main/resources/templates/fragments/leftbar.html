@@ -79,10 +79,10 @@
                 <a th:href="@{'/sede'}"  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Gestion de Sedes</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')">
-                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> descripciton de productos <span class="fa arrow"></span></a>
+                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Descrición de Productos <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level desProductos">
                     <li>
-                        <a th:href="@{/categoria}" >Categoria</a>
+                        <a th:href="@{/categoria}" >Categoría</a>
                     </li>
                     <li>
                         <a th:href="@{/linea}">Línea</a>
