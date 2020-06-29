@@ -16,6 +16,18 @@ public class Tienda {
     @Size(max = 45,message = "el texto no puede tener más de 45 caracteres")
     private String nombre;
 
+    @ManyToOne
+    @JoinColumn(name = "sede_idrol")
+    private Sede sede;
+
+    public Sede getSede() {
+        return sede;
+    }
+
+    public void setSede(Sede sede) {
+        this.sede = sede;
+    }
+
     public int getIdtienda() {
         return idtienda;
     }

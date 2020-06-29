@@ -258,34 +258,7 @@ public class ProductoController {
         return "producto/listar";
     }
 
-    @PostMapping("/uploadImage")
-    public String uploadImage(@RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes att) {
-        String returnValue = "redirect:/producto";
-        Path pathFinal = null;
-        // File  f = null;
-        Producto producto = new Producto();
-        producto.setFoto(imageFile.getOriginalFilename());
 
-
-        try {
-            pathFinal = productoServiceApi.saveImage(imageFile, producto);
-            byte[] bytes = imageFile.getBytes();
-            Files.write(pathFinal, bytes);
-            // f = new File(pathFinal.toString());
-            // BufferedImage image = ImageIO.read(f);
-            // int height = image.getHeight();
-            // int width = image.getWidth();
-
-
-        } catch (Exception e) {
-
-            att.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
-            return "producto/editFrm";
-        }
-
-
-        return returnValue;
-    }
     @GetMapping("/foto")
     public String mostrarFoto(@RequestParam("id")int id, Model model,@ModelAttribute("producto") Producto producto) {
 

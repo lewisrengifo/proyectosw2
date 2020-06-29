@@ -1,12 +1,14 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Entity.Tienda;
+import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.TiendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
@@ -31,8 +33,10 @@ public class TiendaController {
 
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute("tienda") Tienda tienda,
-                          Model model){
+                          Model model ,  HttpSession session ){
 
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        tienda.setSede(usuario.getSede_idsede());
         tiendaRepository.save(tienda);
 
         return "redirect:/categoria/lista";

@@ -18,4 +18,9 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
     @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)",
             countQuery = "SELECT count(*) FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1);", nativeQuery = true)
     Page<Inventariosede> obtenerInvDeMiSede(String sesionSede, Pageable pageable);
+
+    @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)"
+         , nativeQuery = true)
+    List<Inventariosede> obtenerInvDeMiSedeNormal(String sesionSede);
+
 }
