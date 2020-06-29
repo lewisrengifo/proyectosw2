@@ -97,8 +97,7 @@
                                     <!-- ELEGIR LA CANTIDAD -->
                                     <div>
                                         <label >Cantidad</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{stock}">
-
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{cantidad}" >
                                     </div>
                                     <!-- FIN -->
 
@@ -108,8 +107,6 @@
                                         <input type="text" class="form-control" th:field="*{fechallegada}" style="width: 25%" placeholder="formato:dia/mes/año">
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechallegada')}" th:errors="*{fechallegada}"></div>
                                     </div-->
-
-
 
 
                                     <a th:href="@{'/venta'}" class="btn btn-danger">Cancelar</a>
