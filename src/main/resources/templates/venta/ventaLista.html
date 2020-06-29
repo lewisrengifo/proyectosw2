@@ -78,7 +78,7 @@
                                             <img  width="190px" height="160px"   th:src="@{|FotosProyecto/${producto.foto}|}">
                                             <a href="javascript:cerrar()" id="cerrar">x</a>
                                         </div-->
-                                        <td th:text="${( info.index +1) + (prev)*10}"></td>
+                                        <td th:text="${( info.index +1) }"></td>
                                         <td th:text="${venta.rucdni}"></td>
                                         <td th:text="${venta.nombrecomprador}"></td>
                                         <td th:text="${venta.lugarventa}"></td>
@@ -152,17 +152,20 @@
                                                 </div>
                                             </div>
                                         </th-->
+                                        <!--
                                         <td sec:authorize="hasAnyAuthority('Gestor principal')"><a
-                                                th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
+                                                th:href="@{'/venta/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
                                         </td>
                                         <td sec:authorize="hasAnyAuthority('Gestor principal')"><a
                                                 th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
                                         </td>
+                                        -->
 
                                     </tr>
 
                                     </tbody>
                                 </table>
+                                <!--
 
                                 <div class="row">
                                     <div class="col-md-4"></div>
@@ -197,6 +200,7 @@
 
                                     </div>
                                 </div>
+                                -->
                             </div>
                         </div>
                     </div>
