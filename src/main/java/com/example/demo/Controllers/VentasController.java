@@ -48,7 +48,7 @@ public class VentasController {
     @GetMapping(value={"/listaVentas",""})
     public String listarVentas(Model model, HttpSession session){
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-            model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));
+        model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));
         return "venta/listaventa";
     }
 
@@ -70,6 +70,6 @@ public class VentasController {
     public String ingresarVentas(Model model,@ModelAttribute("ventas")Ventas ventas){
 
         ventaRepository.save(ventas);
-    return "redirect:/venta";
+        return "redirect:/venta";
     }
 }

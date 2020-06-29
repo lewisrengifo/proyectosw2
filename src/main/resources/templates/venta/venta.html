@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Venta')">
+</head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
+
+
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                STOCK PARA SEDE
+            </h1>
+        </div>
+
+        <!-- /.   -->
+        <div id="page-inner">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-content">
+                            <div class="table-responsive">
+
+
+
+                                <h2 >Complete los campos</h2>
+                                <br>
+                                <form method="post" th:action="@{'/inventarioSede/agregarStock'}" th:object="${inventariosede}">
+                                    <input type="hidden" th:field="*{idiventariosede}"/>
+                                    <!--<div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                                         role="alert" style="width: 40%">
+                                    </div>-->
+                                    <br>
+
+                                    <!-- RUC o DNI opcional -->
+                                    <div>
+                                        <label for="rucdni">RUC o DNI (opcional)</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{rucdni}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('rucdni')}"
+                                             th:errors="*{rucdni}"></div>
+                                    </div>
+                                    <!-- FIN -->
+                                    <!-- Nombre ( a quién se le vendió) -->
+                                    <div>
+                                        <label for="nombrecomprador">Nombre</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{nombrecomprador}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('nombrecomprador')}"
+                                             th:errors="*{nombrecomprador}"></div>
+                                    </div>
+                                    <!-- FIN -->
+                                    <!-- Número de documento físico (factura/boleta/recibo/transacción) -->
+                                    <div>
+                                        <label for="numerodocumento">Número de documento</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{numerodocumento}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('numerodocumento')}"
+                                             th:errors="*{numerodocumento}"></div>
+                                    </div>
+                                    <!-- FIN -->
+                                    <!-- Lugar de venta -->
+                                    <div>
+                                        <label for="lugarventa">Lugar</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{lugarventa}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('lugarventa')}"
+                                             th:errors="*{lugarventa}"></div>
+                                    </div>
+                                    <!-- FIN -->
+                                    <!-- ELEGIR UN PRODUCTO (código)-->
+                                    <div class="form-group" >
+                                        <label for="producto">Producto/Cantidad Disponible - Precio de venta</label>
+                                        <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                            <option th:each=" pro : ${inventario}"
+                                                    th:value="${pro.idinventario}"
+                                                    th:text="${pro.producto">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!- FIN -->
+                                    <!-- PRECIO FINAL DE VENTA -->
+                                    <!--<div>
+                                        <label for="fechaventa">fecha de venta</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{fechaventa}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechaventa')}"
+                                             th:errors="*{fechaventa}"></div>
+
+                                    </div>-->
+                                    <!-- FIN -->
+                                    <!-- FECHA DE VENTA -->
+                                    <div>
+                                        <label for="fechaventa">fecha de venta</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{fechaventa}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechaventa')}"
+                                             th:errors="*{fechaventa}"></div>
+
+                                    </div>
+                                    <!-- FIN -->
+
+                                    <!-- ELEGIR LA CANTIDAD -->
+                                    <div>
+                                        <label for="stock">Cantidad</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{stock}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('stock')}"
+                                             th:errors="*{stock}"></div>
+
+                                    </div>
+                                    <!-- FIN -->
+
+                                    <!--Fecha de envio-->
+                                    <div class="form-group"  id ="artesano_compra">
+                                        <label >Fecha de envío</label>
+                                        <input type="text" class="form-control" th:field="*{fechallegada}" style="width: 25%" placeholder="formato:dia/mes/año">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechallegada')}" th:errors="*{fechallegada}"></div>
+                                    </div>
+
+
+
+
+                                    <a th:href="@{'/sede/lista'}" class="btn btn-danger">Cancelar</a>
+                                    <button    type="submit" class="btn btn-primary">+ producto</button>
+                                    <a th:href="@{'/inventarioSede/confirmarStock'}" class="btn btn-info">Enviar Stock</a>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+
+</html>
