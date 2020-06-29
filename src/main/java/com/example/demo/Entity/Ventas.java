@@ -43,6 +43,18 @@ public class Ventas {
 
     private int cantidad;
 
+    private String metodopago;
+
+    public String getMetodopago() {
+        return metodopago;
+    }
+
+    public void setMetodopago(String metodopago) {
+        this.metodopago = metodopago;
+    }
+
+
+
     public int getCantidad() {
         return cantidad;
     }

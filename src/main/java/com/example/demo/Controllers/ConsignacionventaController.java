@@ -2,12 +2,15 @@ package com.example.demo.Controllers;
 
 import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Inventarioproducto;
+import com.example.demo.Entity.Inventariosede;
+import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -18,7 +21,8 @@ public class ConsignacionventaController {
 
     @Autowired
     ConsignacionyventaRepository consignacionyventaRepository;
-
+    @Autowired
+    InventarioSedeRepository inventarioSedeRepository;
     @Autowired
     LineaRepository lineaRepository;
     @Autowired
@@ -51,7 +55,7 @@ public class ConsignacionventaController {
 
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model,
-                                           @ModelAttribute("inventarioProducto") Inventarioproducto invPro,@RequestParam("idconsignacionVenta") int id ){
+                                           @ModelAttribute("inventarioProducto") Inventarioproducto invPro, @RequestParam("idconsignacionVenta") int id, HttpSession session){
 
         Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
         invPro.setConsignacionyventa(ultimaConsigOventa.get());
@@ -86,8 +90,17 @@ public class ConsignacionventaController {
             String totalCodigoGenerado = lineac+categoriac+productoc+descriccionC+tamano+comunidadC;
             invPro.setCodigogenerado(totalCodigoGenerado);
         }
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
 
-        inventarioproductoRepository.save(invPro);
+        Inventarioproducto invProductoUltimo = inventarioproductoRepository.save(invPro);
+
+        Inventariosede inventariosede= new Inventariosede();
+        inventariosede.setStock(invProductoUltimo.getCantidad());
+        inventariosede.setFechallegada(fechatudei);
+        inventariosede.setInventarioproductoidinventario(invProductoUltimo);
+        inventariosede.setEstado("entregado");
+        inventariosede.setSede(usuariologueado.getSede_idsede());
+        inventarioSedeRepository.save(inventariosede);
         return "redirect:/ConsignacionVenta";
 
     }

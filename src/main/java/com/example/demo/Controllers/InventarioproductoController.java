@@ -1,8 +1,6 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Entity.Artesano;
-import com.example.demo.Entity.Consignacionyventa;
-import com.example.demo.Entity.Inventarioproducto;
+import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
 import com.example.demo.service.InventarioPrincipalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,8 @@ public class InventarioproductoController {
     InventarioproductoRepository inventarioproductoRepository;
     @Autowired
     InventarioPrincipalService inventarioPrincipalService;
+    @Autowired
+    InventarioSedeRepository inventarioSedeRepository;
 
 
 
@@ -87,6 +87,14 @@ public class InventarioproductoController {
         return "inventario/consigYventa";
     }
 
+    @GetMapping("/stock")
+    public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+        model.addAttribute("stockProductos",inventarioSedeRepository.
+                listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
+        return "inventario/stockProductoInvPrincipal";
+    }
+
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
@@ -112,7 +120,7 @@ public class InventarioproductoController {
 
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa,@RequestParam("idconsignacionVenta") int id){
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa,@RequestParam("idconsignacionVenta") int id,HttpSession session){
 
         Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
         invPro.setConsignacionyventa(ultimaConsigOventa.get());
@@ -149,8 +157,18 @@ public class InventarioproductoController {
             String totalCodigoGenerado = lineac+categoriac+productoc+descriccionC+tamano+comunidadC;
             invPro.setCodigogenerado(totalCodigoGenerado);
         }
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
 
-        inventarioproductoRepository.save(invPro);
+        Inventarioproducto invProductoUltimo = inventarioproductoRepository.save(invPro);
+
+        Inventariosede inventariosede= new Inventariosede();
+        inventariosede.setStock(invProductoUltimo.getCantidad());
+        inventariosede.setFechallegada(fechatudei);
+        inventariosede.setInventarioproductoidinventario(invProductoUltimo);
+        inventariosede.setEstado("entregado");
+        inventariosede.setSede(usuariologueado.getSede_idsede());
+        inventarioSedeRepository.save(inventariosede);
+
         return "redirect:/inventarioPrincipal/sgteProductos/"+ultimaConsigOventa.get().getIdconsignacion();
 
     }
