@@ -8,6 +8,7 @@ import com.example.demo.Repository.SedeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -141,6 +142,16 @@ public class InventariosedeController {
         model.addAttribute("last", totalPage);
         return "inventario/inventariomisede";
 
+    }
+    @GetMapping("/actualizarEstado")
+    public String actualizarEstado(@Param("estado") String estado, @Param("idinventariosede") int idinventariosede){
+        inventarioSedeRepository.actualizarEstado(estado, idinventariosede);
+        return "redirect:/inventarioSede/listarInvMiSede";
+    }
+    @GetMapping("/actualizarObservaciones")
+    public String actualizarObservaciones(@Param("observaciones") String observaciones, @Param("idinventariosede") int idinventariosede){
+        inventarioSedeRepository.actualizarObservaciones(observaciones, idinventariosede);
+        return "redirect:/inventarioSede/listarInvMiSede";
     }
 
 

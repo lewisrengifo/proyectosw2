@@ -6,10 +6,13 @@ import com.example.demo.Entity.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -18,4 +21,12 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
     @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)",
             countQuery = "SELECT count(*) FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1);", nativeQuery = true)
     Page<Inventariosede> obtenerInvDeMiSede(String sesionSede, Pageable pageable);
+    @Transactional
+    @Modifying
+    @Query(value= "UPDATE inventariosede SET estado = :estado WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
+    void actualizarEstado(@Param("estado") String estado, @Param("idinventariosede")int idinventariosede);
+    @Transactional
+    @Modifying
+    @Query(value= "UPDATE inventariosede SET observaciones = :observaciones WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
+    void actualizarObservaciones(@Param("observaciones") String observaciones, @Param("idinventariosede")int idinventariosede);
 }

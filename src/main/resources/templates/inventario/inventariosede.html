@@ -50,6 +50,7 @@
                                         <th>Fecha de llegada</th>
                                         <th>Nombre de la sede</th>
                                         <th>Estado del producto</th>
+                                        <th>Observaciones</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -61,6 +62,7 @@
                                         <td th:text="${inv.getFechallegada()}">---</td>
                                         <td th:text="${inv.sede.nombre}"></td>
                                         <td th:text="${inv.getEstado()}"></td>
+                                        <td th:text="${inv.getObservaciones()}"></td>
 
                                         <!--
                                         <td><select class="form-control" name="estado" id="estado" style="width: 41%">

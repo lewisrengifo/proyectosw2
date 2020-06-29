@@ -27,6 +27,17 @@ public class Inventariosede {
     @JoinColumn(name = "sede_idsede")
     private Sede sede;
 
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    @Column
+    private String observaciones;
+
     public Sede getSede() {
         return sede;
     }
