@@ -147,10 +147,10 @@ public class ProductoController {
         ///////////////////////////////////////////////////
         HashMap<String, String> map = storageService.store(file);
         if (map.get("estado").equals("exito")) {
-            producto.setFoto(map.get("fileName"));
+            String filename2=(map.get("fileName"));
+            producto.setFoto(filename2);
             if (bindingResult.hasErrors()) {
                 model.addAttribute("listaLinea", lineaRepository.findAll());
-
                 return "producto/editFrm";
             } else {
                 if (producto.getIdproducto() == 0) {
@@ -377,7 +377,7 @@ public class ProductoController {
     public ResponseEntity<FileSystemResource> getFile(@RequestParam("id")int id) throws IOException {
         Optional<Producto> optProduct = productoRepository.findById(id);
         Producto producto=optProduct.get();
-        File file = new File("/home/ec2-user/FotosProyecto/"+ producto.getFoto());
+        File file = new File("C:/FotosProyecto/"+ producto.getFoto());
         HttpHeaders respHeaders = new HttpHeaders();
         return new ResponseEntity<FileSystemResource>(
                 new FileSystemResource(file), respHeaders, HttpStatus.OK
@@ -389,6 +389,8 @@ public class ProductoController {
         pww = bCryptPasswordEncoder.encode(pww);
         return pww;
     }
+    ///El otro metodo para guardar
+
 
 }
 
