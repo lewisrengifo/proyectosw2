@@ -123,20 +123,17 @@
 
             </li>
 
-<!--
             <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
                 <a href="#" class=" waves-effect waves-dark"><i class="fa fa-sitemap"></i> Ventas <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="#">Lista de Ventas</a>
+                        <a th:href="@{/venta}">Lista de Ventas</a>
                     </li>
                     <li>
-                        <a href="#">Realizar Ventas</a>
+                        <a th:href="@{/venta/registroventa}">Realizar Ventas</a>
                     </li>
-
                 </ul>
             </li>
-            -->
 
 
         </ul>
