@@ -5,13 +5,14 @@ import com.example.demo.Entity.Usuario;
 import com.example.demo.Entity.Ventas;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
-
+@Repository
 public interface VentaRepository extends JpaRepository<Ventas,Integer> {
 
-    @Query(value = "SELECT * FROM ventas where sede_idrol=?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM ventas where sede_idsede=?1", nativeQuery = true)
     List<Ventas> listaVentasPorSede(int id);
 
 

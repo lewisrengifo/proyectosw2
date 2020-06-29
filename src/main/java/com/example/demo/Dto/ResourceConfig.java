@@ -11,6 +11,6 @@ public class ResourceConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         registry.addResourceHandler("/FotosProyecto/**")
-                .addResourceLocations("file:C:/FotosProyecto/");
+                .addResourceLocations("file:/home/ec2-user/FotosProyecto/");
     }
 }

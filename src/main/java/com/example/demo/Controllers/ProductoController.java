@@ -377,7 +377,7 @@ public class ProductoController {
     public ResponseEntity<FileSystemResource> getFile(@RequestParam("id")int id) throws IOException {
         Optional<Producto> optProduct = productoRepository.findById(id);
         Producto producto=optProduct.get();
-        File file = new File("C:/FotosProyecto/"+ producto.getFoto());
+        File file = new File("/home/ec2-user/FotosProyecto/"+ producto.getFoto());
         HttpHeaders respHeaders = new HttpHeaders();
         return new ResponseEntity<FileSystemResource>(
                 new FileSystemResource(file), respHeaders, HttpStatus.OK
