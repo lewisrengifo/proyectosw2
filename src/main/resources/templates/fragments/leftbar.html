@@ -65,31 +65,12 @@
     <div class="sidebar-collapse">
         <ul class="nav" id="main-menu">
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal','Administrador')">
-                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Inventario Principal <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level ">
-                    <li>
-                        <a th:href="@{/inventarioPrincipal}"  >Inventario de Productos</a>
-                    </li>
-                    <li sec:authorize="hasAnyAuthority('Gestor principal')">
-                        <a th:href="@{/ConsignacionVenta}">Consignacion / Venta</a>
-                    </li>
-                </ul>
-
+            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Administrador')">
+                <a th:href="@{/inventarioPrincipal}"  class=" waves-effect waves-dark"><i class="fa fa-dashboard"></i> Ver Inventario</a>
             </li>
-
-
-
-
-
-
-            <li sec:authorize="hasAnyAuthority('Gestor principal' )">
-                <a  th:href="@{'/inventarioSede'}"  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
+            <li sec:authorize="hasAnyAuthority('Gestor principal')">
+                <a  th:href="@{/inventarioSede}"  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
             </li>
-            <li sec:authorize="hasAnyAuthority('Gestor sede' )">
-                <a  th:href="@{/inventarioSede/listarInvMiSede}"  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
-            </li>
-
             <li sec:authorize="hasAnyAuthority('Administrador')">
                 <a th:href="@{'/usuario'}"  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de Usuarios</a>
             </li>
@@ -98,10 +79,10 @@
                 <a th:href="@{'/sede'}"  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Gestion de Sedes</a>
             </li>
             <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')">
-                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> descripciton de productos <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level ">
+                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Descripción de Productos <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level desProductos">
                     <li>
-                        <a th:href="@{/categoria}" >Categoria</a>
+                        <a th:href="@{/categoria}" >Categoría</a>
                     </li>
                     <li>
                         <a th:href="@{/linea}">Línea</a>
@@ -112,7 +93,9 @@
                     <li>
                         <a th:href="@{/tamano}">Tamaño</a>
                     </li>
-
+                    <li>
+                        <a th:href="@{/tienda}">Tienda</a>
+                    </li>
                     <li>
                         <a th:href="@{/comunidad}" >Comunidad</a>
                     </li>
@@ -149,6 +132,11 @@
 
     <div th:fragment="scriptsAbajo">
 
+        <script>
+            $('.desProductos').collapse({
+                toggle: false
+            })
+        </script>
 
         <!-- jQuery Js -->
         <script th:src="@{/js/jquery-1.10.2.js}"></script>
@@ -169,6 +157,7 @@
         <script th:src="@{/js/easypiechart-data.js}"></script>
 
         <script th:src="@{/js/Lightweight-Chart/jquery.chart.js}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
         <!-- Custom Js -->

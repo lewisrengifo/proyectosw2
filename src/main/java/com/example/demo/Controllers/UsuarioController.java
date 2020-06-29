@@ -217,10 +217,10 @@ public class UsuarioController {
             byte bytes[] = new byte[20];
             random.nextBytes(bytes);
             String token = bytes.toString();
-            String direccion = "http://localhost:8080/UnaChiqui/cambiar1/";
-            //String direccion = "http://ec2-54-237-112-13.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
+            //String direccion = "http://localhost:8080/UnaChiqui/cambiar1/";
+            String direccion = "http://ec2-54-162-44-212.compute-1.amazonaws.com:8080/UnaChiqui/cambiar1/";
             URL url = new URL(direccion + token);
-            String mensaje = "¡Hola!<br><br>Para cambiar su contraseña haga click: <a href='" + direccion + token + "'>AQUÍ</a> <br><br>Atte. Área Una Chiqui</b>";
+            String mensaje = "¡Hola! Usted ha sido registrado usuario en el portal de gestion de Mosqoy<br><br>Para cambiar su contraseña haga click: <a href='" + direccion + token + "'>AQUÍ</a> <br><br>Atte. Área Una Chiqui.pe</b>";
             ;
 
             sendMailService.sendMail(usuario.getCorreo(), "saritaatanacioarenas@gmail.com", "Envio de contraseña", mensaje);
