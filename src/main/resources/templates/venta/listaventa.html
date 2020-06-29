@@ -40,13 +40,16 @@
                                     <thead>
                                     <tr class="info">
                                         <th>#</th>
-                                        <th class="center">RUC</th>
-                                        <th class="center">DNI comprador</th>
+                                        <th class="center">RUC / DNI</th>
+                                        <th class="center">comprador</th>
                                         <th class="center">Lugar de venta</th>
                                         <th class="center">Fecha de venta</th>
                                         <th class="center">Documento de venta</th>
                                         <th class="center">Tienda</th>
                                         <th class="center">Producto</th>
+                                        <th class="center">cantidad</th>
+                                        <th class="center">metodo de pago</th>
+
 
                                     </tr>
                                     </thead>
@@ -60,8 +63,10 @@
                                         <td th:text="${venta.lugarventa}"></td>
                                         <td th:text="${venta.fechaventa}"></td>
                                         <td th:text="${venta.tipodocumento}"></td>
-                                        <td th:text="${venta.tienda.nombre}"></td>
+                                        <td th:text="${venta.tienda.idtienda}==0 ? '--': ${venta.tienda.nombre} " ></td>
                                         <td th:text="${venta.inventariosede.inventarioproductoidinventario.producto.nombreproducto}"></td>
+                                        <td th:text="${venta.cantidad}"></td>
+                                        <td th:text="${venta.metodopago}"></td>
 
                                     </tr>
 
