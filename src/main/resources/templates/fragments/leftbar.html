@@ -74,6 +74,9 @@
                     <li sec:authorize="hasAnyAuthority('Gestor principal')">
                         <a th:href="@{/ConsignacionVenta}">Consignacion / Venta</a>
                     </li>
+                    <li sec:authorize="hasAnyAuthority('Gestor principal')">
+                        <a th:href="@{/inventarioPrincipal/stock}"> Stock Productos </a>
+                    </li>
                 </ul>
 
             </li>

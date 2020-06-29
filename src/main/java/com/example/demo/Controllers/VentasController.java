@@ -42,6 +42,8 @@ public class VentasController {
     InventarioproductoRepository inventarioproductoRepository;
     @Autowired
     VentaRepository ventaRepository;
+    @Autowired
+    TiendaRepository tiendaRepository;
 
     @GetMapping(value={"/listaVentas",""})
     public String listarVentas(Model model, HttpSession session){
@@ -55,16 +57,11 @@ public class VentasController {
 
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
 
-        if(usuariologueado.getRol_idrol().getNombre().equals("Gestor principal")){
-            model.addAttribute("inventarioPrincipalProducto", inventarioproductoRepository.findAll());
-        }else {
-            if(usuariologueado.getRol_idrol().getNombre().equals("Gestor sede")){
-                int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
-                model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
-            }
-        }
-            model.addAttribute("usuarioRol",usuariologueado.getRol_idrol().getNombre());
-            model.addAttribute("idsede",usuariologueado.getSede_idsede().getIdsede());
+        int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
+        model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
+        model.addAttribute("listaTiendas",tiendaRepository.listaTiendasPorSede(sedeUsuario));
+        model.addAttribute("usuarioRol",usuariologueado.getRol_idrol().getNombre());
+        model.addAttribute("idsede",usuariologueado.getSede_idsede().getIdsede());
         return "venta/registroventa";
     }
 

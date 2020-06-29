@@ -87,6 +87,14 @@ public class InventarioproductoController {
         return "inventario/consigYventa";
     }
 
+    @GetMapping("/stock")
+    public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+        model.addAttribute("stockProductos",inventarioSedeRepository.
+                listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
+        return "inventario/stockProductoInvPrincipal";
+    }
+
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){

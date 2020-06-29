@@ -39,6 +39,17 @@
                                     </div>-->
                                     <br>
                                     <input type="hidden" name="sede" th:value="${idsede}"/>
+                                    <!-- ESCOGER TIENDA-->
+                                    <div class="form-group" >
+                                        <label for="inventariosede">Escoger Tienda</label>
+
+                                        <select class="form-control" name="tienda" id="tienda" style="width: 40%">
+                                            <option th:each=" t : ${listaTiendas}"
+                                                    th:value="${t.idtienda}"
+                                                    th:text="${t.nombre}">
+                                            </option>
+                                        </select>
+                                    </div>
                                     <!-- RUC o DNI opcional -->
                                     <div>
                                         <label >RUC o DNI (opcional)</label>
@@ -55,10 +66,17 @@
                                              th:errors="*{nombrecomprador}"></div>
                                     </div>
                                     <!-- FIN -->
+                                    <!-- TIPO DE DOCUMENTO/BOLETA/FACTURA -->
+                                    <div>
+                                        <label>Tipo de Documento</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{tipodocumento}" placeholder="boleta/factura/recibo">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('tipodocumento')}"
+                                             th:errors="*{tipodocumento}"></div>
+                                    </div>
                                     <!-- Número de documento físico (factura/boleta/recibo/transacción) -->
                                     <div>
                                         <label >Número de documento</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{numerodocumento}">
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{numerodocumento}" placeholder="N° boleta/factura/recibo" >
                                         <div class="text-danger" th:if="${#fields.hasErrors('numerodocumento')}"
                                              th:errors="*{numerodocumento}"></div>
                                     </div>
@@ -71,12 +89,7 @@
                                              th:errors="*{lugarventa}"></div>
                                     </div>
 
-                                    <div>
-                                        <label>Tipo de Documento</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{tipodocumento}" placeholder="boleta/factura/recibo">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('tipodocumento')}"
-                                             th:errors="*{tipodocumento}"></div>
-                                    </div>
+
 
                                     <div>
                                         <label>Metodo de Pago</label>
