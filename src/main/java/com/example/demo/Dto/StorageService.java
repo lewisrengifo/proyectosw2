@@ -18,7 +18,7 @@ import java.util.HashMap;
 @Component
 public class StorageService {
     //Se detalla donde estaran guardadas las imagenes
-    String fileLocation = "/home/ec2-user/FotosProyecto/";
+    String fileLocation = "C:/FotosProyecto/";
 
 
 
@@ -52,5 +52,10 @@ public class StorageService {
             e.printStackTrace();
         }
         return map;
+    }
+    public String encriptar(String pww) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        pww = bCryptPasswordEncoder.encode(pww);
+        return pww;
     }
 }

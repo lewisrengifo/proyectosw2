@@ -100,8 +100,12 @@
                                     <!--Fecha FIN-->
                                     <div class="form-group" id="artesano_compra">
                                         <label>Fecha fin</label>
+
                                         <input type="text" class="form-control" th:field="*{fechafin}"
                                                style="width: 25%" placeholder="formato:dia/mes/año">
+
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechafin')}"
+                                             th:errors="*{fechafin}"></div>
                                     </div>
 
 
@@ -112,6 +116,7 @@
                                             <option th:each=" ar : ${listaArtesano}"
                                                     th:value="${ar.idartesano}"
                                                     th:text="${ar.nombreartesano} + ' '+ ${ar.apellidopaterno} + ' '+ ${ar.apellidomaterno} + ' / '+ ${ar.comunidad.nombrecomunidad}">
+
                                             </option>
                                         </select>
                                     </div>
