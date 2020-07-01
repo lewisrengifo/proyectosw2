@@ -91,8 +91,8 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@RequestParam("archivo") MultipartFile file, BindingResult bindingResult
-            , RedirectAttributes attr, @ModelAttribute ("producto") @Valid Producto producto, Model model) {
+    public String guardarProducto(@RequestParam("archivo") MultipartFile file
+            , RedirectAttributes attr, @ModelAttribute ("producto") @Valid Producto producto , BindingResult bindingResult, Model model) {
 
        //Ojala salga xd
         HashMap<String, String> map = storageService.store(file);
