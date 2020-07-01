@@ -14,23 +14,40 @@ public interface VentaRepository extends JpaRepository<Ventas,Integer> {
     //Falta seleccionar los campos que se deben mostrar por reportes, dependerá de la base de datos que tengamos.
     //Crear Dto para el caso particular de sedes, artículos, comunidad, nombre del cliente
 
-    @Query(value = "SELECT nombrecomprador as cliente, numerodocumento as documento, lugarventa as lugar, tipodocumento as tipodocumento, fechaventa as fechaventa  FROM proyectobasesw2.ventas\n" +
-            "where fechaventa like '%?1%';", nativeQuery = true)
+    @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
+            " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
+            " invpr.color as color , v.metodopago as metododepago\n" +
+            "  FROM proyectobasesw2.ventas v\n" +
+            "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
+            "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
+            "  inner join producto p on p.idproducto = invpr.producto_idproducto\n" +
+            "  where fechaventa like '%2020%' ;", nativeQuery = true)
     ReporteMensualoAnualMosqoyDto reporteMensualoAnualMosqoy(String fechaventa);
-
 
 
     //Query para el reporte mensual/anual por ventas en sede
     //Select modificar de acuerdo a lo que se tiene en la base de datos
 
-    @Query(value = "s.nombre as nombresede, v.nombrecomprador as cliente, v.numerodocumento as documento, v.lugarventa as lugar, v.tipodocumento as tipodocumento, v.fechaventa as fecha FROM ventas v inner join sede s on s.idsede = v.idsede \n" +
-            "where v.fechaventa like %?1% and (s.sede_idrol like %?2% or  s.nombre like %?2%);", nativeQuery = true)
-    ReporteMensualAnualSedeDto reporteMensualAnualSede(String fechaventa, String sede);
+    @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
+            " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
+            " invpr.color as color , v.metodopago as metododepago\n" +
+            "  FROM proyectobasesw2.ventas v\n" +
+            "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
+            "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
+            "  inner join producto p on p.idproducto = invpr.producto_idproducto\n" +
+            "  where fechaventa like %?1% and v.sede_idsede = ?2;", nativeQuery = true)
+    ReporteMensualoAnualMosqoyDto reporteMensualAnualSede(String fechaventa, String sede);
 
 
     //Query para el reporte mensual/anual por ventas por cliente
-    @Query(value = "SELECT nombrecomprador as cliente, numerodocumento as documento, lugarventa as lugar, tipodocumento as tipodocumento, fechaventa as fechaventa  FROM proyectobasesw2.ventas \n" +
-            "where fechaventa like '%?1%' and nombrecomprador = ?2;", nativeQuery = true)
+    @Query(value = " SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
+            " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
+            " invpr.color as color , v.metodopago as metododepago\n" +
+            "  FROM proyectobasesw2.ventas v\n" +
+            "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
+            "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
+            "  inner join producto p on p.idproducto = invpr.producto_idproducto\n" +
+            "  where fechaventa like %?1% and v.lugarventa = ?2;", nativeQuery = true)
     ReporteMensualoAnualMosqoyDto reporteCliente(String fechaventa, String cliente);
 
 

@@ -4,10 +4,16 @@ import java.util.Date;
 
 public interface ReporteMensualoAnualMosqoyDto {
 
+    Date getFechadeventa();
+    String getTipodedocumento();
+    String getDocumento();
+    String getRucodni();
     String getCliente();
-    int getDocumento();
-    String getLugar();
-    String getTipodocumento();
-    Date getFechaventa();
+    int getCantidad();
+    String getCodigoproducto();
+    String getNombredeproducto();
+    String getColor();
+    String getMetododepago();
+
 
 }
