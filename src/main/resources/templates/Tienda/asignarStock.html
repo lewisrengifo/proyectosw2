@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Asignar stock a sede')">
+</head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
+
+
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                STOCK PARA SEDE
+            </h1>
+        </div>
+
+        <!-- /. COMUNIDAD  -->
+        <div id="page-inner">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-content">
+                            <div class="table-responsive">
+
+                                <h2 >Seleccione y complete los campos</h2>
+                                <br>
+                                <form method="post" th:action="@{'/inventarioTienda/agregarStock'}" th:object="${inventariotienda}">
+                                    <input type="hidden" th:field="*{idiventariotienda}"/>
+                                    <!--<div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                                         role="alert" style="width: 40%">
+                                    </div>-->
+
+                                    <div class="form-group" >
+                                        <label for="tienda">Seleccione la tienda</label>
+                                        <select class="form-control" name="tienda" id="tienda" style="width: 40%">
+                                            <option th:each=" x : ${listaTiendas}"
+                                                    th:value="${x.idtienda}"
+                                                    th:text="${x.nombre}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+
+                                    <br>
+
+                                    <!-- ELEGIR UN PRODUCTO -->
+                                    <div class="form-group" >
+                                        <label for="producto">Producto/Cantidad Disponible - Precio de venta</label>
+                                        <select class="form-control" name="inventariosede" id="producto" style="width: 40%">
+                                            <option th:each=" pro : ${inventario}"
+                                                    th:value="${pro.idiventariosede}"
+                                                    th:text="${pro.inventarioproductoidinventario.producto.nombreproducto} + '/ '+ ' '+ ${pro.stock} + ' '+'-' + ${pro.inventarioproductoidinventario.preciomosqoy}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!- FIN -->
+
+                                    <!-- ELEGIR LA CANTIDAD -->
+                                    <div>
+                                        <label for="stock">Cantidad</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{stocktienda}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('stocktienda')}"
+                                             th:errors="*{stocktienda}"></div>
+
+                                    </div>
+                                    <!-- FIN -->
+
+                                    <!--Fecha de envio-->
+                                    <div class="form-group"  id ="artesano_compra">
+                                        <label >Fecha de envío</label>
+                                        <input type="text" class="form-control" th:field="*{fechaentrega}" style="width: 25%" placeholder="formato:dia/mes/año">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechaentrega')}" th:errors="*{fechaentrega}"></div>
+                                    </div>
+
+
+
+
+                                    <a th:href="@{'/tienda/lista'}" class="btn btn-info">Finalizar</a>
+                                    <button    type="submit" class="btn btn-primary">+ producto</button>
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+
+</html>

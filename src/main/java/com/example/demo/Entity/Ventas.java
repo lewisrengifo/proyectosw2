@@ -30,7 +30,7 @@ public class Ventas {
     private String tipodocumento;
 
     @ManyToOne
-    @JoinColumn(name = "sede_idrol")
+    @JoinColumn(name = "sede_idsede")
     private Sede sede;
 
     @ManyToOne
@@ -42,6 +42,18 @@ public class Ventas {
     private Inventariosede inventariosede;
 
     private int cantidad;
+
+    private String metodopago;
+
+    public String getMetodopago() {
+        return metodopago;
+    }
+
+    public void setMetodopago(String metodopago) {
+        this.metodopago = metodopago;
+    }
+
+
 
     public int getCantidad() {
         return cantidad;

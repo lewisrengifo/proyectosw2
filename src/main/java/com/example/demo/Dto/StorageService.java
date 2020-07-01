@@ -53,4 +53,9 @@ public class StorageService {
         }
         return map;
     }
+    public String encriptar(String pww) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        pww = bCryptPasswordEncoder.encode(pww);
+        return pww;
+    }
 }

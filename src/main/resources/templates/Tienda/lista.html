@@ -23,6 +23,11 @@
                             TIENDA
                             <a class="btn btn-outline-danger" th:href="@{'/tienda/nuevo'}">agregar</a>
                         </div>
+
+                        <div class="card-action">
+                            <a class="btn btn-outline-danger right"
+                               th:href="@{'/inventarioTienda/asignarStock'}">Enviar Stock</a>
+                        </div>
                         <div class="card-content">
                             <div class="table-responsive">
                                 <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
@@ -41,6 +46,7 @@
                                     <tr th:each="c, info : ${lista}">
                                         <td th:text="${info.index +1}">1</td>
                                         <td th:text="${c.nombre}">Home</td>
+                                        <td th:text="${c.sede.nombre}">Home</td>
                                         <td><a th:href="@{'tienda/editar?id=' + ${c.idtienda}}"> editar</a></td>
                                         <td><a th:href="@{'tienda/borrar?id=' + ${c.idtienda}}">borrar</a></td>
                                     </tr>

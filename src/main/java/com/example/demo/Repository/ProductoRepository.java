@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Entity.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,5 +24,6 @@ public interface ProductoRepository extends JpaRepository<Producto,Integer> {
     @Query(value = "SELECT * FROM producto where idproducto not in (Select p.idproducto from producto p where p.idproducto=?1);"
             , nativeQuery = true)
     List<Producto> mio(int id);
+
 
 }

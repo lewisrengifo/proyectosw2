@@ -21,6 +21,8 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
     @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)",
             countQuery = "SELECT count(*) FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1);", nativeQuery = true)
     Page<Inventariosede> obtenerInvDeMiSede(String sesionSede, Pageable pageable);
+
+
     @Transactional
     @Modifying
     @Query(value= "UPDATE inventariosede SET estado = :estado WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
@@ -29,4 +31,14 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
     @Modifying
     @Query(value= "UPDATE inventariosede SET observaciones = :observaciones WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
     void actualizarObservaciones(@Param("observaciones") String observaciones, @Param("idinventariosede")int idinventariosede);
+
+
+    @Query(value="SELECT * FROM inventariosede where sede_idsede=?1",nativeQuery=true)
+    List<Inventariosede> listarInventarioPorSede(int idSede);
+
+    @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)"
+         , nativeQuery = true)
+    List<Inventariosede> obtenerInvDeMiSedeNormal(String sesionSede);
+
+
 }

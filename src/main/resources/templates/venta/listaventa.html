@@ -40,28 +40,36 @@
                                     <thead>
                                     <tr class="info">
                                         <th>#</th>
-                                        <th class="center">RUC</th>
-                                        <th class="center">DNI comprador</th>
-                                        <th class="center">Lugar de venta</th>
-                                        <th class="center">Fecha de venta</th>
-                                        <th class="center">Documento de venta</th>
                                         <th class="center">Tienda</th>
-                                        <th class="center">Producto</th>
-
+                                        <th class="center">Fecha de Venta</th>
+                                        <th class="center">Tipo de Documento</th>
+                                        <th class="center">N° documento de venta</th>
+                                        <th class="center">Ruc / Dni</th>
+                                        <th class="center">Nombre cliente</th>
+                                        <th class="center">Cantidad</th>
+                                        <th class="center">Codigo generado</th>
+                                        <th class="center">Nombre producto</th>
+                                        <th class="center">Color Producto</th>
+                                        <th class="center">Precio Venta</th>
+                                        <th class="center">Medio de pago</th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
                                     <tr th:each="venta, info : ${listaVentas}">
-
                                         <td th:text="${( info.index +1) }"></td>
-                                        <td th:text="${venta.rucdni}"></td>
-                                        <td th:text="${venta.nombrecomprador}"></td>
-                                        <td th:text="${venta.lugarventa}"></td>
+                                        <td th:text="${venta.tienda.idtienda}==0 ? '--': ${venta.tienda.nombre} " ></td>
                                         <td th:text="${venta.fechaventa}"></td>
                                         <td th:text="${venta.tipodocumento}"></td>
-                                        <td th:text="${venta.tienda.nombre}"></td>
+                                        <td th:text="${venta.numerodocumento}"></td>
+                                        <td th:text="${venta.rucdni}"></td>
+                                        <td th:text="${venta.nombrecomprador}"></td>
+                                        <td th:text="${venta.cantidad}"></td>
+                                        <td th:text="${venta.inventariosede.inventarioproductoidinventario.codigogenerado}"></td>
                                         <td th:text="${venta.inventariosede.inventarioproductoidinventario.producto.nombreproducto}"></td>
+                                        <td th:text="${venta.inventariosede.inventarioproductoidinventario.color}"></td>
+                                        <td th:text="${venta.inventariosede.inventarioproductoidinventario.preciomosqoy}"></td>
+                                        <td th:text="${venta.metodopago}"></td>
 
                                     </tr>
 

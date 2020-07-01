@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+
 import com.example.demo.Dto.ReporteMensualAnualSedeDto;
 import com.example.demo.Dto.UsuarioSedeDto;
 import com.example.demo.Dto.ReporteMensualoAnualMosqoyDto;
@@ -7,7 +8,13 @@ import com.example.demo.Entity.Ventas;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+@Repository
 public interface VentaRepository extends JpaRepository<Ventas,Integer> {
+
 
 
     //Query para el caso de mensual/anual de mosqoy
@@ -59,6 +66,10 @@ public interface VentaRepository extends JpaRepository<Ventas,Integer> {
             "inner join comunidad com on com.idcomunidad = art.comunidad_idcomunidad\n" +
             "where v.fechaventa like %?1% and com.nombrecomunidad = ?2;", nativeQuery = true)
     ReporteMensualoAnualMosqoyDto reporteComunidad(String fechaventa, String comunidad);
+
+
+    @Query(value = "SELECT * FROM ventas where sede_idsede=?1", nativeQuery = true)
+    List<Ventas> listaVentasPorSede(int id);
 
 
 }

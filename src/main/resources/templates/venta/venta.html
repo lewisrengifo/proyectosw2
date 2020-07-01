@@ -32,27 +32,16 @@
 
                                 <h2 >Complete los campos</h2>
                                 <br>
-                                <form method="post" th:action="@{'/venta/agregarVenta'}" th:object="${ventas}">
-                                    <input type="hidden" th:field="*{idventas}"/>
+                                <form method="post" th:action="@{'/inventarioSede/agregarStock'}" th:object="${inventariosede}">
+                                    <input type="hidden" th:field="*{idiventariosede}"/>
                                     <!--<div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
                                     </div>-->
                                     <br>
-                                    <input type="hidden" name="sede" th:value="${idsede}"/>
-                                    <!-- ESCOGER TIENDA-->
-                                    <div class="form-group" >
-                                        <label for="inventariosede">Escoger Tienda</label>
 
-                                        <select class="form-control" name="tienda" id="tienda" style="width: 40%">
-                                            <option th:each=" t : ${listaTiendas}"
-                                                    th:value="${t.idtienda}"
-                                                    th:text="${t.nombre}">
-                                            </option>
-                                        </select>
-                                    </div>
                                     <!-- RUC o DNI opcional -->
                                     <div>
-                                        <label >RUC o DNI (opcional)</label>
+                                        <label for="rucdni">RUC o DNI (opcional)</label>
                                         <input style="width: 88%" type="text" class="form-control" th:field="*{rucdni}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('rucdni')}"
                                              th:errors="*{rucdni}"></div>
@@ -60,61 +49,52 @@
                                     <!-- FIN -->
                                     <!-- Nombre ( a quién se le vendió) -->
                                     <div>
-                                        <label >Nombre Comprador</label>
+                                        <label for="nombrecomprador">Nombre</label>
                                         <input style="width: 88%" type="text" class="form-control" th:field="*{nombrecomprador}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('nombrecomprador')}"
                                              th:errors="*{nombrecomprador}"></div>
                                     </div>
                                     <!-- FIN -->
-                                    <!-- TIPO DE DOCUMENTO/BOLETA/FACTURA -->
-                                    <div>
-                                        <label>Tipo de Documento</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{tipodocumento}" placeholder="boleta/factura/recibo">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('tipodocumento')}"
-                                             th:errors="*{tipodocumento}"></div>
-                                    </div>
                                     <!-- Número de documento físico (factura/boleta/recibo/transacción) -->
                                     <div>
-                                        <label >Número de documento</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{numerodocumento}" placeholder="N° boleta/factura/recibo" >
+                                        <label for="numerodocumento">Número de documento</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{numerodocumento}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('numerodocumento')}"
                                              th:errors="*{numerodocumento}"></div>
                                     </div>
                                     <!-- FIN -->
                                     <!-- Lugar de venta -->
                                     <div>
-                                        <label>Lugar</label>
+                                        <label for="lugarventa">Lugar</label>
                                         <input style="width: 88%" type="text" class="form-control" th:field="*{lugarventa}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('lugarventa')}"
                                              th:errors="*{lugarventa}"></div>
                                     </div>
-
-
-
-                                    <div>
-                                        <label>Metodo de Pago</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{metodopago}" placeholder="efectiro/tarjeta de credito">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('metodopago')}"
-                                             th:errors="*{metodopago}"></div>
-                                    </div>
                                     <!-- FIN -->
                                     <!-- ELEGIR UN PRODUCTO (código)-->
                                     <div class="form-group" >
-                                        <label for="inventariosede">Producto/Cantidad Disponible - Precio de venta</label>
-
-                                        <select class="form-control" name="inventariosede" id="inventariosede" style="width: 40%">
-                                            <option th:each=" pro : ${inventarioSedeProducto}"
-                                                    th:value="${pro.idiventariosede}"
-                                                    th:text="${pro.inventarioproductoidinventario.producto.nombreproducto}+' / '+${pro.stock}">
+                                        <label for="producto">Producto/Cantidad Disponible - Precio de venta</label>
+                                        <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                            <option th:each=" pro : ${inventario}"
+                                                    th:value="${pro.idinventario}"
+                                                    th:text="${pro.producto">
                                             </option>
                                         </select>
                                     </div>
 
                                     <!- FIN -->
+                                    <!-- PRECIO FINAL DE VENTA -->
+                                    <!--<div>
+                                        <label for="fechaventa">fecha de venta</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{fechaventa}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechaventa')}"
+                                             th:errors="*{fechaventa}"></div>
 
+                                    </div>-->
+                                    <!-- FIN -->
                                     <!-- FECHA DE VENTA -->
                                     <div>
-                                        <label >fecha de venta</label>
+                                        <label for="fechaventa">fecha de venta</label>
                                         <input style="width: 88%" type="text" class="form-control" th:field="*{fechaventa}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechaventa')}"
                                              th:errors="*{fechaventa}"></div>
@@ -124,21 +104,28 @@
 
                                     <!-- ELEGIR LA CANTIDAD -->
                                     <div>
-                                        <label >Cantidad</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{cantidad}" >
+                                        <label for="stock">Cantidad</label>
+                                        <input style="width: 88%" type="text" class="form-control" th:field="*{stock}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('stock')}"
+                                             th:errors="*{stock}"></div>
+
                                     </div>
                                     <!-- FIN -->
 
                                     <!--Fecha de envio-->
-                                    <!--div class="form-group"  id ="artesano_compra">
+                                    <div class="form-group"  id ="artesano_compra">
                                         <label >Fecha de envío</label>
                                         <input type="text" class="form-control" th:field="*{fechallegada}" style="width: 25%" placeholder="formato:dia/mes/año">
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechallegada')}" th:errors="*{fechallegada}"></div>
-                                    </div-->
+                                    </div>
 
 
-                                    <a th:href="@{'/venta'}" class="btn btn-danger">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary"> finalizar</button>
+
+
+                                    <a th:href="@{'/sede/lista'}" class="btn btn-danger">Cancelar</a>
+                                    <button    type="submit" class="btn btn-primary">+ producto</button>
+                                    <a th:href="@{'/inventarioSede/confirmarStock'}" class="btn btn-info">Enviar Stock</a>
+
                                 </form>
                             </div>
                         </div>
