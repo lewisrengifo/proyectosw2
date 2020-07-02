@@ -37,20 +37,49 @@ public class InventariosedeController {
 
     @GetMapping("/asignarStock")
     public String asignarStock(Model model, @ModelAttribute("sede") Sede sede,
-                               @ModelAttribute("inventariosede") Inventariosede inventariosede) {
-
-        model.addAttribute("inventario", inventarioproductoRepository.findAll());
+                               @ModelAttribute("inventariosede") Inventariosede inventariosede, HttpSession session) {
+        //model.addAttribute("inventario", inventarioSedeRepository.obtenerInvDeMiSedeNormal(usuario.getSede_idsede().getNombre()));
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        model.addAttribute("inventario", inventarioSedeRepository.obtenerInvDeMiSedeNormal(usuario.getSede_idsede().getNombre()));
         model.addAttribute("listaSede", sedeRepository.findAll());
         return "sede/asignarStock";
     }
 
     @PostMapping("/agregarStock")
-    public String agregarStock(Model model, @ModelAttribute("inventariosede") Inventariosede inventariosede, @ModelAttribute("sede") Sede sede) {
-        Inventariosede invs = new Inventariosede();
+    public String agregarStock(Model model, @ModelAttribute("inventariosede") Inventariosede inventariosede, @ModelAttribute("sede") Sede sede, RedirectAttributes attr,HttpSession session) {
 
+        Usuario user = (Usuario) session.getAttribute("usuario");
+        Inventariosede invs = new Inventariosede();
         invs = inventariosede;
         inventariosede.setEstado("Enviado");
-        inventarioSedeRepository.save(inventariosede);
+        int cantidadParaSede = inventariosede.getStock();
+        int buscaridinventarioPrincipal = inventariosede.getInventarioproductoidinventario().getIdinventario();
+        Inventariosede inventarioPrincipalProducto = inventarioSedeRepository.obtenerStockSedePrincipal(user.getSede_idsede().getIdsede(), buscaridinventarioPrincipal);
+        int cantidadProductostock = inventarioPrincipalProducto.getStock();
+
+
+        if(cantidadProductostock>cantidadParaSede){
+            int stockActualPrincipal = cantidadProductostock-cantidadParaSede;
+           // int productoInventario = inventariosede.getInventarioproductoidinventario().getIdinventario();
+            int sedePrincipal = user.getSede_idsede().getIdsede();
+            Inventariosede inventariosedeCambia = inventarioSedeRepository.ObtenerInventariParacambiarStockParaSede(buscaridinventarioPrincipal, inventariosede.getSede().getIdsede());
+           if (inventariosedeCambia==null){
+               inventarioSedeRepository.actualizarStockSede(stockActualPrincipal,inventarioPrincipalProducto.getIdiventariosede());
+               inventarioSedeRepository.save(inventariosede);
+           }else {
+
+               int nuevoTotal= inventariosedeCambia.getStock() + cantidadParaSede;
+               //actuliza el producto de la sede
+               inventarioSedeRepository.actualizarStockSede(nuevoTotal,inventariosedeCambia.getIdiventariosede());
+               //actualiza el producto en el principal
+               inventarioSedeRepository.actualizarStockSede(stockActualPrincipal,inventarioPrincipalProducto.getIdiventariosede());
+               attr.addFlashAttribute("msgRepetido", "Se mando producto a sede exitosamente");
+           }
+
+        }else {
+            attr.addFlashAttribute("msgRepetido", "La Cantidad asignada excede la del producto");
+            return "redirect:/inventarioSede/asignarStock";
+        }
 
         return "redirect:/inventarioSede/asignarStock";
     }

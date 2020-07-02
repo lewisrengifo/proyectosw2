@@ -74,12 +74,36 @@ public class InventarioTiendaController {
     }
 
     @PostMapping("/agregarStock")
-    public String agregarStock(Model model, @ModelAttribute("inventariotienda") Inventariotienda inventariotienda, @ModelAttribute("tienda") Tienda tienda) {
+    public String agregarStock(Model model, @ModelAttribute("inventariotienda") Inventariotienda inventariotienda, @ModelAttribute("tienda") Tienda tienda,HttpSession session, RedirectAttributes attr) {
+        Usuario user = (Usuario) session.getAttribute("usuario");
         Inventariotienda invt = new Inventariotienda();
-
         invt = inventariotienda;
         inventariotienda.setEstado("Entregado");
-        inventarioTiendaRepository.save(inventariotienda);
+        int cantidadParaTienda = inventariotienda.getStocktienda();
+        int buscarIdInventarioPrincipal = inventariotienda.getInventariosede().getInventarioproductoidinventario().getIdinventario();
+        Inventariosede inventarioPrincipalProducto = inventarioSedeRepository.obtenerStockSedePrincipal(user.getSede_idsede().getIdsede(), buscarIdInventarioPrincipal);
+        int cantidadProductostock = inventarioPrincipalProducto.getStock();
+
+        if(cantidadProductostock>cantidadParaTienda){
+            int stockActualPrincipal = cantidadProductostock-cantidadParaTienda;
+            int sedePrincipal = user.getSede_idsede().getIdsede();
+            Inventariotienda inventarioTiendaCambia = inventarioTiendaRepository.ObtenerInventariParacambiarStockParaTienda(inventariotienda.getInventariosede().getIdiventariosede(), inventariotienda.getTienda().getIdtienda());
+            if (inventarioTiendaCambia==null) {
+                inventarioSedeRepository.actualizarStockSede(stockActualPrincipal,inventarioPrincipalProducto.getIdiventariosede());
+                inventarioTiendaRepository.save(inventariotienda);
+            }else{
+                int nuevoTotal = inventarioTiendaCambia.getStocktienda() + cantidadParaTienda;
+                //actuliza el producto de la tienda
+                inventarioSedeRepository.actualizarStockTienda(nuevoTotal,inventarioTiendaCambia.getIdiventariotienda());
+                //actuliza el producto en el principal
+                inventarioSedeRepository.actualizarStockSede(stockActualPrincipal,inventarioPrincipalProducto.getIdiventariosede());
+                attr.addFlashAttribute("msgRepetido", "Se mando producto a sede exitosamente");
+            }
+        }else{
+            attr.addFlashAttribute("msgRepetido", "La Cantidad asignada excede la del producto");
+            return "redirect:/inventarioTienda/asignarStock";
+        }
+
 
         return "redirect:/inventarioTienda/asignarStock";
     }

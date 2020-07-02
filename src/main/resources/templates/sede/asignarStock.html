@@ -54,6 +54,9 @@
                                     <!--<div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
                                     </div>-->
+                                    <div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                                         role="alert" style="width: 40%">
+                                    </div>
 
                                     <div class="form-group" >
                                         <label for="sede_idsede">Seleccione la sede</label>
@@ -70,11 +73,11 @@
 
                                     <!-- ELEGIR UN PRODUCTO -->
                                     <div class="form-group" >
-                                        <label for="producto">Producto/Cantidad Disponible - Precio de venta</label>
+                                        <label for="producto">Producto/Stock Disponible - Precio de venta</label>
                                         <select class="form-control" name="inventarioproductoidinventario" id="producto" style="width: 40%">
                                             <option th:each=" pro : ${inventario}"
-                                                    th:value="${pro.idinventario}"
-                                                    th:text="${pro.producto.nombreproducto} + '/ '+ ' '+ ${pro.cantidad} + ' '+'-' + ${pro.preciomosqoy}">
+                                                    th:value="${pro.inventarioproductoidinventario.getIdinventario()}"
+                                                    th:text="${pro.inventarioproductoidinventario.producto.nombreproducto}+' / '+${pro.stock}+' / '+${pro.inventarioproductoidinventario.preciomosqoy}">
                                             </option>
                                         </select>
                                     </div>
@@ -83,7 +86,7 @@
 
                                     <!-- ELEGIR LA CANTIDAD -->
                                     <div>
-                                        <label for="stock">Cantidad</label>
+                                        <label >Cantidad</label>
                                         <input style="width: 88%" type="text" class="form-control" th:field="*{stock}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('stock')}"
                                              th:errors="*{stock}"></div>
