@@ -94,6 +94,7 @@
 
                                         <label>Fecha Inicio</label>
                                         <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%" placeholder="formato:dia/mes/año">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div>
 
                                         <!--div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div-->
                                     </div>

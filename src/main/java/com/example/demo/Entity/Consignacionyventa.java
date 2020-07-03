@@ -4,6 +4,7 @@ package com.example.demo.Entity;
 import javax.persistence.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import java.io.Serializable;
@@ -27,6 +28,8 @@ public class Consignacionyventa implements Serializable {
     private String tipo;
 
     @Column(nullable = false)
+    @NotNull(message = "la fecha no debe ser nula")
+    @Temporal(TemporalType.DATE)
     private Date fechainicio;
 
     private Date fechafin;

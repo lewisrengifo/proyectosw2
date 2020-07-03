@@ -8,9 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -42,9 +44,8 @@ public class InventarioproductoController {
     InventarioSedeRepository inventarioSedeRepository;
 
 
-
-    @GetMapping(value = {"","/","/lista"})
-    public String listaInventarioProducto(Model model,@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params){
+    @GetMapping(value = {"", "/", "/lista"})
+    public String listaInventarioProducto(Model model, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params) {
 
         int currentPage = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
@@ -69,7 +70,7 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/agregarInventario")
-    public String consignacionYVenta(@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model){
+    public String consignacionYVenta(@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model) {
         /*String fecha = "01/01/1999";
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         Date fechaDate = null;
@@ -83,44 +84,48 @@ public class InventarioproductoController {
 
         }*/
 
-        model.addAttribute("listaArtesano",artesanoRepository.findAll());
+        model.addAttribute("listaArtesano", artesanoRepository.findAll());
         return "inventario/consigYventa";
     }
 
     @GetMapping("/stock")
-    public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
+    public String stockDeProductosDisponiblesParaSedes(Model model, HttpSession session) {
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-        model.addAttribute("stockProductos",inventarioSedeRepository.
+        model.addAttribute("stockProductos", inventarioSedeRepository.
                 listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
         return "inventario/stockProductoInvPrincipal";
     }
 
     @PostMapping("/agregarConsigVenta")
-    public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+    public String ingresarConsignacionOventa(@ModelAttribute("consigYVenta") @Valid Consignacionyventa consigYventa, BindingResult bindingResult, Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("listaArtesano", artesanoRepository.findAll());
+            return "inventario/consigYventa";
+        }
 
         System.out.println(consigYventa);
         Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
-         int idultimo = save.getIdconsignacion();
+        int idultimo = save.getIdconsignacion();
 
-        return "redirect:/inventarioPrincipal/sgteProductos/"+idultimo;
+        return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
     }
 
     @GetMapping("/sgteProductos/{idultimo}")
     public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                        @ModelAttribute("consigYVenta") Consignacionyventa consigYventa,@PathVariable("idultimo") int id){
+                                        @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @PathVariable("idultimo") int id) {
         Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
 
-        model.addAttribute("listalinea",lineaRepository.findAll());
-        model.addAttribute("listaproducto",productoRepository.findAll());model.addAttribute("listacategoria",categoriaRepository.findAll());
-        model.addAttribute("listatamano",tamanoRepository.findAll());
-      model.addAttribute("consigYventa1",ultimaConsigOventa.get());
+        model.addAttribute("listalinea", lineaRepository.findAll());
+        model.addAttribute("listaproducto", productoRepository.findAll());
+        model.addAttribute("listacategoria", categoriaRepository.findAll());
+        model.addAttribute("listatamano", tamanoRepository.findAll());
+        model.addAttribute("consigYventa1", ultimaConsigOventa.get());
         return "inventario/inventarioProducto";
     }
 
     @PostMapping("/agregarProducto")
     public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa,@RequestParam("idconsignacionVenta") int id,HttpSession session){
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") int id, HttpSession session) {
 
         Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
         invPro.setConsignacionyventa(ultimaConsigOventa.get());
@@ -128,8 +133,8 @@ public class InventarioproductoController {
 
         Date fechatudei = new Date();
 
-       invPro.setFechainicio(fechatudei);
-        if(ultimaConsigOventa.get().getTipo().equals("consignacion")){
+        invPro.setFechainicio(fechatudei);
+        if (ultimaConsigOventa.get().getTipo().equals("consignacion")) {
             String lineac = invPro.getProducto().getLinea().getCodigolinea();
             String categoriac = invPro.getCategoria().getCodigocategoria();
             String productoc = invPro.getProducto().getCodigoproducto();
@@ -140,28 +145,28 @@ public class InventarioproductoController {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
             //OBTENER EL MES
             simpleDateFormat = new SimpleDateFormat("MMMM");
-            String mesC= simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+            String mesC = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
             //OBTENER EL AÑO
             simpleDateFormat = new SimpleDateFormat("YYYY");
             String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
-            String totalCodigoGenerado = lineac+categoriac+productoc
-                    +descriccionC+tamano+comunidadC+artesanoC+mesC+yearco;
+            String totalCodigoGenerado = lineac + categoriac + productoc
+                    + descriccionC + tamano + comunidadC + artesanoC + mesC + yearco;
             invPro.setCodigogenerado(totalCodigoGenerado);
-        }else{
+        } else {
             String lineac = invPro.getProducto().getLinea().getCodigolinea();
             String categoriac = invPro.getCategoria().getCodigocategoria();
             String productoc = invPro.getProducto().getCodigoproducto();
             String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
             String tamano = invPro.getTamano().getCodigotamano();
             String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
-            String totalCodigoGenerado = lineac+categoriac+productoc+descriccionC+tamano+comunidadC;
+            String totalCodigoGenerado = lineac + categoriac + productoc + descriccionC + tamano + comunidadC;
             invPro.setCodigogenerado(totalCodigoGenerado);
         }
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
 
         Inventarioproducto invProductoUltimo = inventarioproductoRepository.save(invPro);
 
-        Inventariosede inventariosede= new Inventariosede();
+        Inventariosede inventariosede = new Inventariosede();
         inventariosede.setStock(invProductoUltimo.getCantidad());
         inventariosede.setFechallegada(fechatudei);
         inventariosede.setInventarioproductoidinventario(invProductoUltimo);
@@ -169,13 +174,13 @@ public class InventarioproductoController {
         inventariosede.setSede(usuariologueado.getSede_idsede());
         inventarioSedeRepository.save(inventariosede);
 
-        return "redirect:/inventarioPrincipal/sgteProductos/"+ultimaConsigOventa.get().getIdconsignacion();
+        return "redirect:/inventarioPrincipal/sgteProductos/" + ultimaConsigOventa.get().getIdconsignacion();
 
     }
 
     @PostMapping("/confirmarPedido")
     public String confirmacionPedidos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                      @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+                                      @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) {
         return "inventario/confirmarpedido";
     }
 
@@ -196,7 +201,6 @@ public class InventarioproductoController {
         }
 
 
-
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("busqueda", busqueda);
         model.addAttribute("listaInventarioPrincipal", pageInvPrincipal.getContent());
@@ -207,12 +211,6 @@ public class InventarioproductoController {
 
         return "inventario/inventarioPrincipal";
     }
-
-
-
-
-
-
 
 
 }
