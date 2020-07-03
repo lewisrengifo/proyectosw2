@@ -6,6 +6,7 @@ import com.example.demo.Repository.InventarioSedeRepository;
 import com.example.demo.Repository.InventarioTiendaRepository;
 import com.example.demo.Repository.ProductoRepository;
 import com.example.demo.Repository.TiendaRepository;
+import com.example.demo.service.InventarioTiendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,16 +38,17 @@ public class InventarioTiendaController {
     @Autowired
     TiendaRepository tiendaRepository;
 
+    @Autowired
+    InventarioTiendaService inventarioTiendaService;
+
 
     @GetMapping(value = {"","/","/lista"})
-    public String listaInventarioTienda(Model model,@RequestParam Map<String, Object> params){
+    public String listaInventarioTienda(Model model,@RequestParam Map<String, Object> params, HttpSession session){
 
+        Usuario user = (Usuario) session.getAttribute("usuario");
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        PageRequest pageRequest = PageRequest.of(page, 10);
-
-
-        Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.findAll(pageRequest);
+        Page<Inventariotienda> pageInvTienda = inventarioTiendaService.listaInventarioTiendaMiSede(user.getSede_idsede().getIdsede(),page);
         int totalPage = pageInvTienda.getTotalPages();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
@@ -69,7 +71,7 @@ public class InventarioTiendaController {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         model.addAttribute("inventario", inventarioSedeRepository.obtenerInvDeMiSedeNormal(usuario.getSede_idsede().getNombre()));
-        model.addAttribute("listaTiendas", tiendaRepository.findAll());
+        model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(usuario.getSede_idsede().getIdsede()));
         return "Tienda/asignarStock";
     }
 
