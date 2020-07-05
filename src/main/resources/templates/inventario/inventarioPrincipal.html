@@ -35,8 +35,12 @@
                             <a class="btn btn-outline-danger" th:href="@{'/ventas/excel'}">Ver Ventas</a>
                         </div>
                         <div class="card-action">
-                            <a class="btn btn-outline-danger" th:href="@{'/inventarioPrincipal/agregarInventario'}">agregar</a>
+                            <a class="btn btn-outline-danger" th:href="@{'/inventarioPrincipal/agregarInventario' + '?referencia= 1' }">Agregar Consignación</a>
                         </div>
+                        <div class="card-action">
+                            <a class="btn btn-flat" th:href="@{'/inventarioPrincipal/agregarInventario' + '?referencia= 2' }">Agregar Compra</a>
+                        </div>
+
                         <div class="card-content">
                             <div class="table-responsive">
                                 <div th:if="${msgCo != null}" th:text="${msgCo}" class="alert alert-success"

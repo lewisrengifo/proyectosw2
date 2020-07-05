@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Inventariosede;
 import com.example.demo.Entity.Producto;
@@ -39,6 +40,18 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
     @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)"
          , nativeQuery = true)
     List<Inventariosede> obtenerInvDeMiSedeNormal(String sesionSede);
+
+
+
+
+    @Query(value="SELECT * FROM inventariosede  invs where invs.inventarioproducto_idinventario = (select idproducto from producto where nombreproducto like '%Lol%') or\n" +
+            "                                invs.fechallegada like '%%' or invs.estado like '%%' or invs.sede_idsede = (select idsede from sede where nombre like '%%')",
+            countQuery ="SELECT count(*) FROM artesano a where a.nombreartesano like %?1% or a.apellidopaterno like %?1% " +
+                    "or a.apellidomaterno like %?1% or a.codigoartesano like %?1% or " +
+                    "a.comunidad_idcomunidad= " +
+                    "(select idcomunidad from comunidad where nombrecomunidad like %?1%)",
+            nativeQuery = true)
+    Page<Artesano> buscadorInventarioSede(String search, Pageable pageable);
 
 
 }

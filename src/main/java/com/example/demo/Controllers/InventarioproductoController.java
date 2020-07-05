@@ -5,18 +5,17 @@ import com.example.demo.Repository.*;
 import com.example.demo.service.InventarioPrincipalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.zip.DataFormatException;
 
 @Controller
 @RequestMapping("/inventarioPrincipal")
@@ -69,7 +68,7 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/agregarInventario")
-    public String consignacionYVenta(@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model){
+    public String consignacionYVenta(@ModelAttribute("referencia2") String referencia2 , @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model , @RequestParam("referencia") int referencia ){
         /*String fecha = "01/01/1999";
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         Date fechaDate = null;
@@ -82,28 +81,40 @@ public class InventarioproductoController {
         {
 
         }*/
-
+        if(referencia == 1){
         model.addAttribute("listaArtesano",artesanoRepository.findAll());
-        return "inventario/consigYventa";
-    }
+        referencia2 = "consig";
+        return "inventario/consig";}
+        else {
+            model.addAttribute("listaArtesano",artesanoRepository.findAll());
+            return "inventario/comprado";
 
-    @GetMapping("/stock")
-    public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
-        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-        model.addAttribute("stockProductos",inventarioSedeRepository.
-                listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
-        return "inventario/stockProductoInvPrincipal";
+        }
     }
 
     @PostMapping("/agregarConsigVenta")
-    public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+    public String ingresarConsignacionOventa(@ModelAttribute("referencia2") String referencia2,Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) throws ParseException {
 
-        System.out.println(consigYventa);
-        Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
-         int idultimo = save.getIdconsignacion();
+        if (referencia2.equals("consig")) {
+            Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
+            int idultimo = save.getIdconsignacion();
 
-        return "redirect:/inventarioPrincipal/sgteProductos/"+idultimo;
+            return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
+        }else{
+
+            Locale locale = new Locale("pe", "PE");
+
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
+            String fechafin = dateFormat.format(new Date());
+            fechafin = "22/12/1900";
+            consigYventa.setFechafin(dateFormat.parse(fechafin));
+
+            Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
+            int idultimo = save.getIdconsignacion();
+
+            return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
+        }
     }
 
     @GetMapping("/sgteProductos/{idultimo}")
@@ -208,7 +219,13 @@ public class InventarioproductoController {
         return "inventario/inventarioPrincipal";
     }
 
-
+    @GetMapping("/stock")
+    public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+        model.addAttribute("stockProductos",inventarioSedeRepository.
+                listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
+        return "inventario/stockProductoInvPrincipal";
+    }
 
 
 
