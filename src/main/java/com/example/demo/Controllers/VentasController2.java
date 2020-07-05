@@ -25,8 +25,8 @@ public class VentasController2 {
     }
 
     @PostMapping("/mensual")
-    public ResponseEntity<InputStreamResource> exportData(@RequestParam("ano")String ano) throws Exception{
-        ByteArrayInputStream stream = serviceExcel.exportarData(ano);
+    public ResponseEntity<InputStreamResource> exportData(@RequestParam("mes")String mes) throws Exception{
+        ByteArrayInputStream stream = serviceExcel.exportarData(mes);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition","attachment; filename=Ventas.xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));

@@ -19,7 +19,7 @@ public class Excel implements ServiceExcel{
     VentaRepository ventaRepository;
 
     @Override
-    public ByteArrayInputStream exportarData(String dato) throws Exception {
+    public ByteArrayInputStream exportarData(String mes) throws Exception {
 
         int linea = 0;
         String[] columns = {"#", "RUC/DNI","Nombre Comprador","# Documento","Lugar de Vente","Fecha Venta",
