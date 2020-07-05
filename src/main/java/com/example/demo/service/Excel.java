@@ -14,11 +14,12 @@ import java.util.List;
 
 @Service
 public class Excel implements ServiceExcel{
+
     @Autowired
     VentaRepository ventaRepository;
 
     @Override
-    public ByteArrayInputStream exportarData() throws Exception {
+    public ByteArrayInputStream exportarData(String dato) throws Exception {
 
         int linea = 0;
         String[] columns = {"#", "RUC/DNI","Nombre Comprador","# Documento","Lugar de Vente","Fecha Venta",
@@ -31,15 +32,10 @@ public class Excel implements ServiceExcel{
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
         headerFont.setColor(IndexedColors.BLUE.getIndex());
-
         CellStyle headerCellStyle = workbook.createCellStyle();
         headerCellStyle.setFont(headerFont);
         headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
         headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        headerCellStyle.setFillBackgroundColor(HSSFColor.HSSFColorPredefined.YELLOW.getIndex());
-        //headerCellStyle.setFillPattern(FillPatternType.THIN_BACKWARD_DIAG);
-
-
         sheet.setColumnWidth(0, 1000);
         sheet.setColumnWidth(1, 5000);
         sheet.setColumnWidth(2, 5000);
@@ -59,6 +55,9 @@ public class Excel implements ServiceExcel{
         }
         linea++;
         for (Ventas ventas : ventaRepository.findAll()){
+            CellStyle headerCellStyle2 = workbook.createCellStyle();
+            headerCellStyle2.setAlignment(HorizontalAlignment.CENTER);
+            headerCellStyle2.setVerticalAlignment(VerticalAlignment.CENTER);
             row = sheet.createRow(linea);
             row.createCell(0).setCellValue(ventas.getIdventas());
             row.createCell(1).setCellValue(ventas.getRucdni());
@@ -69,6 +68,15 @@ public class Excel implements ServiceExcel{
             row.createCell(6).setCellValue(ventas.getTipodocumento());
             row.createCell(7).setCellValue(ventas.getSede().getNombre());
             row.createCell(8).setCellValue(ventas.getTienda().getNombre());
+            row.createCell(0).setCellStyle(headerCellStyle2);
+            row.createCell(1).setCellStyle(headerCellStyle2);
+            row.createCell(2).setCellStyle(headerCellStyle2);
+            row.createCell(3).setCellStyle(headerCellStyle2);
+            row.createCell(4).setCellStyle(headerCellStyle2);
+            row.createCell(5).setCellStyle(headerCellStyle2);
+            row.createCell(6).setCellStyle(headerCellStyle2);
+            row.createCell(7).setCellStyle(headerCellStyle2);
+            row.createCell(8).setCellStyle(headerCellStyle2);
             linea++;
         }
         workbook.write(stream);
