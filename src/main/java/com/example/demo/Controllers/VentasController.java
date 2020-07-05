@@ -97,6 +97,7 @@ public class VentasController {
             }
 
         }
+        ventaRepository.save(ventas);
         return "venta/registroventa";
     }
 
