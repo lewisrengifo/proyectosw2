@@ -18,8 +18,8 @@ import java.util.List;
 @Repository
 public interface InventarioSedeRepository extends JpaRepository<Inventariosede,Integer> {
 
-    @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)",
-            countQuery = "SELECT count(*) FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1);", nativeQuery = true)
+    @Query(value="SELECT * FROM inventariosede invs, sede se where se.nombre=?1 and invs.sede_idsede=se.idsede",
+            countQuery = "SELECT * FROM inventariosede invs, sede se where se.nombre=?1 and invs.sede_idsede=se.idsede", nativeQuery = true)
     Page<Inventariosede> obtenerInvDeMiSede(String sesionSede, Pageable pageable);
 
 
