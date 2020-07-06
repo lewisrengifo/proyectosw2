@@ -3,6 +3,7 @@ package com.example.demo.Entity;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "ventas")
@@ -43,9 +44,20 @@ public class Ventas {
     @JoinColumn(name = "tienda_idtienda")
     private Tienda tienda;
 
-    @ManyToOne
-    @JoinColumn(name = "iventariosede_idiventariosede")
-    private Inventariosede inventariosede;
+    @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
+    private Set<ProductoVenta> productoVenta;
+    //@ManyToOne
+    //@JoinColumn(name = "iventariosede_idiventariosede")
+    //private Inventariosede inventariosede;
+
+    public Set<ProductoVenta> getProductoVenta() {
+        return productoVenta;
+    }
+
+    public void setProductoVenta(Set<ProductoVenta> productoVenta) {
+        this.productoVenta = productoVenta;
+    }
+
 
     @NotNull(message = "No puede ser nulo.")
     @Digits(integer = 5, fraction = 0)
@@ -147,11 +159,9 @@ public class Ventas {
         this.tienda = tienda;
     }
 
-    public Inventariosede getInventariosede() {
-        return inventariosede;
-    }
+    //public Inventariosede getInventariosede() {
+      //  return inventariosede;
+    //}
 
-    public void setInventariosede(Inventariosede inventariosede) {
-        this.inventariosede = inventariosede;
-    }
+    //public void setInventariosede(Inventariosede inventariosede) { this.inventariosede = inventariosede;    }
 }
