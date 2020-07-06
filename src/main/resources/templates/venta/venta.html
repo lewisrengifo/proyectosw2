@@ -29,11 +29,7 @@
                             <div class="table-responsive">
                                 <h2 >Complete los campos</h2>
                                 <br>
-                                <div th:if="${msg1 != null}" th:text="${msg2}" class="alert alert-success"
-                                     role="alert"></div>
-                                <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger"
-                                     role="alert"></div>
-                                <form method="post" th:action="@{'/inventarioSede/agregarStock'}" th:object="${ventas}">
+                                <form method="post" th:action="@{'/ventas/registroventa'}" th:object="${ventas}">
                                     <input type="hidden" th:field="*{idiventariosede}"/>
                                     <!--<div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
