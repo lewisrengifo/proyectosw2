@@ -59,6 +59,7 @@ public class VentasController {
                                  RedirectAttributes redirectAttributes, HttpSession session) {
 
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+
         int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
         model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
         model.addAttribute("listaTiendas",tiendaRepository.listaTiendasPorSede(sedeUsuario));
@@ -66,39 +67,39 @@ public class VentasController {
         model.addAttribute("idsede",usuariologueado.getSede_idsede().getIdsede());
 
         if (bindingResult.hasErrors()) {
-            return "venta/registroventa";
+            return "venta/registoventa";
         }
         for (Ventas ventas1 : ventaRepository.findAll()) {
             if (ventas1.getIdventas()== 0) {
                 if (ventas.getNumerodocumento().equals(ventas1.getNumerodocumento())) {
-                    redirectAttributes.addFlashAttribute("msg", "Documento de venta existente.");
+                    redirectAttributes.addFlashAttribute("msg1", "Documento de venta existente.");
                     redirectAttributes.addFlashAttribute("ventas", ventas);
-                    return "venta/registroventa";
+                    return "venta/registoventa";
                 } else if (ventas1.getIdventas() == 0) {
-                    redirectAttributes.addFlashAttribute("msg", "Venta registrada exitosamente.");
-                    return "venta/registroventa";
-                }
-                //BLOQUE PARA EDITAR VENTA
-                //} else {
-                //    redirectAttributes.addFlashAttribute("msg", "Venta actualizada exitosamente");
+                    redirectAttributes.addFlashAttribute("msg2", "Venta registrada exitosamente.");
+                    return "redirect:/venta";
                 //}
+                //BLOQUE PARA EDITAR VENTA
+                } else {
+                    redirectAttributes.addFlashAttribute("msg2", "Venta actualizada exitosamente");
+                }
             } else{
                 for (Ventas ventas2 : ventaRepository.buscarmenosmio(ventas.getIdventas())) {
-                    if (ventas.getNumerodocumento().equals(ventas1.getNumerodocumento())) {
-                        redirectAttributes.addFlashAttribute("msg", "Documento de venta ya existe.");
+                    if (ventas.getNumerodocumento().equals(ventas2.getNumerodocumento())) {
+                        redirectAttributes.addFlashAttribute("msg1", "Documento de venta ya existe.");
                         redirectAttributes.addFlashAttribute("ventas", ventas);
-                        return "venta/registroventa";
-                    }
-                    /* BLOQUE PARA EDITAR VENTA
+                        return "venta/registoventa";
+                    //}
+                    /* BLOQUE PARA EDITAR VENTA*/
                     } else {
-                        redirectAttributes.addFlashAttribute("msg", "Venta actualizada exitosamente");
-                    }*/
+                        redirectAttributes.addFlashAttribute("msg2", "Venta actualizada exitosamente");
+                    }
                 }
             }
 
         }
         ventaRepository.save(ventas);
-        return "venta/registroventa";
+        return "venta/registoventa";
     }
 
     @PostMapping("/agregarVenta")
