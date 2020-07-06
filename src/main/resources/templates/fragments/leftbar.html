@@ -81,33 +81,29 @@
 
             </li>
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
-                <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Tienda <span class="fa arrow"></span></a>
+
+
+            <li>
+                <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Sede <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level ">
-                    <li>
-                        <a th:href="@{'/tienda'}"  class=" waves-effect waves-dark"> Gestion de Tiendas</a>
+                    <li sec:authorize="hasAnyAuthority('Gestor principal')">
+                        <a th:href="@{'/sede'}" > Gestion de Sedes</a>
                     </li>
-                    <li>
-                        <a th:href="@{/inventarioTienda}"  >Inventario Tienda</a>
+                    <li sec:authorize="hasAnyAuthority('Gestor principal' )">
+                        <a  th:href="@{'/inventarioSede'}"  > Inventario de Sedes</a>
+                    </li>
+                    <li sec:authorize="hasAnyAuthority('Gestor sede' )">
+                        <a  th:href="@{/inventarioSede/listarInvMiSede}"  th:text="'Inventario '+${session.usuario.sede_idsede.nombre}" >Inventario Sede</a>
                     </li>
                 </ul>
-
             </li>
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal' )">
-                <a  th:href="@{'/inventarioSede'}"  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
-            </li>
-            <li sec:authorize="hasAnyAuthority('Gestor sede' )">
-                <a  th:href="@{/inventarioSede/listarInvMiSede}"  class=" waves-effect waves-dark"><i class="fa fa-desktop"></i> Inventario Sede</a>
-            </li>
 
             <li sec:authorize="hasAnyAuthority('Administrador')">
                 <a th:href="@{'/usuario'}"  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de Usuarios</a>
             </li>
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal')">
-                <a th:href="@{'/sede'}"  class=" waves-effect waves-dark"><i class="fa fa-table"></i> Gestion de Sedes</a>
-            </li>
+
 
             <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')">
                 <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Descripción de productos <span class="fa arrow"></span></a>
@@ -135,6 +131,17 @@
 
             </li>
 
+            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
+                <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Tiendas <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level ">
+                    <li>
+                        <a th:href="@{'/tienda'}"  class=" waves-effect waves-dark"> Gestion de Tiendas</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/inventarioTienda}"  >Inventario Tienda</a>
+                    </li>
+                </ul>
+            </li>
 
             <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
                 <a href="#" class=" waves-effect waves-dark"><i class="fa fa-sitemap"></i> Ventas <span class="fa arrow"></span></a>
