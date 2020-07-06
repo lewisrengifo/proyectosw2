@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.Dto.ReporteMensualoAnualMosqoyDto;
 import com.example.demo.Entity.Ventas;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -19,15 +20,15 @@ public class Excel implements ServiceExcel{
     VentaRepository ventaRepository;
 
     @Override
-    public ByteArrayInputStream exportarData(String mes) throws Exception {
+    public ByteArrayInputStream exportarData(String mes,List<ReporteMensualoAnualMosqoyDto> lista,String titulo) throws Exception {
 
         int linea = 0;
-        String[] columns = {"#", "RUC/DNI","Nombre Comprador","# Documento","Lugar de Vente","Fecha Venta",
-        "Tipo de Documento(Factura/Boleta)","Sede","Tienda"};
+        String[] columns = {"Fecha de Venta", "Factura/Boleta","N Documento","RUC/DNI(Cliente)","Cliente","Cantidad",
+        "Codigo de Producto","Nombre de Producto","Color","Metodo de Pago"};
 
         Workbook workbook = new HSSFWorkbook(); //creando archivo Excel
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Sheet sheet = workbook.createSheet("Total Ventas"); //nombre de la hoja de excel
+        Sheet sheet = workbook.createSheet("Total Ventas del "+titulo); //nombre de la hoja de excel
 
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
@@ -36,24 +37,25 @@ public class Excel implements ServiceExcel{
         headerCellStyle.setFont(headerFont);
         headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
         headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        sheet.setColumnWidth(0, 1000);
-        sheet.setColumnWidth(1, 5000);
-        sheet.setColumnWidth(2, 5000);
-        sheet.setColumnWidth(3, 5000);
-        sheet.setColumnWidth(4, 5000);
-        sheet.setColumnWidth(5, 5000);
-        sheet.setColumnWidth(6, 9000);
-        sheet.setColumnWidth(7, 5000);
-        sheet.setColumnWidth(8, 5000);
+        sheet.setColumnWidth(0, 7000);
+        sheet.setColumnWidth(1, 7000);
+        sheet.setColumnWidth(2, 7000);
+        sheet.setColumnWidth(3, 7000);
+        sheet.setColumnWidth(4, 7000);
+        sheet.setColumnWidth(5, 7000);
+        sheet.setColumnWidth(6, 7000);
+        sheet.setColumnWidth(7, 7000);
+        sheet.setColumnWidth(8, 7000);
+        sheet.setColumnWidth(9, 7000);
         Row row = sheet.createRow(linea);
 
         for (int i = 0; i < columns.length; i++) {
             Cell cell = row.createCell(i);
             cell.setCellValue(columns[i]);
             cell.setCellStyle(headerCellStyle);
-
         }
         linea++;
+
         for (Ventas ventas : ventaRepository.findAll()){
             CellStyle headerCellStyle2 = workbook.createCellStyle();
             headerCellStyle2.setAlignment(HorizontalAlignment.CENTER);
