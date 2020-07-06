@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Inventariosede;
 import com.example.demo.Entity.Inventariotienda;
@@ -65,6 +66,16 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
     void actualizarStockSedeXVenta(@Param("stock") int stock, @Param("idinventariosede")int idinventariosede);
 
 
+
+
+
+
+    @Query(value="SELECT invs.* FROM inventariosede  invs , inventarioproducto inve, producto p where p.nombreproducto like %?1%\n" +
+            "                and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario ",
+            countQuery ="SELECT count(*) FROM inventariosede  invs , inventarioproducto inve, producto p where p.nombreproducto like %?1%\n" +
+                    "                and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario ",
+            nativeQuery = true)
+    Page<Inventariosede> buscadorInventarioSede(String search, Pageable pageable);
 
 
 }

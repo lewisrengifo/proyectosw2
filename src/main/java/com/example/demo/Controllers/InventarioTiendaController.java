@@ -6,7 +6,6 @@ import com.example.demo.Repository.InventarioSedeRepository;
 import com.example.demo.Repository.InventarioTiendaRepository;
 import com.example.demo.Repository.ProductoRepository;
 import com.example.demo.Repository.TiendaRepository;
-import com.example.demo.service.InventarioTiendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,31 +37,53 @@ public class InventarioTiendaController {
     @Autowired
     TiendaRepository tiendaRepository;
 
-    @Autowired
-    InventarioTiendaService inventarioTiendaService;
-
 
     @GetMapping(value = {"","/","/lista"})
-    public String listaInventarioTienda(Model model,@RequestParam Map<String, Object> params, HttpSession session){
+    public String listaInventarioTienda(Model model,@RequestParam Map<String, Object> params , RedirectAttributes attr) {
 
-        Usuario user = (Usuario) session.getAttribute("usuario");
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        Page<Inventariotienda> pageInvTienda = inventarioTiendaService.listaInventarioTiendaMiSede(user.getSede_idsede().getIdsede(),page);
-        int totalPage = pageInvTienda.getTotalPages();
-        if (totalPage > 0) {
-            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioTienda/lista";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.findAll(pageRequest);
+            int totalPage = pageInvTienda.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioTienda/lista";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioTienda/lista";
+
+
+
+            }
+
+            model.addAttribute("listaInventarioTienda", pageInvTienda.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventarioTienda";
         }
 
-        model.addAttribute("listaInventarioTienda", pageInvTienda.getContent());
-        model.addAttribute("current", page + 1);
-        model.addAttribute("next", page + 2);
-        model.addAttribute("prev", page);
-        model.addAttribute("last", totalPage);
-
-        return "inventario/inventarioTienda";
-    }
 
 
     @GetMapping("/asignarStock")
@@ -71,44 +92,72 @@ public class InventarioTiendaController {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         model.addAttribute("inventario", inventarioSedeRepository.obtenerInvDeMiSedeNormal(usuario.getSede_idsede().getNombre()));
-        model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(usuario.getSede_idsede().getIdsede()));
+        model.addAttribute("listaTiendas", tiendaRepository.findAll());
         return "Tienda/asignarStock";
     }
 
     @PostMapping("/agregarStock")
-    public String agregarStock(Model model, @ModelAttribute("inventariotienda") Inventariotienda inventariotienda, @ModelAttribute("tienda") Tienda tienda,HttpSession session, RedirectAttributes attr) {
-        Usuario user = (Usuario) session.getAttribute("usuario");
+    public String agregarStock(Model model, @ModelAttribute("inventariotienda") Inventariotienda inventariotienda, @ModelAttribute("tienda") Tienda tienda) {
         Inventariotienda invt = new Inventariotienda();
+
         invt = inventariotienda;
         inventariotienda.setEstado("Entregado");
-        int cantidadParaTienda = inventariotienda.getStocktienda();
-        int buscarIdInventarioPrincipal = inventariotienda.getInventariosede().getInventarioproductoidinventario().getIdinventario();
-        Inventariosede inventarioPrincipalProducto = inventarioSedeRepository.obtenerStockSedePrincipal(user.getSede_idsede().getIdsede(), buscarIdInventarioPrincipal);
-        int cantidadProductostock = inventarioPrincipalProducto.getStock();
-
-        if(cantidadProductostock>cantidadParaTienda){
-            int stockActualPrincipal = cantidadProductostock-cantidadParaTienda;
-            int sedePrincipal = user.getSede_idsede().getIdsede();
-            Inventariotienda inventarioTiendaCambia = inventarioTiendaRepository.ObtenerInventariParacambiarStockParaTienda(inventariotienda.getInventariosede().getIdiventariosede(), inventariotienda.getTienda().getIdtienda());
-            if (inventarioTiendaCambia==null) {
-                inventarioSedeRepository.actualizarStockSede(stockActualPrincipal,inventarioPrincipalProducto.getIdiventariosede());
-                inventarioTiendaRepository.save(inventariotienda);
-            }else{
-                int nuevoTotal = inventarioTiendaCambia.getStocktienda() + cantidadParaTienda;
-                //actuliza el producto de la tienda
-                inventarioSedeRepository.actualizarStockTienda(nuevoTotal,inventarioTiendaCambia.getIdiventariotienda());
-                //actuliza el producto en el principal
-                inventarioSedeRepository.actualizarStockSede(stockActualPrincipal,inventarioPrincipalProducto.getIdiventariosede());
-                attr.addFlashAttribute("msgRepetido", "Se mando producto a sede exitosamente");
-            }
-        }else{
-            attr.addFlashAttribute("msgRepetido", "La Cantidad asignada excede la del producto");
-            return "redirect:/inventarioTienda/asignarStock";
-        }
-
+        inventarioTiendaRepository.save(inventariotienda);
 
         return "redirect:/inventarioTienda/asignarStock";
     }
+
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr) {
+        String busqueda = (String) params.get("searchField");
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/inventarioTienda/lista";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioTienda/lista";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.buscadorInventarioTienda(busqueda,pageRequest);
+            int totalPage = pageInvTienda.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioTienda/lista";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioTienda/lista";
+
+
+
+            }
+
+            model.addAttribute("listaInventarioTienda", pageInvTienda.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventarioTienda";
+        }
+    }
+
 
 }
 

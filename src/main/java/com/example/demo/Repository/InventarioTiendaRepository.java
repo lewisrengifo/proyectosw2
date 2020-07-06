@@ -9,23 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface InventarioTiendaRepository extends JpaRepository<Inventariotienda,Integer> {
 
-    @Query(value="select * from inventariotienda where iventariosede_idiventariosede=?1 and tienda_idtienda=?2",nativeQuery=true)
-    Inventariotienda ObtenerInventariParacambiarStockParaTienda(int idsede, int idtienda);
 
-
-
-    @Query(value="SELECT it.* FROM  inventariotienda it " +
-            "inner join inventariosede invSede on it.iventariosede_idiventariosede=invSede.idiventariosede " +
-            "where invSede.sede_idsede=?1",
-            countQuery="SELECT Count(it.*) FROM  inventariotienda it " +
-            "inner join inventariosede invSede on it.iventariosede_idiventariosede=invSede.idiventariosede " +
-            "where invSede.sede_idsede=?1"
-            ,nativeQuery=true)
-    Page<Inventariotienda> ObtenerInventarioTiendaDeMiSede(int idsede, Pageable pageable);
-
+    @Query(value="SELECT invt.* FROM inventariotienda  invt , inventarioproducto inve, inventariosede invs ,producto p where p.nombreproducto like %?1% \n" +
+            "and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario and invs.idiventariosede = invt.iventariosede_idiventariosede ",
+            countQuery ="SELECT count(*) FROM inventariotienda  invt , inventarioproducto inve, inventariosede invs ,producto p where p.nombreproducto like %?1% \n" +
+                    "and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario and invs.idiventariosede = invt.iventariosede_idiventariosede",
+            nativeQuery = true)
+    Page<Inventariotienda> buscadorInventarioTienda(String search, Pageable pageable);
 }

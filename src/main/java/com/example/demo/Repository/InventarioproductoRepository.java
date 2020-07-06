@@ -38,4 +38,7 @@ public interface  InventarioproductoRepository extends JpaRepository <Inventario
     public Inventarioproducto findByProducto(Producto producto);
 
 
+
+
+
 }
