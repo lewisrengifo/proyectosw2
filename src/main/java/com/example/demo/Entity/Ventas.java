@@ -3,11 +3,11 @@ package com.example.demo.Entity;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "ventas")
 public class Ventas {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idventas;
@@ -43,30 +43,15 @@ public class Ventas {
     @JoinColumn(name = "tienda_idtienda")
     private Tienda tienda;
 
-    @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
-    private Set<ProductoVenta> productoVenta;
-    //@ManyToOne
-    //@JoinColumn(name = "iventariosede_idiventariosede")
-    //private Inventariosede inventariosede;
-
-    public Set<ProductoVenta> getProductoVenta() {
-        return productoVenta;
-    }
-
-    public void setProductoVenta(Set<ProductoVenta> productoVenta) {
-        this.productoVenta = productoVenta;
-    }
-
+    @ManyToOne
+    @JoinColumn(name = "iventariosede_idiventariosede")
+    private Inventariosede inventariosede;
 
     @NotNull(message = "No puede ser nulo.")
     @Digits(integer = 5, fraction = 0)
     @Min(value=1)
     @Max(value=32767)
     private int cantidad;
-
-
-
-
 
     @NotBlank(message = "No debe ser vacío")
     @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
@@ -162,9 +147,11 @@ public class Ventas {
         this.tienda = tienda;
     }
 
-    //public Inventariosede getInventariosede() {
-      //  return inventariosede;
-    //}
+    public Inventariosede getInventariosede() {
+        return inventariosede;
+    }
 
-    //public void setInventariosede(Inventariosede inventariosede) { this.inventariosede = inventariosede;    }
+    public void setInventariosede(Inventariosede inventariosede) {
+        this.inventariosede = inventariosede;
+    }
 }

@@ -48,8 +48,8 @@ public class VentasController {
     @Autowired
     TiendaRepository tiendaRepository;
 
-    @GetMapping(value={"/listaVentas",""})
-    public String listarVentas(Model model, HttpSession session){
+    @GetMapping(value = {"/listaVentas", ""})
+    public String listarVentas(Model model, HttpSession session) {
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
         model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));
         return "venta/listaventa";
@@ -63,27 +63,27 @@ public class VentasController {
 
         int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
         model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
-        model.addAttribute("listaTiendas",tiendaRepository.listaTiendasPorSede(sedeUsuario));
-        model.addAttribute("usuarioRol",usuariologueado.getRol_idrol().getNombre());
-        model.addAttribute("idsede",usuariologueado.getSede_idsede().getIdsede());
+        model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(sedeUsuario));
+        model.addAttribute("usuarioRol", usuariologueado.getRol_idrol().getNombre());
+        model.addAttribute("idsede", usuariologueado.getSede_idsede().getIdsede());
 
         return "venta/registroventa";
     }
 
 
     @PostMapping("/agregarVenta")
-    public String ingresarVentas(Model model,@ModelAttribute("ventas")@Valid Ventas ventas, BindingResult bindingResult,
-                                 RedirectAttributes redirectAttributes, HttpSession session){
+    public String ingresarVentas(Model model, @ModelAttribute("ventas") @Valid Ventas ventas, BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes, HttpSession session) {
 
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
         if (bindingResult.hasErrors()) {
             int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
             model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
-            model.addAttribute("listaTiendas",tiendaRepository.listaTiendasPorSede(sedeUsuario));
-            model.addAttribute("usuarioRol",usuariologueado.getRol_idrol().getNombre());
-            model.addAttribute("idsede",usuariologueado.getSede_idsede().getIdsede());
+            model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(sedeUsuario));
+            model.addAttribute("usuarioRol", usuariologueado.getRol_idrol().getNombre());
+            model.addAttribute("idsede", usuariologueado.getSede_idsede().getIdsede());
             return "venta/registroventa";
-        }else{
+        } else {
             if (ventas.getIdventas() == 0) {
                 for (Ventas unoDeVentas : ventaRepository.findAll()) {
                     if (ventas.getNumerodocumento().equals(unoDeVentas.getNumerodocumento())) {
@@ -91,11 +91,32 @@ public class VentasController {
                         redirectAttributes.addFlashAttribute("ventas", ventas);
                         int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
                         model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
-                        model.addAttribute("listaTiendas",tiendaRepository.listaTiendasPorSede(sedeUsuario));
-                        model.addAttribute("usuarioRol",usuariologueado.getRol_idrol().getNombre());
-                        model.addAttribute("idsede",usuariologueado.getSede_idsede().getIdsede());
+                        model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(sedeUsuario));
+                        model.addAttribute("usuarioRol", usuariologueado.getRol_idrol().getNombre());
+                        model.addAttribute("idsede", usuariologueado.getSede_idsede().getIdsede());
                         return "venta/registroventa";
                     } else {
+                        int cantidadDeStockEnsede = ventas.getInventariosede().getStock();
+                        if (cantidadDeStockEnsede > ventas.getCantidad()) {
+                            Optional<Inventariosede> idSedeCambiaStock = inventarioSedeRepository.findById(ventas.getInventariosede().getIdiventariosede());
+                            int aa = cantidadDeStockEnsede;
+                            int bb = ventas.getCantidad();
+                            int StockNuevo = aa - bb;
+                            Optional<Inventarioproducto> CambiaCantidadProducto =
+                                    inventarioproductoRepository.findById(idSedeCambiaStock.get().getInventarioproductoidinventario().getIdinventario());
+                            int nuevaCantidadProducto = CambiaCantidadProducto.get().getCantidad() - ventas.getCantidad();
+
+                            //Actualizar cantidad en inventario sede
+                            inventarioSedeRepository.actualizarStockSedeXVenta(StockNuevo, idSedeCambiaStock.get().getIdiventariosede());
+                            //actualizar cantidad en inventario principal
+                            inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(nuevaCantidadProducto, CambiaCantidadProducto.get().getIdinventario());
+
+                            ventaRepository.save(ventas);
+                        } else {
+                            return "redirect:/venta/registroventa";
+                        }
+
+                        //return "redirect:/venta";
                         model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));
                         redirectAttributes.addFlashAttribute("msg2", "Venta registrada exitosamente.");
                         ventaRepository.save(ventas);
@@ -109,9 +130,9 @@ public class VentasController {
                         redirectAttributes.addFlashAttribute("ventas", ventas);
                         int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
                         model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
-                        model.addAttribute("listaTiendas",tiendaRepository.listaTiendasPorSede(sedeUsuario));
-                        model.addAttribute("usuarioRol",usuariologueado.getRol_idrol().getNombre());
-                        model.addAttribute("idsede",usuariologueado.getSede_idsede().getIdsede());
+                        model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(sedeUsuario));
+                        model.addAttribute("usuarioRol", usuariologueado.getRol_idrol().getNombre());
+                        model.addAttribute("idsede", usuariologueado.getSede_idsede().getIdsede());
                         return "venta/registoventa";
                     } else {
                         model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));

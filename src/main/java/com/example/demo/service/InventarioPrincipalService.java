@@ -20,7 +20,7 @@ public class InventarioPrincipalService {
 
     public Page<Inventarioproducto> listAll(int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber ,5);
-        return inventarioproductoRepository.findAll( pageable);
+        return inventarioproductoRepository.findAll(pageable);
     }
 
     public Page<Inventarioproducto> listSearch(String search, int page){
