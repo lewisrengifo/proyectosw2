@@ -116,17 +116,17 @@
                                         <ul th:if="${last != 1}" class="pagination justify-content-center">
                                             <li class ="page-item" th:if="${current != 1 }">
                                                 <a class="page-link"  th:if="${busqueda }" th:href="@{'/producto/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
-                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${prev}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede' + '?page=' + ${prev}} "> Anterior </a>
                                             </li>
 
                                             <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
                                                 <a class="page-link" th:if="${busqueda}" th:href="@{'/producto/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
-                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede' + '?page=' + ${page}} " th:text="${page}"  ></a>
                                             </li>
 
                                             <li class ="page-item" th:if="${current != last }">
                                                 <a class="page-link"  th:if="${busqueda}" th:href="@{'/producto/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
-                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${next}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede' + '?page=' + ${next}} "> Siguiente </a>
                                             </li>
 
                                         </ul>
