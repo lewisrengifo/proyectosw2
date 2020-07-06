@@ -20,7 +20,7 @@ public class Excel implements ServiceExcel{
     VentaRepository ventaRepository;
 
     @Override
-    public ByteArrayInputStream exportarData(String mes,List<ReporteMensualoAnualMosqoyDto> lista,String titulo) throws Exception {
+    public ByteArrayInputStream exportarData(String ano,List<ReporteMensualoAnualMosqoyDto> lista,String tipo) throws Exception {
 
         int linea = 0;
         String[] columns = {"Fecha de Venta", "Factura/Boleta","N Documento","RUC/DNI(Cliente)","Cliente","Cantidad",
@@ -28,7 +28,7 @@ public class Excel implements ServiceExcel{
 
         Workbook workbook = new HSSFWorkbook(); //creando archivo Excel
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Sheet sheet = workbook.createSheet("Total Ventas del "+titulo); //nombre de la hoja de excel
+        Sheet sheet = workbook.createSheet("Total Ventas del "+tipo +" "+ano ); //nombre de la hoja de excel
 
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
@@ -56,21 +56,22 @@ public class Excel implements ServiceExcel{
         }
         linea++;
 
-        for (Ventas ventas : ventaRepository.findAll()){
+        for (ReporteMensualoAnualMosqoyDto reporteMensualoAnualMosqoyDto  : lista){
             CellStyle headerCellStyle2 = workbook.createCellStyle();
             headerCellStyle2.setAlignment(HorizontalAlignment.CENTER);
             headerCellStyle2.setVerticalAlignment(VerticalAlignment.CENTER);
             row = sheet.createRow(linea);
-            row.createCell(0).setCellValue(ventas.getIdventas());
-            row.createCell(1).setCellValue(ventas.getRucdni());
-            row.createCell(2).setCellValue(ventas.getNombrecomprador());
-            row.createCell(3).setCellValue(ventas.getNumerodocumento());
-            row.createCell(4).setCellValue(ventas.getLugarventa());
-            row.createCell(5).setCellValue(ventas.getFechaventa());
-            row.createCell(6).setCellValue(ventas.getTipodocumento());
-            row.createCell(7).setCellValue(ventas.getSede().getNombre());
-            row.createCell(8).setCellValue(ventas.getTienda().getNombre());
-            row.createCell(0).setCellStyle(headerCellStyle2);
+            row.createCell(0).setCellValue(reporteMensualoAnualMosqoyDto.getFechadeventa().toString());
+            row.createCell(1).setCellValue(reporteMensualoAnualMosqoyDto.getTipodedocumento());
+            row.createCell(2).setCellValue(reporteMensualoAnualMosqoyDto.getDocumento());
+            row.createCell(3).setCellValue(reporteMensualoAnualMosqoyDto.getRucodni());
+            row.createCell(4).setCellValue(reporteMensualoAnualMosqoyDto.getCliente());
+            row.createCell(5).setCellValue(reporteMensualoAnualMosqoyDto.getCantidad());
+            row.createCell(6).setCellValue(reporteMensualoAnualMosqoyDto.getCodigoproducto());
+            row.createCell(7).setCellValue(reporteMensualoAnualMosqoyDto.getNombredeproducto());
+            row.createCell(8).setCellValue(reporteMensualoAnualMosqoyDto.getColor());
+            row.createCell(9).setCellValue(reporteMensualoAnualMosqoyDto.getMetododepago());
+            /*row.createCell(0).setCellStyle(headerCellStyle2);
             row.createCell(1).setCellStyle(headerCellStyle2);
             row.createCell(2).setCellStyle(headerCellStyle2);
             row.createCell(3).setCellStyle(headerCellStyle2);
@@ -79,6 +80,7 @@ public class Excel implements ServiceExcel{
             row.createCell(6).setCellStyle(headerCellStyle2);
             row.createCell(7).setCellStyle(headerCellStyle2);
             row.createCell(8).setCellStyle(headerCellStyle2);
+            row.createCell(9).setCellStyle(headerCellStyle2);*/
             linea++;
         }
         workbook.write(stream);

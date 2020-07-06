@@ -34,25 +34,12 @@
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/mensual'}">
+                                        <form method="post" th:action="@{'/ventasexcel/ano'}">
                                             <td>1</td>
-                                            <td>Ventas total del Mes</td>
+                                            <td>Ventas total del Año</td>
                                             <td>
                                                 <div class="form-group" >
-                                                    <select class="form-control" name="mes" id="mes" style="width: 80%">
-                                                        <option value="mes" th:text="Enero"></option>
-                                                        <option value="mes" th:text="Febrero"></option>
-                                                        <option value="mes" th:text="Marzo"></option>
-                                                        <option value="mes" th:text="Abril"></option>
-                                                        <option value="mes" th:text="Mayo"></option>
-                                                        <option value="mes" th:text="Junio"></option>
-                                                        <option value="mes" th:text="Julio"></option>
-                                                        <option value="mes" th:text="Agosto"></option>
-                                                        <option value="mes" th:text="Septiembre"></option>
-                                                        <option value="mes" th:text="Octubre"></option>
-                                                        <option value="mes" th:text="Noviembre"></option>
-                                                        <option value="mes" th:text="Diciembre"></option>
-                                                    </select>
+                                                    <input type="text" class="form-control" value="1980" name="ano" id="ano" style="width: 20%">
                                                 </div>
                                             </td>
                                             <td><button type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
@@ -60,30 +47,51 @@
 
                                     </tr>
                                     <tr >
-                                        <td>2</td>
-                                        <td>Ventas total del Trimestre</td>
-                                        <td >
-                                            <div class="form-group" >
-                                                <select class="form-control" name="trimiestre" id="trimiestre" style="width: 80%">
-                                                    <option value="trimiestre" th:text="Primero"></option>
-                                                    <option value="trimiestre" th:text="Segundo"></option>
-                                                    <option value="trimiestre" th:text="Tecer"></option>
-                                                    <option value="trimiestre" th:text="Cuarto"></option>
-                                                </select>
-                                                    <input  type="text" class="form-control" value="1980 " name="anotri" id="anotri" style="width: 10%">
-                                            </div>
-                                        </td>
-                                        <td><a href="#">Exportar Reporte</a></td>
+                                        <form method="post" th:action="@{'/ventasexcel/anomes'}">
+                                            <td>2</td>
+                                            <td>Ventas total del Mes</td>
+                                            <td >
+                                                <div class="form-group" >
+                                                    <select class="form-control" name="mes" id="mes" style="width: 80%">
+                                                        <option >Enero</option>
+                                                        <option  >Febrero</option>
+                                                        <option >Marzo</option>
+                                                        <option >Abril</option>
+                                                        <option >Mayo</option>
+                                                        <option >Junio</option>
+                                                        <option  >Julio</option>
+                                                        <option  >Agosto</option>
+                                                        <option  >Septiembre</option>
+                                                        <option  >Octubre</option>
+                                                        <option >Noviembre</option>
+                                                        <option  >Diciembre</option>
+                                                    </select>
+
+                                                    <input  type="text" class="form-control" value="1980 " name="anomes" id="anomes" style="width: 20%">
+                                                </div>
+                                            </td>
+                                            <td><button type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
+
+                                        </form>
+
                                     </tr>
                                     <tr >
-                                        <td>2</td>
-                                        <td>Ventas total del Ano</td>
-                                        <td>
-                                            <div class="form-group" >
-                                                <input type="text" class="form-control" value="1980 " name="ano" id="ano" style="width: 10%">
-                                            </div>
-                                        </td>
-                                        <td><a href="#">Exportar Reporte</a></td>
+                                        <form method="post" th:action="@{'/ventasexcel/trimestre'}">
+                                            <td>2</td>
+                                            <td>Ventas total del Trimestre</td>
+                                            <td >
+                                                <div class="form-group" >
+                                                    <select class="form-control" name="trimestre" id="trimestre" style="width: 80%">
+                                                        <option >Primero</option>
+                                                        <option >Segundo</option>
+                                                        <option >Tercero</option>
+                                                        <option >Cuarto</option>
+                                                    </select>
+                                                    <input  type="text" class="form-control" value="1980" name="anotri" id="anotri" style="width: 20%">
+                                                </div>
+                                            </td>
+                                            <td><button type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -93,8 +101,30 @@
                 </div>
             </div>
         </div>
-
-
+        <!--td>
+            <div class="form-group" >
+                <select class="form-control" name="mes" id="mes" style="width: 80%">
+                    <option value="mes" th:text="Enero"></option>
+                    <option value="mes" th:text="Febrero"></option>
+                    <option value="mes" th:text="Marzo"></option>
+                    <option value="mes" th:text="Abril"></option>
+                    <option value="mes" th:text="Mayo"></option>
+                    <option value="mes" th:text="Junio"></option>
+                    <option value="mes" th:text="Julio"></option>
+                    <option value="mes" th:text="Agosto"></option>
+                    <option value="mes" th:text="Septiembre"></option>
+                    <option value="mes" th:text="Octubre"></option>
+                    <option value="mes" th:text="Noviembre"></option>
+                    <option value="mes" th:text="Diciembre"></option>
+                </select>
+            </div>
+        </td-->
+        <!--select class="form-control" name="trimiestre" id="trimiestre" style="width: 80%">
+            <option value="trimiestre" th:text="Primero"></option>
+            <option value="trimiestre" th:text="Segundo"></option>
+            <option value="trimiestre" th:text="Tecer"></option>
+            <option value="trimiestre" th:text="Cuarto"></option>
+        </select-->
 
     </div>
 </div>

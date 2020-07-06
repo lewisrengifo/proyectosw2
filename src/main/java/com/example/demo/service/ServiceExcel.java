@@ -6,5 +6,5 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface ServiceExcel {
-    ByteArrayInputStream exportarData(String mes, List<ReporteMensualoAnualMosqoyDto> lista,String titulo) throws Exception;
+    ByteArrayInputStream exportarData(String mes, List<ReporteMensualoAnualMosqoyDto> lista,String tipo) throws Exception;
 }
