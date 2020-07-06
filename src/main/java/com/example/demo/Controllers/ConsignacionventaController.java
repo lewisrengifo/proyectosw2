@@ -103,6 +103,9 @@ public class ConsignacionventaController {
         inventarioSedeRepository.save(inventariosede);
         return "redirect:/ConsignacionVenta";
 
+
+        
+
     }
 
     /*
