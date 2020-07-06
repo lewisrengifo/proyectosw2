@@ -53,6 +53,10 @@ public class Ventas {
     @Max(value=32767)
     private int cantidad;
 
+
+
+
+
     @NotBlank(message = "No debe ser vacío")
     @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String metodopago;
