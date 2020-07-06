@@ -29,7 +29,7 @@
                             <div class="table-responsive">
                                 <h2 >Complete los campos</h2>
                                 <br>
-                                <form method="post" th:action="@{'/ventas/registroventa'}" th:object="${ventas}">
+                                <form method="post" th:action="@{'/inventarioSede/agregarStock'}" th:object="${inventariosede}">
                                     <input type="hidden" th:field="*{idiventariosede}"/>
                                     <!--<div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
                                          role="alert" style="width: 40%">
@@ -74,7 +74,7 @@
                                         <select class="form-control" name="producto" id="producto" style="width: 40%">
                                             <option th:each=" pro : ${inventario}"
                                                     th:value="${pro.idinventario}"
-                                                    th:text="${pro.producto}">
+                                                    th:text="${pro.producto">
                                             </option>
                                         </select>
                                     </div>
