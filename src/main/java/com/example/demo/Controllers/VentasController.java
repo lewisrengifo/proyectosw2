@@ -122,6 +122,7 @@ public class VentasController {
             }
             model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));
             return "redirect:/venta";
+
         }
     }
 }
