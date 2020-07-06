@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
@@ -207,6 +208,8 @@ public class InventarioproductoController {
 
         return "inventario/inventarioPrincipal";
     }
+
+
 
 
 
