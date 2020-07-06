@@ -97,7 +97,7 @@ public class ProductoController {
        //Ojala salga xd
         HashMap<String, String> map = storageService.store(file);
         if (map.get("estado").equals("exito")) {
-            String filename2=(map.get("fileName"));
+            String filename2=(map.get("fileName")   );
             producto.setFoto(filename2);
             if (bindingResult.hasErrors()) {
                 model.addAttribute("listaLinea", lineaRepository.findAll());

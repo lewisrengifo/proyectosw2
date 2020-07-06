@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.SecureRandom;
 import java.util.HashMap;
 
 @Component
@@ -27,8 +28,16 @@ public class StorageService {
         HashMap<String,String> map = new HashMap<>();
 
         //Aqui obtenemos el nombre del archivo con su extension
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        //String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         //fileName=encriptar(fileName)+".jpg";
+        int numeroAleatorio = (int) (Math.random()*999999999+1);
+        String aleatorio= String.valueOf(numeroAleatorio);
+        String fileName=aleatorio+".jpg";
+        /*SecureRandom random = new SecureRandom();
+        byte bytes[] = new byte[20];
+        random.nextBytes(bytes);
+        String newname = bytes.toString();*/
+
         //Validamos si el archivo esta vacio
         try{
             if(file.isEmpty()){
