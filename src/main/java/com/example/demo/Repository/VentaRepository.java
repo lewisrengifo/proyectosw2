@@ -16,7 +16,4 @@ public interface VentaRepository extends JpaRepository<Ventas,Integer> {
     @Query(value = "SELECT * FROM ventas where sede_idsede=?1", nativeQuery = true)
     List<Ventas> listaVentasPorSede(int id);
 
-    @Query(value = "select * from ventas where idventas not in (select v.idventas from ventas v where v.idventas=?1);", nativeQuery = true)
-    List<Ventas> buscarmenosmio(int idventas);
-
 }

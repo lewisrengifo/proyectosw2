@@ -9,13 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,50 +53,18 @@ public class VentasController {
     }
 
     @GetMapping("/registroventa")
-    public String registrarVenta(Model model, @ModelAttribute("ventas")@Valid Ventas ventas, BindingResult bindingResult,
-                                 RedirectAttributes redirectAttributes, HttpSession session) {
+    public String registrarVenta(Model model, @ModelAttribute("ventas")Ventas ventas, HttpSession session) {
 
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+
         int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
         model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
         model.addAttribute("listaTiendas",tiendaRepository.listaTiendasPorSede(sedeUsuario));
         model.addAttribute("usuarioRol",usuariologueado.getRol_idrol().getNombre());
         model.addAttribute("idsede",usuariologueado.getSede_idsede().getIdsede());
-
-        if (bindingResult.hasErrors()) {
-            return "venta/registroventa";
-        }
-        for (Ventas ventas1 : ventaRepository.findAll()) {
-            if (ventas1.getIdventas()== 0) {
-                if (ventas.getNumerodocumento().equals(ventas1.getNumerodocumento())) {
-                    redirectAttributes.addFlashAttribute("msg", "Documento de venta existente.");
-                    redirectAttributes.addFlashAttribute("ventas", ventas);
-                    return "venta/registroventa";
-                } else if (ventas1.getIdventas() == 0) {
-                    redirectAttributes.addFlashAttribute("msg", "Venta registrada exitosamente.");
-                    return "venta/registroventa";
-                }
-                //BLOQUE PARA EDITAR VENTA
-                //} else {
-                //    redirectAttributes.addFlashAttribute("msg", "Venta actualizada exitosamente");
-                //}
-            } else{
-                for (Ventas ventas2 : ventaRepository.buscarmenosmio(ventas.getIdventas())) {
-                    if (ventas.getNumerodocumento().equals(ventas1.getNumerodocumento())) {
-                        redirectAttributes.addFlashAttribute("msg", "Documento de venta ya existe.");
-                        redirectAttributes.addFlashAttribute("ventas", ventas);
-                        return "venta/registroventa";
-                    }
-                    /* BLOQUE PARA EDITAR VENTA
-                    } else {
-                        redirectAttributes.addFlashAttribute("msg", "Venta actualizada exitosamente");
-                    }*/
-                }
-            }
-
-        }
         return "venta/registroventa";
     }
+
 
     @PostMapping("/agregarVenta")
     public String ingresarVentas(Model model,@ModelAttribute("ventas")Ventas ventas){
