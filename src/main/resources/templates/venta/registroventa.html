@@ -14,7 +14,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                STOCK PARA SEDE
+                Registro de venta
             </h1>
         </div>
 
@@ -32,6 +32,11 @@
 
                                 <h2 >Complete los campos</h2>
                                 <br>
+
+                                <div th:if="${msg1 != null}" th:text="${msg2}" class="alert alert-success"
+                                     role="alert"></div>
+                                <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger"
+                                     role="alert"></div>
                                 <form method="post" th:action="@{'/venta/agregarVenta'}" th:object="${ventas}">
                                     <input type="hidden" th:field="*{idventas}"/>
                                     <!--<div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
