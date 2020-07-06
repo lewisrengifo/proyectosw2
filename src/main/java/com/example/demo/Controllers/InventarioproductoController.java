@@ -68,22 +68,12 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/agregarInventario")
-    public String consignacionYVenta(@ModelAttribute("referencia2") String referencia2 , @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model , @RequestParam("referencia") int referencia ){
-        /*String fecha = "01/01/1999";
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaDate = null;
+    public String consignacionYVenta( @ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model , @RequestParam("referencia") int referencia ){
 
-        try {
-            fechaDate = formato.parse(fecha);
-            consigYventa.setFechafin();
-        }
-        catch (ParseException ex)
-        {
-
-        }*/
         if(referencia == 1){
-        model.addAttribute("listaArtesano",artesanoRepository.findAll());
-        referencia2 = "consig";
+            model.addAttribute("listaArtesano",artesanoRepository.findAll());
+            referencia2 = "consig";
+
         return "inventario/consig";}
         else {
             model.addAttribute("listaArtesano",artesanoRepository.findAll());
@@ -93,29 +83,39 @@ public class InventarioproductoController {
     }
 
     @PostMapping("/agregarConsigVenta")
-    public String ingresarConsignacionOventa(@ModelAttribute("referencia2") String referencia2,Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+    public String ingresarConsignacionOventa(@RequestParam("referencia2") String referencia2 ,Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) throws ParseException {
 
         if (referencia2.equals("consig")) {
+            consigYventa.setTipo("Consignación");
             Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
             int idultimo = save.getIdconsignacion();
 
             return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
         }else{
+            consigYventa.setTipo("Comprado");
+            String fecha= "22/12/1900";
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                Date fechafin = null;
+                try {
+                    fechafin = formato.parse(fecha);
+                }
+                catch (ParseException ex)
+                {
+                    System.out.println(ex);
 
-            Locale locale = new Locale("pe", "PE");
-
-            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
-            String fechafin = dateFormat.format(new Date());
-            fechafin = "22/12/1900";
-            consigYventa.setFechafin(dateFormat.parse(fechafin));
-
+                    return "redirect:/inventarioPrincipal";
+                }
             Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
             int idultimo = save.getIdconsignacion();
-
             return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
+            }
+
+
+
+
         }
-    }
+
 
     @GetMapping("/sgteProductos/{idultimo}")
     public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,

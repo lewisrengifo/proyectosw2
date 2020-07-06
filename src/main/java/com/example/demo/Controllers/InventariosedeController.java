@@ -154,7 +154,57 @@ public class InventariosedeController {
         return "redirect:/inventarioSede/listarInvMiSede";
     }
 
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+        String busqueda = (String) params.get("searchField");
 
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/inventarioSede/lista";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioSede/lista";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventariosede> pageInvSede = inventarioSedeRepository.buscadorInventarioSede(busqueda, pageRequest);
+            int totalPage = pageInvSede.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioSede/lista";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioSede/lista";
+
+
+
+            }
+
+            model.addAttribute("listaInventarioSede", pageInvSede.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventarioSede";
+        }
+    }
 
 
 
