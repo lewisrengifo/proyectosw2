@@ -5,6 +5,7 @@ import com.example.demo.Repository.*;
 import com.example.demo.service.InventarioPrincipalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -46,24 +47,27 @@ public class InventarioproductoController {
     @GetMapping(value = {"","/","/lista"})
     public String listaInventarioProducto(Model model,@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params){
 
-        int currentPage = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
-        long totalItems = page.getTotalElements();
-        int totalPages = page.getTotalPages();
+        //Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
+        PageRequest pageRequest = PageRequest.of(page, 5);
+
+        Page<Inventarioproducto> pageProduct = inventarioproductoRepository.findAll(pageRequest);
+        long totalItems = pageProduct.getTotalElements();
+        int totalPages = pageProduct.getTotalPages();
         if (totalPages > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
         }
 
-        List<Inventarioproducto> listaInventarioPrincipal = page.getContent();
+        List<Inventarioproducto> listaInventarioPrincipal = pageProduct.getContent();
 
 
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("listaInventarioPrincipal", listaInventarioPrincipal);
-        model.addAttribute("current", currentPage + 1);
-        model.addAttribute("next", currentPage + 2);
-        model.addAttribute("prev", currentPage);
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
         model.addAttribute("last", totalPages);
         return "inventario/inventarioPrincipal";
     }

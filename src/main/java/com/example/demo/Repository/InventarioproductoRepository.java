@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+import antlr.collections.List;
 import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Inventarioproducto;
 
@@ -36,6 +37,8 @@ public interface InventarioproductoRepository extends JpaRepository <Inventariop
     void ActualizarCantidadInventarioPrincipal(@Param("cantidad") int cantidad, @Param("idinventario") int idinventario);
 
     //public Inventarioproducto findByProducto(Producto producto);
+
+
 
 
 

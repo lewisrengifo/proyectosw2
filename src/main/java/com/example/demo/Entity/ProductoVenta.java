@@ -20,10 +20,7 @@ public class ProductoVenta extends Inventarioproducto {
 
     }
 
-    public ProductoVenta(Producto producto, Categoria categoria, Tamano tamano, String color, Double preciomosqoy, int cantidad) {
-       super(producto, categoria, tamano,color, preciomosqoy);
-       this.cantidad = cantidad;
-    }
+
 
     public void aumentarCantidad(int cantidad) {
         this.cantidad=cantidad+this.cantidad;
