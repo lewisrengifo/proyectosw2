@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -68,8 +69,26 @@ public class VentasController {
 
     @PostMapping("/agregarVenta")
     public String ingresarVentas(Model model,@ModelAttribute("ventas")Ventas ventas){
+        int cantidadDeStockEnsede = ventas.getInventariosede().getStock();
+        if (cantidadDeStockEnsede>ventas.getCantidad()){
+            Optional<Inventariosede> idSedeCambiaStock = inventarioSedeRepository.findById(ventas.getInventariosede().getIdiventariosede());
+            int aa =cantidadDeStockEnsede;
+            int bb = ventas.getCantidad();
+            int StockNuevo = aa - bb ;
+            Optional<Inventarioproducto> CambiaCantidadProducto = 
+                    inventarioproductoRepository.findById(idSedeCambiaStock.get().getInventarioproductoidinventario().getIdinventario());
+            int nuevaCantidadProducto= CambiaCantidadProducto.get().getCantidad() - ventas.getCantidad();
 
-        ventaRepository.save(ventas);
+            //Actualizar cantidad en inventario sede
+            inventarioSedeRepository.actualizarStockSedeXVenta(StockNuevo,idSedeCambiaStock.get().getIdiventariosede());
+            //actualizar cantidad en inventario principal
+            inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(nuevaCantidadProducto,CambiaCantidadProducto.get().getIdinventario());
+
+            ventaRepository.save(ventas);
+        }else {
+            return "redirect:/venta/registroventa";
+        }
+
         return "redirect:/venta";
     }
 }

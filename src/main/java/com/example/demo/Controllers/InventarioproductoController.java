@@ -170,7 +170,7 @@ public class InventarioproductoController {
         inventariosede.setStock(invProductoUltimo.getCantidad());
         inventariosede.setFechallegada(fechatudei);
         inventariosede.setInventarioproductoidinventario(invProductoUltimo);
-        inventariosede.setEstado("entregado");
+        inventariosede.setEstado("recibido");
         inventariosede.setSede(usuariologueado.getSede_idsede());
         inventarioSedeRepository.save(inventariosede);
 
