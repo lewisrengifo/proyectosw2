@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Artesano')"></head>
 <body>
 
 <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
@@ -16,11 +16,11 @@
             <div  class="col-md-8">
                 <div class="card">
                     <div class="container">
-                        <h2 th:text="${artesano.idartesano == 0? 'Nuevo artesano' : 'editar artesano'}">Nuevo/Editar</h2>
+                        <h2 th:text="${artesano.idartesano == 0? 'Nuevo artesano' : 'Editar artesano'}">Nuevo/Editar</h2>
                         <br>
                         <form method="post" th:action="@{'/artesano/guardar'}" th:object="${artesano}">
                             <input type="hidden" th:field="*{idartesano}"/>
-                            <div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
+                            <div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-danger"
                                  role="alert" style="width: 40%">
                             </div>
 

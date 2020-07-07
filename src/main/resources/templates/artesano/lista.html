@@ -50,10 +50,10 @@
                                     <tr class="info">
                                         <th>#</th>
                                         <th>NOMBRE</th>
-                                        <th>APELLIDO PATERNO</th>
-                                        <th>APELLIDO MATERNO</th>
-                                        <th>CODIGO</th>
-                                        <th>COMUNIDAD</th>
+                                        <th class="center">APELLIDO PATERNO</th>
+                                        <th class="center">APELLIDO MATERNO</th>
+                                        <th class="center">CODIGO</th>
+                                        <th class="center">COMUNIDAD</th>
                                         <th sec:authorize="hasAnyAuthority('Gestor principal')"></th>
                                         <th sec:authorize="hasAnyAuthority('Gestor principal')"></th>
                                     </tr>
@@ -61,13 +61,13 @@
                                     <tbody>
                                     <tr th:each="a, info : ${listaArtesano}">
                                         <td th:text="${info.index +1 +prev*5}">1</td>
-                                        <td th:text="${a.nombreartesano}">Home</td>
-                                        <td th:text="${a.apellidopaterno}">H</td>
-                                        <td th:text="${a.apellidomaterno}">H</td>
-                                        <td th:text="${a.codigoartesano}">H</td>
-                                        <td th:text="${a.comunidad.getNombrecomunidad()}">H</td>
-                                        <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'artesano/editar?id=' + ${a.idartesano}}"> editar</a></td>
-                                        <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'artesano/borrar?id=' + ${a.idartesano}}">borrar</a></td>
+                                        <td class="center" th:text="${a.nombreartesano}">Home</td>
+                                        <td class="center" th:text="${a.apellidopaterno}">H</td>
+                                        <td class="center" th:text="${a.apellidomaterno}">H</td>
+                                        <td class="center" th:text="${a.codigoartesano}">H</td>
+                                        <td class="center" th:text="${a.comunidad.getNombrecomunidad()}">H</td>
+                                        <td class="center" sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'artesano/editar?id=' + ${a.idartesano}}">Editar</a></td>
+                                        <td class="center" sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'artesano/borrar?id=' + ${a.idartesano}}">Borrar</a></td>
                                     </tr>
                                     </tbody>
                                 </table>

@@ -35,19 +35,19 @@
                                     <thead>
                                     <tr class="info">
                                         <th>#</th>
-                                        <th>NOMBRE</th>
-                                        <th>CODIGO</th>
+                                        <th class="center">NOMBRE</th>
+                                        <th class="center">CODIGO</th>
                                         <th sec:authorize="hasAnyAuthority('Gestor principal')"></th>
                                         <th sec:authorize="hasAnyAuthority('Gestor principal')"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="c, info : ${listacategoria}">
-                                        <td th:text="${info.index +1}">1</td>
-                                        <td th:text="${c.nombrecategoria}">Home</td>
-                                        <td th:text="${c.codigocategoria}">H</td>
-                                        <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'categoria/editar?id=' + ${c.idcategoria}}"> editar</a></td>
-                                        <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'categoria/borrar?id=' + ${c.idcategoria}}">borrar</a></td>
+                                        <td class="center" th:text="${info.index +1}">1</td>
+                                        <td class="center" th:text="${c.nombrecategoria}">Home</td>
+                                        <td class="center" th:text="${c.codigocategoria}">H</td>
+                                        <td class="center" sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'categoria/editar?id=' + ${c.idcategoria}}">Editar</a></td>
+                                        <td class="center" sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'categoria/borrar?id=' + ${c.idcategoria}}">Borrar</a></td>
                                     </tr>
                                     </tbody>
                                 </table>

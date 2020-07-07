@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Inventario sede')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Inventario de sede')">
 
 
 </head>
@@ -16,7 +16,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                INVENTARIO SEDE
+                Inventario de mi sede
             </h1>
         </div>
 
@@ -37,24 +37,24 @@
 
                                     <tr class="info">
 
-                                        <th>Nombre Producto</th>
-                                        <th>Stock</th>
-                                        <th>Fecha de llegada</th>
-                                        <th>Nombre de la sede</th>
-                                        <th>Estado del producto</th>
-                                        <th>Actualizar estado del producto del producto</th>
-                                        <th>Observaciones</th>
+                                        <th class="center">Nombre Producto</th>
+                                        <th class="center">Stock</th>
+                                        <th class="center">Fecha de llegada</th>
+                                        <th class="center">Nombre de la sede</th>
+                                        <th class="center">Estado del producto</th>
+                                        <th class="center">Actualizar estado del producto del producto</th>
+                                        <th >Observaciones</th>
                                     </tr>
                                     </thead>
                                     <tbody >
                                     <tr th:each="inv : ${listaInventarioSede}" th:if="${inv.estado != 'recibido'}">
 
 
-                                        <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
-                                        <td th:text="${inv.stock}">de31edae</td>
-                                        <td th:text="${inv.getFechallegada()}">---</td>
-                                        <td th:text="${inv.sede.nombre}"></td>
-                                        <td th:text="${inv.estado}"></td>
+                                        <td class="center" th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
+                                        <td class="center" th:text="${inv.stock}">de31edae</td>
+                                        <td class="center" th:text="${inv.getFechallegada()}">---</td>
+                                        <td class="center" th:text="${inv.sede.nombre}"></td>
+                                        <td class="center" th:text="${inv.estado}"></td>
 
 
                                         <td>

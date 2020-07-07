@@ -14,7 +14,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                INVENTARIO PRINCIPAL
+                Gestión de inventario
             </h1>
         </div>
 
@@ -34,19 +34,19 @@
                                 <table class="form-group tab-content">
                                     <thead>
                                     <tr>
-                                        <th># pedido</th>
-                                        <th>tipo</th>
-                                        <th>fecha inicio</th>
-                                        <th>fecha fin</th>
-                                        <th>artesano / comunidad</th>
+                                        <th class="center" >#Pedido</th>
+                                        <th class="center" >Tipo</th>
+                                        <th class="center">Fecha inicio</th>
+                                        <th class="center">Fecha fin</th>
+                                        <th class="center">Artesano / comunidad</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <td th:text="${consigYventa1.numeropedido}"></td>
-                                    <td th:text="${consigYventa1.tipo}"></td>
-                                    <td th:text="${consigYventa1.fechainicio}">de31edae</td>
-                                    <td th:text="${consigYventa1.fechafin}">---</td>
-                                    <td th:text="${consigYventa1.artesano.nombreartesano} + ' ' + ${consigYventa1.artesano.apellidopaterno}"></td>
+                                    <td class="center" th:text="${consigYventa1.numeropedido}"></td>
+                                    <td class="center" th:text="${consigYventa1.tipo}"></td>
+                                    <td class="center" th:text="${consigYventa1.fechainicio}">de31edae</td>
+                                    <td class="center" th:text="${consigYventa1.fechafin}">---</td>
+                                    <td class="center" th:text="${consigYventa1.artesano.nombreartesano} + ' ' + ${consigYventa1.artesano.apellidopaterno}"></td>
                                     </tbody>
 
                                 </table>

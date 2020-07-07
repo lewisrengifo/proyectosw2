@@ -23,7 +23,6 @@
         </div>
 
 
-        <!-- /. COMUNIDAD  -->
         <div id="page-inner">
             <div class="col-xs-4">
                 <form class="header " method="post" th:action="@{'/producto/search'}">
@@ -46,7 +45,7 @@
 
             <!-- /. COMUNIDAD  -->
             <div class="row " >
-                <div class="col-md-10 padding">
+                <div class="col-md-12 padding">
                     <div class="card">
                         <div class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
                             <a class="btn btn-primary right" th:href="@{'/producto/nuevo'}">Agregar</a>
@@ -78,12 +77,12 @@
                                                 <img  width="190px" height="160px"   th:src="@{|FotosProyecto/${producto.foto}|}">
                                                 <a href="javascript:cerrar()" id="cerrar">x</a>
                                             </div-->
-                                            <td th:text="${( info.index +1) + (prev)*10}"></td>
-                                            <td th:text="${producto.getNombreproducto()}"></td>
-                                            <td th:text="${producto.getCodigoproducto()}"></td>
-                                            <td th:text="${producto.getDescripcionproducto()}"></td>
-                                            <td th:text="${producto.getCodigodescripcionproducto()}"></td>
-                                            <td th:text="${producto.getLinea().nombrelinea}"></td>
+                                            <td class="center" th:text="${( info.index +1) + (prev)*10}"></td>
+                                            <td class="center" th:text="${producto.getNombreproducto()}"></td>
+                                            <td class="center" th:text="${producto.getCodigoproducto()}"></td>
+                                            <td class="center" th:text="${producto.getDescripcionproducto()}"></td>
+                                            <td class="center" th:text="${producto.getCodigodescripcionproducto()}"></td>
+                                            <td class="center" th:text="${producto.getLinea().nombrelinea}"></td>
                                             <!--td class="center"><a th:href="@{'/producto/foto' + '?id=' + ${producto.getIdproducto()}}" >Ver</a></td-->
 
                                             <!--Otra forma(1)--============================-->

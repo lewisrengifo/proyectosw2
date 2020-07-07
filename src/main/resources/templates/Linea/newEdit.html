@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Líneas')"></head>
 <body>
 
 <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
@@ -8,7 +8,7 @@
 
 <nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'producto')"></nav>
 <div id="page-wrapper" >
-    <h2 class="page-header" th:text="${linea.idlinea == 0? 'Nueva línea' : 'editar línea'}">Nuevo/Editar</h2>
+    <h2 class="page-header" th:text="${linea.idlinea == 0? 'Nueva línea' : 'Editar línea'}">Nuevo/Editar</h2>
     <div id="page-inner">
         <div class="row">
             <div  class="col-md-8">
