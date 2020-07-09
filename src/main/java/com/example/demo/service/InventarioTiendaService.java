@@ -14,9 +14,11 @@ public class InventarioTiendaService {
 
     @Autowired
     InventarioTiendaRepository inventarioTiendaRepository;
-
+    /*
     public Page<Inventariotienda> listaInventarioTiendaMiSede(int idsede, int page){
         Pageable pageRequest = PageRequest.of(page,5);
         return inventarioTiendaRepository.ObtenerInventarioTiendaDeMiSede(idsede,pageRequest);
     }
+
+     */
 }

@@ -47,7 +47,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(value = "SELECT * FROM usuario where sede_idsede =?1", nativeQuery = true)
     Usuario usuariodelasede(int it);
     @Query(value = "SELECT u.idUsuario as usuariodelasede FROM usuario u inner join sede s on s.idsede=u.sede_idsede where s.idsede=?1", nativeQuery = true)
-    UsuarioSedeDto usuariodelasedeint(int idsede);
+    List<UsuarioSedeDto> usuariodelasedeint(int idsede);
     @Query(value="SELECT * from usuario where rol_idrol = 4", nativeQuery= true)
     List<Usuario> usuariosDisponibles();
     @Transactional
@@ -58,6 +58,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Modifying
     @Query(value= "UPDATE usuario SET sede_idsede = NULL, rol_idrol = '4' WHERE (idUsuario = :idusuario);", nativeQuery = true)
     void actualizarGestorSede(@Param("idusuario") int idusuario);
+    //@Query(value = "SELECT * FROM usuario where sede_idsede = ?1", nativeQuery = true)
+    //List<Usuario> usuariosdelasede(int sede_idsede);
 
 
 }

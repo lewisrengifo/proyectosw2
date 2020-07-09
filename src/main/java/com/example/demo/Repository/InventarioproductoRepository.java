@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+import antlr.collections.List;
 import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Inventarioproducto;
 
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository
-public interface  InventarioproductoRepository extends JpaRepository <Inventarioproducto, Integer> {
+public interface InventarioproductoRepository extends JpaRepository <Inventarioproducto, Integer> {
 
 
 
@@ -35,7 +36,12 @@ public interface  InventarioproductoRepository extends JpaRepository <Inventario
     @Query(value= "UPDATE inventarioproducto SET cantidad = :cantidad WHERE (idinventario = :idinventario);", nativeQuery = true)
     void ActualizarCantidadInventarioPrincipal(@Param("cantidad") int cantidad, @Param("idinventario") int idinventario);
 
-    public Inventarioproducto findByProducto(Producto producto);
+    //public Inventarioproducto findByProducto(Producto producto);
+
+
+
+
+
 
 
 }

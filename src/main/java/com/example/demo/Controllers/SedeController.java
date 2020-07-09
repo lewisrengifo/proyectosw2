@@ -66,8 +66,9 @@ public class SedeController {
             model.addAttribute("page", pages);
         }
         model.addAttribute("listSedes", pageSede.getContent());
+       // model.addAttribute("usuariosdelasede", pageSede.getContent());
         model.addAttribute("totalItems", totalItems);
-
+        model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
         model.addAttribute("current", page + 1);
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
@@ -99,8 +100,13 @@ public class SedeController {
                 redirectAttributes.addFlashAttribute("msg", "La sede se actualizó correctamente");
                 //model.addAttribute(usuariodelasede);
                 idsede = sede.getIdsede();
-                UsuarioSedeDto usuariodelasededb =usuarioRepository.usuariodelasedeint(sede.getIdsede());
-                usuarioRepository.actualizarGestorSede(usuariodelasededb.getUsuariodelasede());
+                List<UsuarioSedeDto> usuariodelasededb =usuarioRepository.usuariodelasedeint(sede.getIdsede());
+                int id = 0;
+                for (UsuarioSedeDto info : usuariodelasededb){
+                    usuarioRepository.actualizarGestorSede(usuariodelasededb.get(id).getUsuariodelasede());
+                    id ++;
+                }
+
                 model.addAttribute("sede", sede);
                 model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
                // model.addAttribute("usuario");
@@ -130,6 +136,13 @@ public class SedeController {
     }
     @GetMapping("/agregargestor")
     public String agregarGestor(Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("sede") Sede sede){
+        //model.addAttribute("listaroles", rolRepository.rolgestorsede());
+        model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
+        //int idsederec = idsede;
+        model.addAttribute("sede", sede);
+        return "sede/formGestorNew";
+    }@GetMapping("/agregargestorAdicional")
+    public String agregarGestorAdicional(Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("sede") Sede sede){
         //model.addAttribute("listaroles", rolRepository.rolgestorsede());
         model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
         //int idsederec = idsede;

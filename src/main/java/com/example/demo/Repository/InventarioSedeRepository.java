@@ -1,5 +1,6 @@
 package com.example.demo.Repository;
 
+import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Inventariosede;
 import com.example.demo.Entity.Inventariotienda;
@@ -19,8 +20,8 @@ import java.util.List;
 @Repository
 public interface InventarioSedeRepository extends JpaRepository<Inventariosede,Integer> {
 
-    @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)",
-            countQuery = "SELECT count(*) FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1);", nativeQuery = true)
+    @Query(value="SELECT * FROM inventariosede invs, sede se where se.nombre=?1 and invs.sede_idsede=se.idsede",
+            countQuery = "SELECT * FROM inventariosede invs, sede se where se.nombre=?1 and invs.sede_idsede=se.idsede", nativeQuery = true)
     Page<Inventariosede> obtenerInvDeMiSede(String sesionSede, Pageable pageable);
 
 
@@ -65,6 +66,16 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
     void actualizarStockSedeXVenta(@Param("stock") int stock, @Param("idinventariosede")int idinventariosede);
 
 
+
+
+
+
+    @Query(value="SELECT invs.* FROM inventariosede  invs , inventarioproducto inve, producto p where p.nombreproducto like %?1%\n" +
+            "                and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario ",
+            countQuery ="SELECT count(*) FROM inventariosede  invs , inventarioproducto inve, producto p where p.nombreproducto like %?1%\n" +
+                    "                and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario ",
+            nativeQuery = true)
+    Page<Inventariosede> buscadorInventarioSede(String search, Pageable pageable);
 
 
 }

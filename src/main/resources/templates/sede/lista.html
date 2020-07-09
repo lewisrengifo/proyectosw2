@@ -61,6 +61,7 @@
                                         <th>Nombre de la sede</th>
                                         <th>Gestor acargo de la sede</th>
                                         <th></th>
+                                        <th></th>
 
 
                                     </tr>
@@ -70,6 +71,9 @@
                                         <td th:text="${sede.nombre}+ ' ' + ${sede.apellido}"></td>
                                         <td><a class="btn btn-outline-danger"
                                                th:href="@{'/sede/editar' + '?id=' + ${sede.sede_idsede.idsede}}">Editar</a>
+                                        </td>
+                                        <td><a class="btn btn-outline-danger"
+                                               th:href="@{'/sede/agregargestorAdicional' + '?id=' + ${sede.sede_idsede.idsede}}">Asignar un gestor adicional</a>
                                         </td>
 
 

@@ -5,19 +5,19 @@ import com.example.demo.Repository.*;
 import com.example.demo.service.InventarioPrincipalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.zip.DataFormatException;
 
 @Controller
 @RequestMapping("/inventarioPrincipal")
@@ -47,65 +47,80 @@ public class InventarioproductoController {
     @GetMapping(value = {"","/","/lista"})
     public String listaInventarioProducto(Model model,@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params){
 
-        int currentPage = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
-        long totalItems = page.getTotalElements();
-        int totalPages = page.getTotalPages();
+        //Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
+        PageRequest pageRequest = PageRequest.of(page, 5);
+
+        Page<Inventarioproducto> pageProduct = inventarioproductoRepository.findAll(pageRequest);
+        long totalItems = pageProduct.getTotalElements();
+        int totalPages = pageProduct.getTotalPages();
         if (totalPages > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
         }
 
-        List<Inventarioproducto> listaInventarioPrincipal = page.getContent();
+        List<Inventarioproducto> listaInventarioPrincipal = pageProduct.getContent();
 
 
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("listaInventarioPrincipal", listaInventarioPrincipal);
-        model.addAttribute("current", currentPage + 1);
-        model.addAttribute("next", currentPage + 2);
-        model.addAttribute("prev", currentPage);
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
         model.addAttribute("last", totalPages);
         return "inventario/inventarioPrincipal";
     }
 
     @GetMapping("/agregarInventario")
-    public String consignacionYVenta(@ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model){
-        /*String fecha = "01/01/1999";
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaDate = null;
+    public String consignacionYVenta( @ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model , @RequestParam("referencia") int referencia ){
 
-        try {
-            fechaDate = formato.parse(fecha);
-            consigYventa.setFechafin();
+        if(referencia == 1){
+            model.addAttribute("listaArtesano",artesanoRepository.findAll());
+            referencia2 = "consig";
+
+        return "inventario/consig";}
+        else {
+            model.addAttribute("listaArtesano",artesanoRepository.findAll());
+            return "inventario/comprado";
+
         }
-        catch (ParseException ex)
-        {
-
-        }*/
-
-        model.addAttribute("listaArtesano",artesanoRepository.findAll());
-        return "inventario/consigYventa";
-    }
-
-    @GetMapping("/stock")
-    public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
-        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-        model.addAttribute("stockProductos",inventarioSedeRepository.
-                listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
-        return "inventario/stockProductoInvPrincipal";
     }
 
     @PostMapping("/agregarConsigVenta")
-    public String ingresarConsignacionOventa(Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
+    public String ingresarConsignacionOventa(@RequestParam("referencia2") String referencia2 ,Model model,@ModelAttribute("inventarioProducto") Inventarioproducto invPro,
+                                               @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) throws ParseException {
 
-        System.out.println(consigYventa);
-        Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
-         int idultimo = save.getIdconsignacion();
+        if (referencia2.equals("consig")) {
+            consigYventa.setTipo("Consignación");
+            Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
+            int idultimo = save.getIdconsignacion();
 
-        return "redirect:/inventarioPrincipal/sgteProductos/"+idultimo;
-    }
+            return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
+        }else{
+            consigYventa.setTipo("Comprado");
+            String fecha= "22/12/1900";
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                Date fechafin = null;
+                try {
+                    fechafin = formato.parse(fecha);
+                }
+                catch (ParseException ex)
+                {
+                    System.out.println(ex);
+
+                    return "redirect:/inventarioPrincipal";
+                }
+            Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
+            int idultimo = save.getIdconsignacion();
+            return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
+            }
+
+
+
+
+        }
+
 
     @GetMapping("/sgteProductos/{idultimo}")
     public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
@@ -166,7 +181,7 @@ public class InventarioproductoController {
         inventariosede.setStock(invProductoUltimo.getCantidad());
         inventariosede.setFechallegada(fechatudei);
         inventariosede.setInventarioproductoidinventario(invProductoUltimo);
-        inventariosede.setEstado("recibido");
+        inventariosede.setEstado("entregado");
         inventariosede.setSede(usuariologueado.getSede_idsede());
         inventarioSedeRepository.save(inventariosede);
 
@@ -209,7 +224,13 @@ public class InventarioproductoController {
         return "inventario/inventarioPrincipal";
     }
 
-
+    @GetMapping("/stock")
+    public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+        model.addAttribute("stockProductos",inventarioSedeRepository.
+                listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
+        return "inventario/stockProductoInvPrincipal";
+    }
 
 
 

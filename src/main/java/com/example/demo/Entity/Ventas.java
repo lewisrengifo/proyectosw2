@@ -1,6 +1,7 @@
 package com.example.demo.Entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Entity
@@ -11,22 +12,27 @@ public class Ventas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idventas;
 
-    @Column
     private String rucdni;
 
-    @Column
+    @NotBlank(message = "El nombre no debe ser vacío")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String nombrecomprador;
 
-    @Column
+    @Digits(integer = 12, fraction = 0, message = "Se aceptan sólo numeros hasta 12 dígitos.")
+    @Min(value=0)
     private String numerodocumento;
 
-    @Column
+    @NotBlank(message = "El nombre no debe ser vacío")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String lugarventa;
 
-    @Column
+    @Column(nullable = false)
+    @NotNull(message = "la fecha no debe ser nula")
+    @Temporal(TemporalType.DATE)
     private Date fechaventa;
 
-    @Column
+    @NotBlank(message = "El nombre no debe ser vacío")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String tipodocumento;
 
     @ManyToOne
@@ -41,8 +47,14 @@ public class Ventas {
     @JoinColumn(name = "iventariosede_idiventariosede")
     private Inventariosede inventariosede;
 
+    @NotNull(message = "No puede ser nulo.")
+    @Digits(integer = 5, fraction = 0)
+    @Min(value=1)
+    @Max(value=32767)
     private int cantidad;
 
+    @NotBlank(message = "No debe ser vacío")
+    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String metodopago;
 
     public String getMetodopago() {
