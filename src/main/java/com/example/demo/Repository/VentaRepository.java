@@ -28,7 +28,7 @@ public interface VentaRepository extends JpaRepository<Ventas,Integer> {
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
             "  inner join producto p on p.idproducto = invpr.producto_idproducto\n" +
-            "  where fechaventa like '%2020%' ;", nativeQuery = true)
+            "  where fechaventa like '%?1%' ;", nativeQuery = true)
     ReporteMensualoAnualMosqoyDto reporteMensualoAnualMosqoy(String fechaventa);
 
 
