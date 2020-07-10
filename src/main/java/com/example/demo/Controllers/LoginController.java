@@ -144,7 +144,7 @@ public class LoginController {
             ZonedDateTime now = ZonedDateTime.now();
             System.out.println(now);
             Date nowdate = Date.from(now.toInstant());
-            System.out.println(nowdate);
+            // System.out.println(nowdate.getDay());
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String formatnow = new String();
 
@@ -171,12 +171,11 @@ public class LoginController {
                         listconsigs.add(consignacionyventa);
                         for (Consignacionyventa info : listconsigs) {
                             String fechamsg = simpleDateFormat1.format(info.getFechafin());
-                            mensajes.add("Numero de pedido : " + info.getNumeropedido() + " fecha de vencimiento: " + fechamsg+ "\n");
+                            mensajes.add("Numero de pedido : " + info.getNumeropedido() + " fecha de vencimiento: " + fechamsg + "\n");
                         }
                         break;
 
                     }
-
 
                 }
 
@@ -184,9 +183,21 @@ public class LoginController {
             String newline = System.lineSeparator();
             String mensajefin = String.join(", ", mensajes);
             Usuario usuario1 = (Usuario) session.getAttribute("usuario");
-            String mensaje = "¡Hola! este es un mensaje automatico del sistema <br><br>El sistema le avisa que el/los siguiente(s) pedido(s) :"
-                    +"<br><br>"+ mensajefin +"<br><br> esta(n) proximo(s) a vencer";
-            sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
+            Calendar calendar3 = Calendar.getInstance();
+            calendar3.setTime(nowdate);
+            System.out.println(calendar3.get(Calendar.DAY_OF_MONTH));
+            if (calendar3.get(Calendar.DAY_OF_MONTH) == 10) {
+                if (mensajes.isEmpty()) {
+                    String mensaje1 = "¡Hola! este es un mensaje automatico del sistema <br><br>En este momento ninguna consignacion esta cerca de su fecha de vencimiento";
+                    sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje1);
+                } else {
+
+                    String mensaje = "¡Hola! este es un mensaje automatico del sistema <br><br>El sistema le avisa que el/los siguiente(s) pedido(s) :"
+                            + "<br><br>" + mensajefin + "<br><br> esta(n) proximo(s) a vencer";
+                    sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
+                }
+            }
+
             return "redirect:/inventarioPrincipal";
         } else {
             return "login/login";
