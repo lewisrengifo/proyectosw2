@@ -225,10 +225,34 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/stock")
-    public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
+    public String stockDeProductosDisponiblesParaSedes( @RequestParam Map<String, Object> params,Model model, HttpSession session ){
+
+        String busqueda = (String) params.get("searchField");
+
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-        model.addAttribute("stockProductos",inventarioSedeRepository.
-                listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
+        int idusuariologueado = usuariologueado.getSede_idsede().getIdsede();
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        PageRequest pageRequest = PageRequest.of(page, 5);
+
+        Page<Inventariosede> pageStock = inventarioSedeRepository.listarInventarioPorSedePaginado(idusuariologueado , pageRequest);
+        long totalItems = pageStock.getTotalElements();
+        int totalPages = pageStock.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+        List<Inventariosede> stockProductos = pageStock.getContent();
+
+
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("stockProductos", stockProductos);
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPages);
+
         return "inventario/stockProductoInvPrincipal";
     }
 
