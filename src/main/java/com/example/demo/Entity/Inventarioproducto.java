@@ -48,17 +48,7 @@ public class Inventarioproducto implements Serializable {
 
     private Date fechainicio;
 
-    public Inventarioproducto(){
 
-    }
-
-   public Inventarioproducto(Producto producto, Categoria categoria, Tamano tamano, String color, Double preciomosqoy) {
-        this.producto= producto;
-        this.categoria = categoria;
-        this.tamano = tamano;
-        this.color = color;
-       this.preciomosqoy = preciomosqoy;
-   }
 
     public int getIdinventario() {
         return idinventario;

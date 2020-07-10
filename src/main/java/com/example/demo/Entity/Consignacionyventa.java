@@ -4,6 +4,7 @@ package com.example.demo.Entity;
 import javax.persistence.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import java.io.Serializable;
@@ -28,6 +29,9 @@ public class Consignacionyventa implements Serializable {
 
     @Column(nullable = false)
     //@Pattern(regexp = "[^(0?[1-9]|[12][0-9]|3[01])[\\/](0?[1-9]|1[012])[/\\\\/](19|20)\\d{2}$]", message = "ingrese una fecha correcta")
+
+    @NotNull(message = "la fecha no debe ser nula")
+    @Temporal(TemporalType.DATE)
     private Date fechainicio;
 
     private Date fechafin;

@@ -19,9 +19,9 @@ public class TiendaController {
     TiendaRepository tiendaRepository;
 
     @GetMapping(value = {"lista", ""})
-    public String listar (Model model){
-
-        model.addAttribute("lista", tiendaRepository.findAll());
+    public String listar (Model model,HttpSession session){
+        Usuario user = (Usuario) session.getAttribute("usuario");
+        model.addAttribute("lista", tiendaRepository.listaTiendasPorSede(user.getSede_idsede().getIdsede()));
 
         return "Tienda/lista";
     }

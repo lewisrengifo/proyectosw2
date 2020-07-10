@@ -37,20 +37,49 @@ public class InventariosedeController {
 
     @GetMapping("/asignarStock")
     public String asignarStock(Model model, @ModelAttribute("sede") Sede sede,
-                               @ModelAttribute("inventariosede") Inventariosede inventariosede) {
-
-        model.addAttribute("inventario", inventarioproductoRepository.findAll());
+                               @ModelAttribute("inventariosede") Inventariosede inventariosede, HttpSession session) {
+        //model.addAttribute("inventario", inventarioSedeRepository.obtenerInvDeMiSedeNormal(usuario.getSede_idsede().getNombre()));
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        model.addAttribute("inventario", inventarioSedeRepository.obtenerInvDeMiSedeNormal(usuario.getSede_idsede().getNombre()));
         model.addAttribute("listaSede", sedeRepository.findAll());
         return "sede/asignarStock";
     }
 
     @PostMapping("/agregarStock")
-    public String agregarStock(Model model, @ModelAttribute("inventariosede") Inventariosede inventariosede, @ModelAttribute("sede") Sede sede) {
-        Inventariosede invs = new Inventariosede();
+    public String agregarStock(Model model, @ModelAttribute("inventariosede") Inventariosede inventariosede, @ModelAttribute("sede") Sede sede, RedirectAttributes attr,HttpSession session) {
 
+        Usuario user = (Usuario) session.getAttribute("usuario");
+        Inventariosede invs = new Inventariosede();
         invs = inventariosede;
         inventariosede.setEstado("Enviado");
-        inventarioSedeRepository.save(inventariosede);
+        int cantidadParaSede = inventariosede.getStock();
+        int buscaridinventarioPrincipal = inventariosede.getInventarioproductoidinventario().getIdinventario();
+        Inventariosede inventarioPrincipalProducto = inventarioSedeRepository.obtenerStockSedePrincipal(user.getSede_idsede().getIdsede(), buscaridinventarioPrincipal);
+        int cantidadProductostock = inventarioPrincipalProducto.getStock();
+
+
+        if(cantidadProductostock>cantidadParaSede){
+            int stockActualPrincipal = cantidadProductostock-cantidadParaSede;
+           // int productoInventario = inventariosede.getInventarioproductoidinventario().getIdinventario();
+            int sedePrincipal = user.getSede_idsede().getIdsede();
+            Inventariosede inventariosedeCambia = inventarioSedeRepository.ObtenerInventariParacambiarStockParaSede(buscaridinventarioPrincipal, inventariosede.getSede().getIdsede());
+           if (inventariosedeCambia==null){
+               inventarioSedeRepository.actualizarStockSede(stockActualPrincipal,inventarioPrincipalProducto.getIdiventariosede());
+               inventarioSedeRepository.save(inventariosede);
+           }else {
+
+               int nuevoTotal= inventariosedeCambia.getStock() + cantidadParaSede;
+               //actuliza el producto de la sede
+               inventarioSedeRepository.actualizarStockSede(nuevoTotal,inventariosedeCambia.getIdiventariosede());
+               //actualiza el producto en el principal
+               inventarioSedeRepository.actualizarStockSede(stockActualPrincipal,inventarioPrincipalProducto.getIdiventariosede());
+               attr.addFlashAttribute("msgRepetido", "Se mando producto a sede exitosamente");
+           }
+
+        }else {
+            attr.addFlashAttribute("msgRepetido", "La Cantidad asignada excede la del producto");
+            return "redirect:/inventarioSede/asignarStock";
+        }
 
         return "redirect:/inventarioSede/asignarStock";
     }
@@ -153,6 +182,60 @@ public class InventariosedeController {
         inventarioSedeRepository.actualizarObservaciones(observaciones, idinventariosede);
         return "redirect:/inventarioSede/listarInvMiSede";
     }
+
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+        String busqueda = (String) params.get("searchField");
+
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/inventarioSede/lista";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioSede/lista";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventariosede> pageInvSede = inventarioSedeRepository.buscadorInventarioSede(busqueda, pageRequest);
+            int totalPage = pageInvSede.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioSede/lista";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioSede/lista";
+
+
+
+            }
+
+            model.addAttribute("listaInventarioSede", pageInvSede.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventarioSede";
+        }
+    }
+
+
 
 
 }

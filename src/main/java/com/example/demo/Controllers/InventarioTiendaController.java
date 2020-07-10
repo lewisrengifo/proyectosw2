@@ -39,28 +39,51 @@ public class InventarioTiendaController {
 
 
     @GetMapping(value = {"","/","/lista"})
-    public String listaInventarioTienda(Model model,@RequestParam Map<String, Object> params){
-
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-
-        PageRequest pageRequest = PageRequest.of(page, 10);
+    public String listaInventarioTienda(Model model,@RequestParam Map<String, Object> params , RedirectAttributes attr) {
 
 
-        Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.findAll(pageRequest);
-        int totalPage = pageInvTienda.getTotalPages();
-        if (totalPage > 0) {
-            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioTienda/lista";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.findAll(pageRequest);
+            int totalPage = pageInvTienda.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioTienda/lista";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioTienda/lista";
+
+
+
+            }
+
+            model.addAttribute("listaInventarioTienda", pageInvTienda.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventarioTienda";
         }
 
-        model.addAttribute("listaInventarioTienda", pageInvTienda.getContent());
-        model.addAttribute("current", page + 1);
-        model.addAttribute("next", page + 2);
-        model.addAttribute("prev", page);
-        model.addAttribute("last", totalPage);
-
-        return "inventario/inventarioTienda";
-    }
 
 
     @GetMapping("/asignarStock")
@@ -83,6 +106,58 @@ public class InventarioTiendaController {
 
         return "redirect:/inventarioTienda/asignarStock";
     }
+
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr) {
+        String busqueda = (String) params.get("searchField");
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/inventarioTienda/lista";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioTienda/lista";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.buscadorInventarioTienda(busqueda,pageRequest);
+            int totalPage = pageInvTienda.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioTienda/lista";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioTienda/lista";
+
+
+
+            }
+
+            model.addAttribute("listaInventarioTienda", pageInvTienda.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventarioTienda";
+        }
+    }
+
 
 }
 

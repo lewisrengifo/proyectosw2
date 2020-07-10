@@ -21,7 +21,7 @@
         <div id="page-inner">
             <!-- /. CATEGORIA  -->
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-action">
                             <a class="btn btn-outline-danger" th:href="@{'/ConsignacionVenta/agregarProductosCV'}">agregar</a>
@@ -37,6 +37,7 @@
                                         <th>Fecha Inicio</th>
                                         <th>Fecha Fin</th>
                                         <th></th>
+
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -47,6 +48,7 @@
                                         <td   th:text="${c.fechainicio}"></td>
                                         <td th:text="${c.fechafin}"></td>
                                         <td ><a th:href="@{'/ConsignacionVenta/agregarProductosCV?id=' + ${c.idconsignacion} }"> + productos</a></td>
+
                                     </tr>
                                     </tbody>
                                 </table>
