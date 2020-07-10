@@ -154,6 +154,26 @@
                     </li>
                 </ul>
             </li>
+            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
+                <a href="#" class=" waves-effect waves-dark"><i class="fa fa-sitemap"></i> Reportes <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a th:href="@{'/ventasexcel'}">Reporte General</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/ventasexcel/sede}">Reporte por sedes</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/ventasexcel/articulos}">Reporte por artículos</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/ventasexcel/comunidad}">Reporte por comunidad</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/ventasexcel/cliente}">Reporte por nombre de cliente</a>
+                    </li>
+                </ul>
+            </li>
 
             <!--
                         <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">

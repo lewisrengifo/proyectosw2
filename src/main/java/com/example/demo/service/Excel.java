@@ -24,17 +24,20 @@ public class Excel implements ServiceExcel{
     public ByteArrayInputStream exportarData(String ano,List<ReporteMensualoAnualMosqoyDto> lista,String tipo) throws Exception {
 
         int linea = 0;
+        //los nombres(títulos) de las columnas en el archivo excel
         String[] columns = {"Fecha de Venta", "Factura/Boleta","N Documento","RUC/DNI(Cliente)","Cliente","Cantidad",
         "Codigo de Producto","Nombre de Producto","Color","Metodo de Pago"};
 
         Workbook workbook = new HSSFWorkbook(); //creando archivo Excel
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();//crear lo que se va a devolver
         Sheet sheet = workbook.createSheet("Total Ventas del "+tipo +" "+ano ); //nombre de la hoja de excel
+         //ano: valores posibles meses (enero, feb..), año (2020, ..) y trimestre (primero, segundo,...)
 
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
+        //estilos
         headerFont.setColor(IndexedColors.BLUE.getIndex());
-        CellStyle headerCellStyle = workbook.createCellStyle();
+        CellStyle headerCellStyle = workbook.createCellStyle();//estilo de la celda
         headerCellStyle.setFont(headerFont);
         headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
         headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);

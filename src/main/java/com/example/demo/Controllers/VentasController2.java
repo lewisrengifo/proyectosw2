@@ -1,6 +1,10 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ReporteMensualoAnualMosqoyDto;
+import com.example.demo.Entity.Comunidad;
+import com.example.demo.Entity.Sede;
+import com.example.demo.Repository.ComunidadRepository;
+import com.example.demo.Repository.SedeRepository;
 import com.example.demo.Repository.VentaRepository1;
 import com.example.demo.service.ServiceExcel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +12,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,9 +39,10 @@ public class VentasController2 {
     @PostMapping("/ano")
     public ResponseEntity<InputStreamResource> exportDataAnual(@RequestParam("ano")String ano) throws Exception{
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteAnualMosqoy(ano);
-        ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,ano);
+        ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,ano);//cambiar 2variable ano por un string que sea igual a lo correspondiente
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition","attachment; filename=Ventas.xls");
+        String archivo = "hola"; //titulo del excel, no del sheet
+        headers.add("Content-Disposition","attachment; filename="+ archivo +".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/anomes")
@@ -138,4 +144,34 @@ public class VentasController2 {
         headers.add("Content-Disposition","attachment; filename=Ventas.xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
+
+    @Autowired
+    SedeRepository sedeRepository;
+
+    @GetMapping("/sede")
+    public String paginaReportesSede(Model model){
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        return "Reportes/sede";
+    }
+
+    @GetMapping("/articulos")
+    public String paginaReportesArticulo(){
+        return "Reportes/articulos";
+    }
+
+    @Autowired
+    ComunidadRepository comunidadRepository;
+    @GetMapping("/comunidad")
+    public String paginaReportesComunidad(Model model){
+        List<Comunidad> listaComunidad = comunidadRepository.findAll();
+        model.addAttribute("listaComunidad", listaComunidad);
+        return "Reportes/comunidad";
+    }
+
+    @GetMapping("/cliente")
+    public String paginaReportesCliente(){
+        return "Reportes/cliente";
+    }
+
 }
