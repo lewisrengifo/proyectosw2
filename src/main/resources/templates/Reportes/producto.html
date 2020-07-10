@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='Reporte por sede')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Reporte por producto')">
 </head>
 <body>
 <div id="wrapper">
@@ -14,7 +14,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                Reporte Sede
+                Reporte Producto
             </h1>
         </div>
         <div id="page-inner">
@@ -27,23 +27,23 @@
                                     <thead>
                                     <tr class="info">
                                         <th>#</th>
-                                        <th>Característica</th>
-                                        <th>Sede</th>
-                                        <th>Opción</th>
+                                        <th>Caracteristica</th>
+                                        <th>Comunidad</th>
+                                        <th>Opcion</th>
                                         <th>Excel</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/ano/sede'}">
+                                        <form method="post" th:action="@{'/ventasexcel/ano/producto'}">
                                             <td>1</td>
                                             <td>Ventas total del Año</td>
                                             <td>
                                                 <div class="form-group">
-                                                    <select class="form-control" name="sede" id="sede" style="width: 40%">
-                                                        <option th:each=" ar : ${listaSede}"
-                                                                th:value="${ar.idsede}"
-                                                                th:text="${ar.nombre}">
+                                                    <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                                        <option th:each=" ar : ${listaProducto}"
+                                                                th:value="${ar.idproducto}"
+                                                                th:text="${ar.nombreproducto}">
 
                                                         </option>
                                                 </div>
@@ -58,15 +58,15 @@
 
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anomes/sede'}">
+                                        <form method="post" th:action="@{'/ventasexcel/anomes/producto'}">
                                             <td>2</td>
                                             <td>Ventas total del Mes</td>
                                             <td>
                                                 <div class="form-group">
-                                                    <select class="form-control" name="sede" id="sede" style="width: 40%">
-                                                        <option th:each=" ar : ${listaSede}"
-                                                                th:value="${ar.idsede}"
-                                                                th:text="${ar.nombre}">
+                                                    <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                                        <option th:each=" ar : ${listaProducto}"
+                                                                th:value="${ar.idproducto}"
+                                                                th:text="${ar.nombreproducto}">
 
                                                         </option>
                                                 </div>
@@ -97,15 +97,15 @@
 
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/trimestre/sede'}">
+                                        <form method="post" th:action="@{'/ventasexcel/trimestre/producto'}">
                                             <td>2</td>
                                             <td>Ventas total del Trimestre</td>
                                             <td>
                                                 <div class="form-group">
-                                                    <select class="form-control" name="sede" id="sede" style="width: 40%">
-                                                        <option th:each=" ar : ${listaSede}"
-                                                                th:value="${ar.idsede}"
-                                                                th:text="${ar.nombre}">
+                                                    <select class="form-control" name="producto" id="producto" style="width: 40%">
+                                                        <option th:each=" ar : ${listaProducto}"
+                                                                th:value="${ar.idproducto}"
+                                                                th:text="${ar.nombreproducto}">
 
                                                         </option>
                                                 </div>
@@ -127,8 +127,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!--
-                            <div class="card-action">
+                            <!--<div class="card-action">
                                 <h2>Generar reportes por</h2>
                                 <br>
                                 <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Sede</a>
@@ -143,12 +142,7 @@
                 </div>
             </div>
         </div>
-
-
     </div>
-
-
-
 </div>
 
 
