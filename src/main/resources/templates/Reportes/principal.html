@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Inventario Principal')">
 </head>
 <body>
@@ -8,8 +7,6 @@
     <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
 
     <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
-
-
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
         <div class="header">
@@ -636,7 +633,6 @@
 
     </div>
 </div>
-
 <script>
     function enviarform1() {
         var ano =document.getElementById('ano').value;
@@ -646,7 +642,7 @@
         }else{
             //$('#mensaje1').show(10000);
             document.getElementById('mensaje1').style.display="block";
-            $('#mensaje1').hide(5000);
+            $('#mensaje1').hide(7000);
             return false;
         }
     }
