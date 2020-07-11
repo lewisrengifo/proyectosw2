@@ -1,17 +1,23 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ReporteMensualoAnualMosqoyDto;
+import com.example.demo.Repository.ComunidadRepository;
+import com.example.demo.Repository.ProductoRepository;
+import com.example.demo.Repository.SedeRepository;
 import com.example.demo.Repository.VentaRepository1;
 import com.example.demo.service.ServiceExcel;
+import com.sun.istack.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -26,19 +32,51 @@ public class VentasController2 {
     @Autowired
     VentaRepository1 ventaRepository1;
 
+    @Autowired
+    SedeRepository sedeRepository;
+
+    @Autowired
+    ComunidadRepository comunidadRepository;
+
+    @Autowired
+    ProductoRepository productoRepository;
+
     @GetMapping("")
-    public String paginaReportes(){
+    public String paginaReportes(Model model){
+        model.addAttribute("listaComunidad",comunidadRepository.findAll());
+        model.addAttribute("listaSede",sedeRepository.findAll());
+        model.addAttribute("listaProducto",productoRepository.findAll());
         return "Reportes/principal";
     }
 
+
+    /*@PostMapping("/ano")
+    public String reporteAno(@RequestParam("ano")String ano, RedirectAttributes att) {
+        try{
+            int a = Integer.valueOf(ano);
+            ResponseEntity<InputStreamResource> inputStreamResourceResponseEntity = null;
+
+            att.addFlashAttribute("msg", "Se descargo correctamente el documento");
+            return  "redirect:/ventasexcel/ano/excel?ano="+ano;
+        }catch (NumberFormatException e){
+            att.addFlashAttribute("msg", "Tiene que ingresar un numero");
+            return  "redirect:/ventasexcel";
+        } catch (Exception e) {
+            e.printStackTrace();
+            att.addFlashAttribute("msg", "Ocurrio un error");
+            return"redirect:/ventasexcel";
+        }
+    }*/
     @PostMapping("/ano")
     public ResponseEntity<InputStreamResource> exportDataAnual(@RequestParam("ano")String ano) throws Exception{
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteAnualMosqoy(ano);
-        ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,ano);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition","attachment; filename=Ventas.xls");
-        return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
+            List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteAnualMosqoy(ano);
+            String tipo="Año";
+            ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,tipo);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition","attachment; filename=Ventas"+ano+".xls");
+            return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
+
     @PostMapping("/anomes")
     public ResponseEntity<InputStreamResource> exportDataAnualyMensual(@RequestParam("anomes")String anomes,@RequestParam("mes")String mes) throws Exception{
         String mes1="";
@@ -95,9 +133,9 @@ public class VentasController2 {
         String dato=anomes+"-"+mes1;
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteAnualMosqoy(dato);
         String aux="Mes "+mes;
-        ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anomes);
+        ByteArrayInputStream stream = serviceExcel.exportarData(anomes,lista,aux);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition","attachment; filename=Ventas.xls");
+        headers.add("Content-Disposition","attachment; filename=Ventas"+mes+anomes+".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/trimestre")
@@ -132,10 +170,11 @@ public class VentasController2 {
             default: mes1="#";
         }
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralAnualMosqoy(mes1,mes2,mes3,anotri);
-        String aux="Trimestre "+ trimestre ;
-        ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
+        String aux="Trimestre " +trimestre;
+        ByteArrayInputStream stream = serviceExcel.exportarData(anotri,lista,aux);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition","attachment; filename=Ventas.xls");
+        headers.add("Content-Disposition","attachment; filename=Ventas"+aux+anotri+".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
+    
 }
