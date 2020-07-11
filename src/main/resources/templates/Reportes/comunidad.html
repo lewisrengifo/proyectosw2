@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='Inventario Principal')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Reporte por Comunidad')">
 </head>
 <body>
 <div id="wrapper">
@@ -14,7 +14,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                Reporte General
+                Reporte Comunidad
             </h1>
         </div>
         <div id="page-inner">
@@ -28,15 +28,26 @@
                                     <tr class="info">
                                         <th>#</th>
                                         <th>Caracteristica</th>
+                                        <th>Comunidad</th>
                                         <th>Opcion</th>
                                         <th>Excel</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/ano'}">
+                                        <form method="post" th:action="@{'/ventasexcel/ano/comunidad'}">
                                             <td>1</td>
                                             <td>Ventas total del Año</td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
+                                                        <option th:each=" ar : ${listaComunidad}"
+                                                                th:value="${ar.idcomunidad}"
+                                                                th:text="${ar.nombrecomunidad}">
+
+                                                        </option>
+                                                </div>
+                                            </td>
                                             <td>
                                                 <div class="form-group" >
                                                     <input type="text" class="form-control" value="1980" name="ano" id="ano" style="width: 20%">
@@ -47,9 +58,19 @@
 
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anomes'}">
+                                        <form method="post" th:action="@{'/ventasexcel/anomes/comunidad'}">
                                             <td>2</td>
                                             <td>Ventas total del Mes</td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
+                                                        <option th:each=" ar : ${listaComunidad}"
+                                                                th:value="${ar.idcomunidad}"
+                                                                th:text="${ar.nombrecomunidad}">
+
+                                                        </option>
+                                                </div>
+                                            </td>
                                             <td >
                                                 <div class="form-group" >
                                                     <select class="form-control" name="mes" id="mes" style="width: 80%">
@@ -76,9 +97,19 @@
 
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/trimestre'}">
+                                        <form method="post" th:action="@{'/ventasexcel/trimestre/comunidad'}">
                                             <td>2</td>
                                             <td>Ventas total del Trimestre</td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <select class="form-control" name="comunidad" id="comunidad" style="width: 40%">
+                                                        <option th:each=" ar : ${listaComunidad}"
+                                                                th:value="${ar.idcomunidad}"
+                                                                th:text="${ar.nombrecomunidad}">
+
+                                                        </option>
+                                                </div>
+                                            </td>
                                             <td >
                                                 <div class="form-group" >
                                                     <select class="form-control" name="trimestre" id="trimestre" style="width: 80%">
@@ -96,14 +127,14 @@
                                     </tbody>
                                 </table>
                             </div>
-                                <!--<div class="card-action">
-                                    <h2>Generar reportes por</h2>
-                                    <br>
-                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Sede</a>
-                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Comunidad</a>
-                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Artículo</a>
-                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Cliente</a>
-                                </div>-->
+                            <!--<div class="card-action">
+                                <h2>Generar reportes por</h2>
+                                <br>
+                                <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Sede</a>
+                                <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Comunidad</a>
+                                <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Artículo</a>
+                                <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Cliente</a>
+                            </div>-->
 
 
                         </div>
@@ -111,36 +142,7 @@
                 </div>
             </div>
         </div>
-        <!--td>
-            <div class="form-group" >
-                <select class="form-control" name="mes" id="mes" style="width: 80%">
-                    <option value="mes" th:text="Enero"></option>
-                    <option value="mes" th:text="Febrero"></option>
-                    <option value="mes" th:text="Marzo"></option>
-                    <option value="mes" th:text="Abril"></option>
-                    <option value="mes" th:text="Mayo"></option>
-                    <option value="mes" th:text="Junio"></option>
-                    <option value="mes" th:text="Julio"></option>
-                    <option value="mes" th:text="Agosto"></option>
-                    <option value="mes" th:text="Septiembre"></option>
-                    <option value="mes" th:text="Octubre"></option>
-                    <option value="mes" th:text="Noviembre"></option>
-                    <option value="mes" th:text="Diciembre"></option>
-                </select>
-            </div>
-        </td-->
-        <!--select class="form-control" name="trimiestre" id="trimiestre" style="width: 80%">
-            <option value="trimiestre" th:text="Primero"></option>
-            <option value="trimiestre" th:text="Segundo"></option>
-            <option value="trimiestre" th:text="Tecer"></option>
-            <option value="trimiestre" th:text="Cuarto"></option>
-        </select-->
-
-
     </div>
-
-
-
 </div>
 
 
