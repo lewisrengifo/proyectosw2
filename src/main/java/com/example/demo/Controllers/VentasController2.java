@@ -42,8 +42,8 @@ public class VentasController2 {
     @Autowired
     ProductoRepository productoRepository;
 
-    @Autowired
-    VentasRepository ventasRepository;
+    //@Autowired
+    //VentasRepository ventasRepository;
 
 
     @GetMapping("")
@@ -186,7 +186,7 @@ public class VentasController2 {
 
 
     @PostMapping("/ano/sede")
-    public ResponseEntity<InputStreamResource> exportDataAnualSede(@RequestParam("ano")String ano, Sede sede) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualSede(@RequestParam("ano")String ano,Sede sede) throws Exception{
 
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteMensualAnualSede(ano, sede.getIdsede());
         ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,ano);//cambiar 2variable ano por un string que sea igual a lo correspondiente
