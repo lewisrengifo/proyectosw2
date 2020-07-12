@@ -25,6 +25,13 @@
 
         <!-- /. COMUNIDAD  -->
         <div id="page-inner">
+            <div>
+                <form method="get" th:action="@{/venta/buscador}">
+                    <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar" aria-label="Search" style="width: 40%">
+                    <button type="submit" class="btn btn-outline-danger">buscar</button>
+                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-outline-danger">Limpiar</a>
+                </form>
+            </div>
 
 
             <!-- /. COMUNIDAD  -->

@@ -4,6 +4,7 @@ package com.example.demo.Controllers;
 import com.example.demo.Dto.ProductoServiceApi;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
+import com.example.demo.service.VentasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -48,6 +49,9 @@ public class VentasController {
     @Autowired
     TiendaRepository tiendaRepository;
 
+    @Autowired
+    VentasService ventasService;
+
     @GetMapping(value = {"/listaVentas", ""})
     public String listarVentas(Model model, HttpSession session) {
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
@@ -69,6 +73,33 @@ public class VentasController {
 
         return "venta/registroventa";
     }
+
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
+
+        String busqueda = (String) params.get("searchField");
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        Page<Ventas> pageVentas = ventasService.listSearch(busqueda, page);
+        int totalPage = pageVentas.getTotalPages();
+        long totalItems = pageVentas.getTotalElements();
+
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("busqueda", busqueda);
+        model.addAttribute("listaVentas", pageVentas.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
+        return "venta/listaventa";
+    }
+
 
 
     @PostMapping("/agregarVenta")
