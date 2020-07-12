@@ -94,7 +94,8 @@ public class VentasController {
                                  RedirectAttributes redirectAttributes, HttpSession session) {
 
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-
+        Optional<Sede> sedeid = sedeRepository.findById(usuariologueado.getSede_idsede().getIdsede());
+        ventas.setSede(sedeid.get());
         Optional<Tienda> byId = tiendaRepository.findById(ventas.getTienda().getIdtienda());
         if (bindingResult.hasErrors()) {
             model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(ventas.getTienda().getIdtienda()));
@@ -104,8 +105,7 @@ public class VentasController {
         } else {
             if (ventas.getIdventas() == 0) {
                         //DATOS BIEN INGRESADOS
-                        Optional<Sede> sedeid = sedeRepository.findById(usuariologueado.getSede_idsede().getIdsede());
-                        ventas.setSede(sedeid.get());
+
                         Inventariotienda inventariotiendaReduceStock = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
                         if (inventariotiendaReduceStock.getStocktienda() >= ventas.getCantidad()) {
                             Optional<Inventariosede> idSedeCambiaStock = inventarioSedeRepository.findById(ventas.getInventariosede().getIdiventariosede());
@@ -134,7 +134,8 @@ public class VentasController {
                 int cantidadViejaVenta = ventaVaACambiar.get().getCantidad();
                 int cantidadNuevaVenta = ventas.getCantidad();
                 if (cantidadNuevaVenta > 0 ) {
-                    if (ventaVaACambiar.get().getInventariosede().getIdiventariosede() == ventas.getInventariosede().getIdiventariosede()) {
+                    if (ventaVaACambiar.get().getInventariosede().getIdiventariosede()
+                            == ventas.getInventariosede().getIdiventariosede()) {
                         if (cantidadNuevaVenta == cantidadViejaVenta) {
                         ventaRepository.save(ventas);
                     } else {
@@ -144,11 +145,19 @@ public class VentasController {
                             int diferencia = cantidadNuevaVenta - cantidadViejaVenta;
                             int nuevoStockEnTienda = invenTiendaCambiaStock.getStocktienda() - diferencia;
                             inventarioTiendaRepository.ActualizarCantidadInventarioTienda(nuevoStockEnTienda, invenTiendaCambiaStock.getIdiventariotienda());
+                            Optional<Inventarioproducto> invPrinCambiaCantidad
+                                    = inventarioproductoRepository.findById(ventas.getInventariosede().getInventarioproductoidinventario().getIdinventario());
+                            int newCantInvPrin = invPrinCambiaCantidad.get().getCantidad()-diferencia;
+                            inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(newCantInvPrin,invPrinCambiaCantidad.get().getIdinventario());
                             ventaRepository.save(ventas);
                         } else {
                             int diferencia2 = cantidadViejaVenta - cantidadNuevaVenta;
                             int nuevoStockTienda2 = invenTiendaCambiaStock.getStocktienda() + diferencia2;
                             inventarioTiendaRepository.ActualizarCantidadInventarioTienda(nuevoStockTienda2, invenTiendaCambiaStock.getIdiventariotienda());
+                            Optional<Inventarioproducto> invPrinCambiaCantidad2
+                                    = inventarioproductoRepository.findById(ventas.getInventariosede().getInventarioproductoidinventario().getIdinventario());
+                            int newCantInvPrin2 = invPrinCambiaCantidad2.get().getCantidad()+diferencia2;
+                            inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(newCantInvPrin2,invPrinCambiaCantidad2.get().getIdinventario());
                             ventaRepository.save(ventas);
                         }
                     }
@@ -156,12 +165,14 @@ public class VentasController {
                 }else{
                         //DARLE SU CANTIDAD A LA TIENDA
                         Inventariotienda invTiendaSumarCant =
-                                inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
+                                inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventaVaACambiar.get().getInventariosede().getIdiventariosede());
                         int cantidadAnterVenta = ventaVaACambiar.get().getCantidad();
                         int NewTotalParatienda = cantidadAnterVenta + invTiendaSumarCant.getStocktienda();
                         inventarioTiendaRepository.ActualizarCantidadInventarioTienda(NewTotalParatienda,invTiendaSumarCant.getIdiventariotienda());
                         //DARLE SU CANTIDAD AL PRODUCTO DEL INVENTARIO
-
+                        Optional<Inventarioproducto> invProductDevolverCant = inventarioproductoRepository.findById(ventaVaACambiar.get().getInventariosede().getInventarioproductoidinventario().getIdinventario());
+                        int cantidadDevueltaTotal = invProductDevolverCant.get().getCantidad() + ventaVaACambiar.get().getCantidad();
+                        inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(cantidadDevueltaTotal,invProductDevolverCant.get().getIdinventario());
 
                         //CUANDO YA CAMBIASTE DE PRODUCTO
                         Inventariotienda inventariotiendaEditExiste = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
@@ -184,7 +195,7 @@ public class VentasController {
                 }
 
             }
-            redirectAttributes.addFlashAttribute("msg2", "Venta actualizada exitosamente.");
+            redirectAttributes.addFlashAttribute("msgInfo", "Venta actualizada exitosamente.");
             return "redirect:/venta";
             }
 

@@ -108,7 +108,7 @@
                                     </div>
                                     <!-- FIN -->
                                     <!-- ELEGIR UN PRODUCTO (código)-->
-                                    <div class="form-group" >
+                                    <div class="form-group" th:if="${ventas.nombrecomprador == null}" >
                                         <label for="inventariosede">Producto - Descripcion Producto - #Cantidad Disponible - $ Precio de venta</label>
 
                                         <select class="form-control" name="inventariosede" id="inventariosede" style="width: 70%">
@@ -117,6 +117,20 @@
                                                     th:text="${pro.inventariosede.inventarioproductoidinventario.producto.nombreproducto} + ' - '
                                                     + ${pro.inventariosede.inventarioproductoidinventario.producto.descripcionproducto} + ' - '
                                                     +'#'+${pro.stocktienda} + ' - ' +'$'+ ${pro.inventariosede.inventarioproductoidinventario.preciomosqoy}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group" th:unless="${ventas.nombrecomprador == null}" >
+                                        <label for="inventariosede">Producto - Descripcion Producto - #Cantidad Disponible - $ Precio de venta</label>
+
+                                        <select class="form-control" name="inventariosede" id="inventariosede" style="width: 70%">
+                                            <option th:each=" pro : ${ProductosEnTienda}"
+                                                    th:value="${pro.inventariosede.getIdiventariosede()}"
+                                                    th:text="${pro.inventariosede.inventarioproductoidinventario.producto.nombreproducto} + ' - '
+                                                    + ${pro.inventariosede.inventarioproductoidinventario.producto.descripcionproducto} + ' - '
+                                                    +'#'+${pro.stocktienda} + ' - ' +'$'+ ${pro.inventariosede.inventarioproductoidinventario.preciomosqoy}"
+                                                    th:selected="${pro.inventariosede.idiventariosede == ventas.inventariosede.idiventariosede}">
                                             </option>
                                         </select>
                                     </div>
