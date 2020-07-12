@@ -126,7 +126,7 @@
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anosede'}">
+                                        <form method="post" th:action="@{'/ventasexcel/ano/sede'}">
                                             <td class="center-align">1</td>
                                             <td class="center-align">Ventas total del Año</td>
                                             <td class="center-align">-</td>
@@ -633,7 +633,7 @@
 
     </div>
 </div>
-<script>
+<!--script>
     function enviarform1() {
         var ano =document.getElementById('ano').value;
         //console.log(ano);
@@ -644,37 +644,80 @@
             //$('#mensaje1').show(10000);
             document.getElementById('mensaje1').style.display="block";
             $('#mensaje1').hide(3000);
-            console.log(ano[0]);
+            console.log(ano.length);
             return false;
         }
     }
-</script>
+</script-->
+    <script>
+        function enviarform1() {
+            document.getElementById('mensaje1').style.display="none";
+            document.getElementById('mensaje2').style.display="none";
+            document.getElementById('mensaje3').style.display="none";
+            var ano =document.getElementById('ano').value;
+            var aux=0;
+            //console.log(ano);
+            for(var i=0;i<ano.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(ano[i])))){
+                    aux=aux+1;
+                }
+            }
+            if(aux===ano.length){
+                return true;
+            }
+            else{
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensaje1').style.display="block";
+                //$('#mensaje1').hide(4000);
+                return false;
+            }
+        }
+    </script>
 <script>
     function enviarform2() {
+        document.getElementById('mensaje1').style.display="none";
+        document.getElementById('mensaje2').style.display="none";
+        document.getElementById('mensaje3').style.display="none";
         var anomes =document.getElementById('anomes').value;
         var mes =document.getElementById('mes').value;
-        console.log(mes);
-        if(Number.isInteger(Number.parseInt(anomes)) && (mes==="Enero" || mes==="Febrero" || mes==="Marzo" || mes==="Abril" || mes==="Mayo" ||
+        var aux=0;
+        for(var i=0;i<anomes.length;i++)
+        {
+            if((Number.isInteger(Number.parseInt(anomes[i])))){
+                aux=aux+1;
+            }
+        }
+        if(aux===anomes.length && (mes==="Enero" || mes==="Febrero" || mes==="Marzo" || mes==="Abril" || mes==="Mayo" ||
             mes==="Junio" || mes==="Julio" || mes==="Agosto" || mes==="Septiembre" || mes==="Octubre" || mes==="Noviembre" || mes==="Diciembre")
             ) {
                 return true;
         }else{
             document.getElementById('mensaje2').style.display="block";
-            $('#mensaje2').hide(3000);
+            //$('#mensaje2').hide(4000);
             return false;
         }
     }
 </script>
 <script>
     function enviarform3() {
+        document.getElementById('mensaje1').style.display="none";
+        document.getElementById('mensaje2').style.display="none";
+        document.getElementById('mensaje3').style.display="none";
         var anotri =document.getElementById('anotri').value;
         var trimestre =document.getElementById('trimestre').value;
-        //console.log(ano);
-        if(Number.isInteger(Number.parseInt(anotri)) && (trimestre==="Primero" || trimestre==="Segundo" || trimestre==="Tercero" || trimestre==="Cuarto") ) {
+        var aux=0;
+        for(var i=0;i<anotri.length;i++)
+        {
+            if((Number.isInteger(Number.parseInt(anotri[i])))){
+                aux=aux+1;
+            }
+        }
+        if(aux===anotri.length && (trimestre==="Primero" || trimestre==="Segundo" || trimestre==="Tercero" || trimestre==="Cuarto") ) {
                 return true;
         }else{
             document.getElementById('mensaje3').style.display="block";
-            $('#mensaje3').hide(3000);
+            //$('#mensaje3').hide(4000);
             return false;
         }
     }
