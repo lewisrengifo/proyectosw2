@@ -67,7 +67,7 @@ public class VentasController2 {
                 break;
 
             case "Mayo":
-                mes="05";
+                mes1="05";
                 break;
 
             case "Junio":
@@ -159,6 +159,13 @@ public class VentasController2 {
         return "Reportes/sede";
     }
 
+    public String pruebaFiltro (@RequestParam("ano")String ano, Sede sede){
+
+        //lógica para validar
+
+        return "reportes/principal";
+    }
+
     @PostMapping("/ano/sede")
     public ResponseEntity<InputStreamResource> exportDataAnualSede(@RequestParam("ano")String ano, Sede sede) throws Exception{
 
@@ -190,7 +197,7 @@ public class VentasController2 {
                 break;
 
             case "Mayo":
-                mes="05";
+                mes1="05";
                 break;
 
             case "Junio":
@@ -314,7 +321,7 @@ public class VentasController2 {
                 break;
 
             case "Mayo":
-                mes="05";
+                mes1="05";
                 break;
 
             case "Junio":
@@ -440,7 +447,7 @@ public class VentasController2 {
                 break;
 
             case "Mayo":
-                mes="05";
+                mes1="05";
                 break;
 
             case "Junio":
@@ -563,7 +570,7 @@ public class VentasController2 {
                 break;
 
             case "Mayo":
-                mes="05";
+                mes1="05";
                 break;
 
             case "Junio":
