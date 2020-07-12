@@ -32,8 +32,8 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
             "  inner join producto p on p.idproducto = invpr.producto_idproducto\n" +
-            "  where (fechaventa like %:mes1% or fechaventa like %:mes2% or fechaventa like %:mes3%) and fechaventa like %:anotri%", nativeQuery = true)
-    List<ReporteMensualoAnualMosqoyDto> reporteTrimestralAnualMosqoy(@Param("mes1") String mes1,@Param("mes2") String mes2, @Param("mes3")String mes3, @Param("anotri")String anotri);
+            "  where (fechaventa like %:mes1% or fechaventa like %:mes2% or fechaventa like %:mes3%)", nativeQuery = true)
+    List<ReporteMensualoAnualMosqoyDto> reporteTrimestralAnualMosqoy(@Param("mes1") String mes1,@Param("mes2") String mes2, @Param("mes3")String mes3);
 
 
     //SEDE anual y mensual
