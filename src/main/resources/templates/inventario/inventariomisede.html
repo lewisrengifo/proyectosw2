@@ -105,6 +105,7 @@
 
                                         <th>Nombre Producto</th>
                                         <th>Descripcion Del Producto</th>
+                                        <th>Codigo Generado</th>
                                         <th>Stock</th>
                                         <th>Fecha de llegada</th>
 
@@ -115,6 +116,7 @@
                                     <tr th:each="inv : ${listaInventarioSede}" th:if="${inv.estado == 'recibido'}">
                                         <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
                                         <td th:text="${inv.getInventarioproductoidinventario().getProducto().getDescripcionproducto()}"></td>
+                                        <td th:text="${inv.getInventarioproductoidinventario().getCodigogenerado()}"> </td>
                                         <td th:text="${inv.stock}">de31edae</td>
                                         <td th:text="${inv.getFechallegada()}">---</td>
 

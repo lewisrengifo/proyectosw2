@@ -44,13 +44,18 @@ public class ConsignacionventaController {
 
         Optional<Consignacionyventa> consigVentabyId = consignacionyventaRepository.findById(id);
 
+        if(consigVentabyId.isPresent()){
+
         model.addAttribute("listalinea",lineaRepository.findAll());
         model.addAttribute("listaproducto",productoRepository.findAll());
         model.addAttribute("listacategoria",categoriaRepository.findAll());
         model.addAttribute("listatamano",tamanoRepository.findAll());
 
         model.addAttribute("consigYventa1",consigVentabyId.get());
-        return "consigVenta/agregarProductos";
+        return "consigVenta/agregarProductos";}else
+        {
+            return "redirect:/ConsignacionVenta";
+        }
     }
 
     @PostMapping("/agregarProducto")
@@ -98,7 +103,7 @@ public class ConsignacionventaController {
         inventariosede.setStock(invProductoUltimo.getCantidad());
         inventariosede.setFechallegada(fechatudei);
         inventariosede.setInventarioproductoidinventario(invProductoUltimo);
-        inventariosede.setEstado("entregado");
+        inventariosede.setEstado("recibido");
         inventariosede.setSede(usuariologueado.getSede_idsede());
         inventarioSedeRepository.save(inventariosede);
         return "redirect:/ConsignacionVenta";
