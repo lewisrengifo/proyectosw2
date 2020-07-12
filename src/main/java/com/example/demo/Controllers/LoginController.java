@@ -186,7 +186,7 @@ public class LoginController {
             Calendar calendar3 = Calendar.getInstance();
             calendar3.setTime(nowdate);
             System.out.println(calendar3.get(Calendar.DAY_OF_MONTH));
-            if (calendar3.get(Calendar.DAY_OF_MONTH) == 10) {
+            if (calendar3.get(Calendar.DAY_OF_MONTH) == 1) {
                 if (mensajes.isEmpty()) {
                     String mensaje1 = "¡Hola! este es un mensaje automatico del sistema <br><br>En este momento ninguna consignacion esta cerca de su fecha de vencimiento";
                     sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje1);
