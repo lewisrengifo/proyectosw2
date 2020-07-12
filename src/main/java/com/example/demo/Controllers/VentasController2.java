@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -139,7 +140,10 @@ public class VentasController2 {
                 break;
             default: mes1="#";
         }
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralAnualMosqoy(mes1,mes2,mes3,anotri);
+        String mmes1 = anotri +"-"+ mes1;
+        String mmes2 = anotri +"-"+ mes2;
+        String mmes3 = anotri +"-"+ mes3;
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralAnualMosqoy(mmes1,mmes2,mmes3);
         String aux="Trimestre "+ trimestre ;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
@@ -159,9 +163,23 @@ public class VentasController2 {
         return "Reportes/sede";
     }
 
-    public String pruebaFiltro (@RequestParam("ano")String ano, Sede sede){
+    public String pruebaFiltro (@RequestParam("ano")String ano, Sede sede, Model model){
 
         //lógica para validar
+        try{
+            Integer anoint = Integer.parseInt(ano);
+            Optional<Sede> sedeporId = sedeRepository.findById(sede.getIdsede());
+            Date hoy = new Date();
+
+            if (anoint != 0){
+
+            }
+        }catch (NumberFormatException e){
+            model.addAttribute("mensaje", "Debe ingresar el año adecuado");
+            return "reportes/principal";
+        }
+
+
 
         return "reportes/principal";
     }
