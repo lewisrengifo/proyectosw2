@@ -637,12 +637,14 @@
     function enviarform1() {
         var ano =document.getElementById('ano').value;
         //console.log(ano);
-        if(Number.isInteger(Number.parseInt(ano))){
-            return true;
-        }else{
+        if((Number.isInteger(Number.parseInt(ano))) ){
+                return true;
+        }
+        else{
             //$('#mensaje1').show(10000);
             document.getElementById('mensaje1').style.display="block";
-            $('#mensaje1').hide(7000);
+            $('#mensaje1').hide(3000);
+            console.log(ano[0]);
             return false;
         }
     }
@@ -653,10 +655,12 @@
         var mes =document.getElementById('mes').value;
         console.log(mes);
         if(Number.isInteger(Number.parseInt(anomes)) && (mes==="Enero" || mes==="Febrero" || mes==="Marzo" || mes==="Abril" || mes==="Mayo" ||
-            mes==="Junio" || mes==="Julio" || mes==="Agosto" || mes==="Septiembre" || mes==="Octubre" || mes==="Noviembre" || mes==="Diciembre")) {
+            mes==="Junio" || mes==="Julio" || mes==="Agosto" || mes==="Septiembre" || mes==="Octubre" || mes==="Noviembre" || mes==="Diciembre")
+            ) {
                 return true;
         }else{
             document.getElementById('mensaje2').style.display="block";
+            $('#mensaje2').hide(3000);
             return false;
         }
     }
@@ -666,12 +670,11 @@
         var anotri =document.getElementById('anotri').value;
         var trimestre =document.getElementById('trimestre').value;
         //console.log(ano);
-        if(Number.isInteger(Number.parseInt(anotri))) {
-            if(trimestre=="Junio" ){
+        if(Number.isInteger(Number.parseInt(anotri)) && (trimestre==="Primero" || trimestre==="Segundo" || trimestre==="Tercero" || trimestre==="Cuarto") ) {
                 return true;
-            }
         }else{
             document.getElementById('mensaje3').style.display="block";
+            $('#mensaje3').hide(3000);
             return false;
         }
     }
