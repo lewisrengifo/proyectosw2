@@ -143,7 +143,7 @@ public class VentasController2 {
         String aux="Trimestre "+ trimestre ;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
-        String archivo = "Reporte trimestral de Mosqoy"; //titulo del excel
+        String archivo = "Reporte trimestral de Mosqoy:" + trimestre; //titulo del excel
         headers.add("Content-Disposition","attachment; filename="+archivo+".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
