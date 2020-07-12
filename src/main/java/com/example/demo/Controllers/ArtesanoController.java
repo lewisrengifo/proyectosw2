@@ -143,10 +143,7 @@ public class ArtesanoController {
                 //CODIGO ARTESANO MAYUSCULA
                 String codm = artesano.getCodigoartesano().toUpperCase();
                 artesano.setCodigoartesano(codm);
-
                 Artesano artesanosByCodigo = artesanoRepository.editarArtesanoBuscarCodigo(artesano.getCodigoartesano());
-
-
                 if (artesano.getIdartesano() == artesanosByCodigo.getIdartesano()) {
 
                     //NOMBRE ARTESANO 1°MAYUSCULA

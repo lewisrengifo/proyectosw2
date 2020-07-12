@@ -42,6 +42,7 @@
                                         <th>N° de pedido</th>
                                         <th>Codigo Generado</th>
                                         <th>Producto</th>
+                                        <th>Cantidad Total</th>
                                         <th>Stock disponible</th>
 
                                     </tr>
@@ -52,14 +53,11 @@
                                         <td th:text="${st.inventarioproductoidinventario.consignacionyventa.numeropedido}" >de31edae</td>
                                         <td th:text="${st.inventarioproductoidinventario.codigogenerado}" >no hay línea en entidad</td>
                                         <td th:text="${st.inventarioproductoidinventario.producto.nombreproducto}" >----</td>
+                                        <td th:text="${st.inventarioproductoidinventario.cantidad}" >---</td>
                                         <td th:text="${st.stock}" >---</td>
-
                                     </tr>
                                     </tbody>
                                 </table>
-
-
-
                             </div>
                         </div>
                     </div>

@@ -181,7 +181,7 @@ public class InventarioproductoController {
         inventariosede.setStock(invProductoUltimo.getCantidad());
         inventariosede.setFechallegada(fechatudei);
         inventariosede.setInventarioproductoidinventario(invProductoUltimo);
-        inventariosede.setEstado("entregado");
+        inventariosede.setEstado("recibido");
         inventariosede.setSede(usuariologueado.getSede_idsede());
         inventarioSedeRepository.save(inventariosede);
 
@@ -200,6 +200,7 @@ public class InventarioproductoController {
     public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
 
         String busqueda = (String) params.get("searchField");
+
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
         Page<Inventarioproducto> pageInvPrincipal = inventarioPrincipalService.listSearch(busqueda, page);
@@ -210,8 +211,6 @@ public class InventarioproductoController {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
         }
-
-
 
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("busqueda", busqueda);
@@ -228,7 +227,7 @@ public class InventarioproductoController {
     public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
         model.addAttribute("stockProductos",inventarioSedeRepository.
-                listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
+                listarInventarioPorSedeConStock(usuariologueado.getSede_idsede().getIdsede()));
         return "inventario/stockProductoInvPrincipal";
     }
 

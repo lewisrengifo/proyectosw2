@@ -35,10 +35,12 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
     void actualizarObservaciones(@Param("observaciones") String observaciones, @Param("idinventariosede")int idinventariosede);
 
 
-    @Query(value="SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido'",nativeQuery=true)
-    List<Inventariosede> listarInventarioPorSede(int idSede);
+    @Query(value="SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido'" +
+            " and stock not in (select p.stock from inventariosede p where p.stock = 0)",nativeQuery=true)
+    List<Inventariosede> listarInventarioPorSedeConStock(int idSede);
 
-    @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)"
+    @Query(value="SELECT invs.* FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1) " +
+            "and invs.stock not in (select p.stock from inventariosede p where p.stock = 0)"
          , nativeQuery = true)
     List<Inventariosede> obtenerInvDeMiSedeNormal(String sesionSede);
 

@@ -32,32 +32,25 @@
                                 <h2 >Complete los campos</h2>
                                 <br>
 
-                                <div th:if="${msg1 != null}" th:text="${msg2}" class="alert alert-success"
+                                <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success"
                                      role="alert"></div>
                                 <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger"
                                      role="alert"></div>
                                 <form method="post" th:action="@{'/venta/agregarVenta'}" th:object="${ventas}">
                                     <input type="hidden" th:field="*{idventas}"/>
-                                    <!--<div th:if="${msgRepetido != null}" th:text="${msgRepetido}" class="alert alert-success"
-                                         role="alert" style="width: 40%">
-                                    </div>-->
-                                    <br>
-                                    <input type="hidden" name="sede" th:value="${idsede}"/>
-                                    <!-- ESCOGER TIENDA-->
-                                    <div class="form-group" >
-                                        <label for="inventariosede">Escoger Tienda</label>
 
-                                        <select class="form-control" name="tienda" id="tienda" style="width: 40%">
-                                            <option th:each=" t : ${listaTiendas}"
-                                                    th:value="${t.idtienda}"
-                                                    th:text="${t.nombre}">
-                                            </option>
-                                        </select>
+                                    <br>
+
+                                    <!-- ESCOGER TIENDA-->
+                                    <div class="form-group">
+                                        <h4 th:text="'Tienda : ' + ${tiendita.nombre}">TIENDA</h4>
+                                       <input  type="hidden" th:field="*{tienda}" th:value="${tiendita.idtienda}"  > </input>
                                     </div>
+
                                     <!-- RUC o DNI opcional -->
                                     <div>
                                         <label >RUC o DNI (opcional)</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{rucdni}">
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{rucdni}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('rucdni')}"
                                              th:errors="*{rucdni}"></div>
                                     </div>
@@ -65,7 +58,7 @@
                                     <!-- Nombre ( a quién se le vendió) -->
                                     <div>
                                         <label >Nombre Comprador</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{nombrecomprador}">
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{nombrecomprador}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('nombrecomprador')}"
                                              th:errors="*{nombrecomprador}"></div>
                                     </div>
@@ -73,14 +66,22 @@
                                     <!-- TIPO DE DOCUMENTO/BOLETA/FACTURA -->
                                     <div>
                                         <label>Tipo de Documento</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{tipodocumento}" placeholder="boleta/factura/recibo">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('tipodocumento')}"
-                                             th:errors="*{tipodocumento}"></div>
+                                        <select th:if="${ventas.tipodocumento==null}" class="form-control" name="tipodocumento" id="tipodocumento" style="width: 40%">
+                                            <option value="Boleta">Boleta</option>
+                                            <option value="Factura">Factura</option>
+                                            <option value="Recibo">Recibo</option>
+                                        </select>
+                                        <select th:unless="${ventas.tipodocumento==null}" class="form-control" name="tipodocumento" id="tipodocumento" style="width: 40%">
+                                            <option value="Boleta">Boleta</option>
+                                            <option value="Factura">Factura</option>
+                                            <option value="Recibo">Recibo</option>
+                                            <option th:selected="${ventas.tipodocumento}" th:text="${ventas.tipodocumento}"></option>
+                                        </select>
                                     </div>
                                     <!-- Número de documento físico (factura/boleta/recibo/transacción) -->
                                     <div>
                                         <label >Número de documento</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{numerodocumento}" placeholder="N° boleta/factura/recibo" >
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{numerodocumento}" placeholder="N° boleta/factura/recibo" >
                                         <div class="text-danger" th:if="${#fields.hasErrors('numerodocumento')}"
                                              th:errors="*{numerodocumento}"></div>
                                     </div>
@@ -88,28 +89,34 @@
                                     <!-- Lugar de venta -->
                                     <div>
                                         <label>Lugar</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{lugarventa}">
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{lugarventa}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('lugarventa')}"
                                              th:errors="*{lugarventa}"></div>
                                     </div>
 
-
-
                                     <div>
                                         <label>Metodo de Pago</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{metodopago}" placeholder="efectiro/tarjeta de credito">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('metodopago')}"
-                                             th:errors="*{metodopago}"></div>
+                                        <select th:if="${ventas.metodopago == null}" class="form-control" name="metodopago" id="metodopago" style="width: 40%">
+                                            <option value="efectivo">Efectivo</option>
+                                            <option value="tarjeta">Tarjeta de Credito</option>
+                                        </select>
+                                        <select th:unless="${ventas.metodopago == null}" class="form-control" name="metodopago" id="metodopago" style="width: 40%">
+                                            <option value="efectivo">Efectivo</option>
+                                            <option value="tarjeta">Tarjeta de Credito</option>
+                                            <option th:selected="${ventas.metodopago}" th:text="${ventas.metodopago}"></option>
+                                        </select>
                                     </div>
                                     <!-- FIN -->
                                     <!-- ELEGIR UN PRODUCTO (código)-->
                                     <div class="form-group" >
-                                        <label for="inventariosede">Producto/Cantidad Disponible - Precio de venta</label>
+                                        <label for="inventariosede">Producto - Descripcion Producto - #Cantidad Disponible - $ Precio de venta</label>
 
-                                        <select class="form-control" name="inventariosede" id="inventariosede" style="width: 40%">
-                                            <option th:each=" pro : ${inventarioSedeProducto}"
-                                                    th:value="${pro.idiventariosede}"
-                                                    th:text="${pro.inventarioproductoidinventario.producto.nombreproducto}+' / '+${pro.stock}">
+                                        <select class="form-control" name="inventariosede" id="inventariosede" style="width: 70%">
+                                            <option th:each=" pro : ${ProductosEnTienda}"
+                                                    th:value="${pro.inventariosede.getIdiventariosede()}"
+                                                    th:text="${pro.inventariosede.inventarioproductoidinventario.producto.nombreproducto} + ' - '
+                                                    + ${pro.inventariosede.inventarioproductoidinventario.producto.descripcionproducto} + ' - '
+                                                    +'#'+${pro.stocktienda} + ' - ' +'$'+ ${pro.inventariosede.inventarioproductoidinventario.preciomosqoy}">
                                             </option>
                                         </select>
                                     </div>
@@ -119,7 +126,7 @@
                                     <!-- FECHA DE VENTA -->
                                     <div>
                                         <label >fecha de venta</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{fechaventa}">
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{fechaventa}">
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechaventa')}"
                                              th:errors="*{fechaventa}"></div>
 
@@ -129,19 +136,12 @@
                                     <!-- ELEGIR LA CANTIDAD -->
                                     <div>
                                         <label >Cantidad</label>
-                                        <input style="width: 88%" type="text" class="form-control" th:field="*{cantidad}" >
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{cantidad}" >
                                     </div>
                                     <!-- FIN -->
 
-                                    <!--Fecha de envio-->
-                                    <!--div class="form-group"  id ="artesano_compra">
-                                        <label >Fecha de envío</label>
-                                        <input type="text" class="form-control" th:field="*{fechallegada}" style="width: 25%" placeholder="formato:dia/mes/año">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('fechallegada')}" th:errors="*{fechallegada}"></div>
-                                    </div-->
 
-
-                                    <a th:href="@{'/venta'}" class="btn btn-danger">Cancelar</a>
+                                    <a th:href="@{'/tienda'}" class="btn btn-danger">Cancelar</a>
                                     <button type="submit" class="btn btn-primary"> finalizar</button>
                                 </form>
                             </div>
