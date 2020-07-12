@@ -28,7 +28,7 @@ public class Excel implements ServiceExcel{
 
         Workbook workbook = new HSSFWorkbook(); //creando archivo Excel
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Sheet sheet = workbook.createSheet("Ventas "+tipo +" "+ano ); //nombre de la hoja de excel
+        Sheet sheet = workbook.createSheet("Ventas "+tipo +" "+ano); //nombre de la hoja de excel
 
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
