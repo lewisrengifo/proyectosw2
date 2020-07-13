@@ -21,11 +21,17 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository
-public interface InventarioproductoRepository extends JpaRepository <Inventarioproducto, Integer> {
+public interface InventarioproductoRepository extends JpaRepository<Inventarioproducto, Integer> {
 
 
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE inventarioproducto SET cantidad = :cantidad WHERE (idinventario = :idinventario);", nativeQuery = true)
+    void ActualizarCantidadInventarioPrincipal(@Param("cantidad") int cantidad, @Param("idinventario") int idinventario);
 
-    @Query(value="SELECT * FROM inventarioproducto invp\n" +
+    //public Inventarioproducto findByProducto(Producto producto);
+
+    @Query(value = "SELECT * FROM inventarioproducto invp\n" +
             "inner join producto p on p.idproducto=invp.producto_idproducto " +
             "inner join linea l on l.idlinea=p.linea_idlinea\n" +
             "inner join categoria cat  on cat.idcategoria=invp.categoria_idcategoria \n" +
@@ -48,7 +54,7 @@ public interface InventarioproductoRepository extends JpaRepository <Inventariop
             "or invp.codigogenerado like %?1%\n" +
             "or cyv.fechainicio like %?1% \n" +
             "or cyv.numeropedido like %?1% ",
-            countQuery =" SELECT count(*) FROM inventarioproducto invp\n" +
+            countQuery = " SELECT count(*) FROM inventarioproducto invp\n" +
                     "inner join producto p on p.idproducto=invp.producto_idproducto " +
                     "inner join linea l on l.idlinea=p.linea_idlinea\n" +
                     "inner join categoria cat on cat.idcategoria=invp.categoria_idcategoria \n" +
@@ -73,19 +79,6 @@ public interface InventarioproductoRepository extends JpaRepository <Inventariop
                     "or cyv.numeropedido like %?1% ",
             nativeQuery = true)
     Page<Inventarioproducto> buscadorInventarioPrincipal(String search, Pageable pageable);
-
-
-    @Transactional
-    @Modifying
-    @Query(value= "UPDATE inventarioproducto SET cantidad = :cantidad WHERE (idinventario = :idinventario);", nativeQuery = true)
-    void ActualizarCantidadInventarioPrincipal(@Param("cantidad") int cantidad, @Param("idinventario") int idinventario);
-
-    //public Inventarioproducto findByProducto(Producto producto);
-
-
-
-
-
 
 
 }

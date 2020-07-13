@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='Lista de ventas')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Lista de productos')">
 
 </head>
 <body>
@@ -25,24 +25,20 @@
 
         <!-- /. COMUNIDAD  -->
         <div id="page-inner">
-            <div>
+            <form method="get" th:action="@{'/venta/buscador'}">
 
-                <form method="get" th:action="@{'/venta/buscador'}">
+                <input th:if="${busqueda!=null}" th:value="${busqueda}" name="searchField"
+                       class="form-control mb-3" type="text" placeholder="Buscar"
+                       aria-label="Search" style="width: 40%">
+                <input th:if="${busqueda==null}" name="searchField" class="form-control mb-3" type="text"
+                       placeholder="Buscar"
+                       aria-label="Search" style="width: 40%">
+                <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
 
-                    <input th:if="${busqueda!=null}" th:value="${busqueda}" name="searchField"
-                           class="form-control mb-3" type="text" placeholder="Buscar"
-                           aria-label="Search" style="width: 40%">
-                    <input th:if="${busqueda==null}" name="searchField" class="form-control mb-3" type="text"
-                           placeholder="Buscar"
-                           aria-label="Search" style="width: 40%">
-                    <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
+                <button type="submit" class="btn btn-outline-danger">buscar</button>
+                <a th:href="@{'/venta/lista'}" class="btn btn-outline-danger">Limpiar</a>
 
-                    <button type="submit" class="btn btn-outline-danger">buscar</button>
-                    <a th:href="@{'/venta/listaVentas'}" class="btn btn-outline-danger">Limpiar</a>
-
-                </form>
-
-            </div>
+            </form>
 
 
             <!-- /. COMUNIDAD  -->
@@ -52,9 +48,9 @@
 
                         <div class="card-content">
                             <div class="table-responsive">
-                                <div th:if="${msgInfo != null}" th:text="${msgInfo}" class="alert alert-success"
-                                     role="alert" style="width: 40%">
-                                </div>
+                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
+                                     role="alert"></div>
+
 
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
@@ -72,12 +68,11 @@
                                         <th class="center">Color Producto</th>
                                         <th class="center">Precio Venta</th>
                                         <th class="center">Medio de pago</th>
-                                        <th class="center"></th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
-                                    <tr th:each="venta, info : ${listaVentas}">
+                                    <tr th:if="${totalElementos} > 0 " th:each="venta, info : ${listaVentas}">
                                         <td th:text="${( info.index +1) }"></td>
                                         <td th:text="${venta.tienda.idtienda}==0 ? '--': ${venta.tienda.nombre} " ></td>
                                         <td th:text="${venta.fechaventa}"></td>
@@ -91,48 +86,41 @@
                                         <td th:text="${venta.inventariosede.inventarioproductoidinventario.color}"></td>
                                         <td th:text="${venta.inventariosede.inventarioproductoidinventario.preciomosqoy}"></td>
                                         <td th:text="${venta.metodopago}"></td>
-                                        <td><a th:href="@{'venta/editar?id=' + ${venta.idventas}}">Editar</a></td>
+
+                                    </tr>
+
+                                    <tr th:unless="${totalElementos} > 0" >
+                                        <h1> No hay Ventas</h1>
 
                                     </tr>
 
                                     </tbody>
                                 </table>
-                                <!--
-
                                 <div class="row">
                                     <div class="col-md-4"></div>
                                     <div class="col-md-8">
+
                                         <ul th:if="${last != 1}" class="pagination justify-content-center">
-                                            <li class="page-item" th:if="${current != 1 }">
-                                                <a class="page-link" th:if="${busqueda }"
-                                                   th:href="@{'/producto/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} ">
-                                                    Anterior </a>
-                                                <a class="page-link" th:unless="${busqueda}"
-                                                   th:href="@{'/producto' + '?page=' + ${prev}} "> Anterior </a>
+                                            <li class ="page-item" th:if="${current != 1 }">
+                                                <a class="page-link"  th:if="${busqueda }" th:href="@{'/venta/buscador' + '?page=' + ${prev} + '&' + 'searchField='+ ${busqueda}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/venta' + '?page=' + ${prev}} "> Anterior </a>
                                             </li>
 
-                                            <li class="page-item" th:each="page:${pages}"
-                                                th:classappend="${current == page ? 'active' : ''}">
-                                                <a class="page-link" th:if="${busqueda}"
-                                                   th:href="@{'/producto/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} "
-                                                   th:text="${page}"></a>
-                                                <a class="page-link" th:unless="${busqueda}"
-                                                   th:href="@{'/producto' + '?page=' + ${page}} " th:text="${page}"></a>
+                                            <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/venta/buscador' + '?searchField='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/venta' + '?page=' + ${page}} " th:text="${page}"  ></a>
                                             </li>
 
-                                            <li class="page-item" th:if="${current != last }">
-                                                <a class="page-link" th:if="${busqueda}"
-                                                   th:href="@{'/producto/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} ">
-                                                    Siguiente </a>
-                                                <a class="page-link" th:unless="${busqueda}"
-                                                   th:href="@{'/producto' + '?page=' + ${next}} "> Siguiente </a>
+                                            <li class ="page-item" th:if="${current != last }">
+                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/venta/buscador' + '?page=' + ${next} + '&' + 'searchField='+ ${busqueda}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/venta' + '?page=' + ${next}} "> Siguiente </a>
                                             </li>
 
                                         </ul>
 
+
                                     </div>
                                 </div>
-                                -->
                             </div>
                         </div>
                     </div>

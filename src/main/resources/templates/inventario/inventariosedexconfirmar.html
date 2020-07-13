@@ -16,12 +16,27 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                INVENTARIO SEDE
+                Productos por confirmar
             </h1>
         </div>
 
         <!-- /. COMUNIDAD  -->
         <div id="page-inner">
+
+            <form method="get" th:action="@{'/inventarioSede/buscadorMiSede'}">
+
+                <input th:if="${busqueda!=null}" th:value="${busqueda}" name="searchField"
+                       class="form-control mb-3" type="text" placeholder="Buscar"
+                       aria-label="Search" style="width: 40%">
+                <input th:if="${busqueda==null}" name="searchField" class="form-control mb-3" type="text"
+                       placeholder="Buscar"
+                       aria-label="Search" style="width: 40%">
+                <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
+
+                <button type="submit" class="btn btn-outline-danger">buscar</button>
+                <a th:href="@{'/inventarioSede/listarInvMiSede'}" class="btn btn-outline-danger">Limpiar</a>
+
+            </form>
 
             <div class="row">
                 <div class="col-md-12">
@@ -31,13 +46,12 @@
 
                             <div class="table-responsive">
 
-                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
-                                     role="alert"></div>
+
                                 <table class="table table-striped table-bordered table-hover" >
                                     <thead>
 
                                     <tr class="info">
-
+                                        <th>#</th>
                                         <th>Nombre Producto</th>
                                         <th>Stock</th>
                                         <th>Fecha de llegada</th>
@@ -48,9 +62,10 @@
                                     </tr>
                                     </thead>
                                     <tbody >
-                                    <tr th:each="inv : ${listaInventarioSede}" th:if="${inv.estado != 'recibido'}">
+                                    <tr th:each="inv, info : ${listaInventarioSede}">
 
 
+                                        <td th:text="${info.index +1}" >1</td>
                                         <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
                                         <td th:text="${inv.stock}">de31edae</td>
                                         <td th:text="${inv.getFechallegada()}">---</td>
@@ -99,35 +114,37 @@
                                 <br>
                                 <br>
 
-                                <table class="table table-striped table-bordered table-hover" >
-                                    <thead>
-
-                                    <tr class="info">
-
-                                        <th>Nombre Producto</th>
-                                        <th>Descripcion Del Producto</th>
-                                        <th>Codigo Generado</th>
-                                        <th>Stock</th>
-                                        <th>Fecha de llegada</th>
-
-
-                                    </tr>
-                                    </thead>
-                                    <tbody >
-                                    <tr th:each="inv : ${listaInventarioSede}" th:if="${inv.estado == 'recibido'}">
-                                        <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
-                                        <td th:text="${inv.getInventarioproductoidinventario().getProducto().getDescripcionproducto()}"></td>
-                                        <td th:text="${inv.getInventarioproductoidinventario().getCodigogenerado()}"> </td>
-                                        <td th:text="${inv.stock}">de31edae</td>
-                                        <td th:text="${inv.getFechallegada()}">---</td>
-
-                                    </tr>
-
-                                    </tbody>
-
-                                </table>
 
                                 </form>
+
+
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+
+                                        <ul th:if="${last != 1}" class="pagination justify-content-center">
+                                            <li class ="page-item" th:if="${current != 1 }">
+                                                <a class="page-link"  th:if="${busqueda }" th:href="@{'/inventarioSede/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede/listarinvsedexconfirmar' + '?page=' + ${prev}} "> Anterior </a>
+                                            </li>
+
+                                            <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/inventarioSede/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede/listarinvsedexconfirmar' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                            </li>
+
+                                            <li class ="page-item" th:if="${current != last }">
+                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/inventarioSede/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede/listarinvsedexconfirmar' + '?page=' + ${next}} "> Siguiente </a>
+                                            </li>
+
+                                        </ul>
+
+
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>

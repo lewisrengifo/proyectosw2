@@ -1,27 +1,24 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="cabecera(titulo)">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
-    <title th:text="${titulo}" ></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title th:text="${titulo}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/materialize/css/materialize.min.css}" media="screen,projection" />
+    <link rel="stylesheet" th:href="@{/materialize/css/materialize.min.css}" media="screen,projection"/>
     <!-- Bootstrap Styles-->
-    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
     <!-- FontAwesome Styles-->
-    <link th:href="@{/css/font-awesome.css}" rel="stylesheet" />
+    <link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
     <!-- Morris Chart Styles-->
-    <link th:href="@{/js/morris/morris-0.4.3.min.css}" rel="stylesheet" />
+    <link th:href="@{/js/morris/morris-0.4.3.min.css}" rel="stylesheet"/>
     <!-- Custom Styles-->
-    <link th:href="@{/css/custom-styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/custom-styles.css}" rel="stylesheet"/>
     <!-- Google Fonts-->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
     <link rel="stylesheet" th:href="@{/js/Lightweight-Chart/cssCharts.css}">
-
-
-
 
 
 </head>
@@ -36,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand waves-effect waves-dark" ><i class="large material-icons">track_changes</i> <strong>Moscoy</strong></a>
+            <a class="navbar-brand waves-effect waves-dark"><i class="large material-icons">track_changes</i> <strong>Moscoy</strong></a>
 
             <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
         </div>
@@ -44,18 +41,22 @@
 
         <ul class="nav navbar-top-links navbar-right" sec:authorize="isAuthenticated()">
 
-            <li><a class="dropdown-button waves-effect waves-dark" href="" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <span th:text="|Bienvenido ${session.usuario.getNombre()} ${session.usuario.getApellido()} - ${session.usuario.getRol_idrol().getNombre()}|"></span> <i class="material-icons right">arrow_drop_down</i></a></li>
+            <li><a class="dropdown-button waves-effect waves-dark" href="" data-activates="dropdown1"><i
+                    class="fa fa-user fa-fw"></i> <span
+                    th:text="|Bienvenido ${session.usuario.getNombre()} ${session.usuario.getApellido()} - ${session.usuario.getRol_idrol().getNombre()}|"></span>
+                <i class="material-icons right">arrow_drop_down</i></a></li>
 
         </ul>
 
     </nav>
     <!-- Dropdown Structure -->
     <ul id="dropdown1" class="dropdown-content">
-        <li> <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0 center">
-            <form th:action="@{/logout}" method="post">
-                <input class="btn btn-link" type="submit" value="Cerrar Sesión"/>
-            </form>
-        </div>
+        <li>
+            <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0 center">
+                <form th:action="@{/logout}" method="post">
+                    <input class="btn btn-link" type="submit" value="Cerrar Sesión"/>
+                </form>
+            </div>
 
         </li>
     </ul>
@@ -65,16 +66,21 @@
     <div class="sidebar-collapse">
         <ul class="nav" id="main-menu">
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal','Administrador')"  th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal'||#httpServletRequest.requestURI == '/UnaChiqui/ConsignacionVenta'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/stock'} ? 'nav-item active' : ''">
-                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Inventario Principal <span class="fa arrow"></span></a>
+            <li sec:authorize="hasAnyAuthority('Gestor principal','Administrador')"
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal'||#httpServletRequest.requestURI == '/UnaChiqui/ConsignacionVenta'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/stock'} ? 'nav-item active' : ''">
+                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Inventario Principal <span
+                        class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal'} ? 'active-menu' : ''">
-                        <a  th:href="@{/inventarioPrincipal}" >Inventario de Productos</a>
+                        <a th:href="@{/inventarioPrincipal}">Inventario de Productos</a>
+
                     </li>
-                    <li sec:authorize="hasAnyAuthority('Gestor principal')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/ConsignacionVenta'} ? 'active-menu' : ''">
+                    <li sec:authorize="hasAnyAuthority('Gestor principal')"
+                        th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/ConsignacionVenta'} ? 'active-menu' : ''">
                         <a th:href="@{/ConsignacionVenta}">Consignacion / Venta</a>
                     </li>
-                    <li sec:authorize="hasAnyAuthority('Gestor principal')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/stock'} ? 'active-menu' : ''">
+                    <li sec:authorize="hasAnyAuthority('Gestor principal')"
+                        th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/stock'} ? 'active-menu' : ''">
                         <a th:href="@{/inventarioPrincipal/stock}"> Stock Productos </a>
                     </li>
                 </ul>
@@ -82,76 +88,104 @@
             </li>
 
 
-
             <li th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/sede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede'||#httpServletRequest.requestURI == '/UnaChiqui/listarInvMiSede'} ? 'nav-item active' : ''">
                 <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Sede <span class="fa arrow"></span></a>
+
                 <ul class="nav nav-second-level ">
-                    <li sec:authorize="hasAnyAuthority('Gestor principal')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/sede'} ? 'active-menu' : ''">
-                        <a th:href="@{'/sede'}" > Gestion de Sedes</a>
+                    <li sec:authorize="hasAnyAuthority('Gestor principal')"
+                        th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/sede'} ? 'active-menu' : ''">
+                        <a th:href="@{'/sede'}"> Gestion de Sedes</a>
                     </li>
-                    <li sec:authorize="hasAnyAuthority('Gestor principal' )" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede'} ? 'active-menu' : ''">
-                        <a  th:href="@{'/inventarioSede'}"  > Inventario de Sedes</a>
+                    <li sec:authorize="hasAnyAuthority('Gestor principal' )"
+                        th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede'} ? 'active-menu' : ''">
+                        <a th:href="@{'/inventarioSede'}"> Inventario de Sedes</a>
                     </li>
-                    <li sec:authorize="hasAnyAuthority('Gestor sede' )" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarInvMiSede'} ? 'active-menu' : ''">
-                        <a  th:href="@{/inventarioSede/listarInvMiSede}"  th:text="'Inventario '+${session.usuario.sede_idsede.nombre}" >Inventario Sede</a>
+                    <li sec:authorize="hasAnyAuthority('Gestor sede' )"
+                        th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarInvMiSede'} ? 'active-menu' : ''">
+                        <a th:href="@{/inventarioSede/listarInvMiSede}"
+                           th:text="'Inventario '+${session.usuario.sede_idsede.nombre}">Inventario Sede</a>
+                    </li>
+                    <li sec:authorize="hasAnyAuthority('Gestor sede' )">
+                        <a th:href="@{/inventarioSede/listarinvsedexconfirmar}">Producto por confirmar</a>
                     </li>
                 </ul>
             </li>
 
 
-            <li sec:authorize="hasAnyAuthority('Administrador')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/usuario'} ? 'nav-item active' : ''">
-                <a th:href="@{'/usuario'}"  class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de Usuarios</a>
+            <li sec:authorize="hasAnyAuthority('Administrador')"
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/usuario'} ? 'nav-item active' : ''">
+                <a th:href="@{'/usuario'}" class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de
+                    Usuarios</a>
             </li>
 
 
+            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')"
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/categoria'||#httpServletRequest.requestURI == '/UnaChiqui/linea'||#httpServletRequest.requestURI == '/UnaChiqui/producto'||#httpServletRequest.requestURI == '/UnaChiqui/tamano'||#httpServletRequest.requestURI == '/UnaChiqui/tamano'||#httpServletRequest.requestURI == '/UnaChiqui/comunidad'||#httpServletRequest.requestURI == '/UnaChiqui/artesano'} ? 'nav-item active' : ''">
+                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Descripción de productos <span
+                        class="fa arrow"></span></a>
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/categoria'||#httpServletRequest.requestURI == '/UnaChiqui/linea'||#httpServletRequest.requestURI == '/UnaChiqui/producto'||#httpServletRequest.requestURI == '/UnaChiqui/tamano'||#httpServletRequest.requestURI == '/UnaChiqui/tamano'||#httpServletRequest.requestURI == '/UnaChiqui/comunidad'||#httpServletRequest.requestURI == '/UnaChiqui/artesano'} ? 'nav-item active' : ''">
-                <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Descripción de productos <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level ">
-                    <li >
-                        <a th:href="@{/categoria}" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/categoria'} ? 'active-menu' : ''">Categoria</a>
+                    <li>
+                        <a th:href="@{/categoria}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/categoria'} ? 'active-menu' : ''">Categoria</a>
                     </li>
                     <li>
-                        <a th:href="@{/linea}" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/linea'} ? 'active-menu' : ''">Línea</a>
+                        <a th:href="@{/linea}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/linea'} ? 'active-menu' : ''">Línea</a>
                     </li>
                     <li>
-                        <a th:href="@{/producto}" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/producto'} ? 'active-menu' : ''">Producto</a>
+                        <a th:href="@{/producto}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/producto'} ? 'active-menu' : ''">Producto</a>
                     </li>
                     <li>
-                        <a th:href="@{/tamano}" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tamano'} ? 'active-menu' : ''">Tamaño</a>
+                        <a th:href="@{/tamano}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tamano'} ? 'active-menu' : ''">Tamaño</a>
                     </li>
 
                     <li>
-                        <a th:href="@{/comunidad}" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/comunidad'} ? 'active-menu' : ''">Comunidad</a>
+                        <a th:href="@{/comunidad}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/comunidad'} ? 'active-menu' : ''">Comunidad</a>
                     </li>
                     <li>
-                        <a th:href="@{/artesano}"th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/artesano'} ? 'active-menu' : ''">Artesano</a>
+                        <a th:href="@{/artesano}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/artesano'} ? 'active-menu' : ''">Artesano</a>
                     </li>
                 </ul>
 
             </li>
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tienda'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'nav-item active' : ''">
-                <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Tiendas <span class="fa arrow"></span></a>
+            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')"
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tienda'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'nav-item active' : ''">
+                <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Tiendas <span
+                        class="fa arrow"></span></a>
+
                 <ul class="nav nav-second-level ">
                     <li>
-                        <a th:href="@{'/tienda'}"  th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tienda'||#httpServletRequest.requestURI == '/UnaChiqui/tienda/lista'} ? 'active-menu' : ''"> Gestion de Tiendas</a>
+                        <a th:href="@{'/tienda'}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tienda'||#httpServletRequest.requestURI == '/UnaChiqui/tienda/lista'} ? 'active-menu' : ''">
+                            Gestion de Tiendas</a>
                     </li>
                     <li>
-                        <a th:href="@{/inventarioTienda}"  th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'active-menu' : ''">Inventario Tienda</a>
+                        <a th:href="@{/inventarioTienda}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'active-menu' : ''">Inventario
+                            Tienda</a>
                     </li>
                 </ul>
             </li>
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/venta'||#httpServletRequest.requestURI == '/UnaChiqui/venta/registroventa'} ? 'nav-item active' : ''">
-                <a href="#" class=" waves-effect waves-dark"><i class="fa fa-sitemap"></i> Ventas <span class="fa arrow"></span></a>
+
+            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')"
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/venta'||#httpServletRequest.requestURI == '/UnaChiqui/venta/registroventa'} ? 'nav-item active' : ''">
+                <a href="#" class=" waves-effect waves-dark"><i class="fa fa-sitemap"></i> Ventas <span
+                        class="fa arrow"></span></a>
+
                 <ul class="nav nav-second-level">
                     <li>
-                        <a th:href="@{/venta}" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/venta'} ? 'active-menu' : ''">Lista de Ventas</a>
+                        <a th:href="@{/venta}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/venta'} ? 'active-menu' : ''">Lista
+                            de Ventas</a>
                     </li>
-                    <li>
-                        <a th:href="@{/venta/registroventa}" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/venta/registroventa'} ? 'active-menu' : ''">Realizar Ventas</a>
-                    </li>
+
                 </ul>
             </li>
 
@@ -169,7 +203,6 @@
                             </ul>
                         </li>
                         -->
-
 
 
         </ul>
