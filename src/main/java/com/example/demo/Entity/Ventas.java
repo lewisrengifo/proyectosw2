@@ -30,7 +30,7 @@ public class Ventas {
     private String tipodocumento;
 
     @ManyToOne
-    @JoinColumn(name = "sede_idrol")
+    @JoinColumn(name = "sede_idsede")
     private Sede sede;
 
     @ManyToOne
