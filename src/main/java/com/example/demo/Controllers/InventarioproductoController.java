@@ -2,7 +2,6 @@ package com.example.demo.Controllers;
 
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
-import com.example.demo.service.InventarioPrincipalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -37,8 +35,7 @@ public class InventarioproductoController {
     ConsignacionyventaRepository consignacionyventaRepository;
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
-    @Autowired
-    InventarioPrincipalService inventarioPrincipalService;
+
     @Autowired
     InventarioSedeRepository inventarioSedeRepository;
 
@@ -196,32 +193,56 @@ public class InventarioproductoController {
     }
 
 
+
     @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
-
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
         String busqueda = (String) params.get("searchField");
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        Page<Inventarioproducto> pageInvPrincipal = inventarioPrincipalService.listSearch(busqueda, page);
-        int totalPage = pageInvPrincipal.getTotalPages();
-        long totalItems = pageInvPrincipal.getTotalElements();
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-        if (totalPage > 0) {
-            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
+            return "redirect:/inventarioPrincipal/lista";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioPrincipal/lista";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventarioproducto> pageInvPrincipal = inventarioproductoRepository.buscadorInventarioPrincipal(busqueda, pageRequest);
+            int totalPage = pageInvPrincipal.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioPrincipal/lista";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioPrincipal/lista";
+
+
+            }
+
+            model.addAttribute("listaInventarioPrincipal", pageInvPrincipal.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventarioPrincipal";
         }
-
-
-
-        model.addAttribute("totalItems", totalItems);
-        model.addAttribute("busqueda", busqueda);
-        model.addAttribute("listaInventarioPrincipal", pageInvPrincipal.getContent());
-        model.addAttribute("current", page + 1);
-        model.addAttribute("next", page + 2);
-        model.addAttribute("prev", page);
-        model.addAttribute("last", totalPage);
-
-        return "inventario/inventarioPrincipal";
     }
 
     @GetMapping("/stock")

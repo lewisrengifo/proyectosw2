@@ -11,4 +11,5 @@ import java.util.List;
 public interface TiendaRepository extends JpaRepository<Tienda, Integer> {
     @Query(value = "SELECT * FROM tienda where sede_idsede=?1", nativeQuery = true)
     List<Tienda> listaTiendasPorSede(int id);
+    
 }

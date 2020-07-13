@@ -1,7 +1,6 @@
 package com.example.demo.Controllers;
 
 
-import com.example.demo.Dto.ProductoServiceApi;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +12,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.example.demo.Entity.Producto;
 import com.example.demo.Repository.ProductoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +40,8 @@ public class VentasController {
     VentaRepository ventaRepository;
     @Autowired
     TiendaRepository tiendaRepository;
+
+
 
     @GetMapping(value = {"/listaVentas", ""})
     public String listarVentas(Model model, HttpSession session) {
@@ -69,6 +64,60 @@ public class VentasController {
 
         return "venta/registroventa";
     }
+
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr,HttpSession session) {
+        String busqueda = (String) params.get("searchField");
+        Usuario user =(Usuario) session.getAttribute("usuario");
+        String nombreSede = user.getSede_idsede().getNombre();
+
+
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/venta/listaVentas";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/venta/listaVentas";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Ventas> pageInvVen = ventaRepository.buscadorVentas(busqueda,nombreSede, pageRequest);
+            int totalPage = pageInvVen.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/venta/listaVentas";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/venta/listaVentas";
+
+            }
+
+            model.addAttribute("listaVentas", pageInvVen.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "venta/listaventa";
+        }
+    }
+
 
 
     @PostMapping("/agregarVenta")
