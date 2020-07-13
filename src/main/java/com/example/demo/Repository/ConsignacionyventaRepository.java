@@ -16,22 +16,14 @@ public interface ConsignacionyventaRepository extends JpaRepository <Consignacio
 
     Consignacionyventa findTopByOrderByIdconsignacionDesc();
 
-    @Query(value="SELECT * FROM consignacionyventa cyv\n"+
-            "inner join artesano a on a.idartesano=cyv.artesano_idartesano\n" +
-            "inner join comunidad c on c.idcomunidad=a.comunidad_idcomunidad\n" +
-            "where cyv.numeropedido like %?1%" +
-            "or cyv.tipo like %?1%" +
-            "or a.nombreartesano like %?1%" +
-            "or a.apellidopaterno like %?1%" +
-            "or c.nombrecomunidad like %?1%",
-            countQuery ="SELECT count(*) FROM consignacionyventa cyv\n"+
-                    "inner join artesano a on a.idartesano=cyv.artesano_idartesano\n" +
-                    "inner join comunidad c on c.idcomunidad=a.comunidad_idcomunidad\n" +
-                    "where cyv.numeropedido like %?1%" +
-                    "or cyv.tipo like %?1%" +
-                    "or a.nombreartesano like %?1%" +
-                    "or a.apellidopaterno like %?1%" +
-                    "or c.nombrecomunidad like %?1%",
+    @Query(value="SELECT cyv.* FROM consignacionyventa cyv\n"+
+            "inner join artesano a on a.idartesano=cyv.artesano_idartesano " +
+            "inner join comunidad com on com.idcomunidad=a.comunidad_idcomunidad " +
+            "where cyv.numeropedido like %?1% or cyv.tipo like %?1% or a.nombreartesano like %?1% or a.apellidopaterno like %?1% or com.nombrecomunidad like %?1%",
+            countQuery ="SELECT count(*) FROM consignacionyventa cyv "+
+                    "inner join artesano a on a.idartesano=cyv.artesano_idartesano " +
+                    "inner join comunidad com on c.idcomunidad=a.comunidad_idcomunidad " +
+                    "where cyv.numeropedido like %?1% or cyv.tipo like %?1% or a.nombreartesano like %?1% or a.apellidopaterno like %?1% or com.nombrecomunidad like %?1%",
             nativeQuery = true)
     Page<Consignacionyventa> buscadorConsignacionesYVentas(String search, Pageable pageable);
 

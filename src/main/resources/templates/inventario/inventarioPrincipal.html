@@ -21,11 +21,22 @@
         <!-- /. COMUNIDAD  -->
         <div id="page-inner">
             <div>
-                <form method="get" th:action="@{/inventarioPrincipal/buscador}">
-                    <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar" aria-label="Search" style="width: 40%">
+
+                <form method="get" th:action="@{'/inventarioPrincipal/buscador'}">
+
+                    <input th:if="${busqueda!=null}" th:value="${busqueda}" name="searchField"
+                           class="form-control mb-3" type="text" placeholder="Buscar"
+                           aria-label="Search" style="width: 40%">
+                    <input th:if="${busqueda==null}" name="searchField" class="form-control mb-3" type="text"
+                           placeholder="Buscar"
+                           aria-label="Search" style="width: 40%">
+                    <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
+
                     <button type="submit" class="btn btn-outline-danger">buscar</button>
-                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-outline-danger">Limpiar</a>
+                    <a th:href="@{'/inventarioPrincipal/lista'}" class="btn btn-outline-danger">Limpiar</a>
+
                 </form>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
