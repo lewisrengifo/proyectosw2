@@ -353,11 +353,11 @@
                             <h2>Reporte por Cliente</h2>
                             <br>
                             <div id="mensajecli1"  style="display: none" class="alert alert-danger"
-                                 role="alert">Debe ingresar un numero</div>
+                                 role="alert">reporte anual: Ingrese correctamente los datos</div>
                             <div id="mensajecli2"  style="display: none" class="alert alert-danger"
-                                 role="alert">Ingrese correctamente los datos</div>
+                                 role="alert">reporte mensual: Ingrese correctamente los datos</div>
                             <div id="mensajecli3"  style="display: none" class="alert alert-danger"
-                                 role="alert">Ingrese correctamente los datos</div>
+                                 role="alert">reporte trimestral: Ingrese correctamente los datos</div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
@@ -372,7 +372,7 @@
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anocli'}">
+                                        <form method="post" th:action="@{'/ventasexcel/ano/cliente'}">
                                             <td class="center-align">1</td>
                                             <td class="center-align">Ventas total del Año</td>
                                             <td class="center-align">-</td>
@@ -381,12 +381,22 @@
                                                     <input type="text" class="form-control" value="1930" name="anocli" id="anocli" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
-                                            <td class="center-align">Lorenzo</td>
+                                            <td class="center-align">
+
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="cliente1" id="cliente1" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="v : ${listaVentas}"
+                                                                th:text="|${v.nombrecomprador}|"
+                                                                th:value="${v.nombrecomprador}"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
                                             <td class="center-align"><button type="submit" onclick="return enviarform10()" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anomescli'}">
+                                        <form method="post" th:action="@{'/ventasexcel/anomes/cliente'}">
                                             <td class="center-align">2</td>
                                             <td class="center-align">Ventas total del Mes</td>
                                             <td >
@@ -408,12 +418,21 @@
                                                 </div>
                                             </td>
                                             <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescli" id="anomescli" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
-                                            <td class="center-align">Lorenzo</td>
+                                            <td class="center-align">
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="cliente2" id="cliente2" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="v : ${listaVentas}"
+                                                                th:text="|${v.nombrecomprador}|"
+                                                                th:value="${v.nombrecomprador}"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
                                             <td class="center-align"><button  onclick="return enviarform11()" type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/trimestrecli'}">
+                                        <form method="post" th:action="@{'/ventasexcel/trimestre/cliente'}">
                                             <td class="center-align">3</td>
                                             <td class="center-align">Ventas total del Trimestre</td>
                                             <td class="center-align">
@@ -427,7 +446,16 @@
                                                 </div>
                                             </td>
                                             <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotricli" id="anotricli" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
-                                            <td class="center-align">Lorenzo</td>
+                                            <td class="center-align">
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="cliente3" id="cliente3" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="v : ${listaVentas}"
+                                                                th:text="|${v.nombrecomprador}|"
+                                                                th:value="${v.nombrecomprador}"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
                                             <td class="center-align"><button  type="submit" onclick="return enviarform12()" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
@@ -438,7 +466,7 @@
                     </div>
                 </div>
             </div>
-            //-----------------PRODUCTO-------------------------------------------------------
+
             <div class="row" style="margin: auto">
                 <div class="col-md-12">
                     <div class="card">
@@ -446,11 +474,11 @@
                             <h2>Reporte por Producto</h2>
                             <br>
                             <div id="mensajepro1"  style="display: none" class="alert alert-danger"
-                                 role="alert">Debe ingresar un numero</div>
+                                 role="alert">reporte anual: Ingrese correctamente los datos</div>
                             <div id="mensajepro2"  style="display: none" class="alert alert-danger"
-                                 role="alert">Ingrese correctamente los datos</div>
+                                 role="alert">reporte mensual: Ingrese correctamente los datos</div>
                             <div id="mensajepro3"  style="display: none" class="alert alert-danger"
-                                 role="alert">Ingrese correctamente los datos</div>
+                                 role="alert">reporte trimestral: Ingrese correctamente los datos</div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
@@ -465,7 +493,7 @@
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anopro'}">
+                                        <form method="post" th:action="@{/ventasexcel/ano/producto}">
                                             <td class="center-align">1</td>
                                             <td class="center-align">Ventas total del Año</td>
                                             <td class="center-align">-</td>
@@ -474,12 +502,21 @@
                                                     <input type="text" class="form-control" value="1930" name="anopro" id="anopro" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
-                                            <td class="center-align">Producto</td>
+                                            <td class="center-align">
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="producto1" id="producto1" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="v : ${listaProducto}"
+                                                                th:text="|${v.nombreproducto}|"
+                                                                th:value="${v.nombreproducto}"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
                                             <td class="center-align"><button type="submit" onclick="return enviarform13()" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anomespro'}">
+                                        <form method="post" th:action="@{'/ventasexcel/anomes/producto'}">
                                             <td class="center-align">2</td>
                                             <td class="center-align">Ventas total del Mes</td>
                                             <td >
@@ -501,12 +538,21 @@
                                                 </div>
                                             </td>
                                             <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomespro" id="anomespro" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
-                                            <td class="center-align">Producto</td>
+                                            <td class="center-align">
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="producto2" id="producto2" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="v : ${listaProducto}"
+                                                                th:text="|${v.nombreproducto}|"
+                                                                th:value="${v.nombreproducto}"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
                                             <td class="center-align"><button  onclick="return enviarform14()" type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
                                     <tr>
-                                        <form method="post" th:action="@{'/ventasexcel/trimestrepro'}">
+                                        <form method="post" th:action="@{'/ventasexcel/trimestre/producto'}">
                                             <td class="center-align">3</td>
                                             <td class="center-align">Ventas total del Trimestre</td>
                                             <td class="center-align">
@@ -520,7 +566,16 @@
                                                 </div>
                                             </td>
                                             <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotripro" id="anotripro" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
-                                            <td class="center-align">Producto</td>
+                                            <td class="center-align">
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="producto3" id="producto3" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="v : ${listaProducto}"
+                                                                th:text="|${v.nombreproducto}|"
+                                                                th:value="${v.nombreproducto}"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
                                             <td class="center-align"><button  type="submit" onclick="return enviarform15()" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
@@ -797,8 +852,194 @@
             }
         }
     </script>
-<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+<!--    script de cliente-->
+    <script>
+        function enviarform10() {
+            document.getElementById('mensajecli1').style.display="none";
+            document.getElementById('mensajecli2').style.display="none";
+            document.getElementById('mensajecli3').style.display="none";
+            var anocomunidad =document.getElementById('anocli').value;
+            //var sede=document.getElementById('sede').value;
 
+            var aux=0;
+            console.log(anocomunidad);
+            for(var i=0;i<anocomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anocomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+
+            if(aux===anocomunidad.length){
+                return true;
+            }
+            else{
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensajecli1').style.display="block";
+
+                //$('#mensaje1').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script>
+        function enviarform11() {
+            document.getElementById('mensajecli1').style.display="none";
+            document.getElementById('mensajecli2').style.display="none";
+            document.getElementById('mensajecli3').style.display="none"
+            var anomes =document.getElementById('anomescli').value;
+            var messede =document.getElementById('mescli').value;
+            var aux=0;
+            console.log(messede);
+            for(var i=0;i<anomes.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anomes[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anomes.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+                messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
+            ) {
+                return true;
+            }else{
+                document.getElementById('mensajecli2').style.display="block";
+                //$('#mensaje2').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script th:inline="javascript">
+        function enviarform12() {
+            document.getElementById('mensajecli1').style.display="none";
+            document.getElementById('mensajecli2').style.display="none";
+            document.getElementById('mensajecli3').style.display="none"
+            var anotricomunidad =document.getElementById('anotricli').value;
+            var trimestrecomunidad =document.getElementById('trimestrecli').value;
+            var comunidad =document.getElementById('cliente3').value;
+            var message =  [[${listaVentas1}]];
+            console.log(message);
+
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombrecomprador===comunidad){
+                    aux2=aux2+1;
+                }
+            }
+            console.log(sede);
+            console.log("aux2="+aux2);
+            var aux=0;
+            for(var i=0;i<anotricomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anotricomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anotricomunidad.length && (trimestrecomunidad==="Primero" || trimestrecomunidad==="Segundo" || trimestrecomunidad==="Tercero" || trimestrecomunidad==="Cuarto") && (aux2!=0)) {
+                return true;
+            }else{
+                document.getElementById('mensajecli3').style.display="block";
+                //$('#mensaje3').hide(4000);
+                return false;
+            }
+        }
+    </script>
+<!--    script producto-->
+    <script>
+        function enviarform13() {
+            document.getElementById('mensajepro1').style.display="none";
+            document.getElementById('mensajepro2').style.display="none";
+            document.getElementById('mensajepro3').style.display="none";
+            var anocomunidad =document.getElementById('anopro').value;
+            //var sede=document.getElementById('sede').value;
+
+            var aux=0;
+            console.log(anocomunidad);
+            for(var i=0;i<anocomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anocomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+
+            if(aux===anocomunidad.length){
+                return true;
+            }
+            else{
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensajepro1').style.display="block";
+
+                //$('#mensaje1').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script>
+        function enviarform14() {
+            document.getElementById('mensajepro1').style.display="none";
+            document.getElementById('mensajepro2').style.display="none";
+            document.getElementById('mensajepro3').style.display="none";
+            var anomes =document.getElementById('anomespro').value;
+            var messede =document.getElementById('mespro').value;
+            var aux=0;
+            console.log(messede);
+            for(var i=0;i<anomes.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anomes[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anomes.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+                messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
+            ) {
+                return true;
+            }else{
+                document.getElementById('mensajepro2').style.display="block";
+                //$('#mensaje2').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script th:inline="javascript">
+        function enviarform15() {
+            document.getElementById('mensajepro1').style.display="none";
+            document.getElementById('mensajepro2').style.display="none";
+            document.getElementById('mensajepro3').style.display="none";
+            var anotricomunidad =document.getElementById('anotripro').value;
+            var trimestrecomunidad =document.getElementById('trimestrepro').value;
+            var comunidad =document.getElementById('producto3').value;
+            var message =  [[${listaProducto1}]];
+            console.log(message);
+
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombrecomprador===comunidad){
+                    aux2=aux2+1;
+                }
+            }
+            console.log(sede);
+            console.log("aux2="+aux2);
+            var aux=0;
+            for(var i=0;i<anotricomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anotricomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anotricomunidad.length && (trimestrecomunidad==="Primero" || trimestrecomunidad==="Segundo" || trimestrecomunidad==="Tercero" || trimestrecomunidad==="Cuarto") && (aux2!=0)) {
+                return true;
+            }else{
+                document.getElementById('mensajepro3').style.display="block";
+                //$('#mensaje3').hide(4000);
+                return false;
+            }
+        }
+    </script>
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+</div>
 </body>
 
 </html>
