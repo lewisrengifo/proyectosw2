@@ -2,8 +2,6 @@ package com.example.demo.Controllers;
 
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
-import com.example.demo.service.InventarioPrincipalService;
-import com.sun.xml.internal.fastinfoset.util.StringArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -39,8 +35,7 @@ public class InventarioproductoController {
     ConsignacionyventaRepository consignacionyventaRepository;
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
-    @Autowired
-    InventarioPrincipalService inventarioPrincipalService;
+
     @Autowired
     InventarioSedeRepository inventarioSedeRepository;
 
@@ -94,7 +89,7 @@ public class InventarioproductoController {
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) throws ParseException {
 
         if (referencia2.equals("consig")) {
-            consigYventa.setTipo("consignacion");
+            consigYventa.setTipo("Consignación");
             Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
             int idultimo = save.getIdconsignacion();
 
@@ -143,11 +138,10 @@ public class InventarioproductoController {
         Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
         invPro.setConsignacionyventa(ultimaConsigOventa.get());
 
-        ZonedDateTime now = ZonedDateTime.now();
-        Date nowdate = Date.from(now.toInstant());
-        //Date fechatudei = new Date();
 
-       invPro.setFechainicio(nowdate);
+        Date fechatudei = new Date();
+
+       invPro.setFechainicio(fechatudei);
         if(ultimaConsigOventa.get().getTipo().equals("consignacion")){
             String lineac = invPro.getProducto().getLinea().getCodigolinea();
             String categoriac = invPro.getCategoria().getCodigocategoria();
@@ -159,49 +153,12 @@ public class InventarioproductoController {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
             //OBTENER EL MES
             simpleDateFormat = new SimpleDateFormat("MMMM");
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(ultimaConsigOventa.get().getFechafin());
-            System.out.println(calendar.getTime());
-            System.out.println(calendar.MONTH);
-            String mesC = "";
-            if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.JANUARY){
-                mesC = "ENE";
-            }else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.FEBRUARY){
-                mesC = "FEB";
-            }else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.MARCH){
-                mesC = "MAR";
-            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.APRIL){
-                mesC = "ABR";
-            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.MAY){
-                mesC = "MAY";
-            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.JUNE){
-                mesC = "JUN";
-            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.JULY){
-                mesC = "JUL";
-            }else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.AUGUST){
-                mesC = "AGO";
-            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.SEPTEMBER){
-                mesC = "SET";
-            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.OCTOBER){
-                mesC = "OCT";
-            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.NOVEMBER){
-                mesC = "NOV";
-            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.DECEMBER){
-                mesC = "DIC";
-            }
-            System.out.println(calendar.MONTH);
-            //String mesC= simpleDateFormat.format(calendar.getTime()).toUpperCase();
-            System.out.println(mesC);
+            String mesC= simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
             //OBTENER EL AÑO
             simpleDateFormat = new SimpleDateFormat("YYYY");
-            char[] yearArr = new char[4];
             String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
-            for (int i= 0; i<yearArr.length; i++){
-                yearArr[i] = yearco.charAt(i);
-            }
-            System.out.println(yearArr);
             String totalCodigoGenerado = lineac+categoriac+productoc
-                    +descriccionC+tamano+comunidadC+artesanoC+mesC+yearArr[2] + yearArr[3];
+                    +descriccionC+tamano+comunidadC+artesanoC+mesC+yearco;
             invPro.setCodigogenerado(totalCodigoGenerado);
         }else{
             String lineac = invPro.getProducto().getLinea().getCodigolinea();
@@ -219,9 +176,9 @@ public class InventarioproductoController {
 
         Inventariosede inventariosede= new Inventariosede();
         inventariosede.setStock(invProductoUltimo.getCantidad());
-        inventariosede.setFechallegada(nowdate);
+        inventariosede.setFechallegada(fechatudei);
         inventariosede.setInventarioproductoidinventario(invProductoUltimo);
-        inventariosede.setEstado("recibido");
+        inventariosede.setEstado("entregado");
         inventariosede.setSede(usuariologueado.getSede_idsede());
         inventarioSedeRepository.save(inventariosede);
 
@@ -236,38 +193,62 @@ public class InventarioproductoController {
     }
 
 
-    @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
 
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
         String busqueda = (String) params.get("searchField");
 
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-        Page<Inventarioproducto> pageInvPrincipal = inventarioPrincipalService.listSearch(busqueda, page);
-        int totalPage = pageInvPrincipal.getTotalPages();
-        long totalItems = pageInvPrincipal.getTotalElements();
+            return "redirect:/inventarioPrincipal/lista";
+        } else {
 
-        if (totalPage > 0) {
-            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioPrincipal/lista";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventarioproducto> pageInvPrincipal = inventarioproductoRepository.buscadorInventarioPrincipal(busqueda, pageRequest);
+            int totalPage = pageInvPrincipal.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioPrincipal/lista";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioPrincipal/lista";
+
+
+            }
+
+            model.addAttribute("listaInventarioPrincipal", pageInvPrincipal.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventarioPrincipal";
         }
-
-        model.addAttribute("totalItems", totalItems);
-        model.addAttribute("busqueda", busqueda);
-        model.addAttribute("listaInventarioPrincipal", pageInvPrincipal.getContent());
-        model.addAttribute("current", page + 1);
-        model.addAttribute("next", page + 2);
-        model.addAttribute("prev", page);
-        model.addAttribute("last", totalPage);
-
-        return "inventario/inventarioPrincipal";
     }
 
     @GetMapping("/stock")
     public String stockDeProductosDisponiblesParaSedes(Model model,HttpSession session){
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-        model.addAttribute("stockProductos",inventarioSedeRepository.
-                listarInventarioPorSedeConStock(usuariologueado.getSede_idsede().getIdsede()));
+        model.addAttribute("stockProductos",inventarioSedeRepository.listarInventarioPorSede(usuariologueado.getSede_idsede().getIdsede()));
         return "inventario/stockProductoInvPrincipal";
     }
 

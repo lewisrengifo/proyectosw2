@@ -1,7 +1,6 @@
 package com.example.demo.Controllers;
 
 
-import com.example.demo.Dto.ProductoServiceApi;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,22 +12,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.jws.WebParam;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.example.demo.Entity.Producto;
 import com.example.demo.Repository.ProductoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,10 +40,8 @@ public class VentasController {
     VentaRepository ventaRepository;
     @Autowired
     TiendaRepository tiendaRepository;
-    @Autowired
-    InventarioTiendaRepository inventarioTiendaRepository;
-    @Autowired
-    SedeRepository sedeRepository;
+
+
 
     @GetMapping(value = {"/listaVentas", ""})
     public String listarVentas(Model model, HttpSession session) {
@@ -61,32 +51,73 @@ public class VentasController {
     }
 
     @GetMapping("/registroventa")
-    public String registrarVenta(Model model, @RequestParam("id") int idTienda,@ModelAttribute("ventas") Ventas ventas,
-                                 RedirectAttributes att, HttpSession session) {
+    public String registrarVenta(Model model, @ModelAttribute("ventas") Ventas ventas,
+                                 RedirectAttributes redirectAttributes, HttpSession session) {
 
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-        Optional<Tienda> byId = tiendaRepository.findById(idTienda);
 
-        if(byId.isPresent()){
         int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
-            List<Inventariotienda> inventariotiendas = inventarioTiendaRepository.listaProductoEnTienda(idTienda);
-            if (inventariotiendas.isEmpty()){
-                String nombreTienda = byId.get().getNombre();
-                att.addFlashAttribute("msgError","La tienda" + nombreTienda + " no posee productos todavía");
-                return "redirect:/tienda";
-            }else{
-                model.addAttribute("ProductosEnTienda", inventariotiendas);
-                ventas.setTienda(byId.get());
-                model.addAttribute("tiendita",byId.get());
-                return "venta/registroventa";
+        model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
+        model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(sedeUsuario));
+        model.addAttribute("usuarioRol", usuariologueado.getRol_idrol().getNombre());
+        model.addAttribute("idsede", usuariologueado.getSede_idsede().getIdsede());
+
+        return "venta/registroventa";
+    }
+
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr,HttpSession session) {
+        String busqueda = (String) params.get("searchField");
+        Usuario user =(Usuario) session.getAttribute("usuario");
+        String nombreSede = user.getSede_idsede().getNombre();
+
+
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/venta/listaVentas";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/venta/listaVentas";
             }
 
-        }else{
-            att.addFlashAttribute("msgError","Tienda seleccionada no Existe");
-            return "redirect:/tienda";
-        }
 
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Ventas> pageInvVen = ventaRepository.buscadorVentas(busqueda,nombreSede, pageRequest);
+            int totalPage = pageInvVen.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/venta/listaVentas";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/venta/listaVentas";
+
+            }
+
+            model.addAttribute("listaVentas", pageInvVen.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "venta/listaventa";
+        }
     }
+
 
 
     @PostMapping("/agregarVenta")
@@ -94,129 +125,75 @@ public class VentasController {
                                  RedirectAttributes redirectAttributes, HttpSession session) {
 
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-        Optional<Sede> sedeid = sedeRepository.findById(usuariologueado.getSede_idsede().getIdsede());
-        ventas.setSede(sedeid.get());
-        Optional<Tienda> byId = tiendaRepository.findById(ventas.getTienda().getIdtienda());
         if (bindingResult.hasErrors()) {
-            model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(ventas.getTienda().getIdtienda()));
-            ventas.setTienda(byId.get());
-            model.addAttribute("tiendita",byId.get());
+            int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
+            model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
+            model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(sedeUsuario));
+            model.addAttribute("usuarioRol", usuariologueado.getRol_idrol().getNombre());
+            model.addAttribute("idsede", usuariologueado.getSede_idsede().getIdsede());
             return "venta/registroventa";
         } else {
             if (ventas.getIdventas() == 0) {
-                        //DATOS BIEN INGRESADOS
-
-                        Inventariotienda inventariotiendaReduceStock = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
-                        if (inventariotiendaReduceStock.getStocktienda() >= ventas.getCantidad()) {
+                for (Ventas unoDeVentas : ventaRepository.findAll()) {
+                    if (ventas.getNumerodocumento().equals(unoDeVentas.getNumerodocumento())) {
+                        redirectAttributes.addFlashAttribute("msg1", "Documento de venta existente.");
+                        redirectAttributes.addFlashAttribute("ventas", ventas);
+                        int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
+                        model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
+                        model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(sedeUsuario));
+                        model.addAttribute("usuarioRol", usuariologueado.getRol_idrol().getNombre());
+                        model.addAttribute("idsede", usuariologueado.getSede_idsede().getIdsede());
+                        return "venta/registroventa";
+                    } else {
+                        int cantidadDeStockEnsede = ventas.getInventariosede().getStock();
+                        if (cantidadDeStockEnsede > ventas.getCantidad()) {
                             Optional<Inventariosede> idSedeCambiaStock = inventarioSedeRepository.findById(ventas.getInventariosede().getIdiventariosede());
-
-                            int aa = inventariotiendaReduceStock.getStocktienda();
+                            int aa = cantidadDeStockEnsede;
                             int bb = ventas.getCantidad();
-                            int StockNuevoEnTienda = aa - bb;
+                            int StockNuevo = aa - bb;
                             Optional<Inventarioproducto> CambiaCantidadProducto =
                                     inventarioproductoRepository.findById(idSedeCambiaStock.get().getInventarioproductoidinventario().getIdinventario());
                             int nuevaCantidadProducto = CambiaCantidadProducto.get().getCantidad() - ventas.getCantidad();
 
-                            //Actualizar cantidad en inventario Tienda
-                            inventarioTiendaRepository.ActualizarCantidadInventarioTienda(StockNuevoEnTienda, inventariotiendaReduceStock.getIdiventariotienda());
+                            //Actualizar cantidad en inventario sede
+                            inventarioSedeRepository.actualizarStockSedeXVenta(StockNuevo, idSedeCambiaStock.get().getIdiventariosede());
                             //actualizar cantidad en inventario principal
                             inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(nuevaCantidadProducto, CambiaCantidadProducto.get().getIdinventario());
-                            redirectAttributes.addFlashAttribute("msgInfo", "Venta registrada exitosamente");
+
                             ventaRepository.save(ventas);
-                            return "redirect:/venta";
                         } else {
-                            redirectAttributes.addFlashAttribute("msg1","La cantidad ingresada debe menor a la Cantidad Disponible del Producto");
-                            return "redirect:/venta/registroventa?id=" + ventas.getTienda().getIdtienda();
+                            return "redirect:/venta/registroventa";
                         }
 
-            } else {
-                Optional<Ventas> ventaVaACambiar = ventaRepository.findById(ventas.getIdventas());
-                int cantidadViejaVenta = ventaVaACambiar.get().getCantidad();
-                int cantidadNuevaVenta = ventas.getCantidad();
-                if (cantidadNuevaVenta > 0 ) {
-                    if (ventaVaACambiar.get().getInventariosede().getIdiventariosede()
-                            == ventas.getInventariosede().getIdiventariosede()) {
-                        if (cantidadNuevaVenta == cantidadViejaVenta) {
+                        //return "redirect:/venta";
+                        model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));
+                        redirectAttributes.addFlashAttribute("msg2", "Venta registrada exitosamente.");
                         ventaRepository.save(ventas);
-                    } else {
-                        Inventariotienda invenTiendaCambiaStock = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
-
-                        if (cantidadNuevaVenta > cantidadViejaVenta) {
-                            int diferencia = cantidadNuevaVenta - cantidadViejaVenta;
-                            int nuevoStockEnTienda = invenTiendaCambiaStock.getStocktienda() - diferencia;
-                            inventarioTiendaRepository.ActualizarCantidadInventarioTienda(nuevoStockEnTienda, invenTiendaCambiaStock.getIdiventariotienda());
-                            Optional<Inventarioproducto> invPrinCambiaCantidad
-                                    = inventarioproductoRepository.findById(ventas.getInventariosede().getInventarioproductoidinventario().getIdinventario());
-                            int newCantInvPrin = invPrinCambiaCantidad.get().getCantidad()-diferencia;
-                            inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(newCantInvPrin,invPrinCambiaCantidad.get().getIdinventario());
-                            ventaRepository.save(ventas);
-                        } else {
-                            int diferencia2 = cantidadViejaVenta - cantidadNuevaVenta;
-                            int nuevoStockTienda2 = invenTiendaCambiaStock.getStocktienda() + diferencia2;
-                            inventarioTiendaRepository.ActualizarCantidadInventarioTienda(nuevoStockTienda2, invenTiendaCambiaStock.getIdiventariotienda());
-                            Optional<Inventarioproducto> invPrinCambiaCantidad2
-                                    = inventarioproductoRepository.findById(ventas.getInventariosede().getInventarioproductoidinventario().getIdinventario());
-                            int newCantInvPrin2 = invPrinCambiaCantidad2.get().getCantidad()+diferencia2;
-                            inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(newCantInvPrin2,invPrinCambiaCantidad2.get().getIdinventario());
-                            ventaRepository.save(ventas);
-                        }
+                        return "redirect:/venta";
                     }
-
-                }else{
-                        //DARLE SU CANTIDAD A LA TIENDA
-                        Inventariotienda invTiendaSumarCant =
-                                inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventaVaACambiar.get().getInventariosede().getIdiventariosede());
-                        int cantidadAnterVenta = ventaVaACambiar.get().getCantidad();
-                        int NewTotalParatienda = cantidadAnterVenta + invTiendaSumarCant.getStocktienda();
-                        inventarioTiendaRepository.ActualizarCantidadInventarioTienda(NewTotalParatienda,invTiendaSumarCant.getIdiventariotienda());
-                        //DARLE SU CANTIDAD AL PRODUCTO DEL INVENTARIO
-                        Optional<Inventarioproducto> invProductDevolverCant = inventarioproductoRepository.findById(ventaVaACambiar.get().getInventariosede().getInventarioproductoidinventario().getIdinventario());
-                        int cantidadDevueltaTotal = invProductDevolverCant.get().getCantidad() + ventaVaACambiar.get().getCantidad();
-                        inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(cantidadDevueltaTotal,invProductDevolverCant.get().getIdinventario());
-
-                        //CUANDO YA CAMBIASTE DE PRODUCTO
-                        Inventariotienda inventariotiendaEditExiste = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
-                        int cant = ventas.getCantidad();
-                        Optional<Inventarioproducto> editProductoCantidad = inventarioproductoRepository.findById(ventas.getInventariosede().getInventarioproductoidinventario().getIdinventario());
-                        int newCantInventProduct = editProductoCantidad.get().getCantidad() -cant;
-                        inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(newCantInventProduct,editProductoCantidad.get().getIdinventario());
-                        if (inventariotiendaEditExiste.getIdiventariotienda()==0){
-                            ventaRepository.save(ventas);
-                        }else{
-                            int cantTiendaEdit = inventariotiendaEditExiste.getStocktienda();
-                            int newCantTienda = cantTiendaEdit-cant;
-                            inventarioTiendaRepository.ActualizarCantidadInventarioTienda(newCantTienda,inventariotiendaEditExiste.getIdiventariotienda());
-                            ventaRepository.save(ventas);
-                        }
-                    }
-                }else{
-                    redirectAttributes.addFlashAttribute("msg","La cantidad Ingresa debe ser Mayor a Cero");
-                    return "redirect:/venta/editar?id=" + ventas.getIdventas();
                 }
-
+            } else {
+                for (Ventas unoDeVentas2 : ventaRepository.buscarmenosmio(ventas.getIdventas())) {
+                    if (ventas.getNumerodocumento().equals(unoDeVentas2.getNumerodocumento())) {
+                        redirectAttributes.addFlashAttribute("msg1", "Documento a modificar ya existe.");
+                        redirectAttributes.addFlashAttribute("ventas", ventas);
+                        int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
+                        model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
+                        model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(sedeUsuario));
+                        model.addAttribute("usuarioRol", usuariologueado.getRol_idrol().getNombre());
+                        model.addAttribute("idsede", usuariologueado.getSede_idsede().getIdsede());
+                        return "venta/registoventa";
+                    } else {
+                        model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));
+                        redirectAttributes.addFlashAttribute("msg2", "Venta actualizada exitosamente.");
+                        ventaRepository.save(ventas);
+                        return "redirect:/venta";
+                    }
+                }
             }
-            redirectAttributes.addFlashAttribute("msgInfo", "Venta actualizada exitosamente.");
+            model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));
             return "redirect:/venta";
-            }
 
-            //terminar las validaciones
-
-    }
-
-
-    @GetMapping("/editar")
-    public String EditarLaventa(@RequestParam("id") int idVenta, @ModelAttribute Ventas ventas, RedirectAttributes att, Model model){
-        Optional<Ventas> ventaqEdita = ventaRepository.findById(idVenta);
-        if (ventaqEdita.isPresent()){
-            ventas = ventaqEdita.get();
-            model.addAttribute("ventas",ventas );
-            Optional<Tienda> byId = tiendaRepository.findById(ventas.getTienda().getIdtienda());
-            List<Inventariotienda> inventariotiendas = inventarioTiendaRepository.listaProductoEnTienda(ventas.getTienda().getIdtienda());
-            model.addAttribute("ProductosEnTienda", inventariotiendas);
-            model.addAttribute("tiendita",byId.get());
-            return "venta/registroventa";
-        }else{
-            return "redirect:/venta";
         }
 
     }

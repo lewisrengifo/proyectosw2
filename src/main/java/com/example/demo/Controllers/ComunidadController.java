@@ -25,14 +25,7 @@ public class ComunidadController {
     @Autowired
     ComunidadRepository comunidadRepository;
 
-    @GetMapping(value = {"", "/"})
-    public String listaComunidad( Model model){
-
-        model.addAttribute("listaComunidad",comunidadRepository.findAll());
-        return "comunidad/lista";
-
-    }
-
+   
     @GetMapping("/nuevo")
     public String nuevaComunidad(@ModelAttribute("comunidad") Comunidad c){
 
