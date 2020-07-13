@@ -287,7 +287,10 @@ public class VentasController2 {
                 break;
             default: mes1="#";
         }
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralSede(mes1,mes2,mes3,anotri, sede.getIdsede());
+        String mmes1 = anotri +"-"+ mes1;
+        String mmes2 = anotri +"-"+ mes2;
+        String mmes3 = anotri +"-"+ mes3;
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralSede(mmes1,mmes2,mmes3, sede.getIdsede());
         String aux="Trimestre "+ trimestre ;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
@@ -415,7 +418,10 @@ public class VentasController2 {
         }
         Optional<Producto> prod = productoRepository.findById(producto.getIdproducto());
         Producto produ = prod.get();
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestreProducto(mes1,mes2,mes3,anotri, produ.getNombreproducto());
+        String mmes1 = anotri +"-"+ mes1;
+        String mmes2 = anotri +"-"+ mes2;
+        String mmes3 = anotri +"-"+ mes3;
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestreProducto(mmes1,mmes2,mmes3, produ.getNombreproducto());
         String aux="Trimestre "+ trimestre ;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
@@ -537,7 +543,10 @@ public class VentasController2 {
                 break;
             default: mes1="#";
         }
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestreComunidad(mes1,mes2,mes3,anotri, comunidad.getIdcomunidad());
+        String mmes1 = anotri +"-"+ mes1;
+        String mmes2 = anotri +"-"+ mes2;
+        String mmes3 = anotri +"-"+ mes3;
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestreComunidad(mmes1,mmes2,mmes3, comunidad.getIdcomunidad());
         String aux="Trimestre "+ trimestre ;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
@@ -664,7 +673,10 @@ public class VentasController2 {
         }
         Optional<Ventas> venta = ventaRepository1.findById(ventas.getIdventas());
         Ventas venta1 = venta.get();
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestreCliente(mes1,mes2,mes3,anotri, venta1.getNombrecomprador());
+        String mmes1 = anotri +"-"+ mes1;
+        String mmes2 = anotri +"-"+ mes2;
+        String mmes3 = anotri +"-"+ mes3;
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestreCliente(mmes1,mmes2,mmes3, venta1.getNombrecomprador());
         String aux="Trimestre "+ trimestre ;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
