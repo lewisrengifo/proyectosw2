@@ -135,7 +135,7 @@
                 <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Tiendas <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level ">
                     <li>
-                        <a th:href="@{'/tienda'}"  th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tienda'} ? 'active-menu' : ''"> Gestion de Tiendas</a>
+                        <a th:href="@{'/tienda'}"  th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tienda'||#httpServletRequest.requestURI == '/UnaChiqui/tienda/lista'} ? 'active-menu' : ''"> Gestion de Tiendas</a>
                     </li>
                     <li>
                         <a th:href="@{/inventarioTienda}"  th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'active-menu' : ''">Inventario Tienda</a>
