@@ -198,13 +198,13 @@ public class VentasController {
         if (busqueda.isEmpty()) {
             attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-            return "redirect:/venta/lista";
+            return "redirect:/venta/listaVentas";
         } else {
 
             try {
                 int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
             } catch (NumberFormatException e) {
-                return "redirect:/venta/lista";
+                return "redirect:/venta/listaVentas";
             }
 
 
@@ -220,23 +220,24 @@ public class VentasController {
                 if (page > pages.size() - 1) {
                     attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
-                    return "redirect:/venta/lista";
+                    return "redirect:/venta/listaVentas";
                 }
                 model.addAttribute("pages", pages);
             } else {
                 attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
-                return "redirect:/venta/lista";
+                return "redirect:/venta/listaVentas";
 
 
             }
-
+            int totalElementos = (int) pageVent.getTotalElements();
             model.addAttribute("listaVentas", pageVent.getContent());
             model.addAttribute("current", page + 1);
             model.addAttribute("next", page + 2);
             model.addAttribute("busqueda", busqueda);
             model.addAttribute("prev", page);
             model.addAttribute("last", totalPage);
+            model.addAttribute("totalElementos", totalElementos);
 
             return "venta/listaventa";
         }
