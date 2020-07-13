@@ -42,6 +42,62 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
             countQuery = "SELECT count(*) FROM inventariosede where sede_idsede=?1 and estado ='recibido'",nativeQuery=true)
     Page<Inventariosede> listarInventarioPorSedePaginado(int idSede,Pageable pageable );
 
+
+    @Query(value="SELECT ins.* FROM inventariosede ins\n" +
+            "    inner join inventarioproducto inP  on inP.idinventario = ins.inventarioproducto_idinventario\n" +
+            "    inner join producto p on p.idproducto = inP.producto_idproducto\n" +
+            "    inner join sede s on s.idsede = ins.sede_idsede\n" +
+            "    where (ins.stock like %?1% or ins.fechallegada like %?1%\n" +
+            "                    or p.nombreproducto like %?1% or p.descripcionproducto like %?1%\n" +
+            "                    or inP.codigogenerado like %?1% or s.nombre like %?1% or ins.estado like %?1%\n" +
+            "                    or ins.observaciones like %?1%)" ,
+            countQuery = "SELECT count(*) FROM inventariosede ins\n" +
+                    "    inner join inventarioproducto inP  on inP.idinventario = ins.inventarioproducto_idinventario\n" +
+                    "    inner join producto p on p.idproducto = inP.producto_idproducto\n" +
+                    "    inner join sede s on s.idsede = ins.sede_idsede\n" +
+                    "    where (ins.stock like %?1% or ins.fechallegada like %?1%\n" +
+                    "                    or p.nombreproducto like %?1% or p.descripcionproducto like %?1%\n" +
+                    "                    or inP.codigogenerado like %?1% or s.nombre like %?1% or ins.estado like %?1%\n" +
+                    "                    or ins.observaciones like %?1%)" ,nativeQuery=true)
+    Page<Inventariosede> buscarInvSedes(String search,Pageable pageable );
+
+
+
+    @Query(value="SELECT ins.* FROM inventariosede ins\n" +
+            "    inner join inventarioproducto inP on ins.inventarioproducto_idinventario=inP.idinventario\n" +
+            "    inner join producto p on p.idproducto = inP.producto_idproducto\n" +
+            "    inner join consignacionyventa cv on cv.idconsignacion=inP.consignacionyventa_idconsignacion\n" +
+            "    inner join sede s on s.idsede = ins.sede_idsede\n" +
+            "    where ( cv.numeropedido like %?1% or inP.codigogenerado like %?1% or p.nombreproducto like %?1%\n" +
+            "                    or inp.cantidad like %?1% or ins.stock like %?1% ) and s.nombre =?2",
+            countQuery = "SELECT ins.* FROM inventariosede ins\\n\" +\n" +
+                    "            \"    inner join inventarioproducto inP on ins.inventarioproducto_idinventario=inP.idinventario\\n\" +\n" +
+                    "            \"    inner join producto p on p.idproducto = inP.producto_idproducto\\n\" +\n" +
+                    "            \"    inner join consignacionyventa cv on cv.idconsignacion=inP.consignacionyventa_idconsignacion\\n\" +\n" +
+                    "            \"    inner join sede s on s.idsede = ins.sede_idsede\\n\" +\n" +
+                    "            \"    where ( cv.numeropedido like %?1% or inP.codigogenerado like %?1% or p.nombreproducto like %?1%\\n\" +\n" +
+                    "            \"                    or inp.cantidad like %?1% or ins.stock like %?1% ) and s.nombre = ?2",nativeQuery=true)
+    Page<Inventariosede> buscarStockPaginado(String search , String sede, Pageable pageable );
+
+
+
+
+
+
+
+
+    @Query(value="SELECT ins.* FROM inventariosede ins \n" +
+            "inner join sede s on s.idsede=ins.sede_idsede \n" +
+            "where s.nombre = ?1 and estado = 'enviado'",
+            countQuery = "SELECT count(*) FROM inventariosede ins \n" +
+                    "           inner join sede s on s.idsede=ins.sede_idsede \n" +
+                    "            where s.nombre = ?1 and estado = 'enviado'",nativeQuery=true)
+    Page<Inventariosede> listarInventarioMiSedeProdXconfir(String Sede,Pageable pageable );
+
+
+
+
+
     @Query(value="SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)"
          , nativeQuery = true)
     List<Inventariosede> obtenerInvDeMiSedeNormal(String sesionSede);
@@ -74,12 +130,22 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
 
 
 
-    @Query(value="SELECT invs.* FROM inventariosede  invs , inventarioproducto inve, producto p where p.nombreproducto like %?1%\n" +
-            "                and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario ",
-            countQuery ="SELECT count(*) FROM inventariosede  invs , inventarioproducto inve, producto p where p.nombreproducto like %?1%\n" +
-                    "                and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario ",
+    @Query(value=" SELECT ins.* FROM inventariosede ins \n" +
+            "inner join inventarioproducto inP  on inP.idinventario = ins.inventarioproducto_idinventario \n" +
+            "inner join producto p on p.idproducto = inP.producto_idproducto \n" +
+            "inner join sede s on s.idsede = ins.sede_idsede \n" +
+            "where (ins.stock like %?1% or ins.fechallegada like %?1% \n" +
+            "or p.nombreproducto like %?1% or p.descripcionproducto like %?1% \n" +
+            "or inP.codigogenerado like %?1%) and s.nombre = \"lima\" and ins.estado=\"recibido\"\n",
+            countQuery =" SELECT ins.* FROM inventariosede ins \n" +
+                    "inner join inventarioproducto inP  on inP.idinventario = ins.inventarioproducto_idinventario \n" +
+                    "inner join producto p on p.idproducto = inP.producto_idproducto \n" +
+                    "inner join sede s on s.idsede = ins.sede_idsede \n" +
+                    "where (ins.stock like %?1% or ins.fechallegada like %?1% \n" +
+                    "or p.nombreproducto like %?1% or p.descripcionproducto like %?1% \n" +
+                    "or inP.codigogenerado like %?1%) and s.nombre = ?2 and ins.estado=\"recibido\"\n",
             nativeQuery = true)
-    Page<Inventariosede> buscadorInventarioSede(String search, Pageable pageable);
+    Page<Inventariosede> buscadorInventarioSede(String search, String sede, Pageable pageable);
 
 
 }

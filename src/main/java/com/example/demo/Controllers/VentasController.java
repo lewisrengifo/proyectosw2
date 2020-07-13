@@ -49,10 +49,50 @@ public class VentasController {
     TiendaRepository tiendaRepository;
 
     @GetMapping(value = {"/listaVentas", ""})
-    public String listarVentas(Model model, HttpSession session) {
+    public String listarVentas(Model model, HttpSession session, @RequestParam Map<String, Object> params , RedirectAttributes attr) {
+
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
-        model.addAttribute("listaVentas", ventaRepository.listaVentasPorSede(usuariologueado.getSede_idsede().getIdsede()));
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/venta";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if (page < 0) {
+            return "redirect:/venta";
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, 5);
+
+        Page<Ventas> pageVent = ventaRepository.listaVentasPorSedePageable(usuariologueado.getSede_idsede().getIdsede() , pageRequest);
+
+        int totalPage = pageVent.getTotalPages();
+
+        int totalElementos = (int) pageVent.getTotalElements();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            if (page > pages.size() - 1) {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/venta";
+            }
+            model.addAttribute("pages", pages);
+        } else {
+
+
+            return "redirect:/venta";
+        }
+
+        model.addAttribute("listaVentas", pageVent.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+        model.addAttribute("totalElementos", totalElementos);
         return "venta/listaventa";
+
+
     }
 
     @GetMapping("/registroventa")
@@ -147,5 +187,58 @@ public class VentasController {
 
         }
 
+    }
+
+    @GetMapping("/buscador")
+    public String buscadorSearch(@RequestParam Map<String, Object> params, HttpSession session ,Model model , RedirectAttributes attr ) {
+
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+
+        String busqueda = (String) params.get("searchField");
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/venta/lista";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/venta/lista";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 5);
+
+
+            Page<Ventas> pageVent = ventaRepository.buscadorVentas(busqueda,usuariologueado.getSede_idsede().getNombre(), pageRequest );
+            int totalPage = pageVent.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/venta/lista";
+                }
+                model.addAttribute("pages", pages);
+            } else {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/venta/lista";
+
+
+            }
+
+            model.addAttribute("listaVentas", pageVent.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "venta/listaventa";
+        }
     }
 }

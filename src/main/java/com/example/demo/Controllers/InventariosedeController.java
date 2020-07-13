@@ -146,7 +146,7 @@ public class InventariosedeController {
             return "redirect:/inventarioSede/listarInvMiSede";
         }
 
-        PageRequest pageRequest = PageRequest.of(page, 10);
+        PageRequest pageRequest = PageRequest.of(page, 5);
 
         Page<Inventariosede> pageProduct = productoServiceApi.getEverInvs(miSede, pageRequest);
 
@@ -172,31 +172,83 @@ public class InventariosedeController {
         return "inventario/inventariomisede";
 
     }
+
+    @GetMapping(value = {"/listarinvsedexconfirmar"})
+    public String listaInventariosedexconfirmar(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        String miSede = usuario.getSede_idsede().getNombre();
+
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/inventarioSede/listarinvsedexconfirmar";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if (page < 0) {
+            return "redirect:/inventarioSede/listarinvsedexconfirmar";
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, 5);
+
+        Page<Inventariosede> pageProduct = inventarioSedeRepository.listarInventarioMiSedeProdXconfir(miSede,pageRequest);
+
+        int totalPage = pageProduct.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            if (page > pages.size() - 1) {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioSede/listarinvsedexconfirmar";
+            }
+            model.addAttribute("pages", pages);
+        } else {
+
+            return "redirect:/inventarioSede/listarinvsedexconfirmar";
+        }
+
+        model.addAttribute("listaInventarioSede", pageProduct.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+        return "inventario/inventariosedexconfirmar";
+
+    }
+
+
+
+
     @GetMapping("/actualizarEstado")
     public String actualizarEstado(@Param("estado") String estado, @Param("idinventariosede") int idinventariosede){
+
         inventarioSedeRepository.actualizarEstado(estado, idinventariosede);
-        return "redirect:/inventarioSede/listarInvMiSede";
+        return "redirect:/inventarioSede/listarinvsedexconfirmar";
     }
     @GetMapping("/actualizarObservaciones")
     public String actualizarObservaciones(@Param("observaciones") String observaciones, @Param("idinventariosede") int idinventariosede){
+
         inventarioSedeRepository.actualizarObservaciones(observaciones, idinventariosede);
-        return "redirect:/inventarioSede/listarInvMiSede";
+        return "redirect:/inventarioSede/listarinvsedexconfirmar";
     }
 
-    @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+    @GetMapping("/buscadorMiSede")
+    public String buscadorMisede(HttpSession session , @RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
         String busqueda = (String) params.get("searchField");
 
         if (busqueda.isEmpty()) {
             attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-            return "redirect:/inventarioSede/lista";
+            return "redirect:/inventarioSede/listarInvMiSede";
         } else {
 
             try {
                 int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
             } catch (NumberFormatException e) {
-                return "redirect:/inventarioSede/lista";
+                return "redirect:/inventarioSede/listarInvMiSede";
             }
 
 
@@ -205,20 +257,20 @@ public class InventariosedeController {
             PageRequest pageRequest = PageRequest.of(page, 10);
 
 
-            Page<Inventariosede> pageInvSede = inventarioSedeRepository.buscadorInventarioSede(busqueda, pageRequest);
+            Page<Inventariosede> pageInvSede = inventarioSedeRepository.buscadorInventarioSede(busqueda,usuario.getSede_idsede().getNombre(), pageRequest);
             int totalPage = pageInvSede.getTotalPages();
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
                 if (page > pages.size() - 1) {
                     attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
-                    return "redirect:/inventarioSede/lista";
+                    return "redirect:/inventarioSede/listarInvMiSede";
                 }
                 model.addAttribute("pages", pages);
             }else{
                 attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
-                return "redirect:/inventarioSede/lista";
+                return "redirect:/inventarioSede/listarInvMiSede";
 
 
 
@@ -231,7 +283,62 @@ public class InventariosedeController {
             model.addAttribute("prev", page);
             model.addAttribute("last", totalPage);
 
-            return "inventario/inventarioSede";
+            return "inventario/inventariomisede";
+        }
+    }
+
+
+    @GetMapping("/buscadorInvSede")
+    public String buscadorsede(HttpSession session , @RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        String busqueda = (String) params.get("searchField");
+
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/inventarioSede";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioSede";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventariosede> pageInvSede = inventarioSedeRepository.buscarInvSedes(busqueda,pageRequest);
+            int totalPage = pageInvSede.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioSede";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioSede";
+
+
+
+            }
+
+            model.addAttribute("listaInventarioSede", pageInvSede.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventariosede";
         }
     }
 
