@@ -36,6 +36,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
             "  where fechaventa like %?1% ;", nativeQuery = true)
     List<ReporteMensualoAnualMosqoyDto> reporteMensualyAnualMosqoy(String fecha);
 
+    //mosqoy trimestre
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
             " invpr.color as color , v.metodopago as metododepago\n" +
@@ -43,8 +44,9 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
             "  inner join producto p on p.idproducto = invpr.producto_idproducto\n" +
-            "  where (fechaventa like %:mes1% or fechaventa like %:mes2% or fechaventa like %:mes3%) and fechaventa like %:anotri%", nativeQuery = true)
-    List<ReporteMensualoAnualMosqoyDto> reporteTrimestralAnualMosqoy(@Param("mes1") String mes1,@Param("mes2") String mes2, @Param("mes3")String mes3, @Param("anotri")String anotri);
+            "  where (fechaventa like %:mes1% or fechaventa like %:mes2% or fechaventa like %:mes3%)", nativeQuery = true)
+    List<ReporteMensualoAnualMosqoyDto> reporteTrimestralAnualMosqoy(@Param("mes1") String mes1,@Param("mes2") String mes2, @Param("mes3")String mes3);
+
 
 
     //SEDE anual y mensual
@@ -57,6 +59,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
             "  inner join producto p on p.idproducto = invpr.producto_idproducto\n" +
             "  where fechaventa like %?1% and v.sede_idsede = ?2 ;", nativeQuery = true)
     List<ReporteMensualoAnualMosqoyDto> reporteMensualAnualSede(String fechaventa, Integer sede);
+
     //trimestre
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
@@ -65,8 +68,8 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
             "  inner join producto p on p.idproducto = invpr.producto_idproducto\n" +
-            "  where (fechaventa like %:mes1% or fechaventa like %:mes2% or fechaventa like %:mes3%) and fechaventa like %:anotri% and v.sede_idsede = :sedeid", nativeQuery = true)
-    List<ReporteMensualoAnualMosqoyDto> reporteTrimestralSede(@Param("mes1") String mes1,@Param("mes2") String mes2, @Param("mes3")String mes3, @Param("anotri")String anotri, @Param("sedeid") Integer sedeid);
+            "  where (fechaventa like %:mes1% or fechaventa like %:mes2% or fechaventa like %:mes3%) and v.sede_idsede = :sedeid", nativeQuery = true)
+    List<ReporteMensualoAnualMosqoyDto> reporteTrimestralSede(@Param("mes1") String mes1,@Param("mes2") String mes2, @Param("mes3")String mes3,  @Param("sedeid") Integer sedeid);
 
     //mensual/anual para COMUNIDAD
     @Query(value = "SELECT v.nombrecomprador as cliente, v.numerodocumento as documento, v.lugarventa as lugar, v.tipodocumento as tipodocumento, v.fechaventa as fechaventa  FROM ventas v inner join inventariosede invs on invs.idiventariosede = v.iventariosede_idiventariosede\n" +
