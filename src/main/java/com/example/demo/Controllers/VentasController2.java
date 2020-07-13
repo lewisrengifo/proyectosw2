@@ -108,7 +108,7 @@ public class VentasController2 {
                 break;
 
             case "Mayo":
-                mes="05";
+                mes1="05";
                 break;
 
             case "Junio":
@@ -179,7 +179,10 @@ public class VentasController2 {
                 break;
             default: mes1="#";
         }
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralAnualMosqoy(mes1,mes2,mes3,anotri);
+        String mmes1 = anotri +"-"+ mes1;
+        String mmes2 = anotri +"-"+ mes2;
+        String mmes3 = anotri +"-"+ mes3;
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralAnualMosqoy(mmes1,mmes2,mmes3);
         String aux="Trimestre " +trimestre;
         ByteArrayInputStream stream = serviceExcel.exportarData(anotri,lista,aux);
         HttpHeaders headers = new HttpHeaders();
@@ -295,8 +298,11 @@ public class VentasController2 {
                 break;
             default: mes1="#";
         }
+        String mmes1 = anotri +"-"+ mes1;
+        String mmes2 = anotri +"-"+ mes2;
+        String mmes3 = anotri +"-"+ mes3;
         Sede sede1=sedeRepository.sedePornombre(sede);
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralSede(mes1,mes2,mes3,anotri, sede1.getIdsede());
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralSede(mmes1,mmes2,mmes3,sede1.getIdsede());
         String aux="Trimestre "+ trimestre;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
@@ -431,7 +437,6 @@ public class VentasController2 {
     //----------FIN DE PRODUCTO
 
     //REPORTES POR COMUNIDAD
-
 
     @PostMapping("/ano/comunidad")
     public ResponseEntity<InputStreamResource> exportDataAnualComunidad(@RequestParam("ano")String ano, Comunidad comunidad) throws Exception{
