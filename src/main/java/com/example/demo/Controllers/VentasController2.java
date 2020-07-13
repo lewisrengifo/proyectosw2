@@ -479,7 +479,7 @@ public class VentasController2 {
 
 
     @PostMapping("/ano/comunidad")
-    public ResponseEntity<InputStreamResource> exportDataAnualComunidad(@RequestParam("anocomunidad")String ano, @RequestParam("com1") String comunidad) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualComunidad(@RequestParam("anocomunidad")String ano, @RequestParam("com1") int comunidad) throws Exception{
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteComunidad(ano, comunidad);
         ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,ano);//cambiar 2variable ano por un string que sea igual a lo correspondiente
         HttpHeaders headers = new HttpHeaders();
@@ -488,7 +488,7 @@ public class VentasController2 {
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/anomes/comunidad")
-    public ResponseEntity<InputStreamResource> exportDataAnualyMensualComunidad(@RequestParam("anomescomunidad")String anomes,@RequestParam("mescomunidad")String mes, @RequestParam("com2") String comunidad) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualyMensualComunidad(@RequestParam("anomescomunidad")String anomes,@RequestParam("mescomunidad")String mes, @RequestParam("com2") int comunidad) throws Exception{
         String mes1="";
         switch (mes){
             case "Enero":

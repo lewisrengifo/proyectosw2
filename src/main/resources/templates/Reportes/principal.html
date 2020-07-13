@@ -249,7 +249,7 @@
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/ano/comunidad'}">
+                                        <form method="post" th:action="@{/ventasexcel/ano/comunidad}">
                                             <td class="center-align">1</td>
                                             <td class="center-align">Ventas total del Año</td>
                                             <td class="center-align">-</td>
@@ -264,7 +264,7 @@
                                                             style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option th:each="x : ${listaComunidad}"
                                                                 th:text="${x.nombrecomunidad}"
-                                                                th:value="${x.nombrecomunidad}"
+                                                                th:value="${x.idcomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -300,9 +300,9 @@
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="com2" id="com2"
                                                             style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}"
-                                                                th:text="|${com.nombrecomunidad}|"
-                                                                th:value="${com.nombrecomunidad}"
+                                                        <option th:each="x : ${listaComunidad}"
+                                                                th:text="${x.nombrecomunidad}"
+                                                                th:value="${x.idcomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -946,7 +946,7 @@
         }
     </script>
 <!--    script producto-->
-    <script>
+    <!--<script>
         function enviarform13() {
             document.getElementById('mensajepro1').style.display="none";
             document.getElementById('mensajepro2').style.display="none";
@@ -1037,7 +1037,7 @@
                 return false;
             }
         }
-    </script>
+    </script>-->
 <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
 </div>
 </body>
