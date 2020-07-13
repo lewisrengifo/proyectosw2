@@ -31,7 +31,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers( "/sede", "/sede/**").hasAnyAuthority("Administrador", "Gestor principal");
         http.authorizeRequests().antMatchers( "/usuario", "/usuario/**").hasAuthority("Administrador");
 
-       // http.authorizeRequests().antMatchers( "/sede", "/sede/**").hasAuthority("Gestor sede");
         http.authorizeRequests().antMatchers( "/ConsignacionVenta", "/ConsignacionVenta/**").hasAuthority("Gestor principal");
         http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority( "Gestor principal", "Gestor sede");
 
@@ -46,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers("/venta", "/venta/**").hasAnyAuthority("Gestor sede", "Gestor principal");
 
-        http.authorizeRequests().antMatchers("/inventarioTienda", "/inventarioTienda/**").hasAnyAuthority("Gestor sede", "Gestor principal");
+        http.authorizeRequests().antMatchers("/inventarioTienda", "/inventarioTienda/**","/tienda","/tienda/**").hasAnyAuthority("Gestor sede", "Gestor principal");
 
 
         http.authorizeRequests().anyRequest().permitAll();

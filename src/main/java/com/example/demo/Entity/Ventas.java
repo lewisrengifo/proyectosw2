@@ -15,7 +15,6 @@ public class Ventas {
     private String rucdni;
 
     @NotBlank(message = "El nombre no debe ser vacío")
-    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String nombrecomprador;
 
     @Digits(integer = 12, fraction = 0, message = "Se aceptan sólo numeros hasta 12 dígitos.")
@@ -23,7 +22,6 @@ public class Ventas {
     private String numerodocumento;
 
     @NotBlank(message = "El nombre no debe ser vacío")
-    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String lugarventa;
 
     @Column(nullable = false)

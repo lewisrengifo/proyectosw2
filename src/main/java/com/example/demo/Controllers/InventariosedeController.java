@@ -41,7 +41,7 @@ public class InventariosedeController {
         //model.addAttribute("inventario", inventarioSedeRepository.obtenerInvDeMiSedeNormal(usuario.getSede_idsede().getNombre()));
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         model.addAttribute("inventario", inventarioSedeRepository.obtenerInvDeMiSedeNormal(usuario.getSede_idsede().getNombre()));
-        model.addAttribute("listaSede", sedeRepository.findAll());
+        model.addAttribute("listaSede", sedeRepository.listaSedeSinPrincipal(usuario.getSede_idsede().getIdsede()));
         return "sede/asignarStock";
     }
 
@@ -58,7 +58,7 @@ public class InventariosedeController {
         int cantidadProductostock = inventarioPrincipalProducto.getStock();
 
 
-        if(cantidadProductostock>cantidadParaSede){
+        if(cantidadProductostock>=cantidadParaSede){
             int stockActualPrincipal = cantidadProductostock-cantidadParaSede;
            // int productoInventario = inventariosede.getInventarioproductoidinventario().getIdinventario();
             int sedePrincipal = user.getSede_idsede().getIdsede();
