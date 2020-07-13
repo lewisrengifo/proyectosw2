@@ -25,22 +25,23 @@
 
         <!-- /. COMUNIDAD  -->
         <div id="page-inner">
-            <div class="col-xs-4">
-                <form class="header " method="post" th:action="@{'/producto/search'}">
-                    <input th:if="${searchField!=null}" th:value="${searchField}" name="search"
-                           type="text" class="form-control" placeholder="Texto a buscar" >
-                    <input th:if="${searchField==null}" name="search" class="form-control mb-3" type="text"
+            <div>
+
+                <form method="get" th:action="@{'/producto/buscador'}">
+
+                    <input th:if="${busqueda!=null}" th:value="${busqueda}" name="searchField"
+                           class="form-control mb-3" type="text" placeholder="Buscar"
+                           aria-label="Search" style="width: 40%">
+                    <input th:if="${busqueda==null}" name="searchField" class="form-control mb-3" type="text"
                            placeholder="Buscar"
                            aria-label="Search" style="width: 40%">
-                    <div class="input-group-append">
-                        <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-info"
-                             role="alert"></div>
-                        <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" class="alert alert-danger"
-                             role="alert"></div>
-                        <button class="btn btn-outline-primary " type="submit">Buscar</button>
-                        <a th:href="@{'/producto'}" class="btn btn-outline-danger">Limpiar</a>
-                    </div>
+                    <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
+
+                    <button type="submit" class="btn btn-outline-danger">buscar</button>
+                    <a th:href="@{'/producto'}" class="btn btn-outline-danger">Limpiar</a>
+
                 </form>
+
             </div>
 
 
@@ -48,13 +49,10 @@
             <div class="row " >
                 <div class="col-md-10 padding">
                     <div class="card">
-<<<<<<< HEAD
+
                         <div class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
                             <a class="btn btn-primary right" th:href="@{'/producto/nuevo'}">Agregar</a>
-=======
-                        <div class="card-action">
-                            <a  class="btn btn-outline-danger" th:href="@{'/producto/nuevo'}">Agregar</a>
->>>>>>> 8275c29011e58acbe9ab1d486f603564b0273eca
+
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
