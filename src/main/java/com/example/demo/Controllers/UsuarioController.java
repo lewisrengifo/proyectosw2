@@ -2,6 +2,7 @@ package com.example.demo.Controllers;
 
 import com.example.demo.Dto.UsuarioServiceApi;
 import com.example.demo.Entity.Rol;
+import com.example.demo.Entity.Sede;
 import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.RolRepository;
 import com.example.demo.Repository.SedeRepository;
@@ -44,7 +45,7 @@ public class UsuarioController {
     SendMailService sendMailService;
 
     @GetMapping(value = {"", "/lista"})
-    public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField,RedirectAttributes attr) {
+    public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField, RedirectAttributes attr) {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         } catch (NumberFormatException e) {
@@ -61,14 +62,14 @@ public class UsuarioController {
         long totalItems = pageUsuario.getTotalElements();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            if (page > pages.size() -1){
+            if (page > pages.size() - 1) {
                 attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
                 return "redirect:/usuario/lista";
             }
 
             model.addAttribute("page", pages);
-        }else{
+        } else {
             attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
             return "redirect:/usuario/lista";
@@ -86,6 +87,7 @@ public class UsuarioController {
         //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
         return "Usuario/lista";
     }
+
     @GetMapping(value = {"/listaractivos"})
     public String listarUsuariosActivos(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField) {
         try {
@@ -119,7 +121,8 @@ public class UsuarioController {
         //model.addAttribute("listaUsuarios", usuarioRepository.findAll());
         return "Usuario/lista";
     }
-        @GetMapping(value = {"/listardesactivados"})
+
+    @GetMapping(value = {"/listardesactivados"})
     public String listarUsuariosDesactivados(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField) {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
@@ -164,7 +167,7 @@ public class UsuarioController {
     public String guardar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                           RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
         if (bindingResult.hasErrors()) {
-           model.addAttribute("listaroles", rolRepository.rolgestorprincipal());
+            model.addAttribute("listaroles", rolRepository.rolgestorprincipal());
             model.addAttribute("listasedes", sedeRepository.findAll());
             return "Usuario/form";
         }
@@ -231,18 +234,25 @@ public class UsuarioController {
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuario.getIdusuario());
             usuario.setContrasena(optionalUsuario.get().getContrasena());
         }
-            //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
-            //if (rol_idrol == 1||rol_idrol==2) {
+        //Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioRepository.ultimoidinsertado());
+        //if (rol_idrol == 1||rol_idrol==2) {
 
-               // usuario.setSede_idsede(null);
-                //usuarioRepository.save(usuario);
-            //} else {
-                //Rol rol = new Rol();
-                //rol.setIdrol(2);
-                //usuario.setRol_idrol(rol);
-                usuario.setSede_idsede(null);
-                usuarioRepository.save(usuario);
-           // }
+        // usuario.setSede_idsede(null);
+        //usuarioRepository.save(usuario);
+        //} else {
+        //Rol rol = new Rol();
+        //rol.setIdrol(2);
+        //usuario.setRol_idrol(rol);
+        if (rol_idrol == 2) {
+            Sede sede = new Sede();
+            sede.setIdsede(3);
+            usuario.setSede_idsede(sede);
+        } else {
+            usuario.setSede_idsede(null);
+        }
+
+        usuarioRepository.save(usuario);
+        // }
 
         return "redirect:/usuario/lista";
     }
@@ -269,7 +279,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador,RedirectAttributes attr) {
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador, RedirectAttributes attr) {
         if (textbuscador.isEmpty()) {
             att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
@@ -293,7 +303,7 @@ public class UsuarioController {
             long totalItems = pageUsuario1.getTotalElements();
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-                if (page > pages.size() -1){
+                if (page > pages.size() - 1) {
                     attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
                     return "redirect:/usuario/lista";
@@ -301,7 +311,7 @@ public class UsuarioController {
 
 
                 model.addAttribute("page", pages);
-            }else{
+            } else {
                 attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
                 return "redirect:/usuario/lista";
