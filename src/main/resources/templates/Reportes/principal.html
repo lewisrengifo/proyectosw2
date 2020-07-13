@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Inventario Principal')">
 </head>
 <body>
@@ -8,51 +7,55 @@
     <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
 
     <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
-
-
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
         <div class="header">
-            <h1 class="page-header">
-                Reporte General
-            </h1>
         </div>
-        <div id="page-inner">
-            <div class="row">
+        <div id="page-inner" style="margin: auto">
+            <div class="row" style="margin: auto">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-content">
+                            <h1 style="text-align: center">REPORTE GENERAL</h1>
+                            <br>
+                            <div id="mensaje1"  style="display: none" class="alert alert-danger"
+                                 role="alert">Debe ingresar un numero</div>
+                            <div id="mensaje2"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensaje3"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr class="info">
-                                        <th>#</th>
-                                        <th>Caracteristica</th>
-                                        <th>Opcion</th>
-                                        <th>Excel</th>
+                                        <th class="center-align">#</th>
+                                        <th class="center-align">Caracteristica</th>
+                                        <th class="center-align">Opcion</th>
+                                        <th class="center-align">Año</th>
+                                        <th class="center-align">Excel</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr >
                                         <form method="post" th:action="@{'/ventasexcel/ano'}">
-                                            <td>1</td>
-                                            <td>Ventas total del Año</td>
-                                            <td>
-                                                <div class="form-group" >
-                                                    <input type="text" class="form-control" value="1980" name="ano" id="ano" style="width: 20%">
+                                            <td class="center-align">1</td>
+                                            <td class="center-align">Ventas total del Año</td>
+                                            <td class="center-align">-</td>
+                                            <td class="center-align">
+                                                <div style="align-content: center" >
+                                                    <input type="text" class="form-control" value="1930" name="ano" id="ano" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
-                                            <td><button type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                            <td class="center-align"><button type="submit" onclick="return enviarform1()" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
-
                                     </tr>
                                     <tr >
                                         <form method="post" th:action="@{'/ventasexcel/anomes'}">
-                                            <td>2</td>
-                                            <td>Ventas total del Mes</td>
+                                            <td class="center-align">2</td>
+                                            <td class="center-align">Ventas total del Mes</td>
                                             <td >
-                                                <div class="form-group" >
-                                                    <select class="form-control" name="mes" id="mes" style="width: 80%">
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="mes" id="mes" style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option >Enero</option>
                                                         <option  >Febrero</option>
                                                         <option >Marzo</option>
@@ -66,31 +69,141 @@
                                                         <option >Noviembre</option>
                                                         <option  >Diciembre</option>
                                                     </select>
-
-                                                    <input  type="text" class="form-control" value="1980 " name="anomes" id="anomes" style="width: 20%">
                                                 </div>
                                             </td>
-                                            <td><button type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
-
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomes" id="anomes" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><button  onclick="return enviarform2()" type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
-
                                     </tr>
                                     <tr >
                                         <form method="post" th:action="@{'/ventasexcel/trimestre'}">
-                                            <td>2</td>
-                                            <td>Ventas total del Trimestre</td>
-                                            <td >
+                                            <td class="center-align">3</td>
+                                            <td class="center-align">Ventas total del Trimestre</td>
+                                            <td class="center-align">
                                                 <div class="form-group" >
-                                                    <select class="form-control" name="trimestre" id="trimestre" style="width: 80%">
+                                                    <select class="form-control" name="trimestre" id="trimestre" style="width: 80%;align-content: center;margin:auto;text-align: center">
                                                         <option >Primero</option>
                                                         <option >Segundo</option>
                                                         <option >Tercero</option>
                                                         <option >Cuarto</option>
                                                     </select>
-                                                    <input  type="text" class="form-control" value="1980" name="anotri" id="anotri" style="width: 20%">
                                                 </div>
                                             </td>
-                                            <td><button type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotri" id="anotri" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><button  type="submit" onclick="return enviarform3()" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin: auto">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <h2>Reporte por Sede</h2>
+                            <br>
+                            <div id="mensajesede1"  style="display: none" class="alert alert-danger"
+                                 role="alert">Debe ingresar un numero</div>
+                            <div id="mensajesede2"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensajesede3"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th class="center-align">#</th>
+                                        <th class="center-align">Caracteristica</th>
+                                        <th class="center-align">Opcion</th>
+                                        <th class="center-align">Año</th>
+                                        <th class="center-align">Sede</th>
+                                        <th class="center-align">Excel</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/ano/sede'}">
+                                            <td class="center-align">1</td>
+                                            <td class="center-align">Ventas total del Año</td>
+                                            <td class="center-align">-</td>
+                                            <td class="center-align">
+                                                <div style="align-content: center" >
+                                                    <input type="text" class="form-control" value="1930" name="anosede" id="anosede" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                </div>
+                                            </td>
+                                            <td class="center-align" >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="sede" id="sede" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="sede : ${listaSede}" th:text="|${sede.nombre}|"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><button type="submit" onclick="return enviarform4()" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/anomes/sede'}">
+                                            <td class="center-align">2</td>
+                                            <td class="center-align">Ventas total del Mes</td>
+                                            <td >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="messede" id="messede" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option >Enero</option>
+                                                        <option  >Febrero</option>
+                                                        <option >Marzo</option>
+                                                        <option >Abril</option>
+                                                        <option >Mayo</option>
+                                                        <option >Junio</option>
+                                                        <option  >Julio</option>
+                                                        <option  >Agosto</option>
+                                                        <option  >Septiembre</option>
+                                                        <option  >Octubre</option>
+                                                        <option >Noviembre</option>
+                                                        <option  >Diciembre</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anomessede" id="anomessede" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align" >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="sedemes" id="sedemes" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="sede : ${listaSede}" th:text="|${sede.nombre}|"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><button  onclick="return enviarform5()" type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/trimestre/sede'}">
+                                            <td class="center-align">3</td>
+                                            <td class="center-align">Ventas total del Trimestre</td>
+                                            <td class="center-align">
+                                                <div class="form-group" >
+                                                    <select class="form-control" name="trimestresede" id="trimestresede" style="width: 80%;align-content: center;margin:auto;text-align: center">
+                                                        <option >Primero</option>
+                                                        <option >Segundo</option>
+                                                        <option >Tercero</option>
+                                                        <option >Cuarto</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotrisede" id="anotrisede" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align" >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="sede1" id="sede1" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="sede : ${listaSede}" th:text="|${sede.nombre}|"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><button  type="submit" onclick="return enviarform6()" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
                                     </tbody>
@@ -110,31 +223,303 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <!--td>
-            <div class="form-group" >
-                <select class="form-control" name="mes" id="mes" style="width: 80%">
-                    <option value="mes" th:text="Enero"></option>
-                    <option value="mes" th:text="Febrero"></option>
-                    <option value="mes" th:text="Marzo"></option>
-                    <option value="mes" th:text="Abril"></option>
-                    <option value="mes" th:text="Mayo"></option>
-                    <option value="mes" th:text="Junio"></option>
-                    <option value="mes" th:text="Julio"></option>
-                    <option value="mes" th:text="Agosto"></option>
-                    <option value="mes" th:text="Septiembre"></option>
-                    <option value="mes" th:text="Octubre"></option>
-                    <option value="mes" th:text="Noviembre"></option>
-                    <option value="mes" th:text="Diciembre"></option>
-                </select>
+            <div class="row" style="margin: auto">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <h2>Reporte por Comunidad</h2>
+                            <br>
+                            <div id="mensajecom1"  style="display: none" class="alert alert-danger"
+                                 role="alert">Debe ingresar un numero</div>
+                            <div id="mensajecom2"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensajecom3"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th class="center-align">#</th>
+                                        <th class="center-align">Caracteristica</th>
+                                        <th class="center-align">Opcion</th>
+                                        <th class="center-align">Año</th>
+                                        <th class="center-align">Comunidad</th>
+                                        <th class="center-align">Excel</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/anocom'}">
+                                            <td class="center-align">1</td>
+                                            <td class="center-align">Ventas total del Año</td>
+                                            <td class="center-align">-</td>
+                                            <td class="center-align">
+                                                <div style="align-content: center" >
+                                                    <input type="text" class="form-control" value="1930" name="anocom" id="anocom" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                </div>
+                                            </td>
+                                            <td class="center-align" >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><button type="submit" onclick="return enviarform7()" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/anomescom'}">
+                                            <td class="center-align">2</td>
+                                            <td class="center-align">Ventas total del Mes</td>
+                                            <td >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="mescom" id="mescom" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option >Enero</option>
+                                                        <option  >Febrero</option>
+                                                        <option >Marzo</option>
+                                                        <option >Abril</option>
+                                                        <option >Mayo</option>
+                                                        <option >Junio</option>
+                                                        <option  >Julio</option>
+                                                        <option  >Agosto</option>
+                                                        <option  >Septiembre</option>
+                                                        <option  >Octubre</option>
+                                                        <option >Noviembre</option>
+                                                        <option  >Diciembre</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescom" id="anomescom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align" >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><button  onclick="return enviarform8()" type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/trimestrecom'}">
+                                            <td class="center-align">3</td>
+                                            <td class="center-align">Ventas total del Trimestre</td>
+                                            <td class="center-align">
+                                                <div class="form-group" >
+                                                    <select class="form-control" name="trimestrecom" id="trimestrecom" style="width: 80%;align-content: center;margin:auto;text-align: center">
+                                                        <option >Primero</option>
+                                                        <option >Segundo</option>
+                                                        <option >Tercero</option>
+                                                        <option >Cuarto</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotricom" id="anotricom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align" >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                        ></option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><button  type="submit" onclick="return enviarform9()" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </td-->
-        <!--select class="form-control" name="trimiestre" id="trimiestre" style="width: 80%">
-            <option value="trimiestre" th:text="Primero"></option>
-            <option value="trimiestre" th:text="Segundo"></option>
-            <option value="trimiestre" th:text="Tecer"></option>
-            <option value="trimiestre" th:text="Cuarto"></option>
-        </select-->
+            <div class="row" style="margin: auto">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <h2>Reporte por Cliente</h2>
+                            <br>
+                            <div id="mensajecli1"  style="display: none" class="alert alert-danger"
+                                 role="alert">Debe ingresar un numero</div>
+                            <div id="mensajecli2"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensajecli3"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th class="center-align">#</th>
+                                        <th class="center-align">Caracteristica</th>
+                                        <th class="center-align">Opcion</th>
+                                        <th class="center-align">Año</th>
+                                        <th class="center-align">Cliente</th>
+                                        <th class="center-align">Excel</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/anocli'}">
+                                            <td class="center-align">1</td>
+                                            <td class="center-align">Ventas total del Año</td>
+                                            <td class="center-align">-</td>
+                                            <td class="center-align">
+                                                <div style="align-content: center" >
+                                                    <input type="text" class="form-control" value="1930" name="anocli" id="anocli" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                </div>
+                                            </td>
+                                            <td class="center-align">Lorenzo</td>
+                                            <td class="center-align"><button type="submit" onclick="return enviarform10()" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/anomescli'}">
+                                            <td class="center-align">2</td>
+                                            <td class="center-align">Ventas total del Mes</td>
+                                            <td >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="mescli" id="mescli" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option >Enero</option>
+                                                        <option  >Febrero</option>
+                                                        <option >Marzo</option>
+                                                        <option >Abril</option>
+                                                        <option >Mayo</option>
+                                                        <option >Junio</option>
+                                                        <option  >Julio</option>
+                                                        <option  >Agosto</option>
+                                                        <option  >Septiembre</option>
+                                                        <option  >Octubre</option>
+                                                        <option >Noviembre</option>
+                                                        <option  >Diciembre</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescli" id="anomescli" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align">Lorenzo</td>
+                                            <td class="center-align"><button  onclick="return enviarform11()" type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/trimestrecli'}">
+                                            <td class="center-align">3</td>
+                                            <td class="center-align">Ventas total del Trimestre</td>
+                                            <td class="center-align">
+                                                <div class="form-group" >
+                                                    <select class="form-control" name="trimestrecli" id="trimestrecli" style="width: 80%;align-content: center;margin:auto;text-align: center">
+                                                        <option >Primero</option>
+                                                        <option >Segundo</option>
+                                                        <option >Tercero</option>
+                                                        <option >Cuarto</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotricli" id="anotricli" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align">Lorenzo</td>
+                                            <td class="center-align"><button  type="submit" onclick="return enviarform12()" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin: auto">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <h2>Reporte por Producto</h2>
+                            <br>
+                            <div id="mensajepro1"  style="display: none" class="alert alert-danger"
+                                 role="alert">Debe ingresar un numero</div>
+                            <div id="mensajepro2"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensajepro3"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th class="center-align">#</th>
+                                        <th class="center-align">Caracteristica</th>
+                                        <th class="center-align">Opcion</th>
+                                        <th class="center-align">Año</th>
+                                        <th class="center-align">Producto</th>
+                                        <th class="center-align">Excel</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/anopro'}">
+                                            <td class="center-align">1</td>
+                                            <td class="center-align">Ventas total del Año</td>
+                                            <td class="center-align">-</td>
+                                            <td class="center-align">
+                                                <div style="align-content: center" >
+                                                    <input type="text" class="form-control" value="1930" name="anopro" id="anopro" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                </div>
+                                            </td>
+                                            <td class="center-align">Producto</td>
+                                            <td class="center-align"><button type="submit" onclick="return enviarform13()" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    <tr >
+                                        <form method="post" th:action="@{'/ventasexcel/anomespro'}">
+                                            <td class="center-align">2</td>
+                                            <td class="center-align">Ventas total del Mes</td>
+                                            <td >
+                                                <div class="form-group" style="align-content: center">
+                                                    <select class="form-control" name="mespro" id="mespro" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option >Enero</option>
+                                                        <option  >Febrero</option>
+                                                        <option >Marzo</option>
+                                                        <option >Abril</option>
+                                                        <option >Mayo</option>
+                                                        <option >Junio</option>
+                                                        <option  >Julio</option>
+                                                        <option  >Agosto</option>
+                                                        <option  >Septiembre</option>
+                                                        <option  >Octubre</option>
+                                                        <option >Noviembre</option>
+                                                        <option  >Diciembre</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomespro" id="anomespro" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align">Producto</td>
+                                            <td class="center-align"><button  onclick="return enviarform14()" type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    <tr>
+                                        <form method="post" th:action="@{'/ventasexcel/trimestrepro'}">
+                                            <td class="center-align">3</td>
+                                            <td class="center-align">Ventas total del Trimestre</td>
+                                            <td class="center-align">
+                                                <div class="form-group" >
+                                                    <select class="form-control" name="trimestrepro" id="trimestrepro" style="width: 80%;align-content: center;margin:auto;text-align: center">
+                                                        <option >Primero</option>
+                                                        <option >Segundo</option>
+                                                        <option >Tercero</option>
+                                                        <option >Cuarto</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotripro" id="anotripro" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align">Producto</td>
+                                            <td class="center-align"><button  type="submit" onclick="return enviarform15()" class="btn btn-outline-info">Exportar Reporte</button></td>
+                                        </form>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
     </div>
@@ -143,7 +528,172 @@
 
 </div>
 
+    <script>
+        function enviarform1() {
+            document.getElementById('mensaje1').style.display="none";
+            document.getElementById('mensaje2').style.display="none";
+            document.getElementById('mensaje3').style.display="none";
+            var ano =document.getElementById('ano').value;
+            var aux=0;
+            //console.log(ano);
+            for(var i=0;i<ano.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(ano[i])))){
+                    aux=aux+1;
+                }
+            }
+            if(aux===ano.length){
+                return true;
+            }
+            else{
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensaje1').style.display="block";
+                document.getElementById('mensaje2').style.display="block";
+                //$('#mensaje1').hide(4000);
+                return false;
+            }
+        }
+    </script>
+<script>
+    function enviarform2() {
+        document.getElementById('mensaje1').style.display="none";
+        document.getElementById('mensaje2').style.display="none";
+        document.getElementById('mensaje3').style.display="none";
+        var anomes =document.getElementById('anomes').value;
+        var mes =document.getElementById('mes').value;
+        var aux=0;
+        for(var i=0;i<anomes.length;i++)
+        {
+            if((Number.isInteger(Number.parseInt(anomes[i])))){
+                aux=aux+1;
+            }
+        }
+        if(aux===anomes.length && (mes==="Enero" || mes==="Febrero" || mes==="Marzo" || mes==="Abril" || mes==="Mayo" ||
+            mes==="Junio" || mes==="Julio" || mes==="Agosto" || mes==="Septiembre" || mes==="Octubre" || mes==="Noviembre" || mes==="Diciembre")
+            ) {
+                return true;
+        }else{
+            document.getElementById('mensaje2').style.display="block";
+            //$('#mensaje2').hide(4000);
+            return false;
+        }
+    }
+</script>
+<script>
+    function enviarform3() {
+        document.getElementById('mensaje1').style.display="none";
+        document.getElementById('mensaje2').style.display="none";
+        document.getElementById('mensaje3').style.display="none";
+        var anotri =document.getElementById('anotri').value;
+        var trimestre =document.getElementById('trimestre').value;
+        var aux=0;
+        for(var i=0;i<anotri.length;i++)
+        {
+            if((Number.isInteger(Number.parseInt(anotri[i])))){
+                aux=aux+1;
+            }
+        }
+        if(aux===anotri.length && (trimestre==="Primero" || trimestre==="Segundo" || trimestre==="Tercero" || trimestre==="Cuarto") ) {
+                return true;
+        }else{
+            document.getElementById('mensaje3').style.display="block";
+            //$('#mensaje3').hide(4000);
+            return false;
+        }
+    }
+</script>
+    <script>
+        function enviarform4() {
+            document.getElementById('mensaje1').style.display="none";
+            document.getElementById('mensaje2').style.display="none";
+            document.getElementById('mensaje3').style.display="none";
+            var anosede =document.getElementById('anosede').value;
+            //var sede=document.getElementById('sede').value;
 
+            var aux=0;
+            console.log(anosede);
+            for(var i=0;i<anosede.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anosede[i])))){
+                    aux=aux+1;
+                }
+            }
+
+            if(aux===anosede.length){
+                return true;
+            }
+            else{
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensaje1').style.display="block";
+
+                //$('#mensaje1').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script>
+        function enviarform5() {
+            document.getElementById('mensaje1').style.display="none";
+            document.getElementById('mensaje2').style.display="none";
+            document.getElementById('mensaje3').style.display="none";
+            var anomes =document.getElementById('anomessede').value;
+            var messede =document.getElementById('messede').value;
+            var aux=0;
+            console.log(messede);
+            for(var i=0;i<anomes.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anomes[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anomes.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+                messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
+            ) {
+                return true;
+            }else{
+                document.getElementById('mensaje2').style.display="block";
+                //$('#mensaje2').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script th:inline="javascript">
+        function enviarform6() {
+            document.getElementById('mensaje1').style.display="none";
+            document.getElementById('mensaje2').style.display="none";
+            document.getElementById('mensaje3').style.display="none";
+            var anotrisede =document.getElementById('anotrisede').value;
+            var trimestresede =document.getElementById('trimestresede').value;
+            var sede =document.getElementById('sede1').value;
+            var message =  [[${listaSede1}]];
+            console.log(message);
+
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombre===sede){
+                    aux2=aux2+1;
+                }
+            }
+            console.log(sede);
+            console.log("aux2="+aux2);
+            var aux=0;
+            for(var i=0;i<anotrisede.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anotrisede[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anotrisede.length && (trimestresede==="Primero" || trimestresede==="Segundo" || trimestresede==="Tercero" || trimestresede==="Cuarto") && (aux2!=0)) {
+                return true;
+            }else{
+                document.getElementById('mensaje3').style.display="block";
+                //$('#mensaje3').hide(4000);
+                return false;
+            }
+        }
+    </script>
 <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
 
 </body>
