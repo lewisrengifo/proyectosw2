@@ -22,42 +22,22 @@ public interface VentaRepository extends JpaRepository<Ventas,Integer> {
     @Query(value = "select * from ventas where idventas not in (select v.idventas from ventas v where v.idventas=?1);", nativeQuery = true)
     List<Ventas> buscarmenosmio(int idventas);
 
-    @Query(value="SELECT v.* FROM ventas v\n" +
+    @Query(value="SELECT * FROM ventas v\n" +
             "inner join tienda t on t.idtienda=v.tienda_idtienda\n" +
             "inner join inventariosede invs on invs.idiventariosede = v.iventariosede_idiventariosede\n" +
             "inner join inventarioproducto invp on invp.idinventario = invs.inventarioproducto_idinventario\n" +
             "inner join producto p on p.idproducto = invp.producto_idproducto\n" +
             "inner join sede s on s.idsede = invs.sede_idsede\n" +
-            "where (t.nombre like %?1%\n" +
-            "or v.fechaventa like %?1%\n" +
-            "or v.tipodocumento like %?1%\n" +
-            "or v.numerodocumento like %?1%\n" +
-            "or v.rucdni like %?1%\n" +
-            "or v.nombrecomprador like %?1%\n" +
-            "or v.cantidad like %?1%\n" +
-            "or invp.codigogenerado like %?1%\n" +
-            "or p.nombreproducto like %?1%\n" +
-            "or invp.color like %?1%\n" +
-            "or v.metodopago like %?1%) and s.nombre = %?2%" ,
-            countQuery =" SELECT count(v.*) FROM ventas v\n" +
+            "where (t.nombre like %?1% or v.fechaventa like %?1% or v.tipodocumento like %?1% or v.numerodocumento like %?1% or v.rucdni like %?1% or v.nombrecomprador like %?1% or v.cantidad like %?1% or invp.codigogenerado like %?1% or p.nombreproducto like %?1% or invp.color like %?1% or v.metodopago like %?1%) and s.nombre=%?2%" ,
+            countQuery =" SELECT count(*) FROM ventas v\n" +
                     "inner join tienda t on t.idtienda=v.tienda_idtienda\n" +
                     "inner join inventariosede invs on invs.idiventariosede = v.iventariosede_idiventariosede\n" +
                     "inner join inventarioproducto invp on invp.idinventario = invs.inventarioproducto_idinventario\n" +
                     "inner join producto p on p.idproducto = invp.producto_idproducto\n" +
                     "inner join sede s on s.idsede = invs.sede_idsede\n" +
-                    "where (t.nombre like %?1%\n" +
-                    "or v.fechaventa like %?1%\n" +
-                    "or v.tipodocumento like %?1%\n" +
-                    "or v.numerodocumento like %?1%\n" +
-                    "or v.rucdni like %?1%\n" +
-                    "or v.nombrecomprador like %?1%\n" +
-                    "or v.cantidad like %?1%\n" +
-                    "or invp.codigogenerado like %?1%\n" +
-                    "or p.nombreproducto like %?1%\n" +
-                    "or invp.color like %?1%\n" +
-                    "or v.metodopago like %%?1) and s.nombre =%?2% " ,
+                    "where (t.nombre like %?1% or v.fechaventa like %?1% or v.tipodocumento like %?1% or v.numerodocumento like %?1% or v.rucdni like %?1% or v.nombrecomprador like %?1% or v.cantidad like %?1% or invp.codigogenerado like %?1% or p.nombreproducto like %?1% or invp.color like %?1% or v.metodopago like %?1%) and s.nombre=%?2%",
             nativeQuery = true)
-    Page<Ventas> buscadorVentas(String search, Pageable pageable);
+    Page<Ventas> buscadorVentas(String search,String nombreSede, Pageable pageable);
 
 
 

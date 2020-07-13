@@ -25,10 +25,10 @@ public interface InventarioproductoRepository extends JpaRepository <Inventariop
 
 
 
-    @Query(value="SELECT invp.* FROM inventarioproducto invp\n" +
+    @Query(value="SELECT * FROM inventarioproducto invp\n" +
             "inner join producto p on p.idproducto=invp.producto_idproducto " +
             "inner join linea l on l.idlinea=p.linea_idlinea\n" +
-            "inner join categoria c on c.idcategoria=invp.categoria_idcategoria \n" +
+            "inner join categoria cat  on cat.idcategoria=invp.categoria_idcategoria \n" +
             "inner join tamano t on t.idtamano=invp.tamano_idtamano\n" +
             "inner join consignacionyventa cyv on cyv.idconsignacion=invp.consignacionyventa_idconsignacion\n" +
             "inner join artesano a on a.idartesano = cyv.artesano_idartesano\n" +
@@ -38,7 +38,7 @@ public interface InventarioproductoRepository extends JpaRepository <Inventariop
             "or l.nombrelinea like %?1%\n" +
             "or p.nombreproducto like %?1%\n" +
             "or p.descripcionproducto like %?1%\n" +
-            "or c.nombrecategoria like %?1%\n" +
+            "or cat.nombrecategoria like %?1%\n" +
             "or t.nombretamano like %?1%\n" +
             "or invp.cantidad like %?1%\n" +
             "or invp.color like %?1%\n" +
@@ -48,10 +48,10 @@ public interface InventarioproductoRepository extends JpaRepository <Inventariop
             "or invp.codigogenerado like %?1%\n" +
             "or cyv.fechainicio like %?1% \n" +
             "or cyv.numeropedido like %?1% ",
-            countQuery =" SELECT count(invp.*) FROM inventarioproducto invp\n" +
+            countQuery =" SELECT count(*) FROM inventarioproducto invp\n" +
                     "inner join producto p on p.idproducto=invp.producto_idproducto " +
                     "inner join linea l on l.idlinea=p.linea_idlinea\n" +
-                    "inner join categoria c on c.idcategoria=invp.categoria_idcategoria \n" +
+                    "inner join categoria cat on cat.idcategoria=invp.categoria_idcategoria \n" +
                     "inner join tamano t on t.idtamano=invp.tamano_idtamano\n" +
                     "inner join consignacionyventa cyv on cyv.idconsignacion=invp.consignacionyventa_idconsignacion\n" +
                     "inner join artesano a on a.idartesano = cyv.artesano_idartesano\n" +
@@ -61,7 +61,7 @@ public interface InventarioproductoRepository extends JpaRepository <Inventariop
                     "or l.nombrelinea like %?1%\n" +
                     "or p.nombreproducto like %?1%\n" +
                     "or p.descripcionproducto like %?1%\n" +
-                    "or c.nombrecategoria like %?1%\n" +
+                    "or cat.nombrecategoria like %?1%\n" +
                     "or t.nombretamano like %?1%\n" +
                     "or invp.cantidad like %?1%\n" +
                     "or invp.color like %?1%\n" +

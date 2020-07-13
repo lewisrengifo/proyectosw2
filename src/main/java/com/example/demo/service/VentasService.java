@@ -20,9 +20,9 @@ public class VentasService {
         return ventaRepository.findAll( pageable);
     }
 
-    public Page<Ventas> listSearch(String search, int page){
+    public Page<Ventas> listSearch(String search,String nombreSede, int page){
         Pageable pageRequest = PageRequest.of(page,5);
-        return ventaRepository.buscadorVentas(search,pageRequest);
+        return ventaRepository.buscadorVentas(search,nombreSede,pageRequest);
     }
 
 

@@ -19,6 +19,14 @@
         </div>
         <!-- /. CATEGORIA  -->
         <div id="page-inner">
+            <div>
+                <form method="get" th:action="@{/Consignacionventa/buscador}">
+                    <input name="searchField" class="form-control mb-3" type="text" placeholder="Buscar" aria-label="Search" style="width: 40%">
+                    <button type="submit" class="btn btn-outline-danger">buscar</button>
+                    <a th:href="@{'/consigVenta'}" class="btn btn-outline-danger">Limpiar</a>
+                </form>
+            </div>
+
             <!-- /. CATEGORIA  -->
             <div class="row">
                 <div class="col-md-12">
@@ -34,6 +42,9 @@
                                         <th>#</th>
                                         <th>N° Pedido</th>
                                         <th>Tipo</th>
+                                        <th>Nombre Artesano</th>
+                                        <th>Apellido Artesano</th>
+                                        <th>Comunidad</th>
                                         <th>Fecha Inicio</th>
                                         <th>Fecha Fin</th>
                                         <th></th>
@@ -45,6 +56,9 @@
                                         <td th:text="${info.index +1}">1</td>
                                         <td th:text="${c.numeropedido}">Home</td>
                                         <td th:text="${c.tipo}">H</td>
+                                        <td th:text="${c.artesano.nombreartesano}">H</td>
+                                        <td th:text="${c.artesano.apellidopaterno}">H</td>
+                                        <td th:text="${c.artesano.comunidad.nombrecomunidad}">H</td>
                                         <td   th:text="${c.fechainicio}"></td>
                                         <td th:text="${c.fechafin}"></td>
                                         <td ><a th:href="@{'/ConsignacionVenta/agregarProductosCV?id=' + ${c.idconsignacion} }"> + productos</a></td>

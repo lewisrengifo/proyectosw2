@@ -75,12 +75,13 @@ public class VentasController {
     }
 
     @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,HttpSession httpSession) {
 
         String busqueda = (String) params.get("searchField");
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-
-        Page<Ventas> pageVentas = ventasService.listSearch(busqueda, page);
+        Usuario user =(Usuario) httpSession.getAttribute("usuario");
+        String nombreSede = user.getSede_idsede().getNombre();
+        Page<Ventas> pageVentas = ventasService.listSearch(busqueda,nombreSede, page);
         int totalPage = pageVentas.getTotalPages();
         long totalItems = pageVentas.getTotalElements();
 
@@ -91,6 +92,7 @@ public class VentasController {
 
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("busqueda", busqueda);
+        model.addAttribute("nombreSede",nombreSede);
         model.addAttribute("listaVentas", pageVentas.getContent());
         model.addAttribute("current", page + 1);
         model.addAttribute("next", page + 2);
