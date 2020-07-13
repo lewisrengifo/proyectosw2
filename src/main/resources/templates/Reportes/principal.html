@@ -18,8 +18,9 @@
                         <div class="card-content">
                             <h1 style="text-align: center">REPORTE GENERAL</h1>
                             <br>
+                            <h3>Los datos estan comprendido entre el año 2000 a 2022</h3>
                             <div id="mensaje1"  style="display: none" class="alert alert-danger"
-                                 role="alert">Debe ingresar un numero</div>
+                                 role="alert">Ingrese correctamente los datos</div>
                             <div id="mensaje2"  style="display: none" class="alert alert-danger"
                                  role="alert">Ingrese correctamente los datos</div>
                             <div id="mensaje3"  style="display: none" class="alert alert-danger"
@@ -137,7 +138,7 @@
                                             </td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="sede" id="sede" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                    <select class="form-control" name="sedeano" id="sedeano" style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option th:each="sede : ${listaSede}" th:text="|${sede.nombre}|"
                                                         ></option>
                                                     </select>
@@ -425,7 +426,7 @@
                             <h2>Reporte por Producto</h2>
                             <br>
                             <div id="mensajepro1"  style="display: none" class="alert alert-danger"
-                                 role="alert">Debe ingresar un numero</div>
+                                 role="alert">Debe ingresar un año entre 2000 a 2022</div>
                             <div id="mensajepro2"  style="display: none" class="alert alert-danger"
                                  role="alert">Ingrese correctamente los datos</div>
                             <div id="mensajepro3"  style="display: none" class="alert alert-danger"
@@ -528,13 +529,13 @@
                     aux=aux+1;
                 }
             }
-            if(aux===ano.length){
+            if(aux===ano.length && 2000<=ano && ano<=2022){
                 return true;
             }
             else{
                 //$('#mensaje1').show(10000);
                 document.getElementById('mensaje1').style.display="block";
-                document.getElementById('mensaje2').style.display="block";
+                //document.getElementById('mensaje2').style.display="block";
                 //$('#mensaje1').hide(4000);
                 return false;
             }
@@ -554,7 +555,7 @@
                 aux=aux+1;
             }
         }
-        if(aux===anomes.length && (mes==="Enero" || mes==="Febrero" || mes==="Marzo" || mes==="Abril" || mes==="Mayo" ||
+        if(2000<=anomes && anomes<=2022 && aux===anomes.length && (mes==="Enero" || mes==="Febrero" || mes==="Marzo" || mes==="Abril" || mes==="Mayo" ||
             mes==="Junio" || mes==="Julio" || mes==="Agosto" || mes==="Septiembre" || mes==="Octubre" || mes==="Noviembre" || mes==="Diciembre")
             ) {
                 return true;
@@ -579,7 +580,7 @@
                 aux=aux+1;
             }
         }
-        if(aux===anotri.length && (trimestre==="Primero" || trimestre==="Segundo" || trimestre==="Tercero" || trimestre==="Cuarto") ) {
+        if(2000<=anotri && anotri<=2022 && aux===anotri.length && (trimestre==="Primero" || trimestre==="Segundo" || trimestre==="Tercero" || trimestre==="Cuarto") ) {
                 return true;
         }else{
             document.getElementById('mensaje3').style.display="block";
@@ -588,14 +589,21 @@
         }
     }
 </script>
-    <script>
+    <script th:inline="javascript">
         function enviarform4() {
             document.getElementById('mensaje1').style.display="none";
             document.getElementById('mensaje2').style.display="none";
             document.getElementById('mensaje3').style.display="none";
             var anosede =document.getElementById('anosede').value;
+            var sedeano=document.getElementById('sedeano').value;
+            var message =  [[${listaSede1}]];
             //var sede=document.getElementById('sede').value;
-
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombre===sedeano){
+                    aux2=aux2+1;
+                }
+            }
             var aux=0;
             console.log(anosede);
             for(var i=0;i<anosede.length;i++)
@@ -605,7 +613,7 @@
                 }
             }
 
-            if(aux===anosede.length){
+            if(aux2===1 && aux===anosede.length && 2000<=anosede && anosede<=2022 ){
                 return true;
             }
             else{
@@ -617,23 +625,31 @@
             }
         }
     </script>
-    <script>
+    <script th:inline="javascript">
         function enviarform5() {
             document.getElementById('mensaje1').style.display="none";
             document.getElementById('mensaje2').style.display="none";
             document.getElementById('mensaje3').style.display="none";
-            var anomes =document.getElementById('anomessede').value;
+            var anomessede =document.getElementById('anomessede').value;
             var messede =document.getElementById('messede').value;
+            var sedemes=document.getElementById('sedemes').value;
+            var message =  [[${listaSede1}]];
             var aux=0;
             console.log(messede);
-            for(var i=0;i<anomes.length;i++)
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombre===sedemes){
+                    aux2=aux2+1;
+                }
+            }
+            for(var i=0;i<anomessede.length;i++)
             {
-                if((Number.isInteger(Number.parseInt(anomes[i])))){
+                if((Number.isInteger(Number.parseInt(anomessede[i])))){
                     aux=aux+1;
                 }
             }
             console.log(aux);
-            if(aux===anomes.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+            if(aux2===1 && 2000<=anomessede && anomessede<=2022 && aux===anomessede.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
                 messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
             ) {
                 return true;
@@ -651,17 +667,17 @@
             document.getElementById('mensaje3').style.display="none";
             var anotrisede =document.getElementById('anotrisede').value;
             var trimestresede =document.getElementById('trimestresede').value;
-            var sede =document.getElementById('sede1').value;
+            var sedetri =document.getElementById('sede1').value;
             var message =  [[${listaSede1}]];
             console.log(message);
 
             var aux2=0;
             for(var ii=0;ii<message.length;ii++){
-                if(message[ii].nombre===sede){
+                if(message[ii].nombre===sedetri){
                     aux2=aux2+1;
                 }
             }
-            console.log(sede);
+            console.log(sedetri);
             console.log("aux2="+aux2);
             var aux=0;
             for(var i=0;i<anotrisede.length;i++)
@@ -671,7 +687,7 @@
                 }
             }
             console.log(aux);
-            if(aux===anotrisede.length && (trimestresede==="Primero" || trimestresede==="Segundo" || trimestresede==="Tercero" || trimestresede==="Cuarto") && (aux2!=0)) {
+            if(2000<=anotrisede && anotrisede<=2022 && aux===anotrisede.length && (trimestresede==="Primero" || trimestresede==="Segundo" || trimestresede==="Tercero" || trimestresede==="Cuarto") && (aux2!=0)) {
                 return true;
             }else{
                 document.getElementById('mensaje3').style.display="block";
