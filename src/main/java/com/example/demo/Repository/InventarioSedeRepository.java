@@ -66,7 +66,8 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede,I
     @Query(value= "UPDATE inventariosede SET stock = :stock WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
     void actualizarStockSedeXVenta(@Param("stock") int stock, @Param("idinventariosede")int idinventariosede);
 
-
+    @Query(value="SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido'",nativeQuery=true)
+    List<Inventariosede> listarInventarioPorSede(int idSede);
 
 
 
