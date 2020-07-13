@@ -48,8 +48,13 @@
             <div class="row " >
                 <div class="col-md-10 padding">
                     <div class="card">
+<<<<<<< HEAD
                         <div class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
                             <a class="btn btn-primary right" th:href="@{'/producto/nuevo'}">Agregar</a>
+=======
+                        <div class="card-action">
+                            <a  class="btn btn-outline-danger" th:href="@{'/producto/nuevo'}">Agregar</a>
+>>>>>>> 8275c29011e58acbe9ab1d486f603564b0273eca
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
@@ -84,7 +89,15 @@
                                             <td th:text="${producto.getDescripcionproducto()}"></td>
                                             <td th:text="${producto.getCodigodescripcionproducto()}"></td>
                                             <td th:text="${producto.getLinea().nombrelinea}"></td>
-                                            <!--td class="center"><a th:href="@{'/producto/foto' + '?id=' + ${producto.getIdproducto()}}" >Ver</a></td-->
+
+                                            <th class="center"><a href="" style='width:125px; height:33px'> Ver</a></th>
+
+                                            <td><a th:href="@{'/producto/verMas' + '?id=' + ${producto.getIdproducto()}}">Ver Mas</a>
+                                            </td>
+                                            <td><a th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Agregar al carrito</a>
+
+                                            <td sec:authorize="hasAnyAuthority('Gestor principal')"  ><a th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
+                                   <!--td class="center"><a th:href="@{'/producto/foto' + '?id=' + ${producto.getIdproducto()}}" >Ver</a></td-->
 
                                             <!--Otra forma(1)--============================-->
                                             <td class="center" >
@@ -178,8 +191,10 @@
                                                 </div>
                                             </th-->
                                             <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'/producto/editar' + '?id=' + ${producto.getIdproducto()}}">Editar</a>
+
                                             </td>
                                             <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'/producto/borrar' + '?id=' + ${producto.getIdproducto()}}">Borrar</a>
+
                                             </td>
 
                                         </tr>
