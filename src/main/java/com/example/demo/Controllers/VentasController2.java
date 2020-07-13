@@ -545,7 +545,9 @@ public class VentasController2 {
         String aux="Mes "+mes;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anomes);
         HttpHeaders headers = new HttpHeaders();
-        String archivo = "Reporte mensual de la comunidad:" + " " + comunidad; //titulo del excel
+        Optional<Comunidad> comunidadbyId = comunidadRepository.findById(comunidad);
+        Comunidad co = comunidadbyId.get();
+        String archivo = "Reporte mensual de la comunidad:" + " " + co.getNombrecomunidad(); //titulo del excel
         headers.add("Content-Disposition","attachment; filename="+ archivo +".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
