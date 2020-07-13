@@ -3,6 +3,7 @@ package com.example.demo.Controllers;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
 import com.example.demo.service.InventarioPrincipalService;
+import com.sun.xml.internal.fastinfoset.util.StringArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -92,7 +94,7 @@ public class InventarioproductoController {
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) throws ParseException {
 
         if (referencia2.equals("consig")) {
-            consigYventa.setTipo("Consignación");
+            consigYventa.setTipo("consignacion");
             Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
             int idultimo = save.getIdconsignacion();
 
@@ -141,10 +143,11 @@ public class InventarioproductoController {
         Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
         invPro.setConsignacionyventa(ultimaConsigOventa.get());
 
+        ZonedDateTime now = ZonedDateTime.now();
+        Date nowdate = Date.from(now.toInstant());
+        //Date fechatudei = new Date();
 
-        Date fechatudei = new Date();
-
-       invPro.setFechainicio(fechatudei);
+       invPro.setFechainicio(nowdate);
         if(ultimaConsigOventa.get().getTipo().equals("consignacion")){
             String lineac = invPro.getProducto().getLinea().getCodigolinea();
             String categoriac = invPro.getCategoria().getCodigocategoria();
@@ -156,12 +159,49 @@ public class InventarioproductoController {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
             //OBTENER EL MES
             simpleDateFormat = new SimpleDateFormat("MMMM");
-            String mesC= simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(ultimaConsigOventa.get().getFechafin());
+            System.out.println(calendar.getTime());
+            System.out.println(calendar.MONTH);
+            String mesC = "";
+            if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.JANUARY){
+                mesC = "ENE";
+            }else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.FEBRUARY){
+                mesC = "FEB";
+            }else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.MARCH){
+                mesC = "MAR";
+            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.APRIL){
+                mesC = "ABR";
+            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.MAY){
+                mesC = "MAY";
+            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.JUNE){
+                mesC = "JUN";
+            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.JULY){
+                mesC = "JUL";
+            }else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.AUGUST){
+                mesC = "AGO";
+            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.SEPTEMBER){
+                mesC = "SET";
+            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.OCTOBER){
+                mesC = "OCT";
+            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.NOVEMBER){
+                mesC = "NOV";
+            } else if (ultimaConsigOventa.get().getFechafin().getMonth()==calendar.DECEMBER){
+                mesC = "DIC";
+            }
+            System.out.println(calendar.MONTH);
+            //String mesC= simpleDateFormat.format(calendar.getTime()).toUpperCase();
+            System.out.println(mesC);
             //OBTENER EL AÑO
             simpleDateFormat = new SimpleDateFormat("YYYY");
+            char[] yearArr = new char[4];
             String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+            for (int i= 0; i<yearArr.length; i++){
+                yearArr[i] = yearco.charAt(i);
+            }
+            System.out.println(yearArr);
             String totalCodigoGenerado = lineac+categoriac+productoc
-                    +descriccionC+tamano+comunidadC+artesanoC+mesC+yearco;
+                    +descriccionC+tamano+comunidadC+artesanoC+mesC+yearArr[2] + yearArr[3];
             invPro.setCodigogenerado(totalCodigoGenerado);
         }else{
             String lineac = invPro.getProducto().getLinea().getCodigolinea();
@@ -179,7 +219,7 @@ public class InventarioproductoController {
 
         Inventariosede inventariosede= new Inventariosede();
         inventariosede.setStock(invProductoUltimo.getCantidad());
-        inventariosede.setFechallegada(fechatudei);
+        inventariosede.setFechallegada(nowdate);
         inventariosede.setInventarioproductoidinventario(invProductoUltimo);
         inventariosede.setEstado("recibido");
         inventariosede.setSede(usuariologueado.getSede_idsede());
