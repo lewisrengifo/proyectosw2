@@ -197,7 +197,7 @@
                                             <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotrisede" id="anotrisede" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="sede" id="sede" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                    <select class="form-control" name="sede1" id="sede1" style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option th:each="sede : ${listaSede}" th:text="|${sede.nombre}|"
                                                         ></option>
                                                     </select>
@@ -644,13 +644,25 @@
             }
         }
     </script>
-    <script>
+    <script th:inline="javascript">
         function enviarform6() {
             document.getElementById('mensaje1').style.display="none";
             document.getElementById('mensaje2').style.display="none";
             document.getElementById('mensaje3').style.display="none";
             var anotrisede =document.getElementById('anotrisede').value;
             var trimestresede =document.getElementById('trimestresede').value;
+            var sede =document.getElementById('sede1').value;
+            var message =  [[${listaSede1}]];
+            console.log(message);
+
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombre===sede){
+                    aux2=aux2+1;
+                }
+            }
+            console.log(sede);
+            console.log("aux2="+aux2);
             var aux=0;
             for(var i=0;i<anotrisede.length;i++)
             {
@@ -659,7 +671,7 @@
                 }
             }
             console.log(aux);
-            if(aux===anotrisede.length && (trimestresede==="Primero" || trimestresede==="Segundo" || trimestresede==="Tercero" || trimestresede==="Cuarto") ) {
+            if(aux===anotrisede.length && (trimestresede==="Primero" || trimestresede==="Segundo" || trimestresede==="Tercero" || trimestresede==="Cuarto") && (aux2!=0)) {
                 return true;
             }else{
                 document.getElementById('mensaje3').style.display="block";

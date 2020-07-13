@@ -54,6 +54,7 @@ public class VentasController2 {
     public String paginaReportes(Model model){
         model.addAttribute("listaComunidad",comunidadRepository.findAll());
         model.addAttribute("listaSede",sedeRepository.findAll());
+        model.addAttribute("listaSede1",sedeRepository.findAll());
         model.addAttribute("listaProducto",productoRepository.findAll());
         return "Reportes/principal";
     }
@@ -264,7 +265,7 @@ public class VentasController2 {
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/trimestre/sede")
-    public ResponseEntity<InputStreamResource> exportDataAnualTrimestralSede(@RequestParam("trimestresede")String trimestre,@RequestParam("anotrisede")String anotri,@RequestParam("sede")String sede) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualTrimestralSede(@RequestParam("trimestresede")String trimestre,@RequestParam("anotrisede")String anotri,@RequestParam("sede1")String sede) throws Exception{
         String mes1="";
         String mes2="";
         String mes3="";
@@ -296,7 +297,7 @@ public class VentasController2 {
         }
         Sede sede1=sedeRepository.sedePornombre(sede);
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralSede(mes1,mes2,mes3,anotri, sede1.getIdsede());
-        String aux="Trimestre "+ trimestre ;
+        String aux="Trimestre "+ trimestre;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
         String archivo = "Reporte trimestral de la sede" + " " + sede1.getNombre(); //titulo del excel
