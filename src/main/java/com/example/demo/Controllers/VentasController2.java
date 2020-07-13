@@ -46,8 +46,8 @@ public class VentasController2 {
     @Autowired
     ProductoRepository productoRepository;
 
-    //@Autowired
-    //VentasRepository ventasRepository;
+    @Autowired
+    VentasRepository ventasRepository;
 
 
     @GetMapping("")
@@ -56,6 +56,7 @@ public class VentasController2 {
         model.addAttribute("listaSede",sedeRepository.findAll());
         model.addAttribute("listaSede1",sedeRepository.findAll());
         model.addAttribute("listaProducto",productoRepository.findAll());
+        model.addAttribute("listaVentas", ventasRepository.findAll());
         return "Reportes/principal";
     }
 
@@ -482,7 +483,7 @@ public class VentasController2 {
 
 
     @PostMapping("/ano/comunidad")
-    public ResponseEntity<InputStreamResource> exportDataAnualComunidad(@RequestParam("ano")String ano, Comunidad comunidad) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualComunidad(@RequestParam("anocomunidad")String ano, Comunidad comunidad) throws Exception{
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteComunidad(ano, comunidad.getIdcomunidad());
         ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,ano);//cambiar 2variable ano por un string que sea igual a lo correspondiente
         HttpHeaders headers = new HttpHeaders();
@@ -491,7 +492,7 @@ public class VentasController2 {
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/anomes/comunidad")
-    public ResponseEntity<InputStreamResource> exportDataAnualyMensualComunidad(@RequestParam("anomes")String anomes,@RequestParam("mes")String mes, Comunidad comunidad) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualyMensualComunidad(@RequestParam("anomescomunidad")String anomes,@RequestParam("mescomunidad")String mes, Comunidad comunidad) throws Exception{
         String mes1="";
         switch (mes){
             case "Enero":
@@ -553,7 +554,7 @@ public class VentasController2 {
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/trimestre/comunidad")
-    public ResponseEntity<InputStreamResource> exportDataAnualTrimestralComunidad(@RequestParam("trimestre")String trimestre,@RequestParam("anotri")String anotri, Comunidad comunidad) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualTrimestralComunidad(@RequestParam("trimestrecomunidad")String trimestre,@RequestParam("anotricomunidad")String anotri, Comunidad comunidad) throws Exception{
         String mes1="";
         String mes2="";
         String mes3="";
@@ -598,13 +599,7 @@ public class VentasController2 {
     //----------FIN COMUNIDAD
 
     //REPORTES DE CLIENTE
-    @Autowired
-    VentasRepository ventasRepository;
-    @GetMapping("/cliente")
-    public String paginaReportesCliente(Model model){
-        model.addAttribute("listaCliente", ventasRepository.findAll());
-        return "Reportes/cliente";
-    }
+
     @PostMapping("/ano/cliente")
     public ResponseEntity<InputStreamResource> exportDataAnualCliente(@RequestParam("ano")String ano, Ventas ventas) throws Exception{
         Optional<Ventas> venta = ventaRepository1.findById(ventas.getIdventas());

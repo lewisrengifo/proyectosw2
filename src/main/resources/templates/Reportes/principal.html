@@ -255,13 +255,15 @@
                                             <td class="center-align">-</td>
                                             <td class="center-align">
                                                 <div style="align-content: center" >
-                                                    <input type="text" class="form-control" value="1930" name="anocom" id="anocom" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                    <input type="text" class="form-control" value="1930" name="anocomunidad" id="anocomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                    <select class="form-control" name="com1" id="com1" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="x : ${listaComunidad}"
+                                                                th:text="${x.nombrecomunidad}"
+                                                                th:value="${x.idcomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -270,12 +272,12 @@
                                         </form>
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anomes/com'}">
+                                        <form method="post" th:action="@{'/ventasexcel/anomes/comunidad'}">
                                             <td class="center-align">2</td>
                                             <td class="center-align">Ventas total del Mes</td>
                                             <td >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="mescom" id="mescom" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                    <select class="form-control" name="mescomunidad" id="mescomunidad" style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option >Enero</option>
                                                         <option  >Febrero</option>
                                                         <option >Marzo</option>
@@ -291,10 +293,10 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescom" id="anomescom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescomunidad" id="anomescomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                    <select class="form-control" name="comunidad" id="comunidad" style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
                                                         ></option>
                                                     </select>
@@ -304,12 +306,12 @@
                                         </form>
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/trimestre/com'}">
+                                        <form method="post" th:action="@{'/ventasexcel/trimestre/comunidad'}">
                                             <td class="center-align">3</td>
                                             <td class="center-align">Ventas total del Trimestre</td>
                                             <td class="center-align">
                                                 <div class="form-group" >
-                                                    <select class="form-control" name="trimestrecom" id="trimestrecom" style="width: 80%;align-content: center;margin:auto;text-align: center">
+                                                    <select class="form-control" name="trimestrecomunidad" id="trimestrecomunidad" style="width: 80%;align-content: center;margin:auto;text-align: center">
                                                         <option >Primero</option>
                                                         <option >Segundo</option>
                                                         <option >Tercero</option>
@@ -317,11 +319,14 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotricom" id="anotricom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980"
+                                                                             name="anotricomunidad" id="anotricomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                        <option th:each="com : ${listaComunidad}"
+                                                                th:text="|${com.nombrecomunidad}|"
+                                                                th:value="${com.nombrecomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
