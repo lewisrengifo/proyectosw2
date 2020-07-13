@@ -230,7 +230,7 @@
                             <h2>Reporte por Comunidad</h2>
                             <br>
                             <div id="mensajecom1"  style="display: none" class="alert alert-danger"
-                                 role="alert">Debe ingresar un numero</div>
+                                 role="alert">Ingrese correctamente los datos</div>
                             <div id="mensajecom2"  style="display: none" class="alert alert-danger"
                                  role="alert">Ingrese correctamente los datos</div>
                             <div id="mensajecom3"  style="display: none" class="alert alert-danger"
@@ -260,10 +260,11 @@
                                             </td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="com1" id="com1" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                    <select class="form-control" name="com1" id="com1"
+                                                            style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option th:each="x : ${listaComunidad}"
                                                                 th:text="${x.nombrecomunidad}"
-                                                                th:value="${x.idcomunidad}"
+                                                                th:value="${x.nombrecomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -293,11 +294,15 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescomunidad" id="anomescomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescomunidad"
+                                                                             id="anomescomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="comunidad" id="comunidad" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                    <select class="form-control" name="com2" id="com2"
+                                                            style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="com : ${listaComunidad}"
+                                                                th:text="|${com.nombrecomunidad}|"
+                                                                th:value="${com.nombrecomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -323,7 +328,7 @@
                                                                              name="anotricomunidad" id="anotricomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                    <select class="form-control" name="com3" id="com3" style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option th:each="com : ${listaComunidad}"
                                                                 th:text="|${com.nombrecomunidad}|"
                                                                 th:value="${com.nombrecomunidad}"
@@ -433,6 +438,7 @@
                     </div>
                 </div>
             </div>
+            //-----------------PRODUCTO-------------------------------------------------------
             <div class="row" style="margin: auto">
                 <div class="col-md-12">
                     <div class="card">
@@ -608,34 +614,34 @@
     }
 </script>
     <script>
-        function enviarform4() {
-            document.getElementById('mensaje1').style.display="none";
-            document.getElementById('mensaje2').style.display="none";
-            document.getElementById('mensaje3').style.display="none";
-            var anosede =document.getElementById('anosede').value;
-            //var sede=document.getElementById('sede').value;
+    function enviarform4() {
+        document.getElementById('mensaje1').style.display="none";
+        document.getElementById('mensaje2').style.display="none";
+        document.getElementById('mensaje3').style.display="none";
+        var anosede =document.getElementById('anosede').value;
+        //var sede=document.getElementById('sede').value;
 
-            var aux=0;
-            console.log(anosede);
-            for(var i=0;i<anosede.length;i++)
-            {
-                if((Number.isInteger(Number.parseInt(anosede[i])))){
-                    aux=aux+1;
-                }
-            }
-
-            if(aux===anosede.length){
-                return true;
-            }
-            else{
-                //$('#mensaje1').show(10000);
-                document.getElementById('mensaje1').style.display="block";
-
-                //$('#mensaje1').hide(4000);
-                return false;
+        var aux=0;
+        console.log(anosede);
+        for(var i=0;i<anosede.length;i++)
+        {
+            if((Number.isInteger(Number.parseInt(anosede[i])))){
+                aux=aux+1;
             }
         }
-    </script>
+
+        if(aux===anosede.length){
+            return true;
+        }
+        else{
+            //$('#mensaje1').show(10000);
+            document.getElementById('mensaje1').style.display="block";
+
+            //$('#mensaje1').hide(4000);
+            return false;
+        }
+    }
+</script>
     <script>
         function enviarform5() {
             document.getElementById('mensaje1').style.display="none";
@@ -694,6 +700,98 @@
                 return true;
             }else{
                 document.getElementById('mensaje3').style.display="block";
+                //$('#mensaje3').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script>
+        function enviarform7() {
+            document.getElementById('mensajecom1').style.display="none";
+            document.getElementById('mensajecom2').style.display="none";
+            document.getElementById('mensajecom3').style.display="none";
+            var anocomunidad =document.getElementById('anocomunidad').value;
+            //var sede=document.getElementById('sede').value;
+
+            var aux=0;
+            console.log(anocomunidad);
+            for(var i=0;i<anocomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anocomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+
+            if(aux===anocomunidad.length){
+                return true;
+            }
+            else{
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensajecom1').style.display="block";
+
+                //$('#mensaje1').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script>
+        function enviarform8() {
+            document.getElementById('mensajecom1').style.display="none";
+            document.getElementById('mensajecom2').style.display="none";
+            document.getElementById('mensajecom3').style.display="none";
+            var anomes =document.getElementById('anomescomunidad').value;
+            var messede =document.getElementById('mescomunidad').value;
+            var aux=0;
+            console.log(messede);
+            for(var i=0;i<anomes.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anomes[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anomes.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+                messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
+            ) {
+                return true;
+            }else{
+                document.getElementById('mensajecom2').style.display="block";
+                //$('#mensaje2').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script th:inline="javascript">
+        function enviarform9() {
+            document.getElementById('mensajecom1').style.display="none";
+            document.getElementById('mensajecom2').style.display="none";
+            document.getElementById('mensajecom3').style.display="none";
+            var anotricomunidad =document.getElementById('anotricomunidad').value;
+            var trimestrecomunidad =document.getElementById('trimestrecomunidad').value;
+            var comunidad =document.getElementById('com3').value;
+            var message =  [[${listaComunidad1}]];
+            console.log(message);
+
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombrecomunidad===comunidad){
+                    aux2=aux2+1;
+                }
+            }
+            console.log(sede);
+            console.log("aux2="+aux2);
+            var aux=0;
+            for(var i=0;i<anotricomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anotricomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anotricomunidad.length && (trimestrecomunidad==="Primero" || trimestrecomunidad==="Segundo" || trimestrecomunidad==="Tercero" || trimestrecomunidad==="Cuarto") && (aux2!=0)) {
+                return true;
+            }else{
+                document.getElementById('mensajecom3').style.display="block";
                 //$('#mensaje3').hide(4000);
                 return false;
             }
