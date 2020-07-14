@@ -105,7 +105,6 @@ public class VentasController {
         } else {
             if (ventas.getIdventas() == 0) {
                         //DATOS BIEN INGRESADOS
-
                         Inventariotienda inventariotiendaReduceStock = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
                         if (inventariotiendaReduceStock.getStocktienda() >= ventas.getCantidad()) {
                             Optional<Inventariosede> idSedeCambiaStock = inventarioSedeRepository.findById(ventas.getInventariosede().getIdiventariosede());

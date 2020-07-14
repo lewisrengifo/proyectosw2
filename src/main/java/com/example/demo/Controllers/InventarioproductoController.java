@@ -125,9 +125,6 @@ public class InventarioproductoController {
             return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
             }
 
-
-
-
         }
 
 
