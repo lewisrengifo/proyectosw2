@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Inventario Tienda')">
@@ -84,7 +85,7 @@
                                         <td class="center" >
                                             <a  data-toggle="modal" href="#" th:data-target="|#${invT.inventariosede.inventarioproductoidinventario.producto.idproducto}|">Ver</a>
                                         </td>
-                                        <td class="center info" th:if="${invT.inventariosede.inventarioproductoidinventario.consignacionyventa.tipo}=='consignacion'"> <a th:href="@{'/inventarioTienda/devolver?id=' + ${invT.idiventariotienda}}" class="center"> Devolver </a></td>
+                                        <td class="center info" th:if="${invT.inventariosede.inventarioproductoidinventario.consignacionyventa.tipo}=='Consignacion'"> <a th:href="@{'/inventarioTienda/devolver?id=' + ${invT.idiventariotienda}}" class="center"> Devolver </a></td>
 
 
                                         <!-- Modal -->
@@ -148,3 +149,14 @@
 </body>
 
 </html>
+=======
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+>>>>>>> 8275c29011e58acbe9ab1d486f603564b0273eca

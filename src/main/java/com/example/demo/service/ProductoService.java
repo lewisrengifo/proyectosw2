@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.Dto.ProductoServiceApi;
+import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Entity.Inventariosede;
 import com.example.demo.Entity.Producto;
 import com.example.demo.Repository.InventarioSedeRepository;
+import com.example.demo.Repository.InventarioproductoRepository;
 import com.example.demo.Repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,8 @@ public class ProductoService implements ProductoServiceApi {
     private ProductoRepository productoRepository;
     @Autowired
     InventarioSedeRepository inventarioSedeRepository;
+    @Autowired
+    InventarioproductoRepository inventarioproductoRepository;
 
     @Override
     public Page<Producto> getAll(Pageable pageable) {
@@ -37,6 +41,7 @@ public class ProductoService implements ProductoServiceApi {
             return inventarioSedeRepository.obtenerInvDeMiSede(search, pageable);
 
     }
+
 
 
 

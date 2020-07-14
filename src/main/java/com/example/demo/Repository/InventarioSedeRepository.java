@@ -18,66 +18,124 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface InventarioSedeRepository extends JpaRepository<Inventariosede,Integer> {
+public interface InventarioSedeRepository extends JpaRepository<Inventariosede, Integer> {
 
-    @Query(value="SELECT * FROM inventariosede invs, sede se where se.nombre=?1 and invs.sede_idsede=se.idsede",
+    @Query(value = "SELECT * FROM inventariosede invs, sede se where se.nombre=?1 and invs.sede_idsede=se.idsede",
             countQuery = "SELECT * FROM inventariosede invs, sede se where se.nombre=?1 and invs.sede_idsede=se.idsede", nativeQuery = true)
     Page<Inventariosede> obtenerInvDeMiSede(String sesionSede, Pageable pageable);
 
 
     @Transactional
     @Modifying
-    @Query(value= "UPDATE inventariosede SET estado = :estado WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
-    void actualizarEstado(@Param("estado") String estado, @Param("idinventariosede")int idinventariosede);
+    @Query(value = "UPDATE inventariosede SET estado = :estado WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
+    void actualizarEstado(@Param("estado") String estado, @Param("idinventariosede") int idinventariosede);
+
     @Transactional
     @Modifying
-    @Query(value= "UPDATE inventariosede SET observaciones = :observaciones WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
-    void actualizarObservaciones(@Param("observaciones") String observaciones, @Param("idinventariosede")int idinventariosede);
+    @Query(value = "UPDATE inventariosede SET observaciones = :observaciones WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
+    void actualizarObservaciones(@Param("observaciones") String observaciones, @Param("idinventariosede") int idinventariosede);
 
 
-    @Query(value="SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido'" +
-            " and stock not in (select p.stock from inventariosede p where p.stock = 0)",nativeQuery=true)
+    @Query(value = "SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido'", nativeQuery = true)
     List<Inventariosede> listarInventarioPorSedeConStock(int idSede);
 
-    @Query(value="SELECT invs.* FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1) " +
-            "and invs.stock not in (select p.stock from inventariosede p where p.stock = 0)"
-         , nativeQuery = true)
+
+    @Query(value = "SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido'",
+            countQuery = "SELECT count(*) FROM inventariosede where sede_idsede=?1 and estado ='recibido'", nativeQuery = true)
+    Page<Inventariosede> listarInventarioPorSedePaginado(int idSede, Pageable pageable);
+
+
+    @Query(value = "SELECT ins.* FROM inventariosede ins\n" +
+            "    inner join inventarioproducto inP  on inP.idinventario = ins.inventarioproducto_idinventario\n" +
+            "    inner join producto p on p.idproducto = inP.producto_idproducto\n" +
+            "    inner join sede s on s.idsede = ins.sede_idsede\n" +
+            "    where (ins.stock like %?1% or ins.fechallegada like %?1%\n" +
+            "                    or p.nombreproducto like %?1% or p.descripcionproducto like %?1%\n" +
+            "                    or inP.codigogenerado like %?1% or s.nombre like %?1% or ins.estado like %?1%\n" +
+            "                    or ins.observaciones like %?1%)",
+            countQuery = "SELECT count(*) FROM inventariosede ins\n" +
+                    "    inner join inventarioproducto inP  on inP.idinventario = ins.inventarioproducto_idinventario\n" +
+                    "    inner join producto p on p.idproducto = inP.producto_idproducto\n" +
+                    "    inner join sede s on s.idsede = ins.sede_idsede\n" +
+                    "    where (ins.stock like %?1% or ins.fechallegada like %?1%\n" +
+                    "                    or p.nombreproducto like %?1% or p.descripcionproducto like %?1%\n" +
+                    "                    or inP.codigogenerado like %?1% or s.nombre like %?1% or ins.estado like %?1%\n" +
+                    "                    or ins.observaciones like %?1%)", nativeQuery = true)
+    Page<Inventariosede> buscarInvSedes(String search, Pageable pageable);
+
+
+    @Query(value = "SELECT ins.* FROM inventariosede ins" +
+            "    inner join inventarioproducto inP on ins.inventarioproducto_idinventario=inP.idinventario" +
+            "    inner join producto p on p.idproducto = inP.producto_idproducto" +
+            "    inner join consignacionyventa cv on cv.idconsignacion=inP.consignacionyventa_idconsignacion" +
+            "    inner join sede s on s.idsede = ins.sede_idsede" +
+            "    where ( cv.numeropedido like %?1% or inP.codigogenerado like %?1% or p.nombreproducto like %?1%" +
+            "                    or inp.cantidad like %?1% or ins.stock like %?1% ) and s.nombre =?2",
+            countQuery = "SELECT ins.* FROM inventariosede ins" +
+                    " inner join inventarioproducto inP on ins.inventarioproducto_idinventario=inP.idinventario" +
+                    " inner join producto p on p.idproducto = inP.producto_idproducto" +
+                    " inner join consignacionyventa cv on cv.idconsignacion=inP.consignacionyventa_idconsignacion" +
+                    " inner join sede s on s.idsede = ins.sede_idsede" +
+                    " where ( cv.numeropedido like %?1% or inP.codigogenerado like %?1% or p.nombreproducto like %?1%" +
+                    " or inp.cantidad like %?1% or ins.stock like %?1% ) and s.nombre = ?2", nativeQuery = true)
+    Page<Inventariosede> buscarStockPaginado(String search, String sede, Pageable pageable);
+
+
+    @Query(value = "SELECT ins.* FROM inventariosede ins \n" +
+            "inner join sede s on s.idsede=ins.sede_idsede \n" +
+            "where s.nombre = ?1 and estado = 'enviado'",
+            countQuery = "SELECT count(*) FROM inventariosede ins \n" +
+                    "           inner join sede s on s.idsede=ins.sede_idsede \n" +
+                    "            where s.nombre = ?1 and estado = 'enviado'", nativeQuery = true)
+    Page<Inventariosede> listarInventarioMiSedeProdXconfir(String Sede, Pageable pageable);
+
+
+    @Query(value = "SELECT * FROM inventariosede invs where invs.sede_idsede = (select idsede from sede where nombre = ?1)"
+            , nativeQuery = true)
     List<Inventariosede> obtenerInvDeMiSedeNormal(String sesionSede);
 
-    @Query(value="SELECT * FROM inventariosede where inventarioproducto_idinventario=?1 and sede_idsede=?2",nativeQuery=true)
+    @Query(value = "SELECT * FROM inventariosede where inventarioproducto_idinventario=?1 and sede_idsede=?2", nativeQuery = true)
     Inventariosede ObtenerInventariParacambiarStockParaSede(int invProducto, int idsede);
 
 
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE inventariosede SET stock = :cantidad WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
+    void actualizarStockSede(@Param("cantidad") int cantidadNew, @Param("idinventariosede") int idinventariosede);
 
     @Transactional
     @Modifying
-    @Query(value= "UPDATE inventariosede SET stock = :cantidad WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
-    void actualizarStockSede(@Param("cantidad") int cantidadNew, @Param("idinventariosede")int idinventariosede);
+    @Query(value = "UPDATE inventariotienda SET stocktienda = :cantidad WHERE (idiventariotienda = :idiventariotienda);", nativeQuery = true)
+    void actualizarStockTienda(@Param("cantidad") int cantidadNew, @Param("idiventariotienda") int idiventariotienda);
 
-    @Transactional
-    @Modifying
-    @Query(value= "UPDATE inventariotienda SET stocktienda = :cantidad WHERE (idiventariotienda = :idiventariotienda);", nativeQuery = true)
-    void actualizarStockTienda(@Param("cantidad") int cantidadNew, @Param("idiventariotienda")int idiventariotienda);
-
-    @Query(value="SELECT * FROM inventariosede where sede_idsede=?1 and inventarioproducto_idinventario=?2",nativeQuery=true)
+    @Query(value = "SELECT * FROM inventariosede where sede_idsede=?1 and inventarioproducto_idinventario=?2", nativeQuery = true)
     Inventariosede obtenerStockSedePrincipal(int idSedePrincipal, int idinventarioProducto);
 
     @Transactional
     @Modifying
-    @Query(value= "UPDATE inventariosede SET stock = :stock WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
-    void actualizarStockSedeXVenta(@Param("stock") int stock, @Param("idinventariosede")int idinventariosede);
+    @Query(value = "UPDATE inventariosede SET stock = :stock WHERE (idiventariosede = :idinventariosede);", nativeQuery = true)
+    void actualizarStockSedeXVenta(@Param("stock") int stock, @Param("idinventariosede") int idinventariosede);
+
+    @Query(value = "SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido'", nativeQuery = true)
+    List<Inventariosede> listarInventarioPorSede(int idSede);
 
 
-
-
-
-
-    @Query(value="SELECT invs.* FROM inventariosede  invs , inventarioproducto inve, producto p where p.nombreproducto like %?1%\n" +
-            "                and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario ",
-            countQuery ="SELECT count(*) FROM inventariosede  invs , inventarioproducto inve, producto p where p.nombreproducto like %?1%\n" +
-                    "                and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario ",
+    @Query(value = " SELECT ins.* FROM inventariosede ins \n" +
+            "inner join inventarioproducto inP  on inP.idinventario = ins.inventarioproducto_idinventario \n" +
+            "inner join producto p on p.idproducto = inP.producto_idproducto \n" +
+            "inner join sede s on s.idsede = ins.sede_idsede \n" +
+            "where (ins.stock like %?1% or ins.fechallegada like %?1% \n" +
+            "or p.nombreproducto like %?1% or p.descripcionproducto like %?1% \n" +
+            "or inP.codigogenerado like %?1%) and s.nombre = \"lima\" and ins.estado=\"recibido\"\n",
+            countQuery = " SELECT ins.* FROM inventariosede ins \n" +
+                    "inner join inventarioproducto inP  on inP.idinventario = ins.inventarioproducto_idinventario \n" +
+                    "inner join producto p on p.idproducto = inP.producto_idproducto \n" +
+                    "inner join sede s on s.idsede = ins.sede_idsede \n" +
+                    "where (ins.stock like %?1% or ins.fechallegada like %?1% \n" +
+                    "or p.nombreproducto like %?1% or p.descripcionproducto like %?1% \n" +
+                    "or inP.codigogenerado like %?1%) and s.nombre = ?2 and ins.estado=\"recibido\"\n",
             nativeQuery = true)
-    Page<Inventariosede> buscadorInventarioSede(String search, Pageable pageable);
+    Page<Inventariosede> buscadorInventarioSede(String search, String sede, Pageable pageable);
 
 
 }
