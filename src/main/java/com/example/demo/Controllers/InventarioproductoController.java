@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
@@ -73,18 +72,30 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/agregarInventario")
-    public String consignacionYVenta( @ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model , @RequestParam("referencia") int referencia ){
+    public String consignacionYVenta( @ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model , @RequestParam("referencia") String referencia ){
 
-        if(referencia == 1){
-            model.addAttribute("listaArtesano",artesanoRepository.findAll());
-            referencia2 = "consig";
 
-        return "inventario/consig";}
-        else {
-            model.addAttribute("listaArtesano",artesanoRepository.findAll());
-            return "inventario/comprado";
+        try {
+            int ref = Integer.parseInt(referencia);
+            if(ref == 1){
+                model.addAttribute("listaArtesano",artesanoRepository.findAll());
+                referencia2 = "consig";
+                return "inventario/consig";}
+            else {
+                if(ref==2){
+                    model.addAttribute("listaArtesano",artesanoRepository.findAll());
+                    return "inventario/comprado";
+                }else
+                {
+                    return "redirect:/inventarioPrincipal";
+                }
 
+            }
+        }catch (NumberFormatException e){
+
+            return "redirect:/inventarioPrincipal";
         }
+
     }
 
     @PostMapping("/agregarConsigVenta")
@@ -92,10 +103,9 @@ public class InventarioproductoController {
                                                @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) throws ParseException {
 
         if (referencia2.equals("consig")) {
-            consigYventa.setTipo("Consignación");
+            consigYventa.setTipo("consignacion");
             Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
             int idultimo = save.getIdconsignacion();
-
             return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
         }else{
             consigYventa.setTipo("Comprado");
@@ -108,7 +118,6 @@ public class InventarioproductoController {
                 catch (ParseException ex)
                 {
                     System.out.println(ex);
-
                     return "redirect:/inventarioPrincipal";
                 }
             Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
@@ -194,7 +203,6 @@ public class InventarioproductoController {
                                       @ModelAttribute("consigYVenta") Consignacionyventa consigYventa){
         return "inventario/confirmarpedido";
     }
-
 
     @GetMapping("/buscador")
     public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {

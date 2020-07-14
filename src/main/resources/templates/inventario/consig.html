@@ -89,14 +89,13 @@
                                         <!--div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div-->
                                     </div>
                                     <!--Fecha FIN-->
-                                    <div class="form-group" id="artesano_compra">
+                                    <div class="form-group " >
+                                        <div class=" input-group date ">
                                         <label>Fecha fin</label>
-
-                                        <input type="text" class="form-control" th:field="*{fechafin}"
+                                            <input type="text" class="form-control datepicker "  data-format="dd/MM/yyyy hh:mm:ss" th:field="*{fechafin}"
                                                style="width: 25%" placeholder="formato:dia/mes/año">
-
-                                        <div class="text-danger" th:if="${#fields.hasErrors('fechafin')}"
-                                             th:errors="*{fechafin}"></div>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                        </div>
                                     </div>
 
 
@@ -116,9 +115,16 @@
                                     <button type="submit" class="btn btn-primary">siguiente</button>
                                 </form>
                             </div>
+                            <!--SCRIPT PARA FECHA-->
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('#datetimepicker4').datetimepicker();
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 

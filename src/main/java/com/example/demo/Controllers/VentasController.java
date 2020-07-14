@@ -133,7 +133,10 @@ public class VentasController {
                 Optional<Ventas> ventaVaACambiar = ventaRepository.findById(ventas.getIdventas());
                 int cantidadViejaVenta = ventaVaACambiar.get().getCantidad();
                 int cantidadNuevaVenta = ventas.getCantidad();
-                if (cantidadNuevaVenta > 0 ) {
+                Inventariotienda invenTiendaCambiaStock2 = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
+
+
+                if (cantidadNuevaVenta > 0 && cantidadNuevaVenta<=invenTiendaCambiaStock2.getStocktienda()) {
                     if (ventaVaACambiar.get().getInventariosede().getIdiventariosede()
                             == ventas.getInventariosede().getIdiventariosede()) {
                         if (cantidadNuevaVenta == cantidadViejaVenta) {
@@ -190,7 +193,7 @@ public class VentasController {
                         }
                     }
                 }else{
-                    redirectAttributes.addFlashAttribute("msg","La cantidad Ingresa debe ser Mayor a Cero");
+                    redirectAttributes.addFlashAttribute("msg1","La cantidad Ingresa debe ser Mayor a Cero");
                     return "redirect:/venta/editar?id=" + ventas.getIdventas();
                 }
 
@@ -199,7 +202,6 @@ public class VentasController {
             return "redirect:/venta";
             }
 
-            //terminar las validaciones
 
     }
 
