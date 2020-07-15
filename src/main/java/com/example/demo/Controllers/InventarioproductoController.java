@@ -164,12 +164,38 @@ public class InventarioproductoController {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
             //OBTENER EL MES
             simpleDateFormat = new SimpleDateFormat("MMMM");
-            String mesC = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+            String mesC = "";
+            if(invPro.getConsignacionyventa().getFechafin().getMonth()==0){
+                mesC="ENE";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==1){
+                mesC="FEB";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==2){
+                mesC="MAR";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==3){
+                mesC="ABR";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==4){
+                mesC="MAY";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==5){
+                mesC="JUN";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==6){
+                mesC="JUL";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==7){
+                mesC="AGO";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==8){
+                mesC="SET";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==9){
+                mesC="OCT";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==10){
+                mesC="NOV";
+            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==11){
+                mesC="DIC";
+            }
             //OBTENER EL AÑO
             simpleDateFormat = new SimpleDateFormat("YYYY");
             String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+            char[] yearchar = yearco.toCharArray();
             String totalCodigoGenerado = lineac + categoriac + productoc
-                    + descriccionC + tamano + comunidadC + artesanoC + mesC + yearco;
+                    + descriccionC + tamano + comunidadC + artesanoC + mesC + yearchar[2] + yearchar[3];
             invPro.setCodigogenerado(totalCodigoGenerado);
         } else {
             String lineac = invPro.getProducto().getLinea().getCodigolinea();
