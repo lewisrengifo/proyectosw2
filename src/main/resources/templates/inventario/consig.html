@@ -92,19 +92,14 @@
                                     <div class="form-group " >
                                         <div class=" input-group date ">
                                         <label>Fecha fin</label>
-<<<<<<< HEAD
-                                            <input type="text" class="form-control datepicker "  data-format="dd/MM/yyyy hh:mm:ss" th:field="*{fechafin}"
-                                               style="width: 25%" placeholder="formato:dia/mes/año">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                        </div>
-=======
+
 
                                         <input type="text" class="form-control" th:field="*{fechafin}"
                                                style="width: 25%" placeholder="formato:mes/dia/año">
 
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechafin')}"
                                              th:errors="*{fechafin}"></div>
->>>>>>> 54b7db8af7b4173f4cadaaa3d9fd84afc93a5cce
+
                                     </div>
 
 
@@ -124,12 +119,6 @@
                                     <button type="submit"  class="btn btn-outline-danger">siguiente</button>
                                 </form>
                             </div>
-                            <!--SCRIPT PARA FECHA-->
-                            <script type="text/javascript">
-                                $(function () {
-                                    $('#datetimepicker4').datetimepicker();
-                                });
-                            </script>
                         </div>
                     </div>
                 </div>
