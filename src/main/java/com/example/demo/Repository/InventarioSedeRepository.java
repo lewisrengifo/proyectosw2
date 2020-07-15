@@ -117,7 +117,7 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede, 
     void actualizarStockSedeXVenta(@Param("stock") int stock, @Param("idinventariosede") int idinventariosede);
 
     @Query(value = "SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido'", nativeQuery = true)
-    List<Inventariosede> listarInventarioPorSede(int idSede);
+    Page<Inventariosede> listarInventarioPorSede(int idSede, Pageable pageable);
 
 
     @Query(value = " SELECT ins.* FROM inventariosede ins \n" +

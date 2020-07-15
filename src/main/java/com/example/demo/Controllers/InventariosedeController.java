@@ -148,8 +148,7 @@ public class InventariosedeController {
 
         PageRequest pageRequest = PageRequest.of(page, 5);
 
-        Page<Inventariosede> pageProduct = productoServiceApi.getEverInvs(miSede, pageRequest);
-
+        Page<Inventariosede> pageProduct = inventarioSedeRepository.listarInventarioPorSede(usuario.getSede_idsede().getIdsede(), pageRequest);
         int totalPage = pageProduct.getTotalPages();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());

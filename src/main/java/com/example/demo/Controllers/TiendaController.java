@@ -61,7 +61,7 @@ public class TiendaController {
     }
 
 
-    @GetMapping("/delete")
+    @GetMapping("/borrar")
     public String borrar (@RequestParam("id") int id){
 
         Optional<Tienda> opt = tiendaRepository.findById(id);
@@ -69,7 +69,7 @@ public class TiendaController {
         if (opt.isPresent()){
             tiendaRepository.deleteById(id);
         }
-        return "redirect:/categoria";
+        return "redirect:/tienda";
     }
 
 
