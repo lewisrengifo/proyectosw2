@@ -18,12 +18,24 @@ import java.util.List;
 public interface InventarioTiendaRepository extends JpaRepository<Inventariotienda,Integer> {
 
 
-    @Query(value="SELECT invt.* FROM inventariotienda  invt , inventarioproducto inve, inventariosede invs ,producto p where p.nombreproducto like %?1% \n" +
-            "and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario and invs.idiventariosede = invt.iventariosede_idiventariosede ",
-            countQuery ="SELECT count(*) FROM inventariotienda  invt , inventarioproducto inve, inventariosede invs ,producto p where p.nombreproducto like %?1% \n" +
-                    "and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario and invs.idiventariosede = invt.iventariosede_idiventariosede",
+    @Query(value="SELECT invt.* FROM inventariotienda invt inner join tienda t on t.idtienda=invt.tienda_idtienda " +
+            "inner join inventariosede inS on inS.idiventariosede=invt.iventariosede_idiventariosede " +
+            "inner join sede s on s.idsede=t.sede_idsede " +
+            "inner join inventarioproducto inP on inP.idinventario=inS.inventarioproducto_idinventario " +
+            "inner join producto pr on pr.idproducto = inP.producto_idproducto " +
+            "where (t.nombre like %?1% or invt.stocktienda like %?1% or inP.codigogenerado like %?1% " +
+            "or invt.fechaentrega like %?1% or invt.estado like %?1% or pr.nombreproducto like %?1%) " +
+            "and s.nombre = ?2",
+            countQuery ="SELECT count(*) FROM inventariotienda invt inner join tienda t on t.idtienda=invt.tienda_idtienda " +
+                    "inner join inventariosede inS on inS.idiventariosede=invt.iventariosede_idiventariosede " +
+                    "inner join sede s on s.idsede=t.sede_idsede " +
+                    "inner join inventarioproducto inP on inP.idinventario=inS.inventarioproducto_idinventario " +
+                    "inner join producto pr on pr.idproducto = inP.producto_idproducto " +
+                    "where (t.nombre like %?1% or invt.stocktienda like %?1% or inP.codigogenerado like %?1% " +
+                    "or invt.fechaentrega like %?1% or invt.estado like %?1% or pr.nombreproducto like %?1%) " +
+                    "and s.nombre = ?2",
             nativeQuery = true)
-    Page<Inventariotienda> buscadorInventarioTienda(String search, Pageable pageable);
+    Page<Inventariotienda> buscadorInventarioTienda(String search, String nombresede, Pageable pageable);
 
     @Query(value="SELECT it.* FROM inventariotienda it " +
             "inner join tienda t on t.idtienda=it.tienda_idtienda " +

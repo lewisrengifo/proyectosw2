@@ -53,13 +53,13 @@
 
                                     <!-- ELEGIR UN PRODUCTO -->
                                     <div class="form-group" >
-                                        <label for="producto">Producto - Description - Cantidad Disponible - Precio de venta</label>
+                                        <label for="producto">Producto - Description - Cantidad Disponible - Codigo generado</label>
                                         <select class="form-control" name="inventariosede" id="producto" style="width: 70%" >
                                             <option th:each=" pro : ${inventario}"
                                                     th:value="${pro.idiventariosede}"
                                                     th:text="${pro.getInventarioproductoidinventario().getProducto().getNombreproducto()} +
                                                     ' - '+ ${pro.getInventarioproductoidinventario().getProducto().getDescripcionproducto()} + ' - '
-                                                     + ${pro.stock} + ' - '+${pro.getInventarioproductoidinventario().getPreciomosqoy()} ">
+                                                     + ${pro.stock} + ' - '+${pro.getInventarioproductoidinventario().codigogenerado} ">
                                             </option>
                                         </select>
                                     </div>

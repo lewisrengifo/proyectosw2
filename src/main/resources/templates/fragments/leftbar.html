@@ -88,7 +88,7 @@
             </li>
 
 
-            <li th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/sede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede'||#httpServletRequest.requestURI == '/UnaChiqui/listarInvMiSede'} ? 'nav-item active' : ''">
+            <li th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/sede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarInvMiSede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarinvsedexconfirmar'} ? 'nav-item active' : ''">
                 <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Sede <span class="fa arrow"></span></a>
 
                 <ul class="nav nav-second-level ">
@@ -102,10 +102,10 @@
                     </li>
                     <li sec:authorize="hasAnyAuthority('Gestor sede' )"
                         th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarInvMiSede'} ? 'active-menu' : ''">
-                        <a th:href="@{/inventarioSede/listarInvMiSede}"
+                        <a th:href="@{'/inventarioSede/listarInvMiSede'}"
                            th:text="'Inventario '+${session.usuario.sede_idsede.nombre}">Inventario Sede</a>
                     </li>
-                    <li sec:authorize="hasAnyAuthority('Gestor sede' )">
+                    <li sec:authorize="hasAnyAuthority('Gestor sede' )" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarinvsedexconfirmar'} ? 'active-menu' : ''">
                         <a th:href="@{/inventarioSede/listarinvsedexconfirmar}">Producto por confirmar</a>
                     </li>
                 </ul>

@@ -132,7 +132,7 @@ public class InventarioTiendaController {
     }
 
     @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr) {
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
         String busqueda = (String) params.get("searchField");
         if (busqueda.isEmpty()) {
             attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
@@ -150,9 +150,9 @@ public class InventarioTiendaController {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
             PageRequest pageRequest = PageRequest.of(page, 10);
+            Usuario usuarioses = (Usuario) session.getAttribute("usuario");
 
-
-            Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.buscadorInventarioTienda(busqueda,pageRequest);
+            Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.buscadorInventarioTienda(busqueda, usuarioses.getSede_idsede().getNombre(), pageRequest);
             int totalPage = pageInvTienda.getTotalPages();
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
