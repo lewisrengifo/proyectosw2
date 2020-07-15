@@ -72,25 +72,24 @@ public class InventarioproductoController {
 
     @GetMapping("/agregarInventario")
 
-    public String consignacionYVenta( @ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model , @RequestParam("referencia") String referencia ){
+    public String consignacionYVenta(@ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model, @RequestParam("referencia") String referencia) {
 
         try {
             int ref = Integer.parseInt(referencia);
-            if(ref == 1){
-                model.addAttribute("listaArtesano",artesanoRepository.findAll());
+            if (ref == 1) {
+                model.addAttribute("listaArtesano", artesanoRepository.findAll());
                 referencia2 = "consig";
-                return "inventario/consig";}
-            else {
-                if(ref==2){
-                    model.addAttribute("listaArtesano",artesanoRepository.findAll());
+                return "inventario/consig";
+            } else {
+                if (ref == 2) {
+                    model.addAttribute("listaArtesano", artesanoRepository.findAll());
                     return "inventario/comprado";
-                }else
-                {
+                } else {
                     return "redirect:/inventarioPrincipal";
                 }
 
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
 
             return "redirect:/inventarioPrincipal";
         }
@@ -126,7 +125,6 @@ public class InventarioproductoController {
 
 
     }
-
 
 
     @GetMapping("/sgteProductos/{idultimo}")
@@ -165,30 +163,30 @@ public class InventarioproductoController {
             //OBTENER EL MES
             simpleDateFormat = new SimpleDateFormat("MMMM");
             String mesC = "";
-            if(invPro.getConsignacionyventa().getFechafin().getMonth()==0){
-                mesC="ENE";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==1){
-                mesC="FEB";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==2){
-                mesC="MAR";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==3){
-                mesC="ABR";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==4){
-                mesC="MAY";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==5){
-                mesC="JUN";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==6){
-                mesC="JUL";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==7){
-                mesC="AGO";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==8){
-                mesC="SET";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==9){
-                mesC="OCT";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==10){
-                mesC="NOV";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==11){
-                mesC="DIC";
+            if (invPro.getConsignacionyventa().getFechafin().getMonth() == 0) {
+                mesC = "ENE";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 1) {
+                mesC = "FEB";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 2) {
+                mesC = "MAR";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 3) {
+                mesC = "ABR";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 4) {
+                mesC = "MAY";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 5) {
+                mesC = "JUN";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 6) {
+                mesC = "JUL";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 7) {
+                mesC = "AGO";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 8) {
+                mesC = "SET";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 9) {
+                mesC = "OCT";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 10) {
+                mesC = "NOV";
+            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 11) {
+                mesC = "DIC";
             }
             //OBTENER EL AÑO
             simpleDateFormat = new SimpleDateFormat("YYYY");
@@ -230,7 +228,7 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model , RedirectAttributes attr ) {
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr) {
 
         String busqueda = (String) params.get("searchField");
         if (busqueda.isEmpty()) {
@@ -311,30 +309,29 @@ public class InventarioproductoController {
 
                 return "redirect:/inventarioPrincipal/stock";
             }
-                model.addAttribute("pages", pages);
+            model.addAttribute("pages", pages);
 
         } else {
 
-                return "redirect:/inventarioPrincipal/stock";
-            }
-
-            List<Inventariosede> stockProductos = pageStock.getContent();
-
-
-            model.addAttribute("totalItems", totalItems);
-            model.addAttribute("stockProductos", stockProductos);
-            model.addAttribute("current", page + 1);
-            model.addAttribute("next", page + 2);
-            model.addAttribute("prev", page);
-            model.addAttribute("last", totalPages);
-
-            return "inventario/stockProductoInvPrincipal";
+            return "redirect:/inventarioPrincipal/stock";
         }
 
+        List<Inventariosede> stockProductos = pageStock.getContent();
+
+
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("stockProductos", stockProductos);
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPages);
+
+        return "inventario/stockProductoInvPrincipal";
+    }
 
 
     @GetMapping("/buscadorStock")
-    public String buscadorStock(@RequestParam Map<String, Object> params, Model model , RedirectAttributes attr,HttpSession session ) {
+    public String buscadorStock(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
         String busqueda = (String) params.get("searchField");
         if (busqueda.isEmpty()) {
@@ -355,7 +352,7 @@ public class InventarioproductoController {
             PageRequest pageRequest = PageRequest.of(page, 5);
 
 
-            Page<Inventariosede> pageInvProd = inventarioSedeRepository.buscarStockPaginado(busqueda,usuariologueado.getSede_idsede().getNombre(), pageRequest);
+            Page<Inventariosede> pageInvProd = inventarioSedeRepository.buscarStockPaginado(busqueda, usuariologueado.getSede_idsede().getNombre(), pageRequest);
             int totalPage = pageInvProd.getTotalPages();
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
@@ -384,7 +381,28 @@ public class InventarioproductoController {
         }
     }
 
+    @GetMapping("/borrar")
+    public String borrarProducto(@RequestParam("id") int id, RedirectAttributes redirectAttributes, Model model) {
+        Optional<Inventarioproducto> optionalInventarioproducto = inventarioproductoRepository.findById(id);
+        if (optionalInventarioproducto.isPresent()) {
+            //validar que sea de la sede cuzco
+            Inventariosede inventariosede = inventarioSedeRepository.buscarporIdInventarioProd(optionalInventarioproducto.get().getIdinventario());
+            Inventariosede inventariosede1 = inventarioSedeRepository.inventarioProdnotsedecuz(optionalInventarioproducto.get().getIdinventario());
+            if (inventariosede != null && inventariosede1 == null) {
+
+                inventarioSedeRepository.deleteById(inventariosede.getIdiventariosede());
+                inventarioproductoRepository.deleteById(id);
+                redirectAttributes.addFlashAttribute("msgdeletesucc", "Producto borrado del inventario correctamente");
+
+
+            } else {
+                redirectAttributes.addFlashAttribute("msgdelete", "Este producto no se puede borrar del inventario principal debido a que fue entregado a una sede");
+            }
+        }
+        return "redirect:/inventarioPrincipal";
     }
+
+}
 
 
 
