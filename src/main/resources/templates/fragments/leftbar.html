@@ -155,7 +155,7 @@
             </li>
 
             <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')"
-                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tienda'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'nav-item active' : ''">
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/tienda'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda/listaTotal'} ? 'nav-item active' : ''">
                 <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Tiendas <span
                         class="fa arrow"></span></a>
 
@@ -167,8 +167,11 @@
                     </li>
                     <li>
                         <a th:href="@{/inventarioTienda}"
-                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'active-menu' : ''">Inventario
-                            Tienda</a>
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'active-menu' : ''" th:text="'Inventario de tiendas de la sede '+${session.usuario.sede_idsede.nombre}">Inventario de tienda</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/inventarioTienda/listaTotal}"
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda/listaTotal'} ? 'active-menu' : ''">Inventario de tiendas de todas las sedes</a>
                     </li>
                 </ul>
             </li>
