@@ -44,7 +44,7 @@
                                     <!-- ESCOGER TIENDA-->
                                     <div class="form-group">
                                         <h4 th:text="'Tienda : ' + ${tiendita.nombre}">TIENDA</h4>
-                                       <input  type="hidden" th:field="*{tienda}" th:value="${tiendita.idtienda}"  > </input>
+                                       <input  type="hidden" th:name="tienda" th:value="${tiendita.idtienda}"  > </input>
                                     </div>
 
                                     <!-- RUC o DNI opcional -->

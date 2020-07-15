@@ -53,7 +53,7 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
             "or invp.facilitador like %?1% \n" +
             "or invp.codigogenerado like %?1%\n" +
             "or cyv.fechainicio like %?1% \n" +
-            "or cyv.numeropedido like %?1% ",
+            "or cyv.numeropedido like %?1% or cyv.tipo like %?1%",
             countQuery = " SELECT count(*) FROM inventarioproducto invp\n" +
                     "inner join producto p on p.idproducto=invp.producto_idproducto " +
                     "inner join linea l on l.idlinea=p.linea_idlinea\n" +
@@ -76,7 +76,7 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
                     "or invp.facilitador like %?1% \n" +
                     "or invp.codigogenerado like %?1%\n" +
                     "or cyv.fechainicio like %?1% \n" +
-                    "or cyv.numeropedido like %?1% ",
+                    "or cyv.numeropedido like %?1% or cyv.tipo like %?1%",
             nativeQuery = true)
     Page<Inventarioproducto> buscadorInventarioPrincipal(String search, Pageable pageable);
 
