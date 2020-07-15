@@ -344,5 +344,10 @@ public class InventariosedeController {
 
 
 
+    @GetMapping("devolverPrincipal")
+    public  String devolverProductoAsedePrincipal(){
+        return "";
+    }
+
 
 }

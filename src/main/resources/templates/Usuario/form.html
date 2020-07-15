@@ -27,31 +27,31 @@
                                 <input type="hidden" th:field="*{idusuario}"/>
                                 <div class="form-group">
                                     <label for="Nombre">Nombre del usuario</label>
-                                    <input type="text" style="width: 88%" class="form-control" th:field="*{nombre}">
+                                    <input type="text" style="width: 35%" class="form-control" th:field="*{nombre}">
                                     <div class="text-danger" th:if="${#fields.hasErrors('nombre')}"
                                          th:errors="*{nombre}"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="Apellido">Apellido del usuario</label>
-                                    <input style="width: 88%" type="text" class="form-control" th:field="*{apellido}">
+                                    <input style="width: 35%" type="text" class="form-control" th:field="*{apellido}">
                                     <div class="text-danger" th:if="${#fields.hasErrors('apellido')}"
                                          th:errors="*{apellido}"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="DNI">DNI del usuario</label>
-                                    <input style="width: 88%" type="text" class="form-control" th:field="*{dni}">
+                                    <input style="width: 35%" type="text" class="form-control" th:field="*{dni}">
                                     <div class="text-danger" th:if="${#fields.hasErrors('dni')}"
                                          th:errors="*{dni}"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="Correo">Correo</label>
-                                    <input style="width: 88%" type="text" class="form-control" th:field="*{correo}">
+                                    <input style="width: 35%" type="text" class="form-control" th:field="*{correo}">
                                     <div class="text-danger" th:if="${#fields.hasErrors('correo')}"
                                          th:errors="*{correo}"></div>
                                 </div>
                                 <div class="form-group" th:if="*{idusuario==0}">
                                     <label for="Contraseña">Contraseña</label>
-                                    <input style="width: 88%" type="password" class="form-control"
+                                    <input style="width: 35%" type="password" class="form-control"
                                            th:field="*{contrasena}">
                                 </div>
 
@@ -137,12 +137,12 @@
                                     <label for="enable">Definir estado</label>
 
 
-                                    <select style="width: 90%" th:if="*{idusuario==0}" class="form-control"
+                                    <select style="width: 35%" th:if="*{idusuario==0}" class="form-control"
                                             name="enable" id="enable">
                                         <option th:value="1">Activado</option>
                                         <option th:value="0">Desactivado</option>
                                     </select>
-                                    <select style="width: 90%" th:unless="*{idusuario==0}" class="form-control"
+                                    <select style="width: 35%" th:unless="*{idusuario==0}" class="form-control"
                                             name="enable" id="enable">
 
                                         <option th:text="Activado" th:selected="*{enable == true}"
@@ -170,7 +170,7 @@
                                 </div>
                                 <div th:unless="*{rol_idrol!=null}" class="form-group">
                                     <label for="rol_idrol">Rol</label>
-                                    <select style="width: 90%" class="form-control" name="rol_idrol" id="rol_idrol">
+                                    <select style="width: 35%" class="form-control" name="rol_idrol" id="rol_idrol">
                                         <option th:each="rol : ${listaroles}" th:text="|${rol.nombre}|"
 
                                                 th:value="${rol.idrol}"
@@ -178,18 +178,12 @@
                                         ></option>
                                     </select>
                                 </div>
-<<<<<<< HEAD
 
-                                <a th:href="@{'/usuario/lista'}" class="btn btn-danger">Cancelar</a>
-=======
                                 <a th:href="@{'/usuario/lista'}" class="btn btn-outline-danger">Cancelar</a>
->>>>>>> 8275c29011e58acbe9ab1d486f603564b0273eca
-
                                 <button type="submit" class="btn btn-outline-danger"
                                         th:text="${usuario.idusuario == 0? 'Registrar' : 'Actualizar'}">
                                     Reg/act
                                 </button>
-
                             </form>
                             <br>
                             </form>

@@ -33,13 +33,16 @@ public class VentasController {
     InventarioSedeRepository inventarioSedeRepository;
     @Autowired
     ProductoRepository productoRepository;
-
+    @Autowired
+    InventarioTiendaRepository inventarioTiendaRepository;
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
     @Autowired
     VentaRepository ventaRepository;
     @Autowired
     TiendaRepository tiendaRepository;
+    @Autowired
+    SedeRepository sedeRepository;
 
 
     @GetMapping(value = {"/listaVentas", ""})
@@ -160,6 +163,118 @@ public class VentasController {
 
 
 
+    @PostMapping("/agregarVenta")
+    public String ingresarVentas(Model model, @ModelAttribute("ventas") @Valid Ventas ventas, BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes, HttpSession session) {
 
 
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+        Optional<Sede> sedeid = sedeRepository.findById(usuariologueado.getSede_idsede().getIdsede());
+        ventas.setSede(sedeid.get());
+        Optional<Tienda> byId = tiendaRepository.findById(ventas.getTienda().getIdtienda());
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(ventas.getTienda().getIdtienda()));
+            ventas.setTienda(byId.get());
+            model.addAttribute("tiendita", byId.get());
+            return "venta/registroventa";
+        } else {
+            if (ventas.getIdventas() == 0) {
+                //DATOS BIEN INGRESADOS
+                Inventariotienda inventariotiendaReduceStock = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
+                if (inventariotiendaReduceStock.getStocktienda() >= ventas.getCantidad()) {
+                    Optional<Inventariosede> idSedeCambiaStock = inventarioSedeRepository.findById(ventas.getInventariosede().getIdiventariosede());
+
+                    int aa = inventariotiendaReduceStock.getStocktienda();
+                    int bb = ventas.getCantidad();
+                    int StockNuevoEnTienda = aa - bb;
+                    Optional<Inventarioproducto> CambiaCantidadProducto =
+                            inventarioproductoRepository.findById(idSedeCambiaStock.get().getInventarioproductoidinventario().getIdinventario());
+                    int nuevaCantidadProducto = CambiaCantidadProducto.get().getCantidad() - ventas.getCantidad();
+
+                    //Actualizar cantidad en inventario Tienda
+                    inventarioTiendaRepository.ActualizarCantidadInventarioTienda(StockNuevoEnTienda, inventariotiendaReduceStock.getIdiventariotienda());
+                    //actualizar cantidad en inventario principal
+                    inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(nuevaCantidadProducto, CambiaCantidadProducto.get().getIdinventario());
+                    redirectAttributes.addFlashAttribute("msgInfo", "Venta registrada exitosamente");
+                    ventaRepository.save(ventas);
+                    return "redirect:/venta";
+                } else {
+                    redirectAttributes.addFlashAttribute("msg1", "La cantidad ingresada debe menor a la Cantidad Disponible del Producto");
+                    return "redirect:/venta/registroventa?id=" + ventas.getTienda().getIdtienda();
+                }
+
+            } else {
+                Optional<Ventas> ventaVaACambiar = ventaRepository.findById(ventas.getIdventas());
+                int cantidadViejaVenta = ventaVaACambiar.get().getCantidad();
+                int cantidadNuevaVenta = ventas.getCantidad();
+                Inventariotienda invenTiendaCambiaStock2 = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
+
+
+                if (cantidadNuevaVenta > 0 && cantidadNuevaVenta <= invenTiendaCambiaStock2.getStocktienda()) {
+                    if (ventaVaACambiar.get().getInventariosede().getIdiventariosede()
+                            == ventas.getInventariosede().getIdiventariosede()) {
+                        if (cantidadNuevaVenta == cantidadViejaVenta) {
+                            ventaRepository.save(ventas);
+                        } else {
+                            Inventariotienda invenTiendaCambiaStock = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
+
+                            if (cantidadNuevaVenta > cantidadViejaVenta) {
+                                int diferencia = cantidadNuevaVenta - cantidadViejaVenta;
+                                int nuevoStockEnTienda = invenTiendaCambiaStock.getStocktienda() - diferencia;
+                                inventarioTiendaRepository.ActualizarCantidadInventarioTienda(nuevoStockEnTienda, invenTiendaCambiaStock.getIdiventariotienda());
+                                Optional<Inventarioproducto> invPrinCambiaCantidad
+                                        = inventarioproductoRepository.findById(ventas.getInventariosede().getInventarioproductoidinventario().getIdinventario());
+                                int newCantInvPrin = invPrinCambiaCantidad.get().getCantidad() - diferencia;
+                                inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(newCantInvPrin, invPrinCambiaCantidad.get().getIdinventario());
+                                ventaRepository.save(ventas);
+                            } else {
+                                int diferencia2 = cantidadViejaVenta - cantidadNuevaVenta;
+                                int nuevoStockTienda2 = invenTiendaCambiaStock.getStocktienda() + diferencia2;
+                                inventarioTiendaRepository.ActualizarCantidadInventarioTienda(nuevoStockTienda2, invenTiendaCambiaStock.getIdiventariotienda());
+                                Optional<Inventarioproducto> invPrinCambiaCantidad2
+                                        = inventarioproductoRepository.findById(ventas.getInventariosede().getInventarioproductoidinventario().getIdinventario());
+                                int newCantInvPrin2 = invPrinCambiaCantidad2.get().getCantidad() + diferencia2;
+                                inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(newCantInvPrin2, invPrinCambiaCantidad2.get().getIdinventario());
+                                ventaRepository.save(ventas);
+                            }
+                        }
+
+                    } else {
+                        //DARLE SU CANTIDAD A LA TIENDA
+                        Inventariotienda invTiendaSumarCant =
+                                inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventaVaACambiar.get().getInventariosede().getIdiventariosede());
+                        int cantidadAnterVenta = ventaVaACambiar.get().getCantidad();
+                        int NewTotalParatienda = cantidadAnterVenta + invTiendaSumarCant.getStocktienda();
+                        inventarioTiendaRepository.ActualizarCantidadInventarioTienda(NewTotalParatienda, invTiendaSumarCant.getIdiventariotienda());
+                        //DARLE SU CANTIDAD AL PRODUCTO DEL INVENTARIO
+                        Optional<Inventarioproducto> invProductDevolverCant = inventarioproductoRepository.findById(ventaVaACambiar.get().getInventariosede().getInventarioproductoidinventario().getIdinventario());
+                        int cantidadDevueltaTotal = invProductDevolverCant.get().getCantidad() + ventaVaACambiar.get().getCantidad();
+                        inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(cantidadDevueltaTotal, invProductDevolverCant.get().getIdinventario());
+
+                        //CUANDO YA CAMBIASTE DE PRODUCTO
+                        Inventariotienda inventariotiendaEditExiste = inventarioTiendaRepository.productoEnTienda(ventas.getTienda().getIdtienda(), ventas.getInventariosede().getIdiventariosede());
+                        int cant = ventas.getCantidad();
+                        Optional<Inventarioproducto> editProductoCantidad = inventarioproductoRepository.findById(ventas.getInventariosede().getInventarioproductoidinventario().getIdinventario());
+                        int newCantInventProduct = editProductoCantidad.get().getCantidad() - cant;
+                        inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(newCantInventProduct, editProductoCantidad.get().getIdinventario());
+                        if (inventariotiendaEditExiste.getIdiventariotienda() == 0) {
+                            ventaRepository.save(ventas);
+                        } else {
+                            int cantTiendaEdit = inventariotiendaEditExiste.getStocktienda();
+                            int newCantTienda = cantTiendaEdit - cant;
+                            inventarioTiendaRepository.ActualizarCantidadInventarioTienda(newCantTienda, inventariotiendaEditExiste.getIdiventariotienda());
+                            ventaRepository.save(ventas);
+                        }
+                    }
+                } else {
+                    redirectAttributes.addFlashAttribute("msg1", "La cantidad Ingresa debe ser Mayor a Cero");
+                    return "redirect:/venta/editar?id=" + ventas.getIdventas();
+                }
+
+            }
+            redirectAttributes.addFlashAttribute("msgInfo", "Venta actualizada exitosamente.");
+            return "redirect:/venta";
+        }
+
+    }
 }

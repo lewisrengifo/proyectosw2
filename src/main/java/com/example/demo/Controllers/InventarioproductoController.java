@@ -71,7 +71,8 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/agregarInventario")
-    public String consignacionYVenta(@ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model, @RequestParam("referencia") String referencia) {
+
+    public String consignacionYVenta( @ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model , @RequestParam("referencia") String referencia ){
 
         try {
             int ref = Integer.parseInt(referencia);
@@ -93,6 +94,7 @@ public class InventarioproductoController {
 
             return "redirect:/inventarioPrincipal";
         }
+
     }
 
     @PostMapping("/agregarConsigVenta")
@@ -100,13 +102,13 @@ public class InventarioproductoController {
                                              @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) throws ParseException {
 
         if (referencia2.equals("consig")) {
-            consigYventa.setTipo("Consignación");
+            consigYventa.setTipo("consignacion");
             Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
             int idultimo = save.getIdconsignacion();
-
             return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
         } else {
             consigYventa.setTipo("Comprado");
+
             String fecha = "22/12/1900";
             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
             Date fechafin = null;
@@ -124,6 +126,7 @@ public class InventarioproductoController {
 
 
     }
+
 
 
     @GetMapping("/sgteProductos/{idultimo}")
@@ -186,7 +189,7 @@ public class InventarioproductoController {
         inventariosede.setStock(invProductoUltimo.getCantidad());
         inventariosede.setFechallegada(fechatudei);
         inventariosede.setInventarioproductoidinventario(invProductoUltimo);
-        inventariosede.setEstado("entregado");
+        inventariosede.setEstado("recibido");
         inventariosede.setSede(usuariologueado.getSede_idsede());
         inventarioSedeRepository.save(inventariosede);
 
@@ -199,7 +202,6 @@ public class InventarioproductoController {
                                       @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) {
         return "inventario/confirmarpedido";
     }
-
 
     @GetMapping("/buscador")
     public String buscadorSearch(@RequestParam Map<String, Object> params, Model model , RedirectAttributes attr ) {
