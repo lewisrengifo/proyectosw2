@@ -94,17 +94,23 @@ public class VentasController {
 
     @GetMapping("/registroventa")
     public String registrarVenta(Model model, @ModelAttribute("ventas") Ventas ventas,
-                                 RedirectAttributes redirectAttributes, HttpSession session) {
+                                 RedirectAttributes redirectAttributes, HttpSession session,@RequestParam("id") String idTienda) {
+        try {
+            int newid = Integer.parseInt(idTienda);
+            Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
 
-        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+            Optional<Tienda> tiendaVenta = tiendaRepository.findById(newid);
 
-        int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
-        model.addAttribute("inventarioSedeProducto", inventarioSedeRepository.listarInventarioPorSede(sedeUsuario));
-        model.addAttribute("listaTiendas", tiendaRepository.listaTiendasPorSede(sedeUsuario));
-        model.addAttribute("usuarioRol", usuariologueado.getRol_idrol().getNombre());
-        model.addAttribute("idsede", usuariologueado.getSede_idsede().getIdsede());
+            int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
 
-        return "venta/registroventa";
+            model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(newid));
+            model.addAttribute("tiendita",tiendaVenta.get());
+
+            return "venta/registroventa";
+        }catch (NumberFormatException e){
+            return "redirect:/tienda";
+        }
+
     }
 
     @GetMapping("/buscador")
