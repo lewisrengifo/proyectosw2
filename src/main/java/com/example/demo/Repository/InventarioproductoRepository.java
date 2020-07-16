@@ -6,6 +6,7 @@ import com.example.demo.Entity.Inventarioproducto;
 
 import com.example.demo.Entity.Usuario;
 
+import org.springframework.data.annotation.AccessType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -80,5 +81,13 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
             nativeQuery = true)
     Page<Inventarioproducto> buscadorInventarioPrincipal(String search, Pageable pageable);
 
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE inventarioproducto SET estado = :estado WHERE (idinventario = :idinventario);", nativeQuery = true)
+    void actualizarEstado(@Param("estado") String estado, @Param("idinventario") int idinventario);
+
+@Query(value = "SELECT * FROM inventarioproducto where estado is null",nativeQuery = true)
+    Page<Inventarioproducto> listaTotalSinDevueltos(Pageable pageable);
 
 }

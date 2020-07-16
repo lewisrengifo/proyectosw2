@@ -25,7 +25,7 @@
                                  role="alert"></div>
                             <form method="get" th:action="@{'/sede/guardarGestorNew'}" th:object="${usuario}">
                                 <input type="hidden" th:field="*{idusuario}"/>
-                                <input type="hidden" th:name="idsede" th:value="${sede.idsede}">
+                                <input type="hidden" th:name="idsede" th:value="${idsede}">
 
                                 <div class="form-group">
                                     <label for="enable">Seleccionar Usuario Disponible</label>

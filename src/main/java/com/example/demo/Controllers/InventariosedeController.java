@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -344,8 +345,17 @@ public class InventariosedeController {
 
 
     @GetMapping("devolverPrincipal")
-    public  String devolverProductoAsedePrincipal(){
-        return "";
+    public  String devolverProductoAsedePrincipal(@RequestParam("id") int id){
+        Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(id);
+        int cantidadSede = productEnSede.get().getStock();
+        String principal = "cuzco";
+        Inventariosede productoSedePrincipal = inventarioSedeRepository.productoParaDevolverAlPrincipal(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), principal);
+        int nuevoTotalEnPrincipal = productoSedePrincipal.getStock() + productEnSede.get().getStock();
+       //SE AGREGA LO DE SEDE AL PRINCIPAL EL STOCK
+        inventarioSedeRepository.actualizarStockSede(nuevoTotalEnPrincipal,productoSedePrincipal.getIdiventariosede());
+        //REDUCIR EL STOCK EN CERO Y PONER ESTADO EN DEVUELTO
+        inventarioSedeRepository.cambiaStockyEstadoSedeCuandoDevuelveProduc(0,"devuelto principal",productEnSede.get().getIdiventariosede());
+        return "redirect:/inventarioSede/listarInvMiSede";
     }
 
 

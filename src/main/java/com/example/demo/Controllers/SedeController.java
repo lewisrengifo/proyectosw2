@@ -66,7 +66,7 @@ public class SedeController {
             model.addAttribute("page", pages);
         }
         model.addAttribute("listSedes", pageSede.getContent());
-       // model.addAttribute("usuariosdelasede", pageSede.getContent());
+        // model.addAttribute("usuariosdelasede", pageSede.getContent());
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
         model.addAttribute("current", page + 1);
@@ -86,8 +86,8 @@ public class SedeController {
     }
 
     @PostMapping("/guardar")
-    public String guardarSede(@ModelAttribute("sede") @Valid Sede sede , BindingResult bindingResult, RedirectAttributes redirectAttributes, @ModelAttribute("usuariodelasede") Usuario usuariodelasede, Model model,
-    @ModelAttribute("idsede") int idsede, @ModelAttribute("usuario") Usuario usuario) {
+    public String guardarSede(@ModelAttribute("sede") @Valid Sede sede, BindingResult bindingResult, RedirectAttributes redirectAttributes, @ModelAttribute("usuariodelasede") Usuario usuariodelasede, Model model,
+                              @ModelAttribute("idsede") int idsede, @ModelAttribute("usuario") Usuario usuario) {
         if (bindingResult.hasErrors()) {
             return "sede/form";
 
@@ -95,21 +95,23 @@ public class SedeController {
             if (sede.getIdsede() == 0) {
                 redirectAttributes.addFlashAttribute("mgs", "La sede se creo correctamente");
                 sedeRepository.save(sede);
-                return "redirect:/sede/agregargestor";
+                model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
+                model.addAttribute("idsede", sedeRepository.save(sede).getIdsede());
+                return "sede/formGestorNew";
             } else {
                 redirectAttributes.addFlashAttribute("msg", "La sede se actualizó correctamente");
                 //model.addAttribute(usuariodelasede);
                 idsede = sede.getIdsede();
-                List<UsuarioSedeDto> usuariodelasededb =usuarioRepository.usuariodelasedeint(sede.getIdsede());
+                List<UsuarioSedeDto> usuariodelasededb = usuarioRepository.usuariodelasedeint(sede.getIdsede());
                 int id = 0;
-                for (UsuarioSedeDto info : usuariodelasededb){
+                for (UsuarioSedeDto info : usuariodelasededb) {
                     usuarioRepository.actualizarGestorSede(usuariodelasededb.get(id).getUsuariodelasede());
-                    id ++;
+                    id++;
                 }
 
-                model.addAttribute("sede", sede);
+                model.addAttribute("idsede", sedeRepository.save(sede).getIdsede());
                 model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
-               // model.addAttribute("usuario");
+                // model.addAttribute("usuario");
                 //usuarioRepository.actualizarSededelGestor(usuariodelasededb.getUsuariodelasede());
                 sedeRepository.save(sede);
 
@@ -134,27 +136,31 @@ public class SedeController {
         }
 
     }
+
     @GetMapping("/agregargestor")
-    public String agregarGestor(Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("sede") Sede sede){
-        //model.addAttribute("listaroles", rolRepository.rolgestorsede());
-        model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
-        //int idsederec = idsede;
-        model.addAttribute("sede", sede);
-        return "sede/formGestorNew";
-    }@GetMapping("/agregargestorAdicional")
-    public String agregarGestorAdicional(Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("sede") Sede sede){
+    public String agregarGestor(Model model, @ModelAttribute("usuario") Usuario usuario, @ModelAttribute("sede") Sede sede) {
         //model.addAttribute("listaroles", rolRepository.rolgestorsede());
         model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
         //int idsederec = idsede;
         model.addAttribute("sede", sede);
         return "sede/formGestorNew";
     }
+
+    @GetMapping("/agregargestorAdicional")
+    public String agregarGestorAdicional(Model model, @ModelAttribute("usuario") Usuario usuario, @RequestParam("id") int idsede) {
+        //model.addAttribute("listaroles", rolRepository.rolgestorsede());
+        model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
+        //int idsederec = idsede;
+        model.addAttribute("idsede", idsede);
+        return "sede/formGestorNew";
+    }
+
     @PostMapping("/guardarGestor")
     public String guardarGestor(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
-                                RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException{
+                                RedirectAttributes redirectAttributes, Model model, @RequestParam(name = "rol_idrol") int rol_idrol) throws MalformedURLException {
         if (bindingResult.hasErrors()) {
             model.addAttribute("listaroles", rolRepository.rolgestorsede());
-           // model.addAttribute("listasedes", sedeRepository.findAll());
+            // model.addAttribute("listasedes", sedeRepository.findAll());
             return "sede/formGestor";
         }
 
@@ -234,13 +240,14 @@ public class SedeController {
         // }
         return "redirect:/sede/lista";
     }
+
     @GetMapping("/editarGest")
     public String editarGestorsede(@ModelAttribute("usuario") Usuario usuario, Model model, @ModelAttribute("usuariodelasede") Usuario usuariosede, RedirectAttributes redirectAttributes) {
 
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuariosede.getIdusuario());
         if (optionalUsuario.isPresent()) {
             model.addAttribute("listaroles", rolRepository.rolgestorsede());
-           // model.addAttribute("listasedes", sedeRepository.findAll());
+            // model.addAttribute("listasedes", sedeRepository.findAll());
             usuario = optionalUsuario.get();
             model.addAttribute("usuario", usuario);
             return "sede/formGestor";
@@ -288,35 +295,34 @@ public class SedeController {
         }
 
     }
+
     public String encriptar(String pww) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         pww = bCryptPasswordEncoder.encode(pww);
         return pww;
     }
+
     @GetMapping("/guardarGestorNew")
-    public String guardarGestorNew(@RequestParam("usuario") int idsuario, @RequestParam("idsede") int idsede){
-            int idsederec = idsede;
-            if(idsederec==0){
-                int idsededb = sedeRepository.findTopByOrderByIdsedeDesc().getIdsede();
-                int iduser = idsuario;
-                usuarioRepository.actualizarRolSede(idsededb, 3, iduser);
-            }else{
-                int iduser = idsuario;
-                usuarioRepository.actualizarRolSede(idsederec, 3, iduser);
-            }
+    public String guardarGestorNew(@RequestParam("usuario") int idsuario, @RequestParam("idsede") int idsede) {
+        int idsederec = idsede;
+
+        int iduser = idsuario;
+        usuarioRepository.actualizarRolSede(idsederec, 3, iduser);
 
 
-            //usuarioRepository.actualizarRolSede(idsuario, 3, idsede);
+        //usuarioRepository.actualizarRolSede(idsuario, 3, idsede);
 
 
         return "redirect:/sede/lista";
     }
+
     @GetMapping("/editarGestorNew")
-    public String editarGestorNew(@RequestParam("usuario") int idsuario){
+    public String editarGestorNew(@RequestParam("usuario") int idsuario) {
         return "";
     }
+
     @ModelAttribute
-    public void provideIdsede(Model model){
+    public void provideIdsede(Model model) {
         model.addAttribute("idsede", new Integer(1));
     }
 }

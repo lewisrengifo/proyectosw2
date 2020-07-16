@@ -142,5 +142,28 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede, 
             nativeQuery = true)
     Page<Inventariosede> buscadorInventarioSede(String search, String sede, Pageable pageable);
 
+    @Query(value = "SELECT ins.* FROM inventariosede ins inner join sede s on s.idsede=ins.sede_idsede " +
+            "where ins.inventarioproducto_idinventario = ?1 and s.nombre = ?2 ",nativeQuery = true)
+    Inventariosede productoParaDevolverAlPrincipal(int idInventario, String sedePrincipal);
+
+
+    @Transactional
+    @Modifying
+    @Query(value= "UPDATE inventariosede SET stock = :stock,estado = :estado WHERE (idiventariosede = :idiventariosede);", nativeQuery = true)
+    void cambiaStockyEstadoSedeCuandoDevuelveProduc(@Param("stock") int stock,@Param("estado")  String devuelto, @Param("idiventariosede")int idiventariosede);
+
+
+    @Query(value = "SELECT * FROM inventariosede " +
+            "where estado='devuelto' and sede_idsede=?1",
+            countQuery = "SELECT * FROM inventariosede " +
+                    "where estado='devuelto' and sede_idsede=?1", nativeQuery = true)
+    Page<Inventariosede> listarProductosDevueltos(int idSede, Pageable pageable);
+
+
+    @Query(value = "SELECT * FROM inventariosede where inventarioproducto_idinventario =?1 and " +
+            "sede_idsede not in (select p.sede_idsede from inventariosede p where p.sede_idsede=?2) " +
+            "and (estado = 'recibido' or estado = 'enviado' ) limit 1",nativeQuery = true)
+    Inventariosede productoTodaviaNoDevueltosEnSede(int idInventario,int idSede);
+
 
 }

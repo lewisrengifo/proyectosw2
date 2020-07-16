@@ -40,22 +40,29 @@ public class InventarioproductoController {
 
     @Autowired
     InventarioSedeRepository inventarioSedeRepository;
+    @Autowired
+    InventarioTiendaRepository inventarioTiendaRepository;
 
 
     @GetMapping(value = {"", "/", "/lista"})
-    public String listaInventarioProducto(Model model, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params) {
+    public String listaInventarioProducto(Model model, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params,RedirectAttributes att) {
 
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
         //Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
         PageRequest pageRequest = PageRequest.of(page, 5);
 
-        Page<Inventarioproducto> pageProduct = inventarioproductoRepository.findAll(pageRequest);
+        Page<Inventarioproducto> pageProduct = inventarioproductoRepository.listaTotalSinDevueltos(pageRequest);
         long totalItems = pageProduct.getTotalElements();
         int totalPages = pageProduct.getTotalPages();
         if (totalPages > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
+            if (page > pages.size() - 1) {
+                att.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioPrincipal";
+            }
         }
 
         List<Inventarioproducto> listaInventarioPrincipal = pageProduct.getContent();
@@ -400,6 +407,76 @@ public class InventarioproductoController {
             }
         }
         return "redirect:/inventarioPrincipal";
+
+    }
+    @GetMapping("/productosDevueltos")
+    public String listaProductosDevultos(@RequestParam Map<String, Object> params, Model model , RedirectAttributes attr,HttpSession session ){
+
+        String busqueda = (String) params.get("searchField");
+
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+        int idusuariologueado = usuariologueado.getSede_idsede().getIdsede();
+
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/inventarioPrincipal/productosDevueltos";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if (page < 0) {
+            return "redirect:/inventarioPrincipal/productosDevueltos";
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, 5);
+
+        Page<Inventariosede> pageStock = inventarioSedeRepository.listarProductosDevueltos(idusuariologueado, pageRequest);
+        long totalItems = pageStock.getTotalElements();
+        int totalPages = pageStock.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+            if (page > pages.size() - 1) {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioPrincipal/productosDevueltos";
+            }
+            model.addAttribute("pages", pages);
+
+        } else {
+
+            return "redirect:/inventarioPrincipal/productosDevueltos";
+        }
+
+        List<Inventariosede> stockProductos = pageStock.getContent();
+
+
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("ProductosDevueltos", stockProductos);
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPages);
+
+        return "inventario/inventarioProductosDevueltos";
+    }
+    @GetMapping("/devolverArtesano")
+    public String devolverProductoAlArtesano(@RequestParam("id") int id,HttpSession session,RedirectAttributes att){
+
+        Usuario user = (Usuario) session.getAttribute("usuario");
+        Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(id);
+        Inventariosede inventariosedeDevuelto = inventarioSedeRepository.productoTodaviaNoDevueltosEnSede(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), user.getSede_idsede().getIdsede());
+        Inventariotienda productoEnTienda = inventarioTiendaRepository.productoEntiendaTodavia(productEnSede.get().getIdiventariosede());
+
+        if (inventariosedeDevuelto==null && productoEnTienda==null ){
+            inventarioSedeRepository.actualizarEstado("devuelto",productEnSede.get().getIdiventariosede());
+            inventarioproductoRepository.actualizarEstado("devuelto",productEnSede.get().getInventarioproductoidinventario().getIdinventario());
+            att.addFlashAttribute("msg","producto devuelto al artesano existosamente");
+            return "redirect:/inventarioPrincipal/stock";
+        }else{
+            att.addFlashAttribute("msg","El producto selecion aún se encuentra en una sede o tienda");
+            return  "redirect:/inventarioPrincipal/stock";
+        }
+
     }
 
 }

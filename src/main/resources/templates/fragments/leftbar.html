@@ -83,6 +83,10 @@
                         th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/stock'} ? 'active-menu' : ''">
                         <a th:href="@{/inventarioPrincipal/stock}"> Stock Productos </a>
                     </li>
+                    <li sec:authorize="hasAnyAuthority('Gestor principal')"
+                        th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/stock'} ? 'active-menu' : ''">
+                        <a th:href="@{/inventarioPrincipal/productosDevueltos}"> Productos Devueltos  </a>
+                    </li>
                 </ul>
 
             </li>

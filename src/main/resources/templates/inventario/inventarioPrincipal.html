@@ -33,7 +33,7 @@
                     <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
 
                     <button type="submit" class="btn btn-outline-danger">buscar</button>
-                    <a th:href="@{'/inventarioPrincipal/lista'}" class="btn btn-outline-danger">Limpiar</a>
+                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-outline-danger">Limpiar</a>
 
                 </form>
 
@@ -92,7 +92,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="a,info: ${listaInventarioProducto}">
+                                    <tr th:each="a,info: ${listaInventarioProducto}" >
                                         <td th:text="${info.index +1+prev*5}" >1</td>
                                         <td th:text="${a.consignacionyventa.numeropedido}" >de31edae</td>
                                         <td th:text="${a.producto.linea.nombrelinea}" >no hay línea en entidad</td>
