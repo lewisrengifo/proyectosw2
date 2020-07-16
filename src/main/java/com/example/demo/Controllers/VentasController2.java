@@ -11,6 +11,7 @@ import com.example.demo.Repository.SedeRepository;
 import com.example.demo.Repository.VentaRepository1;
 import com.example.demo.service.ServiceExcel;
 import com.sun.istack.Nullable;
+import org.hibernate.boot.spi.NaturalIdUniqueKeyBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -80,6 +81,9 @@ public class VentasController2 {
             return"redirect:/ventasexcel";
         }
     }*/
+
+  
+
     @PostMapping("/ano")
     public ResponseEntity<InputStreamResource> exportDataAnual(@RequestParam("ano")String ano) throws Exception{
             List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteAnualMosqoy(ano);
