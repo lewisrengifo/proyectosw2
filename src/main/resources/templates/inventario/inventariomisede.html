@@ -30,6 +30,20 @@
                         <div class="card-content">
 
                             <div class="table-responsive">
+                                <form method="get" th:action="@{'/inventarioSede/buscadorMiSede'}">
+
+                                    <input th:if="${busqueda!=null}" th:value="${busqueda}" name="searchField"
+                                           class="form-control mb-3" type="text" placeholder="Buscar"
+                                           aria-label="Search" style="width: 40%">
+                                    <input th:if="${busqueda==null}" name="searchField" class="form-control mb-3" type="text"
+                                           placeholder="Buscar"
+                                           aria-label="Search" style="width: 40%">
+                                    <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #0a04bf"></div>
+
+                                    <button type="submit" class="btn btn-outline-danger">buscar</button>
+                                    <a th:href="@{'/inventarioSede/listarInvMiSede'}" class="btn btn-outline-danger">Limpiar</a>
+
+                                </form>
 
                                 <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
                                      role="alert"></div>
@@ -61,7 +75,7 @@
                                         <td th:text="${inv.stock}">de31edae</td>
                                         <td th:text="${inv.getFechallegada()}">---</td>
                                         <td><a th:if="${inv.getInventarioproductoidinventario().getConsignacionyventa().getTipo() == 'consignacion'}"
-                                               th:href="@{'/inventarioSede/devolverPrincipal?id=' + ${inv.getIdiventariosede()} }">gaaaa</a></td>
+                                               th:href="@{'/inventarioSede/devolverPrincipal?id=' + ${inv.getIdiventariosede()} }">Devolver al Principal</a></td>
 
                                     </tr>
 
@@ -70,6 +84,32 @@
                                 </table>
 
                                 </form>
+
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+
+                                        <ul th:if="${last != 1}" class="pagination justify-content-center">
+                                            <li class ="page-item" th:if="${current != 1 }">
+                                                <a class="page-link"  th:if="${busqueda }" th:href="@{'/inventarioSede/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede/listarInvMiSede' + '?page=' + ${prev}} "> Anterior </a>
+                                            </li>
+
+                                            <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/inventarioSede/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede/listarInvMiSede' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                            </li>
+
+                                            <li class ="page-item" th:if="${current != last }">
+                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/inventarioSede/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede/listarInvMiSede' + '?page=' + ${next}} "> Siguiente </a>
+                                            </li>
+
+                                        </ul>
+
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

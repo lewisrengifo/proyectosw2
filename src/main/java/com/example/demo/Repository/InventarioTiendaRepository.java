@@ -63,5 +63,7 @@ public interface InventarioTiendaRepository extends JpaRepository<Inventariotien
     @Query(value= "UPDATE inventariotienda SET stocktienda = :cantidad,estado = :estado WHERE (idiventariotienda = :idiventariotienda);", nativeQuery = true)
     void DevolverProductoASede(@Param("cantidad") int cantidadNew,@Param("estado")  String devuelto, @Param("idiventariotienda")int idiventariotienda);
 
+    @Query(value = "SELECT invT.* FROM inventariotienda invT where iventariosede_idiventariosede = ?1 and estado = 'recibido'",nativeQuery = true)
+    Inventariotienda productoEntiendaTodavia(int idInventarioSede);
 
 }
