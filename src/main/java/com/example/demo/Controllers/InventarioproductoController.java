@@ -147,15 +147,23 @@ public class InventarioproductoController {
 
     @GetMapping("/sgteProductos/{idultimo}")
     public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                        @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @PathVariable("idultimo") int id) {
-        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
-
-        model.addAttribute("listalinea", lineaRepository.findAll());
-        model.addAttribute("listaproducto", productoRepository.findAll());
-        model.addAttribute("listacategoria", categoriaRepository.findAll());
-        model.addAttribute("listatamano", tamanoRepository.findAll());
-        model.addAttribute("consigYventa1", ultimaConsigOventa.get());
-        return "inventario/inventarioProducto";
+                                        @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @PathVariable("idultimo") String id) {
+        try{
+            int idcv = Integer.parseInt(id);
+            Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(idcv);
+            if (ultimaConsigOventa.get()!=null){
+                model.addAttribute("listalinea", lineaRepository.findAll());
+                model.addAttribute("listaproducto", productoRepository.findAll());
+                model.addAttribute("listacategoria", categoriaRepository.findAll());
+                model.addAttribute("listatamano", tamanoRepository.findAll());
+                model.addAttribute("consigYventa1", ultimaConsigOventa.get());
+                return "inventario/inventarioProducto";
+            }else{
+                return "redirect:/inventarioPrincipal";
+            }
+        }catch (NumberFormatException e){
+            return "redirect:/inventarioPrincipal";
+        }
     }
 
     @PostMapping("/agregarProducto")
@@ -171,7 +179,12 @@ public class InventarioproductoController {
                 invPro.setConsignacionyventa(ultimaConsigOventa.get());
 
                 if (bindingResult.hasErrors()) {
-                    return "redirect:/inventarioPrincipal/sgteProductos/" + ultimaConsigOventa.get().getIdconsignacion();
+                    model.addAttribute("listalinea", lineaRepository.findAll());
+                    model.addAttribute("listaproducto", productoRepository.findAll());
+                    model.addAttribute("listacategoria", categoriaRepository.findAll());
+                    model.addAttribute("listatamano", tamanoRepository.findAll());
+                    model.addAttribute("consigYventa1", ultimaConsigOventa.get());
+                    return "inventario/inventarioProducto";
                 } else {
                     Date fechatudei = new Date();
 

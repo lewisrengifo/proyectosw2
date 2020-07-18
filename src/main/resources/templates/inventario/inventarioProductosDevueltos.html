@@ -55,6 +55,7 @@
                                         <th>Artesano</th>
                                         <th>Comunidad</th>
                                         <th>Cantidad Devuelto</th>
+                                        <th>codigo generado</th>
 
                                     </tr>
                                     </thead>
@@ -69,6 +70,8 @@
                                         + ' ' + ${st.inventarioproductoidinventario.consignacionyventa.getArtesano().apellidomaterno}"></td>
                                         <td th:text="${st.inventarioproductoidinventario.consignacionyventa.artesano.comunidad.nombrecomunidad}"></td>
                                         <td th:text="${st.inventarioproductoidinventario.cantidad}" >---</td>
+                                        <td th:text="${st.inventarioproductoidinventario.codigogenerado}"></td>
+                                        <td th:text="${st.inventarioproductoidinventario.idinventario}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
