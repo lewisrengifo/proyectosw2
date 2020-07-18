@@ -8,10 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,8 +55,11 @@ public class InventarioproductoController {
             return "redirect:/inventarioPrincipal";
         }
 
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        if (page < 0) {
+            return "redirect:/inventarioPrincipal";
+        }
         //Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
         PageRequest pageRequest = PageRequest.of(page, 5);
 
@@ -154,83 +159,102 @@ public class InventarioproductoController {
     }
 
     @PostMapping("/agregarProducto")
-    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") int id, HttpSession session) {
+    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto")@Valid Inventarioproducto invPro, BindingResult bindingResult,
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") String id, HttpSession session,RedirectAttributes att) {
 
-        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
-        invPro.setConsignacionyventa(ultimaConsigOventa.get());
+        try{
+            int idcoven = Integer.parseInt(id);
 
+            Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(idcoven);
 
-        Date fechatudei = new Date();
+            if (ultimaConsigOventa.isPresent()){
+                invPro.setConsignacionyventa(ultimaConsigOventa.get());
 
-        invPro.setFechainicio(fechatudei);
-        if (ultimaConsigOventa.get().getTipo().equals("consignacion")) {
-            String lineac = invPro.getProducto().getLinea().getCodigolinea();
-            String categoriac = invPro.getCategoria().getCodigocategoria();
-            String productoc = invPro.getProducto().getCodigoproducto();
-            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
-            String tamano = invPro.getTamano().getCodigotamano();
-            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
-            String artesanoC = invPro.getConsignacionyventa().getArtesano().getCodigoartesano();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
-            //OBTENER EL MES
-            simpleDateFormat = new SimpleDateFormat("MMMM");
-            String mesC = "";
-            if (invPro.getConsignacionyventa().getFechafin().getMonth() == 0) {
-                mesC = "ENE";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 1) {
-                mesC = "FEB";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 2) {
-                mesC = "MAR";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 3) {
-                mesC = "ABR";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 4) {
-                mesC = "MAY";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 5) {
-                mesC = "JUN";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 6) {
-                mesC = "JUL";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 7) {
-                mesC = "AGO";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 8) {
-                mesC = "SET";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 9) {
-                mesC = "OCT";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 10) {
-                mesC = "NOV";
-            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 11) {
-                mesC = "DIC";
+                if (bindingResult.hasErrors()) {
+                    return "redirect:/inventarioPrincipal/sgteProductos/" + ultimaConsigOventa.get().getIdconsignacion();
+                } else {
+                    Date fechatudei = new Date();
+
+                    invPro.setFechainicio(fechatudei);
+                    if (ultimaConsigOventa.get().getTipo().equals("consignacion")) {
+                        String lineac = invPro.getProducto().getLinea().getCodigolinea();
+                        String categoriac = invPro.getCategoria().getCodigocategoria();
+                        String productoc = invPro.getProducto().getCodigoproducto();
+                        String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+                        String tamano = invPro.getTamano().getCodigotamano();
+                        String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+                        String artesanoC = invPro.getConsignacionyventa().getArtesano().getCodigoartesano();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+                        //OBTENER EL MES
+                        simpleDateFormat = new SimpleDateFormat("MMMM");
+                        String mesC = "";
+                        if (invPro.getConsignacionyventa().getFechafin().getMonth() == 0) {
+                            mesC = "ENE";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 1) {
+                            mesC = "FEB";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 2) {
+                            mesC = "MAR";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 3) {
+                            mesC = "ABR";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 4) {
+                            mesC = "MAY";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 5) {
+                            mesC = "JUN";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 6) {
+                            mesC = "JUL";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 7) {
+                            mesC = "AGO";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 8) {
+                            mesC = "SET";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 9) {
+                            mesC = "OCT";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 10) {
+                            mesC = "NOV";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 11) {
+                            mesC = "DIC";
+                        }
+                        //OBTENER EL AÑO
+                        simpleDateFormat = new SimpleDateFormat("YYYY");
+                        String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+                        char[] yearchar = yearco.toCharArray();
+                        String totalCodigoGenerado = lineac + categoriac + productoc
+                                + descriccionC + tamano + comunidadC + artesanoC + mesC + yearchar[2] + yearchar[3];
+                        invPro.setCodigogenerado(totalCodigoGenerado);
+                    } else {
+                        String lineac = invPro.getProducto().getLinea().getCodigolinea();
+                        String categoriac = invPro.getCategoria().getCodigocategoria();
+                        String productoc = invPro.getProducto().getCodigoproducto();
+                        String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+                        String tamano = invPro.getTamano().getCodigotamano();
+                        String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+                        String totalCodigoGenerado = lineac + categoriac + productoc + descriccionC + tamano + comunidadC;
+                        invPro.setCodigogenerado(totalCodigoGenerado);
+                    }
+                    Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+
+                    Inventarioproducto invProductoUltimo = inventarioproductoRepository.save(invPro);
+
+                    Inventariosede inventariosede = new Inventariosede();
+                    inventariosede.setStock(invProductoUltimo.getCantidad());
+                    inventariosede.setFechallegada(fechatudei);
+                    inventariosede.setInventarioproductoidinventario(invProductoUltimo);
+                    inventariosede.setEstado("recibido");
+                    inventariosede.setSede(usuariologueado.getSede_idsede());
+                    inventarioSedeRepository.save(inventariosede);
+
+                    return "redirect:/inventarioPrincipal/sgteProductos/" + ultimaConsigOventa.get().getIdconsignacion();
+                }
+
+            }else{
+                att.addFlashAttribute("msgdelete","No se creo correctamente");
+                return "redirect:/inventarioPrincipal";
             }
-            //OBTENER EL AÑO
-            simpleDateFormat = new SimpleDateFormat("YYYY");
-            String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
-            char[] yearchar = yearco.toCharArray();
-            String totalCodigoGenerado = lineac + categoriac + productoc
-                    + descriccionC + tamano + comunidadC + artesanoC + mesC + yearchar[2] + yearchar[3];
-            invPro.setCodigogenerado(totalCodigoGenerado);
-        } else {
-            String lineac = invPro.getProducto().getLinea().getCodigolinea();
-            String categoriac = invPro.getCategoria().getCodigocategoria();
-            String productoc = invPro.getProducto().getCodigoproducto();
-            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
-            String tamano = invPro.getTamano().getCodigotamano();
-            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
-            String totalCodigoGenerado = lineac + categoriac + productoc + descriccionC + tamano + comunidadC;
-            invPro.setCodigogenerado(totalCodigoGenerado);
+
+        }catch (NumberFormatException e){
+            att.addFlashAttribute("msgdelete","No se creo correctamente");
+            return "redirect:/inventarioPrincipal";
         }
-        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
 
-        Inventarioproducto invProductoUltimo = inventarioproductoRepository.save(invPro);
-
-        Inventariosede inventariosede = new Inventariosede();
-        inventariosede.setStock(invProductoUltimo.getCantidad());
-        inventariosede.setFechallegada(fechatudei);
-        inventariosede.setInventarioproductoidinventario(invProductoUltimo);
-        inventariosede.setEstado("recibido");
-        inventariosede.setSede(usuariologueado.getSede_idsede());
-        inventarioSedeRepository.save(inventariosede);
-
-        return "redirect:/inventarioPrincipal/sgteProductos/" + ultimaConsigOventa.get().getIdconsignacion();
 
     }
 

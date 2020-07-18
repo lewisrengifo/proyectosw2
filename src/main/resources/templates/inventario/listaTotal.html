@@ -73,7 +73,8 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each="invT,info: ${listaInventarioTienda}" >
-                                        <td th:text="${info.index +prev*5}" >1</td>
+
+                                        <td th:text="${info.index +1 +prev*5}" >1</td>
                                         <td th:text="${invT.getTienda().nombre}" >de31edae</td>
                                         <td th:text="${invT.getInventariosede().sede.nombre}" >no hay línea en entidad</td>
                                         <td th:text="${invT.inventariosede.inventarioproductoidinventario.producto.nombreproducto}" >----</td>
