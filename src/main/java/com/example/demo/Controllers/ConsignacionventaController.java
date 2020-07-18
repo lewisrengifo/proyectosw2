@@ -219,9 +219,12 @@ public class ConsignacionventaController {
                 return "redirect:/ConsignacionVenta/lista";
             }
 
-
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
+
+            if (page < 0) {
+                return "redirect:/ConsignacionVenta";
+            }
 
             PageRequest pageRequest = PageRequest.of(page, 10);
 
@@ -272,6 +275,10 @@ public class ConsignacionventaController {
 
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            if (page < 0) {
+                return "redirect:/ConsignacionVenta";
+            }
 
             PageRequest pageRequest = PageRequest.of(page, 5);
 

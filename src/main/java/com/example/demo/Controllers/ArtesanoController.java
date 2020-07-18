@@ -245,7 +245,9 @@ public class ArtesanoController {
 
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-
+            if(page <0){
+                return "redirect:/artesano/lista";
+            }
             PageRequest pageRequest = PageRequest.of(page, 10);
 
 

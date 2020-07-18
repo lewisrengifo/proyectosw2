@@ -133,7 +133,9 @@ public class VentasController {
 
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-
+            if (page < 0) {
+                return "redirect:/venta/listaVentas";
+            }
             PageRequest pageRequest = PageRequest.of(page, 5);
 
 

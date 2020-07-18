@@ -55,9 +55,13 @@ public class InventarioTiendaController {
 
 
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-
+        if(page<0){
+            return "redirect:/inventarioTienda/lista";
+        }
         Page<Inventariotienda> pageInvTienda = inventarioTiendaService.listaTiendasPorSede(user.getSede_idsede().getIdsede(), page);
+
         int totalPage = pageInvTienda.getTotalPages();
+
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             if (page > pages.size() - 1) {
@@ -96,10 +100,16 @@ public class InventarioTiendaController {
 
 
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if(page<0){
+            return "redirect:/inventarioTienda/lista";
+        }
         PageRequest pageRequest = PageRequest.of(page, 5);
 
         Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.findAll(pageRequest);
         int totalPage = pageInvTienda.getTotalPages();
+
+
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             if (page > pages.size() - 1) {
@@ -189,7 +199,9 @@ public class InventarioTiendaController {
 
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-
+            if(page<0){
+                return "redirect:/inventarioTienda/lista";
+            }
             PageRequest pageRequest = PageRequest.of(page, 10);
             Usuario usuarioses = (Usuario) session.getAttribute("usuario");
 
@@ -238,7 +250,9 @@ public class InventarioTiendaController {
 
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-
+            if(page<0){
+                return "redirect:/inventarioTienda/listaTotal";
+            }
             PageRequest pageRequest = PageRequest.of(page, 10);
             Usuario usuarioses = (Usuario) session.getAttribute("usuario");
 
