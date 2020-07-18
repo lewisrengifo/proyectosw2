@@ -67,7 +67,7 @@
         <ul class="nav" id="main-menu">
 
             <li sec:authorize="hasAnyAuthority('Gestor principal','Administrador')"
-                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal'||#httpServletRequest.requestURI == '/UnaChiqui/ConsignacionVenta'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/stock'} ? 'nav-item active' : ''">
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal'||#httpServletRequest.requestURI == '/UnaChiqui/ConsignacionVenta'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/productosDevueltos'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/stock'} ? 'nav-item active' : ''">
                 <a class=" waves-effect waves-dark"><i class="fa fa-edit"></i> Inventario Principal <span
                         class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
@@ -92,7 +92,7 @@
             </li>
 
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/sede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarInvMiSede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarinvsedexconfirmar'} ? 'nav-item active' : ''">
+            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/sede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarInvMiSede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarinvsedexconfirmar'} ? 'nav-item active' : ''">
                 <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Sede <span class="fa arrow"></span></a>
 
                 <ul class="nav nav-second-level ">
