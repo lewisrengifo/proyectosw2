@@ -20,6 +20,8 @@ public class TiendaController {
 
     @GetMapping(value = {"lista", "","/"})
     public String listar (Model model,HttpSession session){
+
+
         Usuario user = (Usuario) session.getAttribute("usuario");
         model.addAttribute("lista", tiendaRepository.listaTiendasPorSede(user.getSede_idsede().getIdsede()));
 
