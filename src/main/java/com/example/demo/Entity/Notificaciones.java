@@ -1,6 +1,7 @@
 package com.example.demo.Entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "notificaciones")
@@ -9,12 +10,30 @@ public class Notificaciones {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idnotificaciones;
 
-    @Column
-    private String mensaje;
+    @Column(name = "fecha")
+    private Date fecha;
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
 
     @ManyToOne
     @JoinColumn(name = "usuario_idUsuario")
     private Usuario usuario;
+    @Column(name = "flag")
+    private boolean flag;
 
     public int getIdnotificaciones() {
         return idnotificaciones;
@@ -22,14 +41,6 @@ public class Notificaciones {
 
     public void setIdnotificaciones(int idnotificaciones) {
         this.idnotificaciones = idnotificaciones;
-    }
-
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
     }
 
     public Usuario getUsuario() {
