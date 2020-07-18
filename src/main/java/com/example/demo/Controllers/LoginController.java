@@ -194,7 +194,7 @@ public class LoginController {
             Notificaciones notificaciones = notificacionesRepository.findByUserId(usuario1.getIdusuario());
             Calendar calendar4FechaNotis = Calendar.getInstance();
             calendar4FechaNotis.setTime(notificaciones.getFecha());
-            calendar4FechaNotis.add(calendar4FechaNotis.MONTH,-1);
+            //calendar4FechaNotis.add(calendar4FechaNotis.MONTH,-1);
             if (calendar4FechaNotis.getTime().getMonth() != calendar3.getTime().getMonth()){
                 notificacionesRepository.actualizarFlagFalse(usuario1.getIdusuario());
             }
