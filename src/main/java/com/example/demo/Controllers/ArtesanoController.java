@@ -40,7 +40,7 @@ public class ArtesanoController {
     ComunidadRepository comunidadRepository;
 
     @GetMapping(value = {"", "/lista"})
-    public String listaArtesano(Model model, @RequestParam Map<String, Object> params) {
+    public String listaArtesano(Model model, @RequestParam Map<String, Object> params,RedirectAttributes attr) {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         }catch (NumberFormatException e){
@@ -56,14 +56,21 @@ public class ArtesanoController {
         long totalItems = page.getTotalElements();
         int totalPages = page.getTotalPages();
 
-      //  if (currentPage<0 ) {
-        //    currentPage = 0;
-        //}
+
         if (totalPages > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
-        }
+            if (currentPage > pages.size() - 1) {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
+                return "redirect:/artesano";
+            }
+            model.addAttribute("pages", pages);
+
+        } else {
+            attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+            return "redirect:/artesano";
+        }
         List<Artesano> listaArtesanos = page.getContent();
 
         model.addAttribute("totalItems", totalItems);
