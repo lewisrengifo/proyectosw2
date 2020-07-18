@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Inventario sede')">
+
+
+</head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
+
+
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                Productos por confirmar
+            </h1>
+        </div>
+
+        <!-- /. COMUNIDAD  -->
+        <div id="page-inner">
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-content">
+
+                            <div class="table-responsive">
+
+
+                                <table class="table table-striped table-bordered table-hover" >
+                                    <thead>
+
+                                    <tr class="info">
+                                        <th>#</th>
+                                        <th>Nombre Producto</th>
+                                        <th>Stock</th>
+                                        <th>Fecha de llegada</th>
+                                        <th>Nombre de la sede</th>
+                                        <th>Estado del producto</th>
+                                        <th>Actualizar estado del producto del producto</th>
+                                        <th>Observaciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody >
+                                    <tr th:each="inv, info : ${listaInventarioSede}">
+
+
+                                        <td th:text="${info.index +1}" >1</td>
+                                        <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
+                                        <td th:text="${inv.stock}">de31edae</td>
+                                        <td th:text="${inv.getFechallegada()}">---</td>
+                                        <td th:text="${inv.sede.nombre}"></td>
+                                        <td th:text="${inv.estado}"></td>
+
+
+                                        <td>
+                                            <form method="get" th:action="@{'/inventarioSede/actualizarEstado'}">
+                                                <div class="form-group" >
+
+                                                    <select class="form-control" name="estado" id="estado" style="width: 41%">
+                                                        <option id="enviado" value="recibido" selected th:text="|recibido|">
+                                                        </option>
+                                                        <option   id="recibido" th:text="|no recibido|"
+                                                                  th:value="|no recibido|">
+                                                        </option>
+
+                                                    </select>
+                                                    <input style="width: 50%" type="hidden" class="form-control" name="idinventariosede" th:value="${inv.idiventariosede}">
+
+                                                </div>
+                                                <button  id="bottttton" type="submit" class=" btn btn-info btn-responsive ">Enviar</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="get" th:action="@{'/inventarioSede/actualizarObservaciones'}">
+                                                <div class="form-group" >
+
+                                                    <input style="width: 88%" type="text" class="form-control" name="observaciones">
+                                                    <input style="width: 50%" type="hidden" class="form-control" name="idinventariosede" th:value="${inv.idiventariosede}">
+
+                                                </div>
+                                                <button  id="bottttton" type="submit" class=" btn btn-info btn-responsive ">Enviar</button>
+                                            </form>
+                                        </td>
+
+
+                                    </tr>
+
+                                    </tbody>
+
+                                </table>
+
+                                <br>
+                                <br>
+                                <br>
+
+
+                                </form>
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+
+                                        <ul th:if="${last != 1}" class="pagination justify-content-center">
+                                            <li class ="page-item" th:if="${current != 1 }">
+                                                <a class="page-link"  th:if="${busqueda }" th:href="@{'/inventarioSede/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede/listarinvsedexconfirmar' + '?page=' + ${prev}} "> Anterior </a>
+                                            </li>
+
+                                            <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/inventarioSede/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede/listarinvsedexconfirmar' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                            </li>
+
+                                            <li class ="page-item" th:if="${current != last }">
+                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/inventarioSede/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioSede/listarinvsedexconfirmar' + '?page=' + ${next}} "> Siguiente </a>
+                                            </li>
+
+                                        </ul>
+
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+
+</html>

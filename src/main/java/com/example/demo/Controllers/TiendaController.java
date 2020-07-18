@@ -18,7 +18,7 @@ public class TiendaController {
     @Autowired
     TiendaRepository tiendaRepository;
 
-    @GetMapping(value = {"lista", ""})
+    @GetMapping(value = {"lista", "","/"})
     public String listar (Model model,HttpSession session){
         Usuario user = (Usuario) session.getAttribute("usuario");
         model.addAttribute("lista", tiendaRepository.listaTiendasPorSede(user.getSede_idsede().getIdsede()));
@@ -39,7 +39,7 @@ public class TiendaController {
         tienda.setSede(usuario.getSede_idsede());
         tiendaRepository.save(tienda);
 
-        return "redirect:/categoria/lista";
+        return "redirect:/tienda";
     }
 
     @GetMapping("editar")
@@ -61,7 +61,7 @@ public class TiendaController {
     }
 
 
-    @GetMapping("/delete")
+    @GetMapping("/borrar")
     public String borrar (@RequestParam("id") int id){
 
         Optional<Tienda> opt = tiendaRepository.findById(id);
@@ -69,7 +69,7 @@ public class TiendaController {
         if (opt.isPresent()){
             tiendaRepository.deleteById(id);
         }
-        return "redirect:/categoria";
+        return "redirect:/tienda";
     }
 
 

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Inventario Tienda')">
@@ -49,7 +50,7 @@
                             <div class="table-responsive">
                                 <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
                                      role="alert"></div>
-                                <div th:if="${msgCo != null}" th:text="${msgCo}" class="alert alert-success"
+                                <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
                                      role="alert"></div>
 
                                 <table class="table table-striped table-bordered table-hover">
@@ -59,9 +60,11 @@
                                         <th>Nombre Tienda</th>
                                         <th>Sede</th>
                                         <th>Producto</th>
+                                        <th> Codigo </th>
                                         <th>Stock</th>
                                         <th>Fecha de entrega</th>
                                         <th>Estado</th>
+                                        <th></th>
                                         <th></th>
 
 
@@ -69,11 +72,12 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="invT,info: ${listaInventarioTienda}">
-                                        <td th:text="${info.index +1}" >1</td>
+                                    <tr th:each="invT,info: ${listaInventarioTienda}" th:if="${invT.estado=='recibido'}">
+                                        <td th:text="${info.index +1 +prev*5}" >1</td>
                                         <td th:text="${invT.getTienda().nombre}" >de31edae</td>
                                         <td th:text="${invT.getInventariosede().sede.nombre}" >no hay línea en entidad</td>
                                         <td th:text="${invT.inventariosede.inventarioproductoidinventario.producto.nombreproducto}" >----</td>
+                                        <td th:text="${invT.inventariosede.inventarioproductoidinventario.codigogenerado}"></td>
                                         <td th:text="${invT.stocktienda}" >----</td>
                                         <td th:text="${invT.fechaentrega}" >---</td>
                                         <td th:text="${invT.estado}" >---</td>
@@ -81,6 +85,10 @@
                                         <td class="center" >
                                             <a  data-toggle="modal" href="#" th:data-target="|#${invT.inventariosede.inventarioproductoidinventario.producto.idproducto}|">Ver</a>
                                         </td>
+                                        <td class="center info" th:if="${invT.inventariosede.inventarioproductoidinventario.consignacionyventa.tipo}=='consignacion'"> <a th:href="@{'/inventarioTienda/devolver?id=' + ${invT.idiventariotienda}}" class="center"> Devolver </a></td>
+
+
+
                                         <!-- Modal -->
                                         <div class="modal fade" th:id="${invT.inventariosede.inventarioproductoidinventario.producto.idproducto}" tabindex="-1" role="dialog" aria-hidden="true">
                                             <div class="modal-header">
@@ -106,18 +114,18 @@
                                     <div class="col-md-8">
                                         <ul th:if="${last != 1}" class="pagination justify-content-center">
                                             <li class ="page-item" th:if="${current != 1 }">
-                                                <a class="page-link"  th:if="${busqueda }" th:href="@{'/producto/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
-                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${prev}} "> Anterior </a>
+                                                <a class="page-link"  th:if="${busqueda }" th:href="@{'/inventarioTienda/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioTienda' + '?page=' + ${prev}} "> Anterior </a>
                                             </li>
 
                                             <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
-                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/producto/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
-                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/inventarioTienda/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioTienda' + '?page=' + ${page}} " th:text="${page}"  ></a>
                                             </li>
 
                                             <li class ="page-item" th:if="${current != last }">
-                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/producto/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
-                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/producto' + '?page=' + ${next}} "> Siguiente </a>
+                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/inventarioTienda/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioTienda' + '?page=' + ${next}} "> Siguiente </a>
                                             </li>
 
                                         </ul>
@@ -142,3 +150,14 @@
 </body>
 
 </html>
+=======
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+>>>>>>> 8275c29011e58acbe9ab1d486f603564b0273eca

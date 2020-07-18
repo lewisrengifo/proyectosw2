@@ -48,6 +48,8 @@ public class Inventarioproducto implements Serializable {
 
     private Date fechainicio;
 
+    private String estado;
+
 
 
     public int getIdinventario() {
@@ -144,5 +146,13 @@ public class Inventarioproducto implements Serializable {
 
     public void setFechainicio(Date fechainicio) {
         this.fechainicio = fechainicio;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

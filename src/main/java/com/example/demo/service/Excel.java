@@ -29,13 +29,11 @@ public class Excel implements ServiceExcel{
         "Codigo de Producto","Nombre de Producto","Color","Metodo de Pago"};
 
         Workbook workbook = new HSSFWorkbook(); //creando archivo Excel
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();//crear lo que se va a devolver
-        Sheet sheet = workbook.createSheet("Total Ventas del "+tipo +" "+ano ); //nombre de la hoja de excel
-         //ano: valores posibles meses (enero, feb..), año (2020, ..) y trimestre (primero, segundo,...)
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Sheet sheet = workbook.createSheet("Ventas "+tipo +" "+ano); //nombre de la hoja de excel
 
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
-        //estilos
         headerFont.setColor(IndexedColors.BLUE.getIndex());
         CellStyle headerCellStyle = workbook.createCellStyle();//estilo de la celda
         headerCellStyle.setFont(headerFont);
