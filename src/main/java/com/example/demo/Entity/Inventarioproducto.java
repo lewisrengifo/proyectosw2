@@ -1,7 +1,7 @@
 package com.example.demo.Entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 
 import javax.persistence.*;
@@ -31,20 +31,40 @@ public class Inventarioproducto implements Serializable {
     @JoinColumn(name = "tamano_idtamano")
     private Tamano tamano;
 
+    @NotNull(message = "No puede ser nulo.")
+    @Digits(integer = 5, fraction = 0)
+    @Min(value=1)
+    @Max(value=32767)
     private int cantidad;
+
     private String color;
+
     @Column(name = "costomosqoy")
+    @NotNull(message = "No puede ser nulo.")
+    @Digits(integer = 5, fraction = 2)
+    @Min(value=1)
+    @Max(value=32767)
     private Double preciomosqoy;
+
+
     @Column(name = "costotejedor")
+    @NotNull(message = "No puede ser nulo.")
+    @Digits(integer = 5, fraction = 2)
+    @Min(value=1)
+    @Max(value=32767)
     private Double preciotejedor;
+
     @Column(nullable = false)
+    @NotNull(message = "El campo no puede ser vacio")
     private String facilitador;
+
     @Column(nullable = false)
     private String codigogenerado;
 
     @ManyToOne
     @JoinColumn(name = "consignacionyventa_idconsignacion")
     private Consignacionyventa consignacionyventa;
+
 
     private Date fechainicio;
 

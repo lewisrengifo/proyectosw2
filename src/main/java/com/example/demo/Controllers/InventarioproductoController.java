@@ -47,6 +47,12 @@ public class InventarioproductoController {
     @GetMapping(value = {"", "/", "/lista"})
     public String listaInventarioProducto(Model model, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params,RedirectAttributes att) {
 
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/inventarioPrincipal";
+        }
+
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
         //Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
@@ -246,6 +252,7 @@ public class InventarioproductoController {
 
             try {
                 int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
             } catch (NumberFormatException e) {
                 return "redirect:/inventarioPrincipal/lista";
             }
