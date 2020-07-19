@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers( "/usuario", "/usuario/**").hasAuthority("Administrador");
 
         http.authorizeRequests().antMatchers( "/ConsignacionVenta", "/ConsignacionVenta/**").hasAuthority("Gestor principal");
-        http.authorizeRequests().antMatchers("/categoria", "/categoria/**").hasAnyAuthority( "Gestor principal", "Gestor sede");
+        http.authorizeRequests().antMatchers("/categoria", "/categoria/**","/comunidad","/comunidad/**").hasAnyAuthority( "Gestor principal", "Gestor sede");
 
         //http.authorizeRequests().antMatchers( "/sede", "/sede/**").hasAuthority("Gestor sede");
        // http.authorizeRequests().antMatchers("/venta", "/venta/**").hasAnyAuthority( "Gestor principal", "Gestor sede");
