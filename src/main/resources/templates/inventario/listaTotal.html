@@ -24,7 +24,7 @@
 
             <div>
 
-                <form method="get" th:action="@{'/inventarioTienda/buscador'}">
+                <form method="get" th:action="@{'/inventarioTienda/buscadortotal'}">
 
                     <input th:if="${busqueda!=null}" th:value="${busqueda}" name="searchField"
                            class="form-control mb-3" type="text" placeholder="Buscar"
@@ -34,7 +34,7 @@
                            aria-label="Search" style="width: 40%">
                     <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
                     <button type="submit" class="btn btn-outline-danger">buscar</button>
-                    <a th:href="@{'/inventarioTienda'}" class="btn btn-outline-danger">Limpiar</a>
+                    <a th:href="@{'/inventarioTienda/listaTotal'}" class="btn btn-outline-danger">Limpiar</a>
 
                 </form>
 
@@ -72,7 +72,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="invT,info: ${listaInventarioTienda}" th:if="${invT.estado=='recibido'}">
+                                    <tr th:each="invT,info: ${listaInventarioTienda}" >
+
                                         <td th:text="${info.index +1 +prev*5}" >1</td>
                                         <td th:text="${invT.getTienda().nombre}" >de31edae</td>
                                         <td th:text="${invT.getInventariosede().sede.nombre}" >no hay línea en entidad</td>
@@ -85,8 +86,7 @@
                                         <td class="center" >
                                             <a  data-toggle="modal" href="#" th:data-target="|#${invT.inventariosede.inventarioproductoidinventario.producto.idproducto}|">Ver</a>
                                         </td>
-                                        <td class="center info" th:if="${invT.inventariosede.inventarioproductoidinventario.consignacionyventa.tipo}=='consignacion'"> <a th:href="@{'/inventarioTienda/devolver?id=' + ${invT.idiventariotienda}}" class="center"> Devolver </a></td>
-
+                                        <td class="center info" th:if="${invT.inventariosede.inventarioproductoidinventario.consignacionyventa.tipo}=='Consignacion'"> <a th:href="@{'/inventarioTienda/devolver?id=' + ${invT.idiventariotienda}}" class="center"> Devolver </a></td>
 
 
                                         <!-- Modal -->
@@ -114,18 +114,18 @@
                                     <div class="col-md-8">
                                         <ul th:if="${last != 1}" class="pagination justify-content-center">
                                             <li class ="page-item" th:if="${current != 1 }">
-                                                <a class="page-link"  th:if="${busqueda }" th:href="@{'/inventarioTienda/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
-                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioTienda' + '?page=' + ${prev}} "> Anterior </a>
+                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/inventarioTienda/buscadortotal' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioTienda/listaTotal' + '?page=' + ${prev}} "> Anterior </a>
                                             </li>
 
                                             <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
-                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/inventarioTienda/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
-                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioTienda' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/inventarioTienda/buscadortotal' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioTienda/listaTotal' + '?page=' + ${page}} " th:text="${page}"  ></a>
                                             </li>
 
                                             <li class ="page-item" th:if="${current != last }">
-                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/inventarioTienda/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
-                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioTienda' + '?page=' + ${next}} "> Siguiente </a>
+                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/inventarioTienda/buscadortotal' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioTienda/listaTotal' + '?page=' + ${next}} "> Siguiente </a>
                                             </li>
 
                                         </ul>
@@ -151,13 +151,4 @@
 
 </html>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
 

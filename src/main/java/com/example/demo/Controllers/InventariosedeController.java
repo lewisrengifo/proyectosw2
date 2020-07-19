@@ -254,6 +254,10 @@ public class InventariosedeController {
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
+            if (page < 0) {
+                return "redirect:/inventarioSede/listarInvMiSede";
+            }
+
             PageRequest pageRequest = PageRequest.of(page, 10);
 
 
@@ -308,6 +312,9 @@ public class InventariosedeController {
 
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            if (page < 0) {
+                return "redirect:/inventarioSede";
+            }
 
             PageRequest pageRequest = PageRequest.of(page, 10);
 

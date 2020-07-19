@@ -8,10 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,8 +49,17 @@ public class InventarioproductoController {
     @GetMapping(value = {"", "/", "/lista"})
     public String listaInventarioProducto(Model model, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params,RedirectAttributes att) {
 
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/inventarioPrincipal";
+        }
 
+
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        if (page < 0) {
+            return "redirect:/inventarioPrincipal";
+        }
         //Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
         PageRequest pageRequest = PageRequest.of(page, 5);
 
@@ -79,25 +90,24 @@ public class InventarioproductoController {
 
     @GetMapping("/agregarInventario")
 
-    public String consignacionYVenta( @ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model , @RequestParam("referencia") String referencia ){
+    public String consignacionYVenta(@ModelAttribute("referencia2") String referencia2, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, Model model, @RequestParam("referencia") String referencia) {
 
         try {
             int ref = Integer.parseInt(referencia);
-            if(ref == 1){
-                model.addAttribute("listaArtesano",artesanoRepository.findAll());
+            if (ref == 1) {
+                model.addAttribute("listaArtesano", artesanoRepository.findAll());
                 referencia2 = "consig";
-                return "inventario/consig";}
-            else {
-                if(ref==2){
-                    model.addAttribute("listaArtesano",artesanoRepository.findAll());
+                return "inventario/consig";
+            } else {
+                if (ref == 2) {
+                    model.addAttribute("listaArtesano", artesanoRepository.findAll());
                     return "inventario/comprado";
-                }else
-                {
+                } else {
                     return "redirect:/inventarioPrincipal";
                 }
 
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
 
             return "redirect:/inventarioPrincipal";
         }
@@ -135,98 +145,129 @@ public class InventarioproductoController {
     }
 
 
-
     @GetMapping("/sgteProductos/{idultimo}")
     public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                        @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @PathVariable("idultimo") int id) {
-        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
-
-        model.addAttribute("listalinea", lineaRepository.findAll());
-        model.addAttribute("listaproducto", productoRepository.findAll());
-        model.addAttribute("listacategoria", categoriaRepository.findAll());
-        model.addAttribute("listatamano", tamanoRepository.findAll());
-        model.addAttribute("consigYventa1", ultimaConsigOventa.get());
-        return "inventario/inventarioProducto";
+                                        @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @PathVariable("idultimo") String id) {
+        try{
+            int idcv = Integer.parseInt(id);
+            Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(idcv);
+            if (ultimaConsigOventa.get()!=null){
+                model.addAttribute("listalinea", lineaRepository.findAll());
+                model.addAttribute("listaproducto", productoRepository.findAll());
+                model.addAttribute("listacategoria", categoriaRepository.findAll());
+                model.addAttribute("listatamano", tamanoRepository.findAll());
+                model.addAttribute("consigYventa1", ultimaConsigOventa.get());
+                return "inventario/inventarioProducto";
+            }else{
+                return "redirect:/inventarioPrincipal";
+            }
+        }catch (NumberFormatException e){
+            return "redirect:/inventarioPrincipal";
+        }
     }
 
     @PostMapping("/agregarProducto")
-    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") int id, HttpSession session) {
+    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto")@Valid Inventarioproducto invPro, BindingResult bindingResult,
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") String id, HttpSession session,RedirectAttributes att) {
 
-        Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(id);
-        invPro.setConsignacionyventa(ultimaConsigOventa.get());
+        try{
+            int idcoven = Integer.parseInt(id);
 
+            Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(idcoven);
 
-        Date fechatudei = new Date();
+            if (ultimaConsigOventa.isPresent()){
+                invPro.setConsignacionyventa(ultimaConsigOventa.get());
 
-        invPro.setFechainicio(fechatudei);
-        if (ultimaConsigOventa.get().getTipo().equals("consignacion")) {
-            String lineac = invPro.getProducto().getLinea().getCodigolinea();
-            String categoriac = invPro.getCategoria().getCodigocategoria();
-            String productoc = invPro.getProducto().getCodigoproducto();
-            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
-            String tamano = invPro.getTamano().getCodigotamano();
-            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
-            String artesanoC = invPro.getConsignacionyventa().getArtesano().getCodigoartesano();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
-            //OBTENER EL MES
-            simpleDateFormat = new SimpleDateFormat("MMMM");
-            String mesC = "";
-            if(invPro.getConsignacionyventa().getFechafin().getMonth()==0){
-                mesC="ENE";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==1){
-                mesC="FEB";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==2){
-                mesC="MAR";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==3){
-                mesC="ABR";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==4){
-                mesC="MAY";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==5){
-                mesC="JUN";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==6){
-                mesC="JUL";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==7){
-                mesC="AGO";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==8){
-                mesC="SET";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==9){
-                mesC="OCT";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==10){
-                mesC="NOV";
-            } else if(invPro.getConsignacionyventa().getFechafin().getMonth()==11){
-                mesC="DIC";
+                if (bindingResult.hasErrors()) {
+                    model.addAttribute("listalinea", lineaRepository.findAll());
+                    model.addAttribute("listaproducto", productoRepository.findAll());
+                    model.addAttribute("listacategoria", categoriaRepository.findAll());
+                    model.addAttribute("listatamano", tamanoRepository.findAll());
+                    model.addAttribute("consigYventa1", ultimaConsigOventa.get());
+                    return "inventario/inventarioProducto";
+                } else {
+                    Date fechatudei = new Date();
+
+                    invPro.setFechainicio(fechatudei);
+                    if (ultimaConsigOventa.get().getTipo().equals("consignacion")) {
+                        String lineac = invPro.getProducto().getLinea().getCodigolinea();
+                        String categoriac = invPro.getCategoria().getCodigocategoria();
+                        String productoc = invPro.getProducto().getCodigoproducto();
+                        String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+                        String tamano = invPro.getTamano().getCodigotamano();
+                        String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+                        String artesanoC = invPro.getConsignacionyventa().getArtesano().getCodigoartesano();
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+                        //OBTENER EL MES
+                        simpleDateFormat = new SimpleDateFormat("MMMM");
+                        String mesC = "";
+                        if (invPro.getConsignacionyventa().getFechafin().getMonth() == 0) {
+                            mesC = "ENE";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 1) {
+                            mesC = "FEB";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 2) {
+                            mesC = "MAR";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 3) {
+                            mesC = "ABR";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 4) {
+                            mesC = "MAY";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 5) {
+                            mesC = "JUN";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 6) {
+                            mesC = "JUL";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 7) {
+                            mesC = "AGO";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 8) {
+                            mesC = "SET";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 9) {
+                            mesC = "OCT";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 10) {
+                            mesC = "NOV";
+                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 11) {
+                            mesC = "DIC";
+                        }
+                        //OBTENER EL AÑO
+                        simpleDateFormat = new SimpleDateFormat("YYYY");
+                        String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+                        char[] yearchar = yearco.toCharArray();
+                        String totalCodigoGenerado = lineac + categoriac + productoc
+                                + descriccionC + tamano + comunidadC + artesanoC + mesC + yearchar[2] + yearchar[3];
+                        invPro.setCodigogenerado(totalCodigoGenerado);
+                    } else {
+                        String lineac = invPro.getProducto().getLinea().getCodigolinea();
+                        String categoriac = invPro.getCategoria().getCodigocategoria();
+                        String productoc = invPro.getProducto().getCodigoproducto();
+                        String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+                        String tamano = invPro.getTamano().getCodigotamano();
+                        String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+                        String totalCodigoGenerado = lineac + categoriac + productoc + descriccionC + tamano + comunidadC;
+                        invPro.setCodigogenerado(totalCodigoGenerado);
+                    }
+                    Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+
+                    Inventarioproducto invProductoUltimo = inventarioproductoRepository.save(invPro);
+
+                    Inventariosede inventariosede = new Inventariosede();
+                    inventariosede.setStock(invProductoUltimo.getCantidad());
+                    inventariosede.setFechallegada(fechatudei);
+                    inventariosede.setInventarioproductoidinventario(invProductoUltimo);
+                    inventariosede.setEstado("recibido");
+                    inventariosede.setSede(usuariologueado.getSede_idsede());
+                    inventarioSedeRepository.save(inventariosede);
+
+                    return "redirect:/inventarioPrincipal/sgteProductos/" + ultimaConsigOventa.get().getIdconsignacion();
+                }
+
+            }else{
+                att.addFlashAttribute("msgdelete","No se creo correctamente");
+                return "redirect:/inventarioPrincipal";
             }
-            //OBTENER EL AÑO
-            simpleDateFormat = new SimpleDateFormat("YYYY");
-            String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
-            char[] yearchar = yearco.toCharArray();
-            String totalCodigoGenerado = lineac + categoriac + productoc
-                    + descriccionC + tamano + comunidadC + artesanoC + mesC + yearchar[2] + yearchar[3];
-            invPro.setCodigogenerado(totalCodigoGenerado);
-        } else {
-            String lineac = invPro.getProducto().getLinea().getCodigolinea();
-            String categoriac = invPro.getCategoria().getCodigocategoria();
-            String productoc = invPro.getProducto().getCodigoproducto();
-            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
-            String tamano = invPro.getTamano().getCodigotamano();
-            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
-            String totalCodigoGenerado = lineac + categoriac + productoc + descriccionC + tamano + comunidadC;
-            invPro.setCodigogenerado(totalCodigoGenerado);
+
+        }catch (NumberFormatException e){
+            att.addFlashAttribute("msgdelete","No se creo correctamente");
+            return "redirect:/inventarioPrincipal";
         }
-        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
 
-        Inventarioproducto invProductoUltimo = inventarioproductoRepository.save(invPro);
-
-        Inventariosede inventariosede = new Inventariosede();
-        inventariosede.setStock(invProductoUltimo.getCantidad());
-        inventariosede.setFechallegada(fechatudei);
-        inventariosede.setInventarioproductoidinventario(invProductoUltimo);
-        inventariosede.setEstado("recibido");
-        inventariosede.setSede(usuariologueado.getSede_idsede());
-        inventarioSedeRepository.save(inventariosede);
-
-        return "redirect:/inventarioPrincipal/sgteProductos/" + ultimaConsigOventa.get().getIdconsignacion();
 
     }
 
@@ -237,7 +278,7 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model , RedirectAttributes attr ) {
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr) {
 
         String busqueda = (String) params.get("searchField");
         if (busqueda.isEmpty()) {
@@ -248,6 +289,7 @@ public class InventarioproductoController {
 
             try {
                 int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
             } catch (NumberFormatException e) {
                 return "redirect:/inventarioPrincipal/lista";
             }
@@ -318,30 +360,29 @@ public class InventarioproductoController {
 
                 return "redirect:/inventarioPrincipal/stock";
             }
-                model.addAttribute("pages", pages);
+            model.addAttribute("pages", pages);
 
         } else {
 
-                return "redirect:/inventarioPrincipal/stock";
-            }
-
-            List<Inventariosede> stockProductos = pageStock.getContent();
-
-
-            model.addAttribute("totalItems", totalItems);
-            model.addAttribute("stockProductos", stockProductos);
-            model.addAttribute("current", page + 1);
-            model.addAttribute("next", page + 2);
-            model.addAttribute("prev", page);
-            model.addAttribute("last", totalPages);
-
-            return "inventario/stockProductoInvPrincipal";
+            return "redirect:/inventarioPrincipal/stock";
         }
 
+        List<Inventariosede> stockProductos = pageStock.getContent();
+
+
+        model.addAttribute("totalItems", totalItems);
+        model.addAttribute("stockProductos", stockProductos);
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPages);
+
+        return "inventario/stockProductoInvPrincipal";
+    }
 
 
     @GetMapping("/buscadorStock")
-    public String buscadorStock(@RequestParam Map<String, Object> params, Model model , RedirectAttributes attr,HttpSession session ) {
+    public String buscadorStock(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
         String busqueda = (String) params.get("searchField");
         if (busqueda.isEmpty()) {
@@ -362,7 +403,7 @@ public class InventarioproductoController {
             PageRequest pageRequest = PageRequest.of(page, 5);
 
 
-            Page<Inventariosede> pageInvProd = inventarioSedeRepository.buscarStockPaginado(busqueda,usuariologueado.getSede_idsede().getNombre(), pageRequest);
+            Page<Inventariosede> pageInvProd = inventarioSedeRepository.buscarStockPaginado(busqueda, usuariologueado.getSede_idsede().getNombre(), pageRequest);
             int totalPage = pageInvProd.getTotalPages();
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
@@ -391,7 +432,27 @@ public class InventarioproductoController {
         }
     }
 
+    @GetMapping("/borrar")
+    public String borrarProducto(@RequestParam("id") int id, RedirectAttributes redirectAttributes, Model model) {
+        Optional<Inventarioproducto> optionalInventarioproducto = inventarioproductoRepository.findById(id);
+        if (optionalInventarioproducto.isPresent()) {
+            //validar que sea de la sede cuzco
+            Inventariosede inventariosede = inventarioSedeRepository.buscarporIdInventarioProd(optionalInventarioproducto.get().getIdinventario());
+            Inventariosede inventariosede1 = inventarioSedeRepository.inventarioProdnotsedecuz(optionalInventarioproducto.get().getIdinventario());
+            if (inventariosede != null && inventariosede1 == null) {
 
+                inventarioSedeRepository.deleteById(inventariosede.getIdiventariosede());
+                inventarioproductoRepository.deleteById(id);
+                redirectAttributes.addFlashAttribute("msgdeletesucc", "Producto borrado del inventario correctamente");
+
+
+            } else {
+                redirectAttributes.addFlashAttribute("msgdelete", "Este producto no se puede borrar del inventario principal debido a que fue entregado a una sede");
+            }
+        }
+        return "redirect:/inventarioPrincipal";
+
+    }
     @GetMapping("/productosDevueltos")
     public String listaProductosDevultos(@RequestParam Map<String, Object> params, Model model , RedirectAttributes attr,HttpSession session ){
 
@@ -442,8 +503,6 @@ public class InventarioproductoController {
 
         return "inventario/inventarioProductosDevueltos";
     }
-
-
     @GetMapping("/devolverArtesano")
     public String devolverProductoAlArtesano(@RequestParam("id") int id,HttpSession session,RedirectAttributes att){
 
@@ -464,8 +523,7 @@ public class InventarioproductoController {
 
     }
 
-
-    }
+}
 
 
 

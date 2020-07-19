@@ -56,7 +56,7 @@
                                     <thead>
 
                                     <tr class="info">
-
+                                        <th>#</th>
                                         <th>Nombre Producto</th>
                                         <th>Descripcion Del Producto</th>
                                         <th>Codigo Generado</th>
@@ -68,7 +68,8 @@
                                     </tr>
                                     </thead>
                                     <tbody >
-                                    <tr th:each="inv : ${listaInventarioSede}" th:if="${inv.estado == 'recibido'}">
+                                    <tr th:each="inv , info : ${listaInventarioSede}" th:if="${inv.estado == 'recibido'}">
+                                        <td th:text="${info.index +1+prev*5}" >1</td>
                                         <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
                                         <td th:text="${inv.getInventarioproductoidinventario().getProducto().getDescripcionproducto()}"></td>
                                         <td th:text="${inv.getInventarioproductoidinventario().getCodigogenerado()}"> </td>

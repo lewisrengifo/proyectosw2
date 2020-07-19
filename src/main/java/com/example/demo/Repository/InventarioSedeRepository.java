@@ -19,6 +19,11 @@ import java.util.List;
 
 @Repository
 public interface InventarioSedeRepository extends JpaRepository<Inventariosede, Integer> {
+    Inventariosede findByInventarioproductoidinventario(int id);
+    @Query(value = "SELECT * FROM inventariosede where inventarioproducto_idinventario =?1 and sede_idsede =3", nativeQuery = true)
+    Inventariosede buscarporIdInventarioProd(int id);
+    @Query(value = "SELECT * FROM inventariosede where inventarioproducto_idinventario =?1 and not sede_idsede =3 limit 1", nativeQuery = true)
+    Inventariosede inventarioProdnotsedecuz(int id);
 
     @Query(value = "SELECT * FROM inventariosede invs, sede se where se.nombre=?1 and invs.sede_idsede=se.idsede",
             countQuery = "SELECT * FROM inventariosede invs, sede se where se.nombre=?1 and invs.sede_idsede=se.idsede", nativeQuery = true)

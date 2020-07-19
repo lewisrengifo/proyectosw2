@@ -2,8 +2,10 @@ package com.example.demo.Controllers;
 
 import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Inventarioproducto;
+import com.example.demo.Entity.Notificaciones;
 import com.example.demo.Entity.Usuario;
 import com.example.demo.Repository.ConsignacionyventaRepository;
+import com.example.demo.Repository.NotificacionesRepository;
 import com.example.demo.Repository.UsuarioRepository;
 import com.example.demo.service.SendMailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,8 @@ public class LoginController {
     UsuarioRepository usuarioRepository;
     @Autowired
     ConsignacionyventaRepository consignacionyventaRepository;
+    @Autowired
+    NotificacionesRepository notificacionesRepository;
 
     @GetMapping(value = {"", "/loginForm"})
     public String loginForm(RedirectAttributes attr) {
@@ -181,22 +185,35 @@ public class LoginController {
 
             }
             String newline = System.lineSeparator();
-            String mensajefin = String.join(", ", mensajes);
+            String mensajefin = String.join("<br>", mensajes);
             Usuario usuario1 = (Usuario) session.getAttribute("usuario");
             Calendar calendar3 = Calendar.getInstance();
             calendar3.setTime(nowdate);
-            System.out.println(calendar3.get(Calendar.DAY_OF_MONTH));
-            if (calendar3.get(Calendar.DAY_OF_MONTH) <= 1 && calendar3.get(Calendar.DAY_OF_MONTH)>=7) {
-                if (mensajes.isEmpty()) {
-                    String mensaje1 = "¡Hola! este es un mensaje automatico del sistema <br><br>En este momento ninguna consignacion esta cerca de su fecha de vencimiento";
-                    sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje1);
-                } else {
 
-                    String mensaje = "¡Hola! este es un mensaje automatico del sistema <br><br>El sistema le avisa que el/los siguiente(s) pedido(s) :"
-                            + "<br><br>" + mensajefin + "<br><br> esta(n) proximo(s) a vencer";
-                    sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
-                }
+            System.out.println(calendar3.get(Calendar.DAY_OF_MONTH));
+            Notificaciones notificaciones = notificacionesRepository.findByUserId(usuario1.getIdusuario());
+            Calendar calendar4FechaNotis = Calendar.getInstance();
+            calendar4FechaNotis.setTime(notificaciones.getFecha());
+            //calendar4FechaNotis.add(calendar4FechaNotis.MONTH,-1);
+            if (calendar4FechaNotis.getTime().getMonth() != calendar3.getTime().getMonth()){
+                notificacionesRepository.actualizarFlagFalse(usuario1.getIdusuario());
             }
+            Notificaciones notificaciones1 = notificacionesRepository.findByUserId(usuario1.getIdusuario());
+            if(!notificaciones1.isFlag()){
+                if (calendar3.get(Calendar.DAY_OF_MONTH) >= 15 && calendar3.get(Calendar.DAY_OF_MONTH)<=20) {
+                    if (mensajes.isEmpty()) {
+                        String mensaje1 = "¡Hola! este es un mensaje automatico del sistema <br><br>En este momento ninguna consignacion esta cerca de su fecha de vencimiento";
+                        sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje1);
+                    } else {
+
+                        String mensaje = "¡Hola! este es un mensaje automatico del sistema <br><br>El sistema le avisa que el/los siguiente(s) pedido(s) :"
+                                + "<br><br>" + mensajefin + "<br><br> esta(n) proximo(s) a vencer";
+                        sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
+                    }
+                }
+                notificacionesRepository.actualizarFlagFecha(usuario1.getIdusuario(),calendar3.getTime());
+            }
+
 
             return "redirect:/inventarioPrincipal";
         } else {
