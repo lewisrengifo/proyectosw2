@@ -50,7 +50,7 @@
                                     </tr>
                                     </thead>
                                     <tbody >
-                                    <tr th:each="inv, info : ${listaInventarioSede}">
+                                    <tr th:if="${totalItems}!=0" th:each="inv, info : ${listaInventarioSede}">
 
 
                                         <td th:text="${info.index +1}" >1</td>
@@ -95,6 +95,10 @@
                                         </td>
 
 
+                                    </tr>
+
+                                    <tr th:if="${totalItems}==0">
+                                        No hay productos Envidas por el Gestor Principal
                                     </tr>
 
                                     </tbody>

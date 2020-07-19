@@ -214,6 +214,7 @@ public class InventariosedeController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
+        model.addAttribute("totalItems", pageProduct.getTotalElements());
         return "inventario/inventariosedexconfirmar";
 
     }
