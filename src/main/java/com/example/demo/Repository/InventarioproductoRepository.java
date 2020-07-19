@@ -93,4 +93,9 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
 @Query(value="SELECT * FROM inventarioproducto where producto_idproducto = ?1 limit 1",nativeQuery = true)
     Inventarioproducto verificarProductoEnInventario(int id);
 
+    @Query(value="SELECT * FROM inventarioproducto where categoria_idcategoria = ?1 limit 1",nativeQuery = true)
+    Inventarioproducto verificaCategoriaEnInventario(int id);
+
+
+
 }

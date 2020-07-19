@@ -24,8 +24,6 @@ public class ComunidadController {
 
     @Autowired
     ComunidadRepository comunidadRepository;
-
-   
     @GetMapping("/nuevo")
     public String nuevaComunidad(@ModelAttribute("comunidad") Comunidad c){
 

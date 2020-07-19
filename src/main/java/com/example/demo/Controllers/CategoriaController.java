@@ -4,8 +4,10 @@ package com.example.demo.Controllers;
 import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Categoria;
 import com.example.demo.Entity.Comunidad;
+import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Repository.CategoriaRepository;
 import com.example.demo.Repository.ComunidadRepository;
+import com.example.demo.Repository.InventarioproductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +33,9 @@ public class CategoriaController {
 
     @Autowired
     ComunidadRepository comunidadRepository;
+    @Autowired
+    InventarioproductoRepository inventarioproductoRepository;
+
     @GetMapping("")
     public String listaCategorias(Model model , @RequestParam Map<String, Object> params,RedirectAttributes attr) {
 
@@ -158,13 +163,27 @@ public class CategoriaController {
     }
     @GetMapping("/borrar")
     public String borrarCategoria(Model model,
-                                   @RequestParam("id") int id,RedirectAttributes att){
-        Optional<Categoria> elimniarCate = categoriaRepository.findById(id);
-        if(elimniarCate.isPresent()){
-            att.addFlashAttribute("msg", "Borrado Exitosamente");
-            categoriaRepository.deleteById(id);
+                                   @RequestParam("id") String id,RedirectAttributes att){
+        try{
+            int idcat = Integer.parseInt(id);
+            Optional<Categoria> optCategory = categoriaRepository.findById(idcat);
+            Inventarioproducto inventarioproducto = inventarioproductoRepository.verificaCategoriaEnInventario(idcat);
+            if (inventarioproducto == null){
+                if (optCategory.isPresent()) {
+                    categoriaRepository.deleteById(idcat);
+                    att.addFlashAttribute("msgBorrado", "Borrado Exitosamente");
+                    return "redirect:/categoria";
+                }
+            }else {
+                att.addFlashAttribute("msgBorrado", "Categoria se encuentra en el inventario principal");
+                return "redirect:/categoria";
+            }
+
+        }catch (NumberFormatException e){
             return "redirect:/categoria";
         }
+
+
         return "redirect:/categoria";
     }
 

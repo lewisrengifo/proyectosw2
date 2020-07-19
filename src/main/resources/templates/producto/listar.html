@@ -37,8 +37,10 @@
                            aria-label="Search" style="width: 40%">
                     <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
 
+
                     <button type="submit" class="btn btn-outline-danger">buscar</button>
                     <a th:href="@{'/producto'}" class="btn btn-outline-danger">Limpiar</a>
+                    <div th:if="${msg != null}" th:text="${msg}" style="color: #ac2925"></div>
 
                 </form>
 
