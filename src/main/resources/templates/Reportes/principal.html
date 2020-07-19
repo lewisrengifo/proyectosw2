@@ -18,7 +18,7 @@
                         <div class="card-content">
                             <h1 style="text-align: center">REPORTE GENERAL</h1>
                             <br>
-                            <h3 class="center-align">(Los datos estan comprendido entre el año 2000 a 2022)</h3>
+                            <h3 class="center-align">(Los Reportes estan comprendidos desde el Año 2018 al 2030)</h3>
                             <br>
                             <div id="mensaje1" style="display: none" class="alert alert-danger"
                                  role="alert">Ingrese correctamente los datos</div>
@@ -34,14 +34,14 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
+                                    <tr style="vertical-align: auto">
                                         <form method="post" th:action="@{'/ventasexcel/ano'}">
-                                            <td class="center-align">1</td>
-                                            <td class="center-align">Ventas total del Año</td>
+                                            <td class="center-align" >1</td>
+                                            <td class="center-align" >Ventas total del Año</td>
                                             <td class="center-align">-</td>
                                             <td class="center-align">
                                                 <div style="align-content: center" >
-                                                    <input type="text" class="form-control" value="1930" name="ano" id="ano" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                    <input type="text" class="form-control" value="2018" name="ano" id="ano" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
                                             <td class="center-align"><button  onclick="return enviarform1()" type="submit"  class="btn btn-outline-info">Exportar Reporte</button></td>
@@ -69,7 +69,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anomes" id="anomes" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anomes" id="anomes" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align"><button  onclick="return enviarform2()" type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
@@ -87,7 +87,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotri" id="anotri" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anotri" id="anotri" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align"><button  type="submit" onclick="return enviarform3()" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
@@ -126,7 +126,7 @@
                                             <td class="center-align">-</td>
                                             <td class="center-align">
                                                 <div style="align-content: center" >
-                                                    <input type="text" class="form-control" value="1930" name="anosede" id="anosede" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                    <input type="text" class="form-control" value="2018" name="anosede" id="anosede" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
                                             <td class="center-align" >
@@ -162,7 +162,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anomessede" id="anomessede" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anomessede" id="anomessede" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="sedemes" id="sedemes" style="width: 80%;align-content: center;margin:auto;text-align: center" >
@@ -188,7 +188,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotrisede" id="anotrisede" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anotrisede" id="anotrisede" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="sede1" id="sede1" style="width: 80%;align-content: center;margin:auto;text-align: center" >
@@ -235,7 +235,7 @@
                                             <td class="center-align">-</td>
                                             <td class="center-align">
                                                 <div style="align-content: center" >
-                                                    <input type="text" class="form-control" value="1930" name="anocom" id="anocom" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                    <input type="text" class="form-control" value="2018" name="anocom" id="anocom" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
                                             <td class="center-align" >
@@ -271,7 +271,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anomescom" id="anomescom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anomescom" id="anomescom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="com2" id="com2" style="width: 80%;align-content: center;margin:auto;text-align: center" >
@@ -297,7 +297,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotricom" id="anotricom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anotricom" id="anotricom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="com3" id="com3" style="width: 80%;align-content: center;margin:auto;text-align: center" >
@@ -343,7 +343,7 @@
                                             <td class="center-align">-</td>
                                             <td class="center-align">
                                                 <div style="align-content: center" >
-                                                    <input type="text" class="form-control" value="1930" name="anocli" id="anocli" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                    <input type="text" class="form-control" value="2018" name="anocli" id="anocli" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
                                             <td class="center-align">
@@ -382,7 +382,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescli" id="anomescli" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anomescli" id="anomescli" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align">
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="cliente2" id="cliente2" style="width: 80%;align-content: center;margin:auto;text-align: center" >
@@ -410,7 +410,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotricli" id="anotricli" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anotricli" id="anotricli" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align">
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="cliente3" id="cliente3" style="width: 80%;align-content: center;margin:auto;text-align: center" >
@@ -458,7 +458,7 @@
                                             <td class="center-align">-</td>
                                             <td class="center-align">
                                                 <div style="align-content: center" >
-                                                    <input type="text" class="form-control" value="1930" name="anopro" id="anopro" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                    <input type="text" class="form-control" value="2018" name="anopro" id="anopro" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
                                             <td class="center-align">
@@ -496,7 +496,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomespro" id="anomespro" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anomespro" id="anomespro" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align">
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="producto2" id="producto2" style="width: 80%;align-content: center;margin:auto;text-align: center" >
@@ -524,7 +524,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotripro" id="anotripro" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="2018" name="anotripro" id="anotripro" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align">
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="producto3" id="producto3" style="width: 80%;align-content: center;margin:auto;text-align: center" >
@@ -565,7 +565,7 @@
                     aux=aux+1;
                 }
             }
-            if(aux===ano.length && 2000<=ano && ano<=2022){
+            if(aux===ano.length && 2018<=ano && ano<=2030){
                 return true;
             }
             else{
@@ -594,7 +594,7 @@
             }
         }
         console.log(aux);
-        if(2000<=anomes && anomes<=2022 && aux===anomes.length && (mes==="Enero" || mes==="Febrero" || mes==="Marzo" || mes==="Abril" || mes==="Mayo" ||
+        if(2018<=anomes && anomes<=2030 && aux===anomes.length && (mes==="Enero" || mes==="Febrero" || mes==="Marzo" || mes==="Abril" || mes==="Mayo" ||
             mes==="Junio" || mes==="Julio" || mes==="Agosto" || mes==="Septiembre" || mes==="Octubre" || mes==="Noviembre" || mes==="Diciembre")
             ) {
                 return true;
@@ -621,7 +621,7 @@
                 aux=aux+1;
             }
         }
-        if(2000<=anotri && anotri<=2022 && aux===anotri.length && (trimestre==="Primero" || trimestre==="Segundo" || trimestre==="Tercero" || trimestre==="Cuarto") ) {
+        if(2018<=anotri && anotri<=2030 && aux===anotri.length && (trimestre==="Primero" || trimestre==="Segundo" || trimestre==="Tercero" || trimestre==="Cuarto") ) {
                 return true;
         }else{
             document.getElementById('mensaje1').style.display="block";
@@ -655,7 +655,7 @@
                 }
             }
 
-            if(aux2===1 && aux===anosede.length && 2000<=anosede && anosede<=2022 ){
+            if(aux2===1 && aux===anosede.length && 2018<=anosede && anosede<=2030 ){
                 return true;
             }
             else{
@@ -690,7 +690,7 @@
                 }
             }
             console.log(aux);
-            if(aux2===1 && 2000<=anomessede && anomessede<=2022 && aux===anomessede.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+            if(aux2===1 && 2018<=anomessede && anomessede<=2030 && aux===anomessede.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
                 messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
             ) {
                 return true;
@@ -728,7 +728,7 @@
                 }
             }
             console.log(aux);
-            if(2000<=anotrisede && anotrisede<=2022 && aux===anotrisede.length && (trimestresede==="Primero" || trimestresede==="Segundo" || trimestresede==="Tercero" || trimestresede==="Cuarto") && (aux2!=0)) {
+            if(2018<=anotrisede && anotrisede<=2030 && aux===anotrisede.length && (trimestresede==="Primero" || trimestresede==="Segundo" || trimestresede==="Tercero" || trimestresede==="Cuarto") && (aux2!=0)) {
                 return true;
             }else{
                 document.getElementById('mensaje2').style.display="block";
@@ -763,7 +763,7 @@
             }
         }
 
-        if(aux2===1 && aux===anocom.length && 2000<=anocom && anocom<=2022 ){
+        if(aux2===1 && aux===anocom.length && 2018<=anocom && anocom<=2030){
             return true;
         }
         else{
@@ -798,7 +798,7 @@
             }
         }
         console.log(aux);
-        if(aux2===1 && 2000<=anomescom && anomescom<=2022 && aux===anomescom.length && (mescom==="Enero" || mescom==="Febrero" || mescom==="Marzo" || mescom==="Abril" || mescom==="Mayo" ||
+        if(aux2===1 && 2018<=anomescom && anomescom<=2030 && aux===anomescom.length && (mescom==="Enero" || mescom==="Febrero" || mescom==="Marzo" || mescom==="Abril" || mescom==="Mayo" ||
             mescom==="Junio" || mescom==="Julio" || mescom==="Agosto" || mescom==="Septiembre" || mescom==="Octubre" || mescom==="Noviembre" || mescom==="Diciembre")
         ) {
             return true;
@@ -836,7 +836,7 @@
             }
         }
         console.log(aux);
-        if(2000<=anotricom && anotricom<=2022 && aux===anotricom.length && (trimestrecom==="Primero" || trimestrecom==="Segundo" || trimestrecom==="Tercero" || trimestrecom==="Cuarto") && (aux2!=0)) {
+        if(2018<=anotricom && anotricom<=2030 && aux===anotricom.length && (trimestrecom==="Primero" || trimestrecom==="Segundo" || trimestrecom==="Tercero" || trimestrecom==="Cuarto") && (aux2!=0)) {
             return true;
         }else{
             document.getElementById('mensaje5').style.display="block";
@@ -869,7 +869,7 @@
                 }
             }
 
-            if(aux===anocli.length && 2000<=anocli && anocli<=2022 && aux2!=0 ){
+            if(aux===anocli.length && 2018<=anocli && anocli<=2030 && aux2!=0 ){
                 return true;
             }
             else{
@@ -905,7 +905,7 @@
                 }
             }
             console.log(aux);
-            if(aux2!=0 && 2000<=anomescli && anomescli<=2022 && aux===anomescli.length && (mescli==="Enero" || mescli==="Febrero" || mescli==="Marzo" || mescli==="Abril" || mescli==="Mayo" ||
+            if(aux2!=0 && 2018<=anomescli && anomescli<=2030 && aux===anomescli.length && (mescli==="Enero" || mescli==="Febrero" || mescli==="Marzo" || mescli==="Abril" || mescli==="Mayo" ||
                 mescli==="Junio" || mescli==="Julio" || mescli==="Agosto" || mescli==="Septiembre" || mescli==="Octubre" || mescli==="Noviembre" || mescli==="Diciembre")
             ) {
                 return true;
@@ -944,7 +944,7 @@
                 }
             }
             console.log(auxx);
-            if(2000<=anotricli && anotricli<=2022 && auxx===anotricli.length && (trimestrecli==="Primero" || trimestrecli==="Segundo" || trimestrecli==="Tercero" || trimestrecli==="Cuarto") && (aux2!=0)) {
+            if(2018<=anotricli && anotricli<=2030 && auxx===anotricli.length && (trimestrecli==="Primero" || trimestrecli==="Segundo" || trimestrecli==="Tercero" || trimestrecli==="Cuarto") && (aux2!=0)) {
                 return true;
             }else{
                 document.getElementById('mensaje3').style.display="block";
@@ -978,7 +978,7 @@
                 }
             }
 
-            if(aux===anopro.length && 2000<=anopro && anopro<=2022 && aux2!=0){
+            if(aux===anopro.length && 2018<=anopro && anopro<=2030 && aux2!=0){
                 return true;
             }
             else{
@@ -1013,7 +1013,7 @@
                 }
             }
             console.log(aux);
-            if(aux2!=0 && aux===anomespro.length && (mespro==="Enero" || mespro==="Febrero" || mespro==="Marzo" || mespro==="Abril" || mespro==="Mayo" ||
+            if(aux2!=0 && 2018<=anomespro && anomespro<=2030 && aux===anomespro.length && (mespro==="Enero" || mespro==="Febrero" || mespro==="Marzo" || mespro==="Abril" || mespro==="Mayo" ||
                 mespro==="Junio" || mespro==="Julio" || mespro==="Agosto" || mespro==="Septiembre" || mespro==="Octubre" || mespro==="Noviembre" || mespro==="Diciembre")
             ) {
                 return true;
@@ -1050,7 +1050,7 @@
             }
             console.log(aux);
             console.log(aux2);
-            if(2000<=anotripro && anotripro<=2022 && aux===anotripro.length && (trimestrepro==="Primero" || trimestrepro==="Segundo" || trimestrepro==="Tercero" || trimestrepro==="Cuarto") && (aux2!=0)) {
+            if(2018<=anotripro && anotripro<=2030 && aux===anotripro.length && (trimestrepro==="Primero" || trimestrepro==="Segundo" || trimestrepro==="Tercero" || trimestrepro==="Cuarto") && (aux2!=0)) {
                 return true;
             }else{
                 document.getElementById('mensaje4').style.display="block";
