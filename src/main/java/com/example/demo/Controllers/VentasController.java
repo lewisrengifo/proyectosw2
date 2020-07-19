@@ -285,4 +285,29 @@ public class VentasController {
         }
 
     }
+
+    @GetMapping("/editar")
+    public String editarProducto(Model model, @RequestParam("id") int id, @ModelAttribute("producto") Ventas ventas) {
+
+        Optional<Ventas> optProduct = ventaRepository.findById(id);
+
+        if (optProduct.isPresent()) {
+
+           // Optional<Tienda> tiendaVenta = tiendaRepository.findById(newid);
+
+           // int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
+
+            //model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(newid));
+            //model.addAttribute("tiendita",tiendaVenta.get());
+            Optional<Tienda> byIdtienda = tiendaRepository.findById(optProduct.get().getTienda().getIdtienda());
+            model.addAttribute("tiendita",byIdtienda.get());
+            model.addAttribute("ventas", optProduct.get());
+            model.addAttribute("ProductosEnTienda",inventarioTiendaRepository.listaProductoEnTienda(byIdtienda.get().getIdtienda()) );
+            return "venta/registroventa";
+        } else {
+            return "redirect:/producto";
+        }
+    }
+
+
 }
