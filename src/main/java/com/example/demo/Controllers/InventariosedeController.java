@@ -204,7 +204,14 @@ public class InventariosedeController {
                 return "redirect:/inventarioSede/listarinvsedexconfirmar";
             }
             model.addAttribute("pages", pages);
-        } else {
+        } else if (totalPage == 0){
+            model.addAttribute("listaInventarioSede", pageProduct.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+            return "inventario/inventariosedexconfirmar";
+        }else {
 
             return "redirect:/inventarioSede/listarinvsedexconfirmar";
         }
