@@ -73,11 +73,11 @@
 
                                     <!-- ELEGIR UN PRODUCTO -->
                                     <div class="form-group" >
-                                        <label for="producto">Producto/Stock Disponible - Precio de venta</label>
+                                        <label for="producto">Producto/Stock Disponible - Codigo generado</label>
                                         <select class="form-control" name="inventarioproductoidinventario" id="producto" style="width: 40%">
                                             <option th:each=" pro : ${inventario}"
                                                     th:value="${pro.inventarioproductoidinventario.getIdinventario()}"
-                                                    th:text="${pro.inventarioproductoidinventario.producto.nombreproducto}+' / '+${pro.stock}+' / '+${pro.inventarioproductoidinventario.preciomosqoy}">
+                                                    th:text="${pro.inventarioproductoidinventario.producto.nombreproducto}+' / '+${pro.stock}+' / '+${pro.inventarioproductoidinventario.codigogenerado}">
                                             </option>
                                         </select>
                                     </div>
@@ -104,7 +104,7 @@
 
 
 
-                                    <a th:href="@{'/sede/lista'}" class="btn btn-info">Finalizar</a>
+                                    <a th:href="@{'/sede'}" class="btn btn-info">Finalizar</a>
                                     <button    type="submit" class="btn btn-primary">+ producto</button>
 
 

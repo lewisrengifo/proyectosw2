@@ -10,6 +10,7 @@ import com.example.demo.Repository.*;
 
 import com.example.demo.service.ServiceExcel;
 import com.sun.istack.Nullable;
+import org.hibernate.boot.spi.NaturalIdUniqueKeyBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -46,20 +47,22 @@ public class VentasController2 {
     @Autowired
     ProductoRepository productoRepository;
 
+
     @Autowired
     VentasRepository ventasRepository;
 
 
     @GetMapping("")
     public String paginaReportes(Model model){
+
         model.addAttribute("listaComunidad",comunidadRepository.findAll());
         model.addAttribute("listaComunidad1",comunidadRepository.findAll());
         model.addAttribute("listaSede",sedeRepository.findAll());
         model.addAttribute("listaSede1",sedeRepository.findAll());
         model.addAttribute("listaProducto",productoRepository.findAll());
         model.addAttribute("listaProducto1", productoRepository.findAll());
-        model.addAttribute("listaVentas", ventasRepository.findAll());
-        model.addAttribute("listaVentas1", ventasRepository.findAll());
+        model.addAttribute("listaVentas", ventaRepository1.findAll());
+        model.addAttribute("listaVentas1", ventaRepository1.findAll());
         return "Reportes/principal";
     }
 
@@ -81,6 +84,9 @@ public class VentasController2 {
             return"redirect:/ventasexcel";
         }
     }*/
+
+  
+
     @PostMapping("/ano")
     public ResponseEntity<InputStreamResource> exportDataAnual(@RequestParam("ano")String ano) throws Exception{
 
@@ -353,9 +359,6 @@ public class VentasController2 {
     //-----FIN DE SEDE
 
     //---------REPORTES POR ARTICULOS(productos)
-
-
-
     @PostMapping("/ano/producto")
     public ResponseEntity<InputStreamResource> exportDataAnualProducto(@RequestParam("anopro") String ano, @RequestParam("producto1") String producto) throws Exception{
 
@@ -475,12 +478,15 @@ public class VentasController2 {
 
     //----------FIN DE PRODUCTO
 
+    //----------FIN DE PRODUCTO
+
     //REPORTES POR COMUNIDAD
 
 
-    @PostMapping("/ano/comunidad")
-    public ResponseEntity<InputStreamResource> exportDataAnualComunidad(@RequestParam("anocomunidad")String ano, @RequestParam("com1") int comunidad) throws Exception{
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteComunidad(ano, comunidad);
+    /*@PostMapping("/ano/comunidad")
+    public ResponseEntity<InputStreamResource> exportDataAnualComunidad(@RequestParam("ano")String ano, Comunidad comunidad) throws Exception{
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteComunidad(ano, comunidad.getIdcomunidad());
+>>>>>>> 8356ed35fbab9c976148488d8d6ceb1b7f8e6d7d
         ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,ano);//cambiar 2variable ano por un string que sea igual a lo correspondiente
         HttpHeaders headers = new HttpHeaders();
         String archivo = "Reporte anual del año " + ano +" de la comunidad:" + " " + comunidad; //titulo del excel, no del sheet
@@ -592,7 +598,7 @@ public class VentasController2 {
         String archivo = "Reporte trimestral de la comunidad:" + " " + comunidad; //titulo del excel
         headers.add("Content-Disposition","attachment; filename="+ archivo+".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
-    }
+    }*/
 
     //----------FIN COMUNIDAD
 

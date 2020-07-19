@@ -67,7 +67,9 @@
                                 <h2>Consignacion</h2>
                                 <br>
 
-                                <form method="post" th:action="@{'/inventarioPrincipal/agregarConsigVenta'+ '?referencia2=consig'}" th:object="${consigYVenta}">
+                                <form method="post"
+                                      th:action="@{'/inventarioPrincipal/agregarConsigVenta'+ '?referencia2=consig'}"
+                                      th:object="${consigYVenta}">
 
 
                                     <br>
@@ -83,27 +85,31 @@
 
 
                                         <label>Fecha Inicio</label>
-                                        <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%" placeholder="formato:dia/mes/año">
-                                        <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div>
+                                        <input type="text" class="form-control" th:field="*{fechainicio}"
+                                               style="width: 25%" placeholder="formato:mes/dia/año">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}"
+                                             th:errors="*{fechainicio}"></div>
 
                                         <!--div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div-->
                                     </div>
                                     <!--Fecha FIN-->
-                                    <div class="form-group" id="artesano_compra">
-                                        <label>Fecha fin</label>
+                                    <div class="form-group ">
 
+                                        <label>Fecha fin</label>
                                         <input type="text" class="form-control" th:field="*{fechafin}"
-                                               style="width: 25%" placeholder="formato:dia/mes/año">
+                                               style="width: 25%" placeholder="formato:mes/dia/año">
 
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechafin')}"
                                              th:errors="*{fechafin}"></div>
+
                                     </div>
 
 
                                     <!-- ELEGIR UN ARTESANO / COMUNIDAD -->
                                     <div class="form-group">
                                         <label for="artesano">Artesano / Comunidad </label>
-                                        <select class="form-control" name="artesano" id="artesano" style="width: 40%">
+                                        <select class="form-control" name="artesano" id="artesano"
+                                                style="width: 40%">
                                             <option th:each=" ar : ${listaArtesano}"
                                                     th:value="${ar.idartesano}"
                                                     th:text="${ar.nombreartesano} + ' '+ ${ar.apellidopaterno} + ' '+ ${ar.apellidomaterno} + ' / '+ ${ar.comunidad.nombrecomunidad}">
@@ -112,13 +118,15 @@
                                         </select>
                                     </div>
                                     <!- FIN -->
-                                    <a th:href="@{'/inventarioPrincipal'}" class="btn btn-danger">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary">siguiente</button>
+                                    <a th:href="@{'/inventarioPrincipal'}"
+                                       class="btn btn-outline-danger">Cancelar</a>
+                                    <button type="submit" class="btn btn-outline-danger">siguiente</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 

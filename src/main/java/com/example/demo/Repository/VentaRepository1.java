@@ -123,4 +123,5 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
             "  where (v.fechaventa like %:mes1% or v.fechaventa like %:mes2% or v.fechaventa like %:mes3%) and p.nombreproducto like %:nombreproducto%", nativeQuery = true)
     List<ReporteMensualoAnualMosqoyDto> reporteTrimestreProducto(@Param("mes1") String mes1,@Param("mes2") String mes2, @Param("mes3")String mes3, @Param("nombreproducto") String nombreproducto);
 
+
 }

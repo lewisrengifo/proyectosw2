@@ -2,6 +2,7 @@ package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ProductoServiceApi;
 import com.example.demo.Dto.StorageService;
+import com.example.demo.Entity.Consignacionyventa;
 import com.example.demo.Entity.Producto;
 import com.example.demo.Repository.LineaRepository;
 import com.example.demo.Repository.ProductoRepository;
@@ -189,7 +190,7 @@ public class ProductoController {
 
     }
 
-    @PostMapping("/search")
+   /* @PostMapping("/search")
     public String buscarProducto(String busca, @RequestParam Map<String, Object> params, Model model) {
 
         String busqueda = (String) params.get("search");
@@ -229,36 +230,58 @@ public class ProductoController {
 
         return "producto/listar";
     }
+*/
+   @GetMapping("/buscador")
+   public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+       String busqueda = (String) params.get("searchField");
 
-    @GetMapping("/search")
-    public String buscarProducto(@RequestParam Map<String, Object> params, Model model) {
+       if (busqueda.isEmpty()) {
+           attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-        String busqueda = (String) params.get("search");
+           return "redirect:/producto";
+       } else {
 
-        PageRequest pageRequest;
+           try {
+               int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+           } catch (NumberFormatException e) {
+               return "redirect:/producto";
+           }
 
-        Page<Producto> pageProduct;
-        int totalPage;
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
+           int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        pageRequest = PageRequest.of(page, 10);
-        pageProduct = productoServiceApi.getEver(busqueda, pageRequest);
-        totalPage = pageProduct.getTotalPages();
-        if (totalPage > 0) {
-            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
-        }
+           PageRequest pageRequest = PageRequest.of(page, 10);
+           if(page<0){
+               return "redirect:/producto";
+           }
 
-        model.addAttribute("busqueda", busqueda);
-        model.addAttribute("listaProductos", pageProduct.getContent());
-        model.addAttribute("current", page + 1);
-        model.addAttribute("next", page + 2);
-        model.addAttribute("prev", page);
-        model.addAttribute("last", totalPage);
+           Page<Producto> pagePro = productoRepository.obtenerFiltroProducto(busqueda, pageRequest);
+           int totalPage = pagePro.getTotalPages();
+           if (totalPage > 0) {
+               List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+               if (page > pages.size() - 1) {
+                   attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
-        return "producto/listar";
-    }
+                   return "redirect:/producto";
+               }
+               model.addAttribute("pages", pages);
+           }else{
+               attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+               return "redirect:/producto";
+
+           }
+
+           model.addAttribute("listaProductos", pagePro.getContent());
+           model.addAttribute("current", page + 1);
+           model.addAttribute("next", page + 2);
+           model.addAttribute("busqueda", busqueda);
+           model.addAttribute("prev", page);
+           model.addAttribute("last", totalPage);
+
+           return "producto/listar";
+       }
+   }
 
 
     @GetMapping("/foto")

@@ -28,6 +28,10 @@
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
+
+                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
+                                     role="alert"></div>
+
                                 <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
                                      role="alert"></div>
 
@@ -43,7 +47,7 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each="c, info : ${listacategoria}">
-                                        <td th:text="${info.index +1}">1</td>
+                                        <td th:text="${info.index +1+prev*5}" >1</td>
                                         <td th:text="${c.nombrecategoria}">Home</td>
                                         <td th:text="${c.codigocategoria}">H</td>
                                         <td sec:authorize="hasAnyAuthority('Gestor principal')" ><a th:href="@{'categoria/editar?id=' + ${c.idcategoria}}"> editar</a></td>
@@ -51,6 +55,33 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+
+                                        <ul th:if="${last != 1}" class="pagination justify-content-center">
+                                            <li class ="page-item" th:if="${current != 1 }">
+                                                <a class="page-link"  th:if="${busqueda }" th:href="@{'/inventarioSede/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/categoria' + '?page=' + ${prev}} "> Anterior </a>
+                                            </li>
+
+                                            <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/inventarioSede/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/categoria' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                            </li>
+
+                                            <li class ="page-item" th:if="${current != last }">
+                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/inventarioSede/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/categoria' + '?page=' + ${next}} "> Siguiente </a>
+                                            </li>
+
+                                        </ul>
+
+
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
