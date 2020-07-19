@@ -21,7 +21,7 @@ public class Excel implements ServiceExcel{
     VentaRepository ventaRepository;
 
     @Override
-    public ByteArrayInputStream exportarData(String ano,List<ReporteMensualoAnualMosqoyDto> lista,String tipo) throws Exception {
+    public  ByteArrayInputStream exportarData(String ano,List<ReporteMensualoAnualMosqoyDto> lista,String tipo) throws Exception {
 
         int linea = 0;
         //los nombres(títulos) de las columnas en el archivo excel
