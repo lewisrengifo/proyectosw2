@@ -46,7 +46,7 @@ public class SedeController {
     SendMailService sendMailService;
 
     @GetMapping(value = {"", "/lista"})
-    public String listarSedes(@RequestParam Map<String, Object> params, Model model) {
+    public String listarSedes(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         } catch (NumberFormatException e) {
@@ -63,8 +63,22 @@ public class SedeController {
         long totalItems = pageSede.getTotalElements();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("page", pages);
+            if (page > pages.size() - 1) {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/sede/lista";
+            }
+
+            model.addAttribute("pages", pages);
+        } else {
+            attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+            return "redirect:/sede/lista";
+
         }
+
+
+
         model.addAttribute("listSedes", pageSede.getContent());
         // model.addAttribute("usuariosdelasede", pageSede.getContent());
         model.addAttribute("totalItems", totalItems);

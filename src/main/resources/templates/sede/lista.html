@@ -51,7 +51,7 @@
                                      role="alert"></div>
                                 <div th:if="${msgcorreo != null}" th:text="${msgcorreo}" class="alert alert-danger"
                                      role="alert"></div>
-                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-danger"
+                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
                                      role="alert"></div>
 
 
@@ -79,45 +79,35 @@
 
                                     </tr>
                                 </table>
+
+
+
                                 <div class="row">
-                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4"></div>
                                     <div class="col-md-8">
 
-                                        <br>
-
                                         <ul th:if="${last != 1}" class="pagination justify-content-center">
-
-                                            <li class="page-item" th:classappend="${prev == 0 ? 'disabled': '' }">
-                                                <a th:if="${searchField==null}" class="page-link"
-                                                   th:href="@{'/sede' + '?page=' + ${prev}} ">
-                                                    Anterior </a>
-                                                <a th:if="${searchField!=null}" class="page-link"
-                                                   th:href="@{'/usuario/buscador' + '?searchField=' +${searchField}+ '&page==' + ${prev}} ">
-                                                    Anterior </a>
-
-                                            <li class="page-item" th:each="page:${page}"
-                                                th:classappend="${current == page ? 'active' : ''}">
-                                                <a th:if="${searchField==null}" class="page-link"
-                                                   th:href="@{'/sede' + '?page=' + ${page}} "
-                                                   th:text="${page}"></a>
-                                                <a th:if="${searchField!=null}" class="page-link"
-                                                   th:href="@{'/sede/buscador' + '?searchField=' +${searchField}+ '&page=' + ${page}} "
-                                                   th:text="${page}"></a>
+                                            <li class ="page-item" th:if="${current != 1 }">
+                                                <a class="page-link"  th:if="${searchField }" th:href="@{'/sede/buscador' + '?page=' + ${prev} + '&' + 'searchField='+ ${searchField}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${searchField}" th:href="@{'/sede' + '?page=' + ${prev}} "> Anterior </a>
                                             </li>
 
-                                            <li class="page-item" th:classappend="${current == last ? 'disabled': '' }">
-                                                <a th:if="${searchField==null}" class="page-link"
-                                                   th:href="@{'/sede' + '?page=' + ${next}} ">
-                                                    Siguiente </a>
-                                                <a th:if="${searchField!=null}" class="page-link"
-                                                   th:href="@{'/sede/buscador' + '?searchField=' +${searchField}+ '&page=' + ${next}} ">
-                                                    Siguiente </a>
+                                            <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                                                <a class="page-link" th:if="${searchField}" th:href="@{'/sede/buscador' + '?searchField='+ ${searchField} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${searchField}" th:href="@{'/sede' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                            </li>
+
+                                            <li class ="page-item" th:if="${current != last }">
+                                                <a class="page-link"  th:if="${searchField}" th:href="@{'/sede/searbuscadorch' + '?page=' + ${next} + '&' + 'searchField='+ ${searchField}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${searchField}" th:href="@{'/sede' + '?page=' + ${next}} "> Siguiente </a>
+                                            </li>
 
                                         </ul>
 
+
                                     </div>
-                                    <div class="col-md-2"></div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

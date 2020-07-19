@@ -34,7 +34,7 @@ public class UsuarioService {
     }
 
     public Page<Usuario> getAllGestSede(int pageNumber) {
-        Pageable pageable1 = PageRequest.of(pageNumber, 5);
+        Pageable pageable1 = PageRequest.of(pageNumber, 4);
         return usuarioRepository.gestoresSede(pageable1);
     }
 }
