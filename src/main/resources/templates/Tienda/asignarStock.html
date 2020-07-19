@@ -78,11 +78,11 @@
                                     <!--Fecha de envio-->
                                     <div class="form-group" >
                                         <label >Fecha de envío</label>
-                                        <input type="text" class="form-control" th:field="*{fechaentrega}" style="width: 25%" placeholder="formato:dia/mes/año">
+                                        <input type="text" class="form-control" th:field="*{fechaentrega}" style="width: 25%" placeholder="formato:mes/dia/año">
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechaentrega')}" th:errors="*{fechaentrega}"></div>
                                     </div>
 
-                                    <a th:href="@{'/tienda/lista'}" class="btn btn-info">Finalizar</a>
+                                    <a th:href="@{'/tienda'}" class="btn btn-danger">Cancelar</a>
                                     <button    type="submit" class="btn btn-primary">+ producto</button>
 
 
