@@ -32,7 +32,7 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
 
     //public Inventarioproducto findByProducto(Producto producto);
 
-    @Query(value = "SELECT * FROM inventarioproducto invp\n" +
+    @Query(value = "SELECT invp.* FROM inventarioproducto invp\n" +
             "inner join producto p on p.idproducto=invp.producto_idproducto " +
             "inner join linea l on l.idlinea=p.linea_idlinea\n" +
             "inner join categoria cat  on cat.idcategoria=invp.categoria_idcategoria \n" +
@@ -40,7 +40,7 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
             "inner join consignacionyventa cyv on cyv.idconsignacion=invp.consignacionyventa_idconsignacion\n" +
             "inner join artesano a on a.idartesano = cyv.artesano_idartesano\n" +
             "inner join comunidad com on com.idcomunidad=a.comunidad_idcomunidad\n" +
-            "where com.nombrecomunidad like %?1%\n" +
+            "where (com.nombrecomunidad like %?1%\n" +
             "or a.nombreartesano like %?1%\n" +
             "or l.nombrelinea like %?1%\n" +
             "or p.nombreproducto like %?1%\n" +
@@ -54,7 +54,7 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
             "or invp.facilitador like %?1% \n" +
             "or invp.codigogenerado like %?1%\n" +
             "or cyv.fechainicio like %?1% \n" +
-            "or cyv.numeropedido like %?1% or cyv.tipo like %?1%",
+            "or cyv.numeropedido like %?1% or cyv.tipo like %?1% ) and invp.estado is null ",
             countQuery = " SELECT count(*) FROM inventarioproducto invp\n" +
                     "inner join producto p on p.idproducto=invp.producto_idproducto " +
                     "inner join linea l on l.idlinea=p.linea_idlinea\n" +
@@ -63,7 +63,7 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
                     "inner join consignacionyventa cyv on cyv.idconsignacion=invp.consignacionyventa_idconsignacion\n" +
                     "inner join artesano a on a.idartesano = cyv.artesano_idartesano\n" +
                     "inner join comunidad com on com.idcomunidad=a.comunidad_idcomunidad\n" +
-                    "where com.nombrecomunidad like %?1%\n" +
+                    "where (com.nombrecomunidad like %?1%\n" +
                     "or a.nombreartesano like %?1%\n" +
                     "or l.nombrelinea like %?1%\n" +
                     "or p.nombreproducto like %?1%\n" +
@@ -77,7 +77,7 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
                     "or invp.facilitador like %?1% \n" +
                     "or invp.codigogenerado like %?1%\n" +
                     "or cyv.fechainicio like %?1% \n" +
-                    "or cyv.numeropedido like %?1% or cyv.tipo like %?1%",
+                    "or cyv.numeropedido like %?1% or cyv.tipo like %?1%) and invp.estado is null ",
             nativeQuery = true)
     Page<Inventarioproducto> buscadorInventarioPrincipal(String search, Pageable pageable);
 
@@ -89,5 +89,8 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
 
 @Query(value = "SELECT * FROM inventarioproducto where estado is null",nativeQuery = true)
     Page<Inventarioproducto> listaTotalSinDevueltos(Pageable pageable);
+
+@Query(value="SELECT * FROM inventarioproducto where producto_idproducto = ?1 limit 1",nativeQuery = true)
+    Inventarioproducto verificarProductoEnInventario(int id);
 
 }

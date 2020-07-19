@@ -1,9 +1,11 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Dto.UsuarioServiceApi;
+import com.example.demo.Entity.Notificaciones;
 import com.example.demo.Entity.Rol;
 import com.example.demo.Entity.Sede;
 import com.example.demo.Entity.Usuario;
+import com.example.demo.Repository.NotificacionesRepository;
 import com.example.demo.Repository.RolRepository;
 import com.example.demo.Repository.SedeRepository;
 import com.example.demo.Repository.UsuarioRepository;
@@ -24,6 +26,8 @@ import javax.validation.Valid;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.SecureRandom;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +47,8 @@ public class UsuarioController {
     SedeRepository sedeRepository;
     @Autowired
     SendMailService sendMailService;
+    @Autowired
+    NotificacionesRepository notificacionesRepository;
 
     @GetMapping(value = {"", "/lista"})
     public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField, RedirectAttributes attr) {
@@ -247,6 +253,14 @@ public class UsuarioController {
             Sede sede = new Sede();
             sede.setIdsede(3);
             usuario.setSede_idsede(sede);
+            ZonedDateTime now = ZonedDateTime.now();
+            Date nowdate = Date.from(now.toInstant());
+            Notificaciones notificaciones = new Notificaciones();
+            notificaciones.setFecha(nowdate);
+            notificaciones.setFlag(false);
+            //Usuario usuario1 = new Usuario();
+            notificaciones.setUsuario(usuarioRepository.save(usuario));
+            notificacionesRepository.save(notificaciones);
         } else {
             usuario.setSede_idsede(null);
         }
