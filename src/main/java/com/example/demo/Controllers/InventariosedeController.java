@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -221,16 +222,57 @@ public class InventariosedeController {
 
 
     @GetMapping("/actualizarEstado")
-    public String actualizarEstado(@Param("estado") String estado, @Param("idinventariosede") int idinventariosede){
+    public String actualizarEstado(@Param("estado") String estado, @Param("idinventariosede") String idinventariosede,RedirectAttributes att){
+    try{
+        int idv = Integer.parseInt(idinventariosede);
+        if (estado.equals("recibido")){
+            Optional<Inventariosede> inventSede = inventarioSedeRepository.findById(idv);
+            if (inventSede.get().getObservaciones().isEmpty()){
+                inventarioSedeRepository.actualizarEstado(estado, idv);
+                return "redirect:/inventarioSede/listarinvsedexconfirmar";
+            }else{
+                att.addFlashAttribute("msg","Para recibir un producto, no debe poseer observaciones");
+                return "redirect:/inventarioSede/listarinvsedexconfirmar";
+            }
 
-        inventarioSedeRepository.actualizarEstado(estado, idinventariosede);
+        }else{
+            if(estado.equals("observado")){
+                Optional<Inventariosede> inventSede = inventarioSedeRepository.findById(idv);
+                if (inventSede.get().getObservaciones().isEmpty()){
+                    att.addFlashAttribute("msg","Debe se escribir las observaciones para mandar el estado Observado");
+                    return "redirect:/inventarioSede/listarinvsedexconfirmar";
+                }else{
+                    inventarioSedeRepository.actualizarEstado(estado, idv);
+                    return "redirect:/inventarioSede/listarinvsedexconfirmar";
+                }
+            }else{
+                return "redirect:/inventarioSede/listarinvsedexconfirmar";
+            }
+
+        }
+    }catch (NumberFormatException e){
         return "redirect:/inventarioSede/listarinvsedexconfirmar";
     }
-    @GetMapping("/actualizarObservaciones")
-    public String actualizarObservaciones(@Param("observaciones") String observaciones, @Param("idinventariosede") int idinventariosede){
 
-        inventarioSedeRepository.actualizarObservaciones(observaciones, idinventariosede);
-        return "redirect:/inventarioSede/listarinvsedexconfirmar";
+    }
+    @GetMapping("/actualizarObservaciones")
+    public String actualizarObservaciones(@Param("observaciones") String observaciones, @Param("idinventariosede") String idinventariosede,RedirectAttributes att){
+
+        try{
+            int idve = Integer.parseInt(idinventariosede);
+
+            if (inventarioSedeRepository.findById(idve).isPresent()){
+                inventarioSedeRepository.actualizarObservaciones(observaciones, inventarioSedeRepository.findById(idve).get().getIdiventariosede());
+                att.addFlashAttribute("msgObservaciones",observaciones);
+                return "redirect:/inventarioSede/listarinvsedexconfirmar";
+            }else{
+                return "redirect:/inventarioSede/listarinvsedexconfirmar";
+            }
+
+        }catch (NumberFormatException e){
+            return "redirect:/inventarioSede/listarinvsedexconfirmar";
+        }
+
     }
 
     @GetMapping("/buscadorMiSede")
