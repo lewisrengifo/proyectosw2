@@ -140,7 +140,7 @@
                                     <!-- FECHA DE VENTA -->
                                     <div>
                                         <label >fecha de venta</label>
-                                        <input style="width: 40%" type="text" class="form-control" th:field="*{fechaventa}">
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{fechaventa}" placeholder="formato:mes/dia/año">
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechaventa')}"
                                              th:errors="*{fechaventa}"></div>
 

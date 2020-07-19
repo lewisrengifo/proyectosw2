@@ -106,7 +106,7 @@ public class InventarioTiendaController {
         }
         PageRequest pageRequest = PageRequest.of(page, 5);
 
-        Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.findAll(pageRequest);
+        Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.findmenosDevuelto(pageRequest);
         int totalPage = pageInvTienda.getTotalPages();
 
 
