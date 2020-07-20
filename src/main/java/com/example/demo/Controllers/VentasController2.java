@@ -89,7 +89,7 @@ public class VentasController2 {
 
     @PostMapping("/ano")
     public ResponseEntity<InputStreamResource> exportDataAnual(@RequestParam("ano")String ano) throws Exception{
-            
+
                 List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteAnualMosqoy(ano);
                 String tipo="Año";
                 ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,tipo);
