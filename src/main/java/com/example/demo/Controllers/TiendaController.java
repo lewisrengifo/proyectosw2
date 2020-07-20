@@ -82,7 +82,7 @@ public class TiendaController {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("msg2", "Ingrese todos los datos solicitados correctamente.");
+            model.addAttribute("msg2", "Ingrese todos los datos solicitados correctamente.");
             return "Tienda/newEdit";
         }
         tienda.setSede(usuario.getSede_idsede());
@@ -91,14 +91,14 @@ public class TiendaController {
             if (existeTiendaSede == null) {
                 redirectAttributes.addFlashAttribute("msg", "Tienda creada exitosamente.");
             } else {
-                redirectAttributes.addFlashAttribute("msg2", "Tienda con nombre existente para la localidad.");
+                model.addAttribute("msg2", "Tienda con nombre existente para la localidad.");
                 redirectAttributes.addFlashAttribute("tienda", tienda);
                 return "Tienda/newEdit";
             }
         } else {
             for (Tienda tiendaAux : tiendaRepository.buscarmenosmio(tienda.getIdtienda())) {
                 if (tiendaAux.getNombre().equalsIgnoreCase(tienda.getNombre())) {
-                    redirectAttributes.addFlashAttribute("msg2", "Tienda con nombre existente para la localidad.");
+                    model.addAttribute("msg2", "Tienda con nombre existente para la localidad.");
                     redirectAttributes.addFlashAttribute("tienda", tienda);
                     return "Tienda/newEdit";
                 } else if (tienda.getIdtienda() == 0) {
