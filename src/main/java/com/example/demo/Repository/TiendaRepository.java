@@ -25,8 +25,7 @@ public interface TiendaRepository extends JpaRepository<Tienda, Integer> {
     @Query(value = "select * from tienda where idtienda not in (select t.idtienda from tienda t where t.idtienda=?1);", nativeQuery = true)
     List<Tienda> buscarmenosmio(int id);
 
-    @Query(value="select * from proyectobasesw2.ventas where tienda_idtienda = ?1 limit 1;",nativeQuery = true)
-    Ventas verificaidTiendaenVentas(int id);
+
 
 
     @Query(value="SELECT * from tienda where tienda.nombre like (?1) and tienda.sede_idsede=?2 limit 1;" , nativeQuery = true)

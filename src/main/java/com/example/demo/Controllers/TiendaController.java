@@ -2,6 +2,8 @@ package com.example.demo.Controllers;
 
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.TiendaRepository;
+import com.example.demo.Repository.VentaRepository;
+import com.example.demo.Repository.VentasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,8 @@ public class TiendaController {
 
     @Autowired
     TiendaRepository tiendaRepository;
+    @Autowired
+    VentaRepository ventaRepository;
 
     @GetMapping(value = {"lista", "","/"})
     public String listar (Model model, @RequestParam Map<String, Object> params,HttpSession session , RedirectAttributes attr){
@@ -139,7 +143,7 @@ public class TiendaController {
     public String borrar (@RequestParam("id") int id, RedirectAttributes attr){
         try {
             Optional<Tienda> opt = tiendaRepository.findById(id);
-            Ventas verificaidTiendaenVentas = tiendaRepository.verificaidTiendaenVentas(id);
+            Ventas verificaidTiendaenVentas = ventaRepository.verificaidTiendaenVentas(id);
             if (verificaidTiendaenVentas == null) {
                 if (opt.isPresent()) {
                     tiendaRepository.deleteById(id);
