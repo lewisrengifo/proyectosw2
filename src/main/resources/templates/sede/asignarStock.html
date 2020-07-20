@@ -97,7 +97,8 @@
                                     <!--Fecha de envio-->
                                     <div class="form-group"  id ="artesano_compra">
                                         <label >Fecha de envío</label>
-                                        <input type="text" class="form-control" th:field="*{fechallegada}" style="width: 25%" placeholder="formato:mes/dia/año">
+                                        <input type="text" class="form-control" th:field="*{fechallegada}" style="width: 25%;margin: 0 0 1px 0" >
+                                        <label>Formato: Mes/Dia/Año</label>
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechallegada')}" th:errors="*{fechallegada}"></div>
                                     </div>
 
