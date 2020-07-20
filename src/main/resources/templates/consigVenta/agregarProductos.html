@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='Moscoy')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Ingresar pedido a inventario')">
 </head>
 <body>
 <div id="wrapper">
@@ -115,7 +115,7 @@
                                     <input type="hidden" class="form-control" name="idconsignacionVenta" th:value="${consigYventa1.getIdconsignacion()}" >
 
                                     <a th:href="@{'/ConsignacionVenta'}" class="btn btn-danger">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary">+ producto</button>
+                                    <button type="submit" class="btn btn-outline-danger">+ producto</button>
                                 </form>
                             </div>
                         </div>

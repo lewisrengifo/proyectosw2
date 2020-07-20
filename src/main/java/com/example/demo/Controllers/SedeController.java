@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.awt.font.NumericShaper;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.SecureRandom;
@@ -130,16 +131,21 @@ public class SedeController {
     }
 
     @GetMapping("/editar")
-    public String editarSede(@ModelAttribute("sede") Sede sede, Model model, @RequestParam("id") int id, @ModelAttribute("usuariodelasede") Usuario usuariodelasede) {
-        Optional<Sede> optionalSede = sedeRepository.findById(id);
-        //Usuario usuariodelasede = usuarioRepository.usuariodelasede(id);
-        if (optionalSede.isPresent()) {
-            sede = optionalSede.get();
-            model.addAttribute(sede);
-            //usuariodelasede=usuarioRepository.usuariodelasede(id);
-            //model.addAttribute(usuariodelasede);
-            return "sede/form";
-        } else {
+    public String editarSede(@ModelAttribute("sede") Sede sede, Model model, @RequestParam("id") String id, @ModelAttribute("usuariodelasede") Usuario usuariodelasede) {
+        try {
+            int id1 = Integer.parseInt(id);
+            Optional<Sede> optionalSede = sedeRepository.findById(id1);
+            //Usuario usuariodelasede = usuarioRepository.usuariodelasede(id);
+            if (optionalSede.isPresent()) {
+                sede = optionalSede.get();
+                model.addAttribute(sede);
+                //usuariodelasede=usuarioRepository.usuariodelasede(id);
+                //model.addAttribute(usuariodelasede);
+                return "sede/form";
+            } else {
+                return "redirect:/sede/lista";
+            }
+        }catch (NumberFormatException e){
             return "redirect:/sede/lista";
         }
 
@@ -155,12 +161,18 @@ public class SedeController {
     }
 
     @GetMapping("/agregargestorAdicional")
-    public String agregarGestorAdicional(Model model, @ModelAttribute("usuario") Usuario usuario, @RequestParam("id") int idsede) {
-        //model.addAttribute("listaroles", rolRepository.rolgestorsede());
-        model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
-        //int idsederec = idsede;
-        model.addAttribute("idsede", idsede);
-        return "sede/formGestorNew";
+    public String agregarGestorAdicional(Model model, @ModelAttribute("usuario") Usuario usuario, @RequestParam("id") String idsede) {
+        try {
+            int idsede2 = Integer.parseInt(idsede);
+            //model.addAttribute("listaroles", rolRepository.rolgestorsede());
+            model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
+            //int idsederec = idsede;
+            model.addAttribute("idsede", idsede2);
+            return "sede/formGestorNew";
+        }catch (NumberFormatException e){
+            return "redirect:/sede/lista";
+        }
+
     }
 
     @PostMapping("/guardarGestor")

@@ -557,22 +557,28 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/devolverArtesano")
-    public String devolverProductoAlArtesano(@RequestParam("id") int id, HttpSession session, RedirectAttributes att) {
+    public String devolverProductoAlArtesano(@RequestParam("id") String id, HttpSession session, RedirectAttributes att) {
 
-        Usuario user = (Usuario) session.getAttribute("usuario");
-        Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(id);
-        Inventariosede inventariosedeDevuelto = inventarioSedeRepository.productoTodaviaNoDevueltosEnSede(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), user.getSede_idsede().getIdsede());
-        Inventariotienda productoEnTienda = inventarioTiendaRepository.productoEntiendaTodavia(productEnSede.get().getIdiventariosede());
+        try{
+            int idDevolver = Integer.parseInt(id);
+            Usuario user = (Usuario) session.getAttribute("usuario");
+            Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(idDevolver);
+            Inventariosede inventariosedeDevuelto = inventarioSedeRepository.productoTodaviaNoDevueltosEnSede(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), user.getSede_idsede().getIdsede());
+            Inventariotienda productoEnTienda = inventarioTiendaRepository.productoEntiendaTodavia(productEnSede.get().getIdiventariosede());
 
-        if (inventariosedeDevuelto == null && productoEnTienda == null) {
-            inventarioSedeRepository.actualizarEstado("devuelto", productEnSede.get().getIdiventariosede());
-            inventarioproductoRepository.actualizarEstado("devuelto", productEnSede.get().getInventarioproductoidinventario().getIdinventario());
-            att.addFlashAttribute("msg", "producto devuelto al artesano existosamente");
-            return "redirect:/inventarioPrincipal/stock";
-        } else {
-            att.addFlashAttribute("msg", "El producto selecion aún se encuentra en una sede o tienda");
+            if (inventariosedeDevuelto == null && productoEnTienda == null) {
+                inventarioSedeRepository.actualizarEstado("devuelto", productEnSede.get().getIdiventariosede());
+                inventarioproductoRepository.actualizarEstado("devuelto", productEnSede.get().getInventarioproductoidinventario().getIdinventario());
+                att.addFlashAttribute("msg", "producto devuelto al artesano existosamente");
+                return "redirect:/inventarioPrincipal/stock";
+            } else {
+                att.addFlashAttribute("msg", "El producto selecion aún se encuentra en una sede o tienda");
+                return "redirect:/inventarioPrincipal/stock";
+            }
+        }catch (NumberFormatException e){
             return "redirect:/inventarioPrincipal/stock";
         }
+
 
     }
 
