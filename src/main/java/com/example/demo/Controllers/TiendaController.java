@@ -1,8 +1,6 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Entity.Inventariosede;
-import com.example.demo.Entity.Tienda;
-import com.example.demo.Entity.Usuario;
+import com.example.demo.Entity.*;
 import com.example.demo.Repository.TiendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,12 +33,12 @@ public class TiendaController {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         } catch (NumberFormatException e) {
-            return "redirect:/tienda";
+            return "redirect:/tienda/lista";
         }
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
         if (page < 0) {
-            return "redirect:/tienda";
+            return "redirect:/tienda/lista";
         }
 
         PageRequest pageRequest = PageRequest.of(page, 5);
@@ -53,12 +51,12 @@ public class TiendaController {
             if (page > pages.size() - 1) {
                 attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
-                return "redirect:/tienda";
+                return "redirect:/tienda/lista";
             }
             model.addAttribute("pages", pages);
         } else {
 
-            return "redirect:/tienda";
+            return "redirect:/tienda/lista";
         }
 
         model.addAttribute("lista", pageTienda.getContent());
@@ -73,55 +71,47 @@ public class TiendaController {
     }
 
     @GetMapping("nuevo")
-    public String nuevo(@ModelAttribute("tienda") Tienda tienda){
+    public String nuevo(@ModelAttribute("tienda") Tienda tienda, Model model,RedirectAttributes redirectAttributes){
 
         return "Tienda/newEdit";
     }
 
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute("tienda") @Valid Tienda tienda, BindingResult bindingResult,
-                          RedirectAttributes redirectAttributes, Model model , HttpSession session ){
+                          RedirectAttributes redirectAttributes, Model model , HttpSession session ) {
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("msg2", "Ingrese todos los datos solicitados correctamente.");
-            return "tienda/newEdit";
+            return "Tienda/newEdit";
         }
-
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
         tienda.setSede(usuario.getSede_idsede());
-
-        for (Tienda tiendaAux : tiendaRepository.findAll()) {
-            if (tienda.getIdtienda() == 0) {
-                if (tienda.getNombre().equals(tiendaAux.getNombre()) &  tiendaAux.getIdtienda()==tienda.getIdtienda()) {
+        if (tienda.getIdtienda() == 0) {
+            Tienda existeTiendaSede = tiendaRepository.verificaidTienda(tienda.getNombre(), tienda.getSede().getIdsede());
+            if (existeTiendaSede == null) {
+                redirectAttributes.addFlashAttribute("msg", "Tienda creada exitosamente.");
+            } else {
+                redirectAttributes.addFlashAttribute("msg2", "Tienda con nombre existente para la localidad.");
+                redirectAttributes.addFlashAttribute("tienda", tienda);
+                return "Tienda/newEdit";
+            }
+        } else {
+            for (Tienda tiendaAux : tiendaRepository.buscarmenosmio(tienda.getIdtienda())) {
+                if (tiendaAux.getNombre().equalsIgnoreCase(tienda.getNombre())) {
                     redirectAttributes.addFlashAttribute("msg2", "Tienda con nombre existente para la localidad.");
                     redirectAttributes.addFlashAttribute("tienda", tienda);
-                    return "redirect:/tienda/newEdit";
-                }else if (tienda.getIdtienda() == 0) {
-                        redirectAttributes.addFlashAttribute("msg", "Tienda creada exitosamente.");
+                    return "Tienda/newEdit";
+                } else if (tienda.getIdtienda() == 0) {
+                    redirectAttributes.addFlashAttribute("msg", "Producto Creado Exitosamente");
                 } else {
-                redirectAttributes.addFlashAttribute("msg", "Tienda actualizada exitosamente");
-                }
-            } else {
-                for (Tienda t2 : tiendaRepository.buscarmenosmio(tienda.getNombre())) {
-                    if (tienda.getNombre().equals(t2.getNombre()) &  t2.getIdtienda()==tienda.getIdtienda()) {
-                        if (tienda.getNombre().equals(tiendaAux.getNombre()) &  tiendaAux.getIdtienda()==tienda.getIdtienda()) {
-                            redirectAttributes.addFlashAttribute("msg2", "Tienda con nombre existente para la localidad.");
-                            redirectAttributes.addFlashAttribute("tienda", tienda);
-                        }
-                        return "redirect:/tienda/newEdit";
-                    } else {
-                        redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
-
-                    }
-
+                    redirectAttributes.addFlashAttribute("msg", "Producto Actualizado Exitosamente");
                 }
             }
 
         }
-
         tiendaRepository.save(tienda);
-
         return "redirect:/tienda";
+
     }
 
     @GetMapping("editar")
@@ -137,25 +127,30 @@ public class TiendaController {
             return "Tienda/newEdit";
 
         }else {
-            return "redirect:/categoria/lista";
+            return "redirect:/tienda";
         }
 
     }
 
 
     @GetMapping("/borrar")
-    public String borrar (@RequestParam("id") int id){
+    public String borrar (@RequestParam("id") int id, RedirectAttributes attr){
+        try {
+            Optional<Tienda> opt = tiendaRepository.findById(id);
+            Ventas verificaidTiendaenVentas = tiendaRepository.verificaidTiendaenVentas(id);
+            if (verificaidTiendaenVentas == null) {
+                if (opt.isPresent()) {
+                    tiendaRepository.deleteById(id);
+                    attr.addFlashAttribute("msg", "Tienda borrada exitosamente");
+                    return "redirect:/tienda";
+                }
+            }else {
+                attr.addFlashAttribute("msg2","No se puede borrar, tiene Ventas realizadas");
+        }
 
-        Optional<Tienda> opt = tiendaRepository.findById(id);
-
-        if (opt.isPresent()){
-            tiendaRepository.deleteById(id);
+        }catch (NumberFormatException e){
+            return "redirect:/tienda";
         }
         return "redirect:/tienda";
     }
-
-
-
-
 }
-
