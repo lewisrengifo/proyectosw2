@@ -52,6 +52,8 @@ public class UsuarioController {
 
     @GetMapping(value = {"", "/lista"})
     public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField, RedirectAttributes attr) {
+
+
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         } catch (NumberFormatException e) {
@@ -294,6 +296,7 @@ public class UsuarioController {
 
     @GetMapping("/buscador")
     public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador, RedirectAttributes attr) {
+
         if (textbuscador.isEmpty()) {
             att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
