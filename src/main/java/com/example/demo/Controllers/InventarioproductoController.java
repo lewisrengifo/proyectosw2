@@ -166,7 +166,7 @@ public class InventarioproductoController {
         } else {
             if (referencia2.equals("comprado")) {
                 consigYventa.setTipo("comprado");
-
+                consigYventa.setFechafin(consigYventa.getFechainicio());
                 Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
                 int idultimo = save.getIdconsignacion();
                 return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;

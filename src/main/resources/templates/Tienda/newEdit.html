@@ -26,9 +26,9 @@
                                 <div class="form-group">
                                     <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
                                          role="alert"></div>
-                                    <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
+                                    <div style="width: 40%" th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
                                          role="alert"></div>
-                                    <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger"
+                                    <div style="width: 40%" th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger"
                                          role="alert"></div>
                                     <label>Nombre </label>
                                     <input type="text" class="form-control" th:field="*{nombre}" style="width: 40%">

@@ -80,6 +80,7 @@ public class TiendaController {
     public String guardar(@ModelAttribute("tienda") @Valid Tienda tienda, BindingResult bindingResult,
                           RedirectAttributes redirectAttributes, Model model , HttpSession session ) {
         Usuario usuario = (Usuario) session.getAttribute("usuario");
+        tienda.setNombre(tienda.getNombre().trim());
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("msg2", "Ingrese todos los datos solicitados correctamente.");
@@ -109,6 +110,7 @@ public class TiendaController {
             }
 
         }
+
         tiendaRepository.save(tienda);
         return "redirect:/tienda";
 
@@ -146,6 +148,7 @@ public class TiendaController {
                 }
             }else {
                 attr.addFlashAttribute("msg2","No se puede borrar, tiene Ventas realizadas");
+                return "redirect:/tienda";
         }
 
         }catch (NumberFormatException e){
