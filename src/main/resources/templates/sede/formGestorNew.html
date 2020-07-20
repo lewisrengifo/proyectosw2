@@ -25,25 +25,21 @@
                                  role="alert"></div>
                             <form method="get" th:action="@{'/sede/guardarGestorNew'}" th:object="${usuario}">
                                 <input type="hidden" th:field="*{idusuario}"/>
-                                <input type="hidden" th:name="idsede" th:value="${sede.idsede}">
+                                <input type="hidden" th:name="idsede" th:value="${idsede}">
 
                                 <div class="form-group">
-                                    <label for="enable">Seleccionar Usuario Disponible</label>
+                                    <label >Seleccionar Usuario Disponible</label>
 
 
-                                    <select style="width: 90%" class="form-control"
+                                    <select style="width: 40%" class="form-control"
                                             name="usuario" id="usuario">
-                                        <option th:each="usuario : ${listausuariosdisponibles}"
-                                                th:text="|${usuario.nombre}|"
-                                                th:value="${usuario.idusuario}"
-
+                                        <option th:each="usu : ${listausuariosdisponibles}"
+                                                th:value="${usu.idusuario}"
+                                                th:text="${usu.nombre} + ' ' + ${usu.apellido} + ' / ' + ${usu.getDni()}"
                                         ></option>
 
                                     </select>
                                 </div>
-
-                                    <a th:href="@{'/sede/lista'}" class="btn btn-danger">Cancelar</a>
-
                                     <button type="submit" class="btn btn-primary"
                                             th:text="${usuario.idusuario == 0? 'Registrar' : 'Actualizar'}">
                                         Reg/act
@@ -60,6 +56,6 @@
         </div>
     </div>
     <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
-
+</div>
 </body>
 </html>

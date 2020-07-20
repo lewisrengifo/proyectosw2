@@ -1,11 +1,10 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ArtesanoServiceApi;
-import com.example.demo.Entity.Artesano;
-import com.example.demo.Entity.Comunidad;
-import com.example.demo.Entity.Producto;
+import com.example.demo.Entity.*;
 import com.example.demo.Repository.ArtesanoRepository;
 import com.example.demo.Repository.ComunidadRepository;
+import com.example.demo.Repository.ConsignacionyventaRepository;
 import com.example.demo.service.ArtesanoService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.sun.org.apache.xpath.internal.operations.Or;
@@ -38,9 +37,11 @@ public class ArtesanoController {
     ArtesanoRepository artesanoRepository;
     @Autowired
     ComunidadRepository comunidadRepository;
+    @Autowired
+    ConsignacionyventaRepository consignacionyventaRepository;
 
     @GetMapping(value = {"", "/lista"})
-    public String listaArtesano(Model model, @RequestParam Map<String, Object> params) {
+    public String listaArtesano(Model model, @RequestParam Map<String, Object> params,RedirectAttributes attr) {
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         }catch (NumberFormatException e){
@@ -56,14 +57,21 @@ public class ArtesanoController {
         long totalItems = page.getTotalElements();
         int totalPages = page.getTotalPages();
 
-      //  if (currentPage<0 ) {
-        //    currentPage = 0;
-        //}
+
         if (totalPages > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
-        }
+            if (currentPage > pages.size() - 1) {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
+                return "redirect:/artesano";
+            }
+            model.addAttribute("pages", pages);
+
+        } else {
+            attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+            return "redirect:/artesano";
+        }
         List<Artesano> listaArtesanos = page.getContent();
 
         model.addAttribute("totalItems", totalItems);
@@ -116,14 +124,28 @@ public class ArtesanoController {
 
     @GetMapping("/borrar")
     public String borrarArtesano(Model model,
-                                 @RequestParam("id") int id, RedirectAttributes att) {
+                                 @RequestParam("id") String id, RedirectAttributes att) {
 
-        Optional<Artesano> optionalArtesano = artesanoRepository.findById(id);
-        if (optionalArtesano.isPresent()) {
-            att.addFlashAttribute("msgAr", "Artesano borrado Exitosamente");
-            artesanoRepository.deleteById(id);
+        try{
+            int idart = Integer.parseInt(id);
+            Optional<Artesano> optionalArtesano = artesanoRepository.findById(idart);
+            Consignacionyventa consignacionyventa = consignacionyventaRepository.verificaArtesanoEnConsignacionYVenta(idart);
+            if (consignacionyventa == null){
+                if (optionalArtesano.isPresent()) {
+                    att.addFlashAttribute("msgArt", "Artesano borrado Exitosamente");
+                    artesanoRepository.deleteById(idart);
+                    return "redirect:/artesano";
+                }
+            }else {
+                att.addFlashAttribute("msgArt",
+                        "Actualmente el artesano se encuentra en Consignación y Venta");
+            }
+
+        }catch (NumberFormatException e){
             return "redirect:/artesano";
         }
+
+
         return "redirect:/artesano";
     }
 
@@ -143,10 +165,7 @@ public class ArtesanoController {
                 //CODIGO ARTESANO MAYUSCULA
                 String codm = artesano.getCodigoartesano().toUpperCase();
                 artesano.setCodigoartesano(codm);
-
                 Artesano artesanosByCodigo = artesanoRepository.editarArtesanoBuscarCodigo(artesano.getCodigoartesano());
-
-
                 if (artesano.getIdartesano() == artesanosByCodigo.getIdartesano()) {
 
                     //NOMBRE ARTESANO 1°MAYUSCULA
@@ -230,47 +249,58 @@ public class ArtesanoController {
 
     }
 
-
     @GetMapping("/buscador")
-    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model) {
-
-
-
+    public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
         String busqueda = (String) params.get("searchField");
-        try {
+
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/artesano/lista";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/artesano/lista";
+            }
+
+
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-        }catch (NumberFormatException e){
-            return "redirect:/artesano/lista";
+            if(page <0){
+                return "redirect:/artesano/lista";
+            }
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Artesano> pageArt = artesanoRepository.buscadorArtesano(busqueda, pageRequest);
+            int totalPage = pageArt.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/artesano/lista";
+                }
+                model.addAttribute("pages", pages);
+            }else{
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/artesano/lista";
+
+            }
+
+            model.addAttribute("listaArtesano", pageArt.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "artesano/lista";
         }
-
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-
-        if(page <0){
-            return "redirect:/artesano/lista";
-        }
-
-        Page<Artesano> pageArtesanos = artesanoService.listSearch(busqueda, page);
-        int totalPage = pageArtesanos.getTotalPages();
-        long totalItems = pageArtesanos.getTotalElements();
-
-        if (totalPage > 0) {
-            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
-        }
-
-        model.addAttribute("totalItems", totalItems);
-        model.addAttribute("busqueda", busqueda);
-        model.addAttribute("listaArtesano", pageArtesanos.getContent());
-        model.addAttribute("current", page + 1);
-        model.addAttribute("next", page + 2);
-        model.addAttribute("prev", page);
-        model.addAttribute("last", totalPage);
-
-        //model.addAttribute("listaArtesano", artesanoRepository.buscadorArtesano(buscador));
-        return "artesano/lista";
-
-
     }
+
 
 
 }

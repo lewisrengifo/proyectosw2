@@ -1,11 +1,16 @@
 package com.example.demo.Controllers;
 
 
+import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Categoria;
 import com.example.demo.Entity.Comunidad;
+import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Repository.CategoriaRepository;
 import com.example.demo.Repository.ComunidadRepository;
+import com.example.demo.Repository.InventarioproductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/categoria")
@@ -25,16 +33,57 @@ public class CategoriaController {
 
     @Autowired
     ComunidadRepository comunidadRepository;
+    @Autowired
+    InventarioproductoRepository inventarioproductoRepository;
+
     @GetMapping("")
-    public String listaCategorias(Model model){
+    public String listaCategorias(Model model , @RequestParam Map<String, Object> params,RedirectAttributes attr) {
 
-        List<Comunidad> listaComunidad = comunidadRepository.findAll();
-        model.addAttribute("listaComunidad",listaComunidad);
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/categoria";
+        }
 
-        List<Categoria> listaCate = categoriaRepository.findAll();
-        model.addAttribute("listacategoria",listaCate);
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        return "categoria/lista";
+        if (page < 0) {
+            return "redirect:/categoria";
+        }
+        PageRequest pageRequest = PageRequest.of(page, 5);
+        Page<Categoria> pageCat = categoriaRepository.findAll(pageRequest);
+        long totalItems = pageCat.getTotalElements();
+        int totalPages = pageCat.getTotalPages();
+
+        //  if (currentPage<0 ) {
+        //    currentPage = 0;
+        //}
+        if (totalPages > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
+            if (page > pages.size() - 1) {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/categoria";
+            }
+            model.addAttribute("pages", pages);
+
+        } else {
+            attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+            return "redirect:/categoria";
+        }
+            List<Categoria> listacategoria = pageCat.getContent();
+
+            model.addAttribute("totalItems", totalItems);
+            model.addAttribute("listacategoria", listacategoria);
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPages);
+            return "categoria/lista";
+
+
+
     }
 
     @GetMapping("/nuevo")
@@ -114,13 +163,27 @@ public class CategoriaController {
     }
     @GetMapping("/borrar")
     public String borrarCategoria(Model model,
-                                   @RequestParam("id") int id,RedirectAttributes att){
-        Optional<Categoria> elimniarCate = categoriaRepository.findById(id);
-        if(elimniarCate.isPresent()){
-            att.addFlashAttribute("msg", "Borrado Exitosamente");
-            categoriaRepository.deleteById(id);
+                                   @RequestParam("id") String id,RedirectAttributes att){
+        try{
+            int idcat = Integer.parseInt(id);
+            Optional<Categoria> optCategory = categoriaRepository.findById(idcat);
+            Inventarioproducto inventarioproducto = inventarioproductoRepository.verificaCategoriaEnInventario(idcat);
+            if (inventarioproducto == null){
+                if (optCategory.isPresent()) {
+                    categoriaRepository.deleteById(idcat);
+                    att.addFlashAttribute("msgBorradoExito", "Borrado Exitosamente");
+                    return "redirect:/categoria";
+                }
+            }else {
+                att.addFlashAttribute("msgBorrado", "Categoria se encuentra en el inventario principal");
+                return "redirect:/categoria";
+            }
+
+        }catch (NumberFormatException e){
             return "redirect:/categoria";
         }
+
+
         return "redirect:/categoria";
     }
 

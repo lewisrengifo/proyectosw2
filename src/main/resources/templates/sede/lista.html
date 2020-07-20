@@ -10,22 +10,7 @@
 
         <h2 class="page-header">Lista de Sedes</h2>
         <div id="page-inner">
-            <div>
-                <form method="get" th:action="@{'/sede/buscador'}">
 
-                    <input th:if="${searchField!=null}" th:value="${searchField}" name="searchField"
-                           class="form-control mb-3" type="text" placeholder="Buscar"
-                           aria-label="Search" style="width: 40%">
-                    <input th:if="${searchField==null}" name="searchField" class="form-control mb-3" type="text"
-                           placeholder="Buscar"
-                           aria-label="Search" style="width: 40%">
-                    <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
-                    <button type="submit" class="btn btn-outline-danger">buscar</button>
-                    <a th:href="@{'/sede/lista'}" class="btn btn-outline-danger">Limpiar</a>
-
-                </form>
-                <br>
-            </div>
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
@@ -33,7 +18,7 @@
 
                             <a class="btn btn-outline-danger mt-4 mb-4" th:href="@{'/sede/nuevo'}">Nueva Sede</a>
 
-                            <div th:text="|Total de sedes : ${totalItems}|"></div>
+                            <div th:text="|Total de Usuario con Sedes : ${totalItems}|"></div>
                         </div>
                         <div class="card-action">
                             <a class="btn btn-outline-danger right"
@@ -60,6 +45,7 @@
                                         <th>Nombre de la sede</th>
                                         <th>Gestor acargo de la sede</th>
                                         <th></th>
+                                        <th></th>
 
 
                                     </tr>
@@ -69,6 +55,9 @@
                                         <td th:text="${sede.nombre}+ ' ' + ${sede.apellido}"></td>
                                         <td><a class="btn btn-outline-danger"
                                                th:href="@{'/sede/editar' + '?id=' + ${sede.sede_idsede.idsede}}">Editar</a>
+                                        </td>
+                                        <td><a class="btn btn-outline-danger"
+                                               th:href="@{'/sede/agregargestorAdicional' + '?id=' + ${sede.sede_idsede.idsede}}">Asignar un gestor adicional</a>
                                         </td>
 
 

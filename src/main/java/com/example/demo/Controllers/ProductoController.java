@@ -2,7 +2,10 @@ package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ProductoServiceApi;
 import com.example.demo.Dto.StorageService;
+import com.example.demo.Entity.Consignacionyventa;
+import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Entity.Producto;
+import com.example.demo.Repository.InventarioproductoRepository;
 import com.example.demo.Repository.LineaRepository;
 import com.example.demo.Repository.ProductoRepository;
 import com.example.demo.service.UploadFileService;
@@ -27,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,11 +51,13 @@ public class ProductoController {
 
     @Autowired
     LineaRepository lineaRepository;
+    @Autowired
+    InventarioproductoRepository inventarioproductoRepository;
 
     @Autowired
     StorageService storageService;
     @GetMapping(value = {"", "/"})
-    public String listaProduct(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+    public String listaProduct(@RequestParam Map<String, Object> params, Model model) {
 
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
@@ -73,15 +77,7 @@ public class ProductoController {
         int totalPage = pageProduct.getTotalPages();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            if (page > pages.size() -1){
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
-
-                return "redirect:/producto";
-            }
             model.addAttribute("pages", pages);
-        }else{
-
-            return "redirect:/producto";
         }
 
         model.addAttribute("listaProductos", pageProduct.getContent());
@@ -100,51 +96,10 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@RequestParam("archivo") MultipartFile file, @Valid Producto producto, BindingResult bindingResult
-            , RedirectAttributes attr, Model model) {
+    public String guardarProducto(@RequestParam("archivo") MultipartFile file
+            , RedirectAttributes attr, @ModelAttribute ("producto") @Valid Producto producto , BindingResult bindingResult, Model model) {
 
-
-        /*String returnValue = "redirect:/producto";
-        Path pathFinal = null;
-        // File  f = null;
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("listaLinea", lineaRepository.findAll());
-            return "producto/editFrm";
-        } else {
-
-            if (producto.getIdproducto() == 0) {
-
-                producto.setFoto(imageFile.getOriginalFilename());
-
-
-                try {
-                    pathFinal = productoServiceApi.saveImage(imageFile, producto);
-                    byte[] bytes = imageFile.getBytes();
-                    Files.write(pathFinal, bytes);
-                    // f = new File(pathFinal.toString());
-                    // BufferedImage image = ImageIO.read(f);
-                    // int height = image.getHeight();
-                    // int width = image.getWidth();
-
-                } catch (Exception e) {
-
-                    attr.addFlashAttribute("msgImagenProducto", "La imagen seleccionada no existe o no es válida");
-                    model.addAttribute("listaLinea", lineaRepository.findAll());
-                    return "producto/editFrm";
-                }
-
-
-                attr.addFlashAttribute("msg", "Producto creado exitosamente");
-            } else {
-                attr.addFlashAttribute("msg", "Producto actualizado exitosamente");
-            }
-
-            productoRepository.save(producto);
-            return "redirect:/producto";
-        }
-    }*/
-        ///////////////////////////////////////////////////
+       //Ojala salga xd
         HashMap<String, String> map = storageService.store(file);
         if (map.get("estado").equals("exito")) {
             String filename2=(map.get("fileName")   );
@@ -188,10 +143,7 @@ public class ProductoController {
                 String cod = producto.getCodigoproducto().toUpperCase();
                 producto.setCodigoproducto(cod);
                 String cod1 = producto.getCodigodescripcionproducto().toUpperCase();
-                //===================================================//
-
-
-                //==================================================//
+                producto.setCodigodescripcionproducto(cod1);
                 productoRepository.save(producto);
                 return "redirect:/producto";
             }
@@ -201,7 +153,15 @@ public class ProductoController {
             model.addAttribute("listaLinea", lineaRepository.findAll());
             return "producto/editFrm";
         }
-    }
+}
+
+
+
+
+
+
+
+
 
 
     @GetMapping("/editar")
@@ -213,7 +173,6 @@ public class ProductoController {
             producto = optProduct.get();
             model.addAttribute("producto", producto);
             model.addAttribute("listaLinea", lineaRepository.findAll());
-
             return "producto/editFrm";
         } else {
             return "redirect:/producto";
@@ -222,31 +181,37 @@ public class ProductoController {
 
     @GetMapping("/borrar")
     public String borrarProducto(Model model,
-                                 @RequestParam("id") int id,
+
+                                 @RequestParam("id") String id,
                                  RedirectAttributes attr) {
 
-        Optional<Producto> optProduct = productoRepository.findById(id);
+        try{
+            int id2=Integer.parseInt(id);
+            Optional<Producto> optProduct = productoRepository.findById(id2);
+            Inventarioproducto inventarioproducto = inventarioproductoRepository.verificarProductoEnInventario(id2);
+            if (inventarioproducto==null){
+                if (optProduct.isPresent()) {
+                    productoRepository.deleteById(id2);
+                    attr.addFlashAttribute("msgBorrado", "Producto borrado exitosamente");
+                }
+                return "redirect:/producto";
+            }else{
+                attr.addFlashAttribute("msg", "Producto se encuentra en el inventario principal");
+                return "redirect:/producto";
+            }
 
-        if (optProduct.isPresent()) {
-            productoRepository.deleteById(id);
-            attr.addFlashAttribute("msg", "Producto borrado exitosamente");
+        }catch (NumberFormatException e){
+            return "redirect:/producto";
         }
-        return "redirect:/producto";
+
 
     }
 
-    @PostMapping("/search")
-    public String buscarProducto(String busca, @RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
-
-
+   /* @PostMapping("/search")
+    public String buscarProducto(String busca, @RequestParam Map<String, Object> params, Model model) {
 
         String busqueda = (String) params.get("search");
 
-        if (busqueda.isEmpty()) {
-            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
-
-            return "redirect:/producto";
-        }
         PageRequest pageRequest;
 
         Page<Producto> pageProduct;
@@ -268,22 +233,9 @@ public class ProductoController {
         pageRequest = PageRequest.of(page, 10);
         pageProduct = productoServiceApi.getEver(busqueda, pageRequest);
         totalPage = pageProduct.getTotalPages();
-        if (pageProduct.getTotalElements()==0){
-
-            return "redirect:/producto";
-        }
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            if (page > pages.size() -1){
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
-
-                return "redirect:/producto";
-            }
             model.addAttribute("pages", pages);
-
-        }else{
-            return "redirect:/producto";
-
         }
 
         model.addAttribute("busqueda", busqueda);
@@ -292,54 +244,61 @@ public class ProductoController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
-        model.addAttribute("searchField", busqueda);
 
         return "producto/listar";
     }
+*/
+   @GetMapping("/buscador")
+   public String buscadorSearch(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+       String busqueda = (String) params.get("searchField");
 
-    @GetMapping("/search")
-    public String buscarProducto(@RequestParam Map<String, Object> params, Model model,RedirectAttributes attr) {
+       if (busqueda.isEmpty()) {
+           attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-        String busqueda = (String) params.get("search");
+           return "redirect:/producto";
+       } else {
 
-        PageRequest pageRequest;
-
-        Page<Producto> pageProduct;
-        int totalPage;
-        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-
-
-        pageRequest = PageRequest.of(page, 10);
-        pageProduct = productoServiceApi.getEver(busqueda, pageRequest);
-        totalPage = pageProduct.getTotalPages();
-        if (totalPage > 0) {
-            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            if (page > pages.size() -1){
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
-
-                return "redirect:/producto";
-            }
+           try {
+               int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+           } catch (NumberFormatException e) {
+               return "redirect:/producto";
+           }
 
 
+           int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-            model.addAttribute("pages", pages);
-        }else{
-            attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+           PageRequest pageRequest = PageRequest.of(page, 10);
+           if(page<0){
+               return "redirect:/producto";
+           }
 
-            return "redirect:/producto";
-        }
+           Page<Producto> pagePro = productoRepository.obtenerFiltroProducto(busqueda, pageRequest);
+           int totalPage = pagePro.getTotalPages();
+           if (totalPage > 0) {
+               List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+               if (page > pages.size() - 1) {
+                   attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
-        model.addAttribute("busqueda", busqueda);
-        model.addAttribute("listaProductos", pageProduct.getContent());
-        model.addAttribute("current", page + 1);
-        model.addAttribute("next", page + 2);
-        model.addAttribute("prev", page);
-        model.addAttribute("last", totalPage);
-        model.addAttribute("searchField", busqueda);
+                   return "redirect:/producto";
+               }
+               model.addAttribute("pages", pages);
+           }else{
+               attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
+               return "redirect:/producto";
 
-        return "producto/listar";
-    }
+           }
+
+           model.addAttribute("listaProductos", pagePro.getContent());
+           model.addAttribute("current", page + 1);
+           model.addAttribute("next", page + 2);
+           model.addAttribute("busqueda", busqueda);
+           model.addAttribute("prev", page);
+           model.addAttribute("last", totalPage);
+
+           return "producto/listar";
+       }
+   }
 
 
     @GetMapping("/foto")
@@ -377,12 +336,15 @@ public class ProductoController {
     public ResponseEntity<FileSystemResource> getFile(@RequestParam("id")int id) throws IOException {
         Optional<Producto> optProduct = productoRepository.findById(id);
         Producto producto=optProduct.get();
-        File file = new File("C:/FotosProyecto/"+ producto.getFoto());
+        //String path = "C:/FotosProyecto/";
+        String path = "/home/ec2-user/FotosProyecto/";
+        File file = new File(path + producto.getFoto());
         HttpHeaders respHeaders = new HttpHeaders();
         return new ResponseEntity<FileSystemResource>(
                 new FileSystemResource(file), respHeaders, HttpStatus.OK
         );
     }
+
 
     public String encriptar(String pww) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -390,6 +352,7 @@ public class ProductoController {
         return pww;
     }
     ///El otro metodo para guardar
+
 
 
 }

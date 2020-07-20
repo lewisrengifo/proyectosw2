@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Inventario Principal')">
+</head>
+<body>
+<div id="wrapper">
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+
+    <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
+
+
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                PRODUCTOS DEVUELTOS
+            </h1>
+        </div>
+
+        <!-- /. COMUNIDAD  -->
+        <div id="page-inner">
+            <div>
+                <form method="get" th:action="@{'/inventarioPrincipal/buscadorProductosDevueltos'}">
+
+                    <input th:if="${busqueda!=null}" th:value="${busqueda}" name="searchField"
+                           class="form-control mb-3" type="text" placeholder="Buscar"
+                           aria-label="Search" style="width: 40%">
+                    <input th:if="${busqueda==null}" name="searchField" class="form-control mb-3" type="text"
+                           placeholder="Buscar"
+                           aria-label="Search" style="width: 40%">
+                    <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
+
+                    <button type="submit" class="btn btn-outline-danger">buscar</button>
+                    <a th:href="@{'/inventarioPrincipal/stock'}" class="btn btn-outline-danger">Limpiar</a>
+
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-content">
+                            <div class="table-responsive">
+
+                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
+                                     role="alert"></div>
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr class="info">
+                                        <th>#</th>
+                                        <th>N° de pedido</th>
+                                        <th>Producto</th>
+                                        <th>Descripcion Producto</th>
+                                        <th>Artesano</th>
+                                        <th>Comunidad</th>
+                                        <th>Cantidad Devuelto</th>
+                                        <th>codigo generado</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="st,info: ${ProductosDevueltos}">
+                                        <td th:text="${info.index +1 + (prev)*5}" >1</td>
+                                        <td th:text="${st.inventarioproductoidinventario.consignacionyventa.numeropedido}" >de31edae</td>
+                                        <td th:text="${st.inventarioproductoidinventario.producto.nombreproducto}" >----</td>
+                                        <td th:text="${st.inventarioproductoidinventario.producto.descripcionproducto}"></td>
+                                        <td th:text="${st.inventarioproductoidinventario.consignacionyventa.getArtesano().nombreartesano} +
+                                        ' '+ ${st.inventarioproductoidinventario.consignacionyventa.getArtesano().apellidopaterno}
+                                        + ' ' + ${st.inventarioproductoidinventario.consignacionyventa.getArtesano().apellidomaterno}"></td>
+                                        <td th:text="${st.inventarioproductoidinventario.consignacionyventa.artesano.comunidad.nombrecomunidad}"></td>
+                                        <td th:text="${st.inventarioproductoidinventario.cantidad}" >---</td>
+                                        <td th:text="${st.inventarioproductoidinventario.codigogenerado}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+
+                                        <ul th:if="${last != 1}" class="pagination justify-content-center">
+                                            <li class ="page-item" th:if="${current != 1 }">
+                                                <a class="page-link"  th:if="${busqueda }" th:href="@{'/inventarioPrincipal/search' + '?page=' + ${prev} + '&' + 'search='+ ${busqueda}} "> Anterior </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioPrincipal/productosDevueltos' + '?page=' + ${prev}} "> Anterior </a>
+                                            </li>
+
+                                            <li class ="page-item" th:each="page:${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                                                <a class="page-link" th:if="${busqueda}" th:href="@{'/inventarioPrincipal/search' + '?search='+ ${busqueda} + '&' + 'page=' + ${page}} " th:text="${page}"  ></a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioPrincipal/productosDevueltos' + '?page=' + ${page}} " th:text="${page}"  ></a>
+                                            </li>
+
+                                            <li class ="page-item" th:if="${current != last }">
+                                                <a class="page-link"  th:if="${busqueda}" th:href="@{'/inventarioPrincipal/search' + '?page=' + ${next} + '&' + 'search='+ ${busqueda}} "> Siguiente </a>
+                                                <a class="page-link" th:unless="${busqueda}" th:href="@{'/inventarioPrincipal/productosDevueltos' + '?page=' + ${next}} "> Siguiente </a>
+                                            </li>
+
+                                        </ul>
+
+
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
+
+</body>
+
+</html>
