@@ -23,7 +23,7 @@ public class InventarioTiendaService {
      */
 
     public Page<Inventariotienda> listaTiendasPorSede(int idsede, int page){
-        Pageable pageRequest = PageRequest.of(page,5);
+        Pageable pageRequest = PageRequest.of(page,10);
         return inventarioTiendaRepository.listarTiendasEnSede(idsede,pageRequest);
     }
 

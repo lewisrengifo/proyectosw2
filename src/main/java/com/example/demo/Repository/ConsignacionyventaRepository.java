@@ -36,6 +36,9 @@ public interface ConsignacionyventaRepository extends JpaRepository<Consignacion
     @Query(value="select * from proyectobasesw2.consignacionyventa where artesano_idartesano = ?1 limit 1;",nativeQuery = true)
     Consignacionyventa verificaArtesanoEnConsignacionYVenta(int id);
 
+    @Query(value = "SELECT * FROM consignacionyventa order by idconsignacion desc",nativeQuery = true)
+    Page<Consignacionyventa> listaConsigVenta(Pageable pageable);
+
 }
 
 

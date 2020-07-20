@@ -63,7 +63,7 @@ public class InventarioproductoController {
             return "redirect:/inventarioPrincipal";
         }
         //Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Inventarioproducto> pageProduct = inventarioproductoRepository.listaTotalSinDevueltos(pageRequest);
         long totalItems = pageProduct.getTotalElements();
@@ -367,7 +367,7 @@ public class InventarioproductoController {
             return "redirect:/inventarioPrincipal/stock";
         }
 
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Inventariosede> pageStock = inventarioSedeRepository.listarInventarioPorSedePaginado(idusuariologueado, pageRequest);
         long totalItems = pageStock.getTotalElements();
@@ -491,7 +491,7 @@ public class InventarioproductoController {
             return "redirect:/inventarioPrincipal/productosDevueltos";
         }
 
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Inventariosede> pageStock = inventarioSedeRepository.listarProductosDevueltos(idusuariologueado, pageRequest);
         long totalItems = pageStock.getTotalElements();

@@ -36,6 +36,8 @@
                                      role="alert"></div>
                                 <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger"
                                      role="alert"></div>
+                                <div th:if="${msgprecio != null}" th:text="${msgprecio}" class="alert alert-danger"
+                                     role="alert"></div>
                                 <form method="post" th:action="@{'/venta/agregarVenta'}" th:object="${ventas}">
                                     <input type="hidden" th:field="*{idventas}"/>
 
@@ -119,6 +121,12 @@
                                                     +'#'+${pro.stocktienda} + ' - ' +'$'+ ${pro.inventariosede.inventarioproductoidinventario.preciomosqoy}">
                                             </option>
                                         </select>
+                                    </div>
+                                    <div>
+                                        <label >Precio de venta</label>
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{precioventa}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('precioventa')}"
+                                             th:errors="*{precioventa}"></div>
                                     </div>
 
                                     <div class="form-group" th:unless="${ventas.nombrecomprador == null}" >
