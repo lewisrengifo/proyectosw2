@@ -48,6 +48,7 @@ public class Ventas {
     private Inventariosede inventariosede;
 
     @NotNull(message = "No puede ser nulo.")
+
     @Digits(integer = 5, fraction = 0)
     @Min(value=1, message = "Mínimo valor debe ser 1")
     @Max(value=32767)
@@ -74,7 +75,8 @@ public class Ventas {
     public void setPrecioventa(Double precioventa) {
         this.precioventa = precioventa;
     }
-
+    @NotNull(message = "No puede ser nulo")
+    
     private Double precioventa;
 
     public String getMetodopago() {
