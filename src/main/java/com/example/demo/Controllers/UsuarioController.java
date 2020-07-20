@@ -214,7 +214,6 @@ public class UsuarioController {
 
                     } else {
                         redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
-
                     }
 
                 }

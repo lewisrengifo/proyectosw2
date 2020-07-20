@@ -9,10 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -77,11 +79,46 @@ public class TiendaController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute("tienda") Tienda tienda,
-                          Model model ,  HttpSession session ){
+    public String guardar(@ModelAttribute("tienda") @Valid Tienda tienda, BindingResult bindingResult,
+                          RedirectAttributes redirectAttributes, Model model , HttpSession session ){
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("msg2", "Ingrese todos los datos solicitados correctamente.");
+            return "tienda/newEdit";
+        }
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         tienda.setSede(usuario.getSede_idsede());
+
+        for (Tienda tiendaAux : tiendaRepository.findAll()) {
+            if (tienda.getIdtienda() == 0) {
+                if (tienda.getNombre().equals(tiendaAux.getNombre()) &  tiendaAux.getIdtienda()==tienda.getIdtienda()) {
+                    redirectAttributes.addFlashAttribute("msg2", "Tienda con nombre existente para la localidad.");
+                    redirectAttributes.addFlashAttribute("tienda", tienda);
+                    return "redirect:/tienda/newEdit";
+                }else if (tienda.getIdtienda() == 0) {
+                        redirectAttributes.addFlashAttribute("msg", "Tienda creada exitosamente.");
+                } else {
+                redirectAttributes.addFlashAttribute("msg", "Tienda actualizada exitosamente");
+                }
+            } else {
+                for (Tienda t2 : tiendaRepository.buscarmenosmio(tienda.getNombre())) {
+                    if (tienda.getNombre().equals(t2.getNombre()) &  t2.getIdtienda()==tienda.getIdtienda()) {
+                        if (tienda.getNombre().equals(tiendaAux.getNombre()) &  tiendaAux.getIdtienda()==tienda.getIdtienda()) {
+                            redirectAttributes.addFlashAttribute("msg2", "Tienda con nombre existente para la localidad.");
+                            redirectAttributes.addFlashAttribute("tienda", tienda);
+                        }
+                        return "redirect:/tienda/newEdit";
+                    } else {
+                        redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
+
+                    }
+
+                }
+            }
+
+        }
+
         tiendaRepository.save(tienda);
 
         return "redirect:/tienda";
