@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Date;
@@ -26,7 +28,7 @@ public class Ventas {
 
     @Column(nullable = false)
     @NotNull(message = "la fecha no debe ser nula")
-    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
     private Date fechaventa;
 
     @NotBlank(message = "El nombre no debe ser vacío")

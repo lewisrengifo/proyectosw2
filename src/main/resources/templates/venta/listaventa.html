@@ -76,7 +76,7 @@
                                     <tr th:if="${totalElementos} > 0 " th:each="venta, info : ${listaVentas}">
                                         <td th:text="${( info.index +1) }"></td>
                                         <td th:text="${venta.tienda.idtienda}==0 ? '--': ${venta.tienda.nombre} " ></td>
-                                        <td th:text="${venta.fechaventa}"></td>
+                                        <td th:text="${venta.fechaventa.getDate()}+ '/' + ${venta.fechaventa.getMonth()+1}+'/' + ${venta.fechaventa.getYear()+1900}"></td>
                                         <td th:text="${venta.tipodocumento}"></td>
                                         <td th:text="${venta.numerodocumento}"></td>
                                         <td th:text="${venta.rucdni}"></td>
@@ -85,9 +85,9 @@
                                         <td th:text="${venta.inventariosede.inventarioproductoidinventario.codigogenerado}"></td>
                                         <td th:text="${venta.inventariosede.inventarioproductoidinventario.producto.nombreproducto}"></td>
                                         <td th:text="${venta.inventariosede.inventarioproductoidinventario.color}"></td>
-                                        <td th:text="${venta.inventariosede.inventarioproductoidinventario.preciomosqoy}"></td>
+                                        <td th:text="${venta.precioventa}"></td>
                                         <td th:text="${venta.metodopago}"></td>
-                                        
+
 
                                     </tr>
 

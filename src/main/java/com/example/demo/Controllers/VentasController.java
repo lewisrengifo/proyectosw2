@@ -4,16 +4,20 @@ package com.example.demo.Controllers;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -168,7 +172,12 @@ public class VentasController {
             return "venta/listaventa";
         }
     }
-
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(
+                dateFormat, true));
+    }
 
 
     @PostMapping("/agregarVenta")
@@ -180,6 +189,13 @@ public class VentasController {
         Optional<Sede> sedeid = sedeRepository.findById(usuariologueado.getSede_idsede().getIdsede());
         ventas.setSede(sedeid.get());
         Optional<Tienda> byId = tiendaRepository.findById(ventas.getTienda().getIdtienda());
+        if (ventas.getPrecioventa()<ventas.getInventariosede().getInventarioproductoidinventario().getPreciomosqoy()){
+            model.addAttribute("msgprecio","El precio de venta debe ser mayor o igual al precio registrado por mosqoy");
+            model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(ventas.getTienda().getIdtienda()));
+            ventas.setTienda(byId.get());
+            model.addAttribute("tiendita", byId.get());
+            return "venta/registroventa";
+        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(ventas.getTienda().getIdtienda()));
             ventas.setTienda(byId.get());
@@ -203,7 +219,7 @@ public class VentasController {
                     inventarioTiendaRepository.ActualizarCantidadInventarioTienda(StockNuevoEnTienda, inventariotiendaReduceStock.getIdiventariotienda());
                     //actualizar cantidad en inventario principal
                     inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(nuevaCantidadProducto, CambiaCantidadProducto.get().getIdinventario());
-                    ventas.setPreciototal(ventas.getCantidad()*CambiaCantidadProducto.get().getPreciomosqoy());
+                    ventas.setPreciototal(ventas.getCantidad()*ventas.getPrecioventa());
                     redirectAttributes.addFlashAttribute("msgInfo", "Venta registrada exitosamente");
                     ventaRepository.save(ventas);
                     return "redirect:/venta";
