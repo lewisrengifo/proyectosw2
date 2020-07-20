@@ -164,6 +164,7 @@ public class InventarioTiendaController {
         int invSedeParaTienda = inventariotienda.getInventariosede().getIdiventariosede();
         Inventariotienda inventariotiendaExiste = inventarioTiendaRepository.productoEnTienda(idTienda, invSedeParaTienda);
 
+
         if (inventariotienda.getStocktienda() <= inventariotienda.getInventariosede().getStock()) {
             if (inventariotiendaExiste == null) {
                 int reducirCantidadenSede = inventariotienda.getStocktienda();

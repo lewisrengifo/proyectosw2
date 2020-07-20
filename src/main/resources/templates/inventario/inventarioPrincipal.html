@@ -95,7 +95,7 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each="a,info: ${listaInventarioProducto}" >
-                                        <td th:text="${info.index +1+prev*5}" >1</td>
+                                        <td th:text="${info.index +1+prev*10}" >1</td>
                                         <td th:text="${a.consignacionyventa.numeropedido}" >de31edae</td>
                                         <td th:text="${a.producto.linea.nombrelinea}" >no hay línea en entidad</td>
                                         <td th:text="${a.categoria.getNombrecategoria()}" >----</td>
