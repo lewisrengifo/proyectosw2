@@ -23,7 +23,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
 
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invpr.color as color , v.metodopago as metododepago\n" +
+            " invpr.color as color , v.metodopago as metododepago, v.precioventa\n" +
             "  FROM proyectobasesw2.ventas v\n" +
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
@@ -33,7 +33,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
 
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invpr.color as color , v.metodopago as metododepago\n" +
+            " invpr.color as color , v.metodopago as metododepago, v.precioventa\n" +
             "  FROM proyectobasesw2.ventas v\n" +
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
@@ -44,7 +44,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
     //mosqoy trimestre
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invpr.color as color , v.metodopago as metododepago\n" +
+            " invpr.color as color , v.metodopago as metododepago, v.precioventa\n" +
             "  FROM proyectobasesw2.ventas v\n" +
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
@@ -57,7 +57,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
     //SEDE anual y mensual
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invpr.color as color , v.metodopago as metododepago\n" +
+            " invpr.color as color , v.metodopago as metododepago, v.precioventa\n" +
             "  FROM proyectobasesw2.ventas v\n" +
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
@@ -68,7 +68,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
     //trimestre
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invpr.color as color , v.metodopago as metododepago\n" +
+            " invpr.color as color , v.metodopago as metododepago, v.precioventa\n" +
             "  FROM proyectobasesw2.ventas v\n" +
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
@@ -80,7 +80,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
     @Query(value = "SELECT v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento,  v.numerodocumento as documento,\n" +
             " v.rucdni as rucodni,v.nombrecomprador as cliente, v.cantidad as cantidad,\n" +
             " p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invp.color as color, v.metodopago as metododepago \n" +
+            " invp.color as color, v.metodopago as metododepago, v.precioventa \n" +
             " FROM ventas v inner join inventariosede invs on invs.idiventariosede = v.iventariosede_idiventariosede\n" +
             "            inner join inventarioproducto invp on invp.idinventario = invs.inventarioproducto_idinventario\n" +
             "            inner join consignacionyventa consve on consve.idconsignacion = invp.consignacionyventa_idconsignacion\n" +
@@ -93,7 +93,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
     @Query(value = "SELECT v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento,v.rucdni as rucodni,\n" +
             "v.nombrecomprador as cliente, v.cantidad as cantidad,\n" +
             " p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invp.color as color, v.metodopago as metododepago\n" +
+            " invp.color as color, v.metodopago as metododepago, v.precioventa\n" +
             " FROM ventas v inner join inventariosede invs on invs.idiventariosede = v.iventariosede_idiventariosede\n" +
             "            inner join inventarioproducto invp on invp.idinventario = invs.inventarioproducto_idinventario\n" +
             "            inner join consignacionyventa consve on consve.idconsignacion = invp.consignacionyventa_idconsignacion\n" +
@@ -106,7 +106,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
     //mensual/anual para CLIENTE
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invpr.color as color , v.metodopago as metododepago\n" +
+            " invpr.color as color , v.metodopago as metododepago, v.precioventa\n" +
             "  FROM proyectobasesw2.ventas v\n" +
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
@@ -116,7 +116,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
     //trimestre
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invpr.color as color , v.metodopago as metododepago\n" +
+            " invpr.color as color , v.metodopago as metododepago, v.precioventa\n" +
             "  FROM proyectobasesw2.ventas v\n" +
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +
@@ -128,7 +128,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
     //mensual/anual para PRODUCTO
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni, " +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto, " +
-            " invpr.color as color , v.metodopago as metododepago " +
+            " invpr.color as color , v.metodopago as metododepago, v.precioventa " +
             "  FROM proyectobasesw2.ventas v " +
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede " +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario " +
@@ -140,7 +140,7 @@ public interface VentaRepository1 extends JpaRepository<Ventas,Integer> {
 
     @Query(value = "SELECT  v.fechaventa as fechadeventa, v.tipodocumento as tipodedocumento, v.numerodocumento as documento, v.rucdni as rucodni,\n" +
             " v.nombrecomprador as cliente, v.cantidad , p.codigoproducto as codigoproducto, p.nombreproducto as nombredeproducto,\n" +
-            " invpr.color as color , v.metodopago as metododepago\n" +
+            " invpr.color as color , v.metodopago as metododepago, v.precioventa\n" +
             "  FROM proyectobasesw2.ventas v\n" +
             "  inner join inventariosede invse on invse.idiventariosede = v.iventariosede_idiventariosede\n" +
             "  inner join inventarioproducto invpr on invpr.idinventario = invse.inventarioproducto_idinventario\n" +

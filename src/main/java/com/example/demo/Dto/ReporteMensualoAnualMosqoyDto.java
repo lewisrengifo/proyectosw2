@@ -14,6 +14,7 @@ public interface ReporteMensualoAnualMosqoyDto {
     String getNombredeproducto();
     String getColor();
     String getMetododepago();
+    String getPrecioVenta();
 
 
 }
