@@ -76,7 +76,7 @@ public class Ventas {
         this.precioventa = precioventa;
     }
     @NotNull(message = "No puede ser nulo")
-    
+
     private Double precioventa;
 
     public String getMetodopago() {
