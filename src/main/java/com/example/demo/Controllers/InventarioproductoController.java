@@ -116,30 +116,41 @@ public class InventarioproductoController {
 
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(@RequestParam("referencia2") String referencia2, Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                             @ModelAttribute("consigYVenta") Consignacionyventa consigYventa) throws ParseException {
+                                             @ModelAttribute("consigYVenta")@Valid Consignacionyventa consigYventa,BindingResult bindingResult,RedirectAttributes att) throws ParseException {
 
-        if (referencia2.equals("consig")) {
-            consigYventa.setTipo("consignacion");
-            Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
-            int idultimo = save.getIdconsignacion();
-            return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
-        } else {
-            consigYventa.setTipo("Comprado");
+            if (referencia2.equals("consig")) {
 
-            String fecha = "22/12/1900";
-            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-            Date fechafin = null;
-            try {
-                fechafin = formato.parse(fecha);
-            } catch (ParseException ex) {
-                System.out.println(ex);
+                if (bindingResult.hasErrors()){
+                    model.addAttribute("listaArtesano", artesanoRepository.findAll());
+                    return "inventario/consig";
+                }else{
+                    try{
+                        int numPedido = Integer.parseInt(consigYventa.getNumeropedido());
+                        consigYventa.setTipo("consignacion");
+                        Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
+                        int idultimo = save.getIdconsignacion();
+                        return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
+                    }catch (NumberFormatException e){
+                        att.addFlashAttribute("msgAlert","El numero de pedido deben solo numeros");
+                        model.addAttribute("listaArtesano", artesanoRepository.findAll());
+                        return "inventario/consig";
+                    }
+                }
 
-                return "redirect:/inventarioPrincipal";
+
+
+            } else {
+                if(referencia2.equals("comprado")){
+                    consigYventa.setTipo("comprado");
+
+                    Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
+                    int idultimo = save.getIdconsignacion();
+                    return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
+                }else {
+                    return "redirect:/inventarioPrincipal";
+                }
+
             }
-            Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
-            int idultimo = save.getIdconsignacion();
-            return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
-        }
 
 
     }
