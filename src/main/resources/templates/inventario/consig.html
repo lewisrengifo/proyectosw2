@@ -70,6 +70,8 @@
                                 <BR>
                                 <div th:if="${msgAlert!= null}" th:text="${msgAlert}" class="alert alert-warning"
                                      role="alert"> </div>
+                                <div th:if="${msgnumped!= null}" th:text="${msgnumped}" class="alert alert-warning"
+                                     role="alert"> </div>
                                 <form method="post"
                                       th:action="@{'/inventarioPrincipal/agregarConsigVenta'+ '?referencia2=consig'}"
                                       th:object="${consigYVenta}">

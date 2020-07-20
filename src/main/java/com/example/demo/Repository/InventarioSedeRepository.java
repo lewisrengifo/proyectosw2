@@ -88,7 +88,7 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede, 
 
     @Query(value = "SELECT ins.* FROM inventariosede ins \n" +
             "inner join sede s on s.idsede=ins.sede_idsede \n" +
-            "where s.nombre = ?1 and estado = 'enviado'",
+            "where s.nombre = ?1 and estado = 'enviado' order by idiventariosede desc",
             countQuery = "SELECT count(*) FROM inventariosede ins \n" +
                     "           inner join sede s on s.idsede=ins.sede_idsede \n" +
                     "            where s.nombre = ?1 and estado = 'enviado'", nativeQuery = true)

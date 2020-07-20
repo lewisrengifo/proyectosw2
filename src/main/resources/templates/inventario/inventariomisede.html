@@ -45,7 +45,9 @@
 
                                 </form>
 
-                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
+                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-success"
+                                     role="alert"></div>
+                                <div th:if="${msgNosepuedeDevolver != null}" th:text="${msgNosepuedeDevolver}" class="alert alert-warning"
                                      role="alert"></div>
 
 
