@@ -55,6 +55,16 @@ public class Ventas {
     @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String metodopago;
 
+    public Double getPreciototal() {
+        return preciototal;
+    }
+
+    public void setPreciototal(Double preciototal) {
+        this.preciototal = preciototal;
+    }
+
+    private Double preciototal;
+
     public String getMetodopago() {
         return metodopago;
     }

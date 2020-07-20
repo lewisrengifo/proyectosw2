@@ -203,6 +203,7 @@ public class VentasController {
                     inventarioTiendaRepository.ActualizarCantidadInventarioTienda(StockNuevoEnTienda, inventariotiendaReduceStock.getIdiventariotienda());
                     //actualizar cantidad en inventario principal
                     inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(nuevaCantidadProducto, CambiaCantidadProducto.get().getIdinventario());
+                    ventas.setPreciototal(ventas.getCantidad()*CambiaCantidadProducto.get().getPreciomosqoy());
                     redirectAttributes.addFlashAttribute("msgInfo", "Venta registrada exitosamente");
                     ventaRepository.save(ventas);
                     return "redirect:/venta";
