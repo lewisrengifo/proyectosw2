@@ -110,31 +110,26 @@ public class ProductoController {
             } else {
                 if (producto.getIdproducto() == 0) {
 
-                    for (Producto prod : productoRepository.findAll()) {
-                        if (prod.getCodigoproducto().equalsIgnoreCase(producto.getCodigoproducto())) {
-                            attr.addFlashAttribute("msg", "Código de producto ya existe");
-                            return "redirect:/producto/nuevo";
-
-                        } else if (producto.getIdproducto() == 0) {
-                            attr.addFlashAttribute("msgCo", "Producto Creado Exitosamente");
-                        } else {
-                            attr.addFlashAttribute("msgCo", "Producto Actualizado Exitosamente");
-                        }
+                    Producto productNameCod = productoRepository.verificarCodigoProducto(producto.getCodigoproducto());
+                    Producto productDescripCod = productoRepository.verificarCodigoProducto(producto.getCodigodescripcionproducto());
+                    if (productDescripCod==null && productNameCod == null){
+                        productoRepository.save(producto);
+                        attr.addFlashAttribute("msgCrear","producto creado exitosamente");
+                        return "redirect:/producto";
+                    }else{
+                        attr.addFlashAttribute("msgCrear","El codigo que esta ingresando ya esta siendo utilizado");
+                        model.addAttribute("listaLinea", lineaRepository.findAll());
+                        return "producto/editFrm";
                     }
-                } else {
-                    for (Producto prod : productoRepository.mio(producto.getIdproducto())) {
-                        if (prod.getCodigoproducto().equalsIgnoreCase(producto.getCodigoproducto())) {
-                            if (prod.getNombreproducto().equalsIgnoreCase(producto.getNombreproducto())) {
-                                attr.addFlashAttribute("msg1", "Nombre de Comunidad ya exite");
-                                attr.addFlashAttribute("comunidad", producto);
-                            }
-                            return "redirect:/producto/nuevo";
 
-                        } else if (producto.getIdproducto() == 0) {
-                            attr.addFlashAttribute("msgCo", "Producto Creado Exitosamente");
-                        } else {
-                            attr.addFlashAttribute("msgCo", "Producto Actualizado Exitosamente");
-                        }
+
+                } else {
+                    Optional<Producto> productExiste = productoRepository.findById(producto.getIdproducto());
+                    if(productExiste.get().getCodigoproducto().equals(producto.getCodigoproducto()) && productExiste.get().getCodigodescripcionproducto().equals(producto.getCodigodescripcionproducto())){
+                        attr.addFlashAttribute("msg","Producto editado exitosamente");
+                        return "redirect:/producto";
+                    }else{
+                        
                     }
                 }
                 String nom = producto.getNombreproducto().substring(0, 1).toUpperCase() + producto.getNombreproducto().substring(1).toLowerCase();

@@ -25,5 +25,9 @@ public interface ProductoRepository extends JpaRepository<Producto,Integer> {
             , nativeQuery = true)
     List<Producto> mio(int id);
 
+    @Query(value = "SELECT * FROM producto where codigoproducto = ?1 or codigodescripcionproducto = ?1",nativeQuery = true)
+        Producto verificarCodigoProducto(String codigo);
+
+
 
 }
