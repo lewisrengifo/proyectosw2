@@ -17,14 +17,23 @@
                             <h2 th:text="${tienda.idtienda == 0? 'Nueva tienda' : 'Editar tienda'}">
                                 Nuevo/Editar</h2>
                             <hr/>
-                            <div style="width: 40%" th:if="${msg != null}" th:text="${msg}" class="alert alert-danger"
-                                 role="alert"></div>
+
 
                             <form method="post" th:action="@{'/tienda/guardar'}" th:object="${tienda}">
+
                                 <input type="hidden" th:field="*{idtienda}"/>
+
                                 <div class="form-group">
+                                    <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
+                                         role="alert"></div>
+                                    <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
+                                         role="alert"></div>
+                                    <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger"
+                                         role="alert"></div>
                                     <label>Nombre </label>
                                     <input type="text" class="form-control" th:field="*{nombre}" style="width: 40%">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+
                                 </div>
                                 <a th:href="@{'/tienda'}" class="btn btn-outline-danger">Cancelar</a>
                                 <!--  falta definir dónde será la vista prinpipal respecto a esta tabla.

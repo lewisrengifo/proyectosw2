@@ -39,6 +39,7 @@ public class InventarioproductoController {
     ArtesanoRepository artesanoRepository;
     @Autowired
     ConsignacionyventaRepository consignacionyventaRepository;
+
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
 
@@ -201,8 +202,10 @@ public class InventarioproductoController {
     }
 
     @PostMapping("/agregarProducto")
-    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") @Valid Inventarioproducto invPro, BindingResult bindingResult,
-                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") String id, HttpSession session, RedirectAttributes att) {
+
+    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto")@Valid Inventarioproducto invPro, BindingResult bindingResult,
+                                           RedirectAttributes redirectAttributes, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") String id, HttpSession session,RedirectAttributes att) {
+
 
         try {
             int idcoven = Integer.parseInt(id);
@@ -223,59 +226,66 @@ public class InventarioproductoController {
                     Date fechatudei = new Date();
 
                     invPro.setFechainicio(fechatudei);
-                    if (ultimaConsigOventa.get().getTipo().equals("consignacion")) {
-                        String lineac = invPro.getProducto().getLinea().getCodigolinea();
-                        String categoriac = invPro.getCategoria().getCodigocategoria();
-                        String productoc = invPro.getProducto().getCodigoproducto();
-                        String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
-                        String tamano = invPro.getTamano().getCodigotamano();
-                        String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
-                        String artesanoC = invPro.getConsignacionyventa().getArtesano().getCodigoartesano();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
-                        //OBTENER EL MES
-                        simpleDateFormat = new SimpleDateFormat("MMMM");
-                        String mesC = "";
-                        if (invPro.getConsignacionyventa().getFechafin().getMonth() == 0) {
-                            mesC = "ENE";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 1) {
-                            mesC = "FEB";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 2) {
-                            mesC = "MAR";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 3) {
-                            mesC = "ABR";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 4) {
-                            mesC = "MAY";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 5) {
-                            mesC = "JUN";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 6) {
-                            mesC = "JUL";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 7) {
-                            mesC = "AGO";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 8) {
-                            mesC = "SET";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 9) {
-                            mesC = "OCT";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 10) {
-                            mesC = "NOV";
-                        } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 11) {
-                            mesC = "DIC";
+                    if (invPro.getPreciomosqoy()>invPro.getPreciotejedor()) {
+                        if (ultimaConsigOventa.get().getTipo().equals("consignacion")) {
+                            String lineac = invPro.getProducto().getLinea().getCodigolinea();
+                            String categoriac = invPro.getCategoria().getCodigocategoria();
+                            String productoc = invPro.getProducto().getCodigoproducto();
+                            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+                            String tamano = invPro.getTamano().getCodigotamano();
+                            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+                            String artesanoC = invPro.getConsignacionyventa().getArtesano().getCodigoartesano();
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+                            //OBTENER EL MES
+                            simpleDateFormat = new SimpleDateFormat("MMMM");
+                            String mesC = "";
+                            if (invPro.getConsignacionyventa().getFechafin().getMonth() == 0) {
+                                mesC = "ENE";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 1) {
+                                mesC = "FEB";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 2) {
+                                mesC = "MAR";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 3) {
+                                mesC = "ABR";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 4) {
+                                mesC = "MAY";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 5) {
+                                mesC = "JUN";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 6) {
+                                mesC = "JUL";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 7) {
+                                mesC = "AGO";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 8) {
+                                mesC = "SET";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 9) {
+                                mesC = "OCT";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 10) {
+                                mesC = "NOV";
+                            } else if (invPro.getConsignacionyventa().getFechafin().getMonth() == 11) {
+                                mesC = "DIC";
+                            }
+                            //OBTENER EL AÑO
+                            simpleDateFormat = new SimpleDateFormat("YYYY");
+                            String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
+                            char[] yearchar = yearco.toCharArray();
+                            String totalCodigoGenerado = lineac + categoriac + productoc
+                                    + descriccionC + tamano + comunidadC + artesanoC + mesC + yearchar[2] + yearchar[3];
+                            invPro.setCodigogenerado(totalCodigoGenerado);
+                        } else {
+                            String lineac = invPro.getProducto().getLinea().getCodigolinea();
+                            String categoriac = invPro.getCategoria().getCodigocategoria();
+                            String productoc = invPro.getProducto().getCodigoproducto();
+                            String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
+                            String tamano = invPro.getTamano().getCodigotamano();
+                            String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
+                            String totalCodigoGenerado = lineac + categoriac + productoc + descriccionC + tamano + comunidadC;
+                            invPro.setCodigogenerado(totalCodigoGenerado);
                         }
-                        //OBTENER EL AÑO
-                        simpleDateFormat = new SimpleDateFormat("YYYY");
-                        String yearco = simpleDateFormat.format(invPro.getConsignacionyventa().getFechafin()).toUpperCase();
-                        char[] yearchar = yearco.toCharArray();
-                        String totalCodigoGenerado = lineac + categoriac + productoc
-                                + descriccionC + tamano + comunidadC + artesanoC + mesC + yearchar[2] + yearchar[3];
-                        invPro.setCodigogenerado(totalCodigoGenerado);
-                    } else {
-                        String lineac = invPro.getProducto().getLinea().getCodigolinea();
-                        String categoriac = invPro.getCategoria().getCodigocategoria();
-                        String productoc = invPro.getProducto().getCodigoproducto();
-                        String descriccionC = invPro.getProducto().getCodigodescripcionproducto();
-                        String tamano = invPro.getTamano().getCodigotamano();
-                        String comunidadC = invPro.getConsignacionyventa().getArtesano().getComunidad().getCodigocomunidad();
-                        String totalCodigoGenerado = lineac + categoriac + productoc + descriccionC + tamano + comunidadC;
-                        invPro.setCodigogenerado(totalCodigoGenerado);
+                    }else{
+                        model.addAttribute("inventarioProducto",invPro);
+                        int idultimo = invPro.getConsignacionyventa().getIdconsignacion();
+                        redirectAttributes.addFlashAttribute("msg2", "El precio Moscoy debe ser mayor que el precio tejedor.");
+                        return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
                     }
                     Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
 
