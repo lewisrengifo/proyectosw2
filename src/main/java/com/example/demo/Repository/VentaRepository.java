@@ -22,7 +22,7 @@ import java.util.List;
 @Repository
 public interface VentaRepository extends JpaRepository<Ventas, Integer> {
 
-    @Query(value = "SELECT * FROM ventas where sede_idsede=?1",
+    @Query(value = "SELECT * FROM ventas where sede_idsede=?1 order by idventas desc",
             countQuery = "SELECT count(*) FROM ventas where sede_idsede= ?1 ",
 
             nativeQuery = true)

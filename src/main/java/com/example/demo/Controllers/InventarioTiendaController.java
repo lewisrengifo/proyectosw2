@@ -104,7 +104,7 @@ public class InventarioTiendaController {
         if(page<0){
             return "redirect:/inventarioTienda/lista";
         }
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Inventariotienda> pageInvTienda = inventarioTiendaRepository.findmenosDevuelto(pageRequest);
         int totalPage = pageInvTienda.getTotalPages();
@@ -153,6 +153,7 @@ public class InventarioTiendaController {
         int idTienda = inventariotienda.getTienda().getIdtienda();
         int invSedeParaTienda = inventariotienda.getInventariosede().getIdiventariosede();
         Inventariotienda inventariotiendaExiste = inventarioTiendaRepository.productoEnTienda(idTienda, invSedeParaTienda);
+
 
         if (inventariotienda.getStocktienda() <= inventariotienda.getInventariosede().getStock()) {
             if (inventariotiendaExiste == null) {
