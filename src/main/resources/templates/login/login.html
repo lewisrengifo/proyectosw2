@@ -17,17 +17,19 @@
         </span>
         <br>
         <div align="center">
-            <h5 th:if="${param.error}" class="alert alert-danger" style="color:#ff0000">Acceso Denegado</h5>
+            <h5  th:if="${param.error}" class="alert alert-danger" style="color:#ff0000;padding: 10px;width: 370px"><strong>Acceso Denegado</strong></h5>
         </div>
         <div align="center" th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
         <div align="center" th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger" role="alert"></div>
 
-        <div class="container" >
-            <input type="text" class="form-control" placeholder="Usuario" aria-label="Usuario" aria-describedby="addon-wrapping" name="correo">
+
+        <div class="container" style="width: auto" >
+            <input type="text" class="form-control" placeholder="Correo" aria-label="Correo" aria-describedby="addon-wrapping" name="correo">
         </div>
         <br>
-        <div class="container">
-            <input type="password" class="form-control" placeholder="Contraseña" aria-label="Contraseña" aria-describedby="addon-wrapping" name="password">
+        <div class="container" style="width: auto">
+            <input type="password" class="form-control" placeholder="Contrasena" aria-label="Contrasena" aria-describedby="addon-wrapping" name="password">
+
         </div>
         <br>
 
@@ -35,10 +37,10 @@
             <a class="nav-link" th:href="@{/olvidoContrasenia}">Olvide mi contraseña</a>
         </div>
         <br>
-        <input type="submit" class="btn btn-info btn-block" value="Iniciar Sesion">
+        <input type="submit" class="btn btn-info btn-block" value="Iniciar Sesion" style="width: 250px;margin: auto">
     </form >
     <div class="login100-more" >
-        <img width="99%" th:src="@{'/img/foto.jpg'}">
+        <img width="99.8%" th:src="@{'/img/foto.jpg'}" style="min-height: 100vh">
     </div>
 </div>
 </body>
