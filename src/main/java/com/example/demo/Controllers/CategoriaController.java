@@ -171,7 +171,7 @@ public class CategoriaController {
             if (inventarioproducto == null){
                 if (optCategory.isPresent()) {
                     categoriaRepository.deleteById(idcat);
-                    att.addFlashAttribute("msgBorrado", "Borrado Exitosamente");
+                    att.addFlashAttribute("msgBorradoExito", "Borrado Exitosamente");
                     return "redirect:/categoria";
                 }
             }else {

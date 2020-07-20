@@ -2,11 +2,15 @@ package com.example.demo.Controllers;
 
 
 import com.example.demo.Dto.RendirizadorPaginas;
+import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Comunidad;
+import com.example.demo.Entity.Usuario;
+import com.example.demo.Repository.ArtesanoRepository;
 import com.example.demo.Repository.ComunidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/comunidad")
@@ -24,54 +30,96 @@ public class ComunidadController {
 
     @Autowired
     ComunidadRepository comunidadRepository;
+    @Autowired
+    ArtesanoRepository artesanoRepository;
+
+    @GetMapping("")
+    public String listarComunidad(@RequestParam Map<String, Object> params, Model model) {
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
+            return "redirect:/comunidad";
+        }
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+        if (page < 0) {
+            return "redirect:/comunidad";
+        }
+        PageRequest pageRequest = PageRequest.of(page, 5);
+        Page<Comunidad> pageComu = comunidadRepository.findAll(pageRequest);
+        int totalPage = pageComu.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+        model.addAttribute("listaComunidad", pageComu.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+        //model.addAttribute("listaComunidad",comunidadRepository.findAll());
+        return "comunidad/lista";
+    }
+
+
     @GetMapping("/nuevo")
-    public String nuevaComunidad(@ModelAttribute("comunidad") Comunidad c){
+    public String nuevaComunidad(@ModelAttribute("comunidad") Comunidad c) {
 
         return "comunidad/newEdit";
     }
 
     @GetMapping("/editar")
     public String editarComunidad(@ModelAttribute("comunidad") Comunidad comunidad,
-                                  @RequestParam("id") int id, Model model,RedirectAttributes att){
+                                  @RequestParam("id") int id, Model model, RedirectAttributes att) {
         Optional<Comunidad> optionalComunidad = comunidadRepository.findById(id);
-        if(optionalComunidad.isPresent() && optionalComunidad.get().getIdcomunidad()>5 ){
+        if (optionalComunidad.isPresent() && optionalComunidad.get().getIdcomunidad() > 5) {
             comunidad = optionalComunidad.get();
-            model.addAttribute("comunidad",comunidad);
+            model.addAttribute("comunidad", comunidad);
             return "comunidad/newEdit";
-        }
-        else {
+        } else {
             att.addFlashAttribute("msgE", "No puede editar esta Comunidad");
-            return  "redirect:/comunidad";
+            return "redirect:/comunidad";
         }
 
     }
 
     @GetMapping("/borrar")
     public String borrarComunidad(Model model,
-                                  @RequestParam("id") int id, RedirectAttributes att){
+                                  @RequestParam("id") String id, RedirectAttributes att) {
 
-        Optional<Comunidad> optionalComunidad = comunidadRepository.findById(id);
-        if(optionalComunidad.isPresent() && optionalComunidad.get().getIdcomunidad()>5){
-            att.addFlashAttribute("msgCo", "Comunidad Borrada Exitosamente");
-            comunidadRepository.deleteById(id);
+        try {
+            int idCom = Integer.parseInt(id);
+            Optional<Comunidad> optionalComunidad = comunidadRepository.findById(idCom);
+            Artesano artesano = artesanoRepository.verificarComunidadenArtesano(idCom);
+            if (artesano == null){
+                if (optionalComunidad.isPresent() && optionalComunidad.get().getIdcomunidad() > 5) {
+                    att.addFlashAttribute("msgCo", "Comunidad Borrada Exitosamente");
+                    comunidadRepository.deleteById(idCom);
+
+                }
+            }
+             else {
+                att.addFlashAttribute("msgE",
+                        "No puede borrar esta Comunidad, porque hay artesanos pertenecientes a esta.");
+                return "redirect:/comunidad";
+            }
+
+        }catch (NumberFormatException e){
             return "redirect:/comunidad";
         }
-        else
-        {
-            att.addFlashAttribute("msgE", "No puede borrar esta Comunidad");
-            return "redirect:/comunidad";
-        }
 
+        return "redirect:/comunidad";
     }
 
     @PostMapping("/guardar")
     public String guardarComunidad(@ModelAttribute("comunidad") @Valid Comunidad comunidad, BindingResult bindingResult,
-                                        RedirectAttributes att){
+                                   RedirectAttributes att) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "comunidad/newEdit";
-        }else{
-            if(comunidad.getIdcomunidad()==0){
+        } else {
+            if (comunidad.getIdcomunidad() == 0) {
                 for (Comunidad com : comunidadRepository.findAll()) {
                     if (com.getNombrecomunidad().equalsIgnoreCase(comunidad.getNombrecomunidad()) || com.getCodigocomunidad().equalsIgnoreCase(comunidad.getCodigocomunidad())) {
                         if (com.getNombrecomunidad().equalsIgnoreCase(comunidad.getNombrecomunidad())) {
@@ -90,9 +138,8 @@ public class ComunidadController {
                         att.addFlashAttribute("msgCo", "Comunidad Actualizada Exitosamente");
                     }
                 }
-            }
-            else{
-                for(Comunidad comunidad1:comunidadRepository.mio(comunidad.getIdcomunidad())){
+            } else {
+                for (Comunidad comunidad1 : comunidadRepository.mio(comunidad.getIdcomunidad())) {
                     if (comunidad1.getNombrecomunidad().equalsIgnoreCase(comunidad.getNombrecomunidad()) || comunidad1.getCodigocomunidad().equalsIgnoreCase(comunidad.getCodigocomunidad())) {
                         if (comunidad1.getNombrecomunidad().equalsIgnoreCase(comunidad.getNombrecomunidad())) {
                             att.addFlashAttribute("msg1", "Nombre de Comunidad ya exite");
@@ -112,9 +159,9 @@ public class ComunidadController {
                 }
             }
             //String nom= comunidad.getNombrecomunidad().substring(0, 1).toUpperCase() + comunidad.getNombrecomunidad().substring(1);
-            String nom=comunidad.getNombrecomunidad().substring(0, 1).toUpperCase() + comunidad.getNombrecomunidad().substring(1).toLowerCase();
+            String nom = comunidad.getNombrecomunidad().substring(0, 1).toUpperCase() + comunidad.getNombrecomunidad().substring(1).toLowerCase();
             comunidad.setNombrecomunidad(nom);
-            String cod=comunidad.getCodigocomunidad().toUpperCase();
+            String cod = comunidad.getCodigocomunidad().toUpperCase();
             comunidad.setCodigocomunidad(cod);
             comunidadRepository.save(comunidad);
             return "redirect:/comunidad";
@@ -122,14 +169,36 @@ public class ComunidadController {
     }
 
     @PostMapping("/buscar")
-    public String filtar(@RequestParam("nom") String nom,Model model,RedirectAttributes att){
-        if(nom.isEmpty()){
-            att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+    public String filtar(@RequestParam Map<String, Object> params, @RequestParam("nom") String nom, Model model, @ModelAttribute("busqueda") String textbuscador, RedirectAttributes att) {
+        try {
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        } catch (NumberFormatException e) {
             return "redirect:/comunidad";
         }
-        else{
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-            model.addAttribute("listaComunidad",comunidadRepository.filtro(nom));
+        if (page < 0) {
+            return "redirect:/comunidad";
+        }
+        if (nom.isEmpty()) {
+            att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+            return "redirect:/comunidad";
+        } else {
+            PageRequest pageRequest = PageRequest.of(page, 5);
+            Page<Comunidad> pageComu = comunidadRepository.findAll(pageRequest);
+            int totalPage = pageComu.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                model.addAttribute("pages", pages);
+            }
+
+            model.addAttribute("listaComunidad", pageComu.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+            model.addAttribute("busqueda", nom);
+            model.addAttribute("listaComunidad", comunidadRepository.filtro(nom,pageRequest));
             return "comunidad/lista";
         }
 

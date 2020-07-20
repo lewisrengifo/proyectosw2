@@ -227,7 +227,7 @@ public class InventariosedeController {
         int idv = Integer.parseInt(idinventariosede);
         if (estado.equals("recibido")){
             Optional<Inventariosede> inventSede = inventarioSedeRepository.findById(idv);
-            if (inventSede.get().getObservaciones().isEmpty()){
+            if (inventSede.get().getObservaciones().isEmpty()||inventSede==null){
                 inventarioSedeRepository.actualizarEstado(estado, idv);
                 return "redirect:/inventarioSede/listarinvsedexconfirmar";
             }else{
