@@ -4,11 +4,13 @@ import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -61,7 +63,7 @@ public class InventarioproductoController {
             return "redirect:/inventarioPrincipal";
         }
         //Page<Inventarioproducto> page = inventarioPrincipalService.listAll(currentPage);
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Inventarioproducto> pageProduct = inventarioproductoRepository.listaTotalSinDevueltos(pageRequest);
         long totalItems = pageProduct.getTotalElements();
@@ -112,6 +114,12 @@ public class InventarioproductoController {
             return "redirect:/inventarioPrincipal";
         }
 
+    }
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(
+                dateFormat, true));
     }
 
     @PostMapping("/agregarConsigVenta")
@@ -359,7 +367,7 @@ public class InventarioproductoController {
             return "redirect:/inventarioPrincipal/stock";
         }
 
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Inventariosede> pageStock = inventarioSedeRepository.listarInventarioPorSedePaginado(idusuariologueado, pageRequest);
         long totalItems = pageStock.getTotalElements();
@@ -483,7 +491,7 @@ public class InventarioproductoController {
             return "redirect:/inventarioPrincipal/productosDevueltos";
         }
 
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Inventariosede> pageStock = inventarioSedeRepository.listarProductosDevueltos(idusuariologueado, pageRequest);
         long totalItems = pageStock.getTotalElements();

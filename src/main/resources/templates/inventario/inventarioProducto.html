@@ -45,8 +45,8 @@
                                     <tbody>
                                     <td th:text="${consigYventa1.numeropedido}"></td>
                                     <td th:text="${consigYventa1.tipo}"></td>
-                                    <td th:text="${consigYventa1.fechainicio}">de31edae</td>
-                                    <td th:text="${consigYventa1.fechafin}">---</td>
+                                    <td th:text="${consigYventa1.fechainicio.getDay() + consigYventa1.getFechainicio().getMonth() + consigYventa1.getFechainicio().getYear()}">de31edae</td>
+                                    <td th:text="${consigYventa1.fechafin.getDate() +'/'+ consigYventa1.getFechafin().getMonth()+1+'/' + consigYventa1.getFechafin().getMonth()+1900}">---</td>
                                     <td th:if="${consigYventa1.tipo}=='consignacion'" th:text=" ${consigYventa1.artesano.comunidad.nombrecomunidad} + ' / '+${consigYventa1.artesano.nombreartesano} + ' ' + ${consigYventa1.artesano.apellidopaterno} + ' '+${consigYventa1.artesano.apellidomaterno} "></td>
                                     <td th:unless="${consigYventa1.tipo}=='consignacion'" th:text="${consigYventa1.artesano.comunidad.nombrecomunidad}"></td>
 

@@ -3,6 +3,7 @@ package com.example.demo.Controllers;
 import com.example.demo.Dto.ProductoServiceApi;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.InventarioSedeRepository;
+import com.example.demo.Repository.InventarioTiendaRepository;
 import com.example.demo.Repository.InventarioproductoRepository;
 import com.example.demo.Repository.SedeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class InventariosedeController {
     SedeRepository sedeRepository;
     @Autowired
     InventarioSedeRepository inventarioSedeRepository;
+    @Autowired
+    InventarioTiendaRepository inventarioTiendaRepository;
 
 
     @GetMapping("/asignarStock")
@@ -405,25 +408,35 @@ public class InventariosedeController {
 
 
     @GetMapping("devolverPrincipal")
-    public String devolverProductoAsedePrincipal(@RequestParam("id") String id) {
 
-        try {
-            int idnuevo = Integer.parseInt(id);
-            Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(idnuevo);
-            int cantidadSede = productEnSede.get().getStock();
-            String principal = "cuzco";
-            Inventariosede productoSedePrincipal = inventarioSedeRepository.productoParaDevolverAlPrincipal(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), principal);
-            int nuevoTotalEnPrincipal = productoSedePrincipal.getStock() + productEnSede.get().getStock();
-            //SE AGREGA LO DE SEDE AL PRINCIPAL EL STOCK
-            inventarioSedeRepository.actualizarStockSede(nuevoTotalEnPrincipal, productoSedePrincipal.getIdiventariosede());
-            //REDUCIR EL STOCK EN CERO Y PONER ESTADO EN DEVUELTO
-            inventarioSedeRepository.cambiaStockyEstadoSedeCuandoDevuelveProduc(0, "devuelto principal", productEnSede.get().getIdiventariosede());
+    public String devolverProductoAsedePrincipal(@RequestParam("id") String id,RedirectAttributes att) {
+
+        try{
+            int id1 =Integer.parseInt(id);
+            Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(id1);
+            Inventariotienda productEnTienda = inventarioTiendaRepository.productoEntiendaTodavia(productEnSede.get().getIdiventariosede());
+            if(productEnTienda==null){
+                int cantidadSede = productEnSede.get().getStock();
+                String principal = "cuzco";
+                Inventariosede productoSedePrincipal = inventarioSedeRepository.productoParaDevolverAlPrincipal(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), principal);
+                int nuevoTotalEnPrincipal = productoSedePrincipal.getStock() + productEnSede.get().getStock();
+                //SE AGREGA LO DE SEDE AL PRINCIPAL EL STOCK
+                inventarioSedeRepository.actualizarStockSede(nuevoTotalEnPrincipal, productoSedePrincipal.getIdiventariosede());
+                //REDUCIR EL STOCK EN CERO Y PONER ESTADO EN DEVUELTO
+                inventarioSedeRepository.cambiaStockyEstadoSedeCuandoDevuelveProduc(0, "devuelto principal", productEnSede.get().getIdiventariosede());
+                att.addFlashAttribute("msgPagina","producto devuelto a sede");
+                return "redirect:/inventarioSede/listarInvMiSede";
+            }else{
+                att.addFlashAttribute("msgNosepuedeDevolver","El producto aún se encuentra en la tienda");
+                return "redirect:/inventarioSede/listarInvMiSede";
+            }
+
+
 
         }catch (NumberFormatException e){
             return "redirect:/inventarioSede/listarInvMiSede";
         }
 
-        return "redirect:/inventarioSede/listarInvMiSede";
 
     }
 

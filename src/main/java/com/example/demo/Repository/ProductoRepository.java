@@ -25,5 +25,18 @@ public interface ProductoRepository extends JpaRepository<Producto,Integer> {
             , nativeQuery = true)
     List<Producto> mio(int id);
 
+    @Query(value = "SELECT * FROM producto where codigoproducto = ?1 or codigodescripcionproducto = ?1",nativeQuery = true)
+        Producto verificarCodigoProducto(String codigo);
+    @Query(value = "SELECT * FROM producto where codigodescripcionproducto = ?1",nativeQuery = true)
+    Producto verificarDescripcionProducto(String codigo);
+
+    @Query(value = "SELECT * FROM producto where (codigoproducto = ?1 or codigodescripcionproducto = ?1) " +
+            "and idproducto not in (select p.idproducto from producto p  where p.idproducto = ?2)",nativeQuery = true)
+    Producto verificarCodigoProductoSinElMio(String codigo,int idproducto);
+
+    @Query(value = "SELECT * FROM producto where (codigodescripcionproducto = ?1) " +
+            "and idproducto not in (select p.idproducto from producto p  where p.idproducto = ?2)",nativeQuery = true)
+    Producto verificarCodigoDescripcionProductoSinElMio(String codigo,int idproducto);
+
 
 }

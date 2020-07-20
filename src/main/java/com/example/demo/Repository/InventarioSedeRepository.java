@@ -45,8 +45,8 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede, 
     List<Inventariosede> listarInventarioPorSedeConStock(int idSede);
 
 
-    @Query(value = "SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido'",
-            countQuery = "SELECT count(*) FROM inventariosede where sede_idsede=?1 and estado ='recibido'", nativeQuery = true)
+    @Query(value = "SELECT * FROM inventariosede where sede_idsede=?1 and estado ='recibido' order by idiventariosede desc",
+            countQuery = "SELECT count(*) FROM inventariosede where sede_idsede=?1 and estado ='recibido' order by idiventariosede desc", nativeQuery = true)
     Page<Inventariosede> listarInventarioPorSedePaginado(int idSede, Pageable pageable);
 
 
@@ -154,9 +154,9 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede, 
 
 
     @Query(value = "SELECT * FROM inventariosede " +
-            "where estado='devuelto' and sede_idsede=?1",
+            "where estado='devuelto' and sede_idsede=?1 order by idiventariosede desc ",
             countQuery = "SELECT * FROM inventariosede " +
-                    "where estado='devuelto' and sede_idsede=?1", nativeQuery = true)
+                    "where estado='devuelto' and sede_idsede=?1 order by idiventariosede desc", nativeQuery = true)
     Page<Inventariosede> listarProductosDevueltos(int idSede, Pageable pageable);
 
 
