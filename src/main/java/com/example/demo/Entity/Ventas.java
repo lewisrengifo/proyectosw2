@@ -65,6 +65,16 @@ public class Ventas {
 
     private Double preciototal;
 
+    public Double getPrecioventa() {
+        return precioventa;
+    }
+
+    public void setPrecioventa(Double precioventa) {
+        this.precioventa = precioventa;
+    }
+
+    private Double precioventa;
+
     public String getMetodopago() {
         return metodopago;
     }
