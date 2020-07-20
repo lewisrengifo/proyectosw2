@@ -179,6 +179,7 @@ public class InventarioTiendaController {
             att.addFlashAttribute("msgAlerta", "La cantidad ingresada debe ser menor a la de la Cantidad Disponible");
             return "redirect:/inventarioTienda/asignarStock";
         }
+
         return "redirect:/inventarioTienda/asignarStock";
     }
 

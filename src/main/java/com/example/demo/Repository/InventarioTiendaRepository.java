@@ -76,4 +76,6 @@ public interface InventarioTiendaRepository extends JpaRepository<Inventariotien
     @Query(value = "SELECT * FROM inventariotienda where estado = 'recibido'", nativeQuery = true)
     Page<Inventariotienda> findmenosDevuelto(Pageable pageable);
 
+
+
 }
