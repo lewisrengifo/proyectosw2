@@ -4,23 +4,24 @@ package com.example.demo.Controllers;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
 import com.example.demo.service.InventarioTiendaService;
+import com.example.demo.service.SendMailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -40,8 +41,17 @@ public class InventarioTiendaController {
     InventarioTiendaService inventarioTiendaService;
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
+    @Autowired
+    SendMailService sendMailService;
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
-
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(
+                dateFormat, true));
+    }
     @GetMapping(value = {"", "/", "/lista"})
     public String listaInventarioTienda(Model model, @RequestParam Map<String, Object> params, RedirectAttributes attr, HttpSession session) {
 
@@ -149,7 +159,7 @@ public class InventarioTiendaController {
 
     @PostMapping("/agregarStock")
     public String agregarStock(Model model, @ModelAttribute("inventariotienda") Inventariotienda inventariotienda, @ModelAttribute("tienda") Tienda tienda, RedirectAttributes att) {
-
+        //Integer nuevoTotal = null;
         int idTienda = inventariotienda.getTienda().getIdtienda();
         int invSedeParaTienda = inventariotienda.getInventariosede().getIdiventariosede();
         Inventariotienda inventariotiendaExiste = inventarioTiendaRepository.productoEnTienda(idTienda, invSedeParaTienda);
@@ -165,6 +175,16 @@ public class InventarioTiendaController {
                 inventariotienda.setEstado("recibido");
                 inventarioTiendaRepository.save(inventariotienda);
                 att.addFlashAttribute("msg", "Producto enviado a tienda Exitosamente");
+                Optional<Inventariosede> invSedeRecoAgain = inventarioSedeRepository.findById(inventariotienda.getInventariosede().getIdiventariosede());
+                List<Usuario> gestoresPrincipales = usuarioRepository.findGestoresPrincipales();
+                if (nuevoTotalCantidad==0){
+                    String mensaje = "El siguiente producto: "+ invSedeRecoAgain.get().getInventarioproductoidinventario().getProducto().getNombreproducto()+" con codigo generado: "+invSedeRecoAgain.get().getInventarioproductoidinventario().getCodigogenerado() +" de la sede: " + invSedeRecoAgain.get().getSede().getNombre()+ " se quedo sin stock";
+                    for (Usuario gestPrin : gestoresPrincipales){
+                        sendMailService.sendMail(gestPrin.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre stock de productos - Mosqoy", mensaje);
+                    }
+                    //sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
+                }
+
 
             } else {
                 int aumentarCantidadentienda = inventariotienda.getStocktienda();
@@ -175,6 +195,16 @@ public class InventarioTiendaController {
                 int nuevaStockEnsede = invSedeReduceCantidad.get().getStock() - aumentarCantidadentienda;
                 inventarioSedeRepository.actualizarStockSede(nuevaStockEnsede, inventariotiendaExiste.getInventariosede().getIdiventariosede());
                 att.addFlashAttribute("msg", "Se sumo Producto a tienda Exitosamente");
+                Optional<Inventariosede> invSedeRecoAgain = inventarioSedeRepository.findById(inventariotienda.getInventariosede().getIdiventariosede());
+                List<Usuario> gestoresPrincipales = usuarioRepository.findGestoresPrincipales();
+                if (nuevaStockEnsede==0){
+                    String mensaje = "El siguiente producto: "+ invSedeRecoAgain.get().getInventarioproductoidinventario().getProducto().getNombreproducto()+" con codigo generado: "+invSedeRecoAgain.get().getInventarioproductoidinventario().getCodigogenerado() +" de la sede: " + invSedeRecoAgain.get().getSede().getNombre()+ " se quedo sin stock";
+                    for (Usuario gestPrin : gestoresPrincipales){
+                        sendMailService.sendMail(gestPrin.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre stock de productos - Mosqoy", mensaje);
+                    }
+                    //sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
+                }
+
             }
         } else {
             att.addFlashAttribute("msgAlerta", "La cantidad ingresada debe ser menor a la de la Cantidad Disponible");

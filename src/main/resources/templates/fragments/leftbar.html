@@ -119,7 +119,7 @@
 
 
             <li sec:authorize="hasAnyAuthority('Administrador')"
-                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/usuario'} ? 'nav-item active' : ''">
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/usuario'||#httpServletRequest.requestURI == '/UnaChiqui/usuario/buscador?searchField=lewis'} ? 'nav-item active' : ''">
                 <a th:href="@{'/usuario'}" class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de
                     Usuarios</a>
             </li>
@@ -187,20 +187,20 @@
 
 
             <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')"
-                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/venta'||#httpServletRequest.requestURI == '/UnaChiqui/venta/registroventa'} ? 'nav-item active' : ''">
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/venta'||#httpServletRequest.requestURI == '/UnaChiqui/venta/registroventa'||#httpServletRequest.requestURI == '/UnaChiqui/venta/buscador?searchField=saga'} ? 'nav-item active' : ''">
                 <a href="#" class=" waves-effect waves-dark"><i class="fa fa-sitemap"></i> Ventas <span
                         class="fa arrow"></span></a>
 
                 <ul class="nav nav-second-level">
                     <li>
                         <a th:href="@{/venta}"
-                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/venta'} ? 'active-menu' : ''">Lista
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/venta'||#httpServletRequest.requestURI == '/UnaChiqui/venta/buscador?searchField=saga'} ? 'active-menu' : ''">Lista
                             de Ventas</a>
                     </li>
 
                 </ul>
             </li>
-            
+
 
             <!--
                         <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">

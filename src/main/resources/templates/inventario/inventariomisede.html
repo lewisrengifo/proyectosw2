@@ -74,7 +74,7 @@
                                         <td th:text="${inv.getInventarioproductoidinventario().getProducto().getDescripcionproducto()}"></td>
                                         <td th:text="${inv.getInventarioproductoidinventario().getCodigogenerado()}"> </td>
                                         <td th:text="${inv.stock}">de31edae</td>
-                                        <td th:text="${inv.getFechallegada()}">---</td>
+                                        <td th:text="${inv.getFechallegada().getDate()}+'/' +${inv.getFechallegada().getMonth()+1} + '/' + ${inv.getFechallegada().getYear()+1900}">---</td>
                                         <td><a th:if="${inv.getInventarioproductoidinventario().getConsignacionyventa().getTipo() == 'consignacion'}"
                                                th:href="@{'/inventarioSede/devolverPrincipal?id=' + ${inv.getIdiventariosede()} }">Devolver al Principal</a></td>
 

@@ -1,63 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Tienda')">
-
-</head>
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Gestion de tienda')"></head>
 <body>
-
-<div id="wrapper" >
+<div id="wrapper">
     <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
+    <!--/. NAV TOP  -->
 
-    <nav th:replace="fragments/leftbar.html :: barraizquierda"></nav>
-
+    <nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'categoria')"></nav>
     <div id="page-wrapper">
-        <div class="header">
-            <h2 th:text="${tienda.idtienda == 0? 'Nueva Tienda' : 'editar Tienda'}">Nuevo/Editar</h2>
-        </div>
-
         <div id="page-inner">
-            <form method="post" th:action="@{'/tienda/guardar'}" th:object="${tienda}">
-                <input type="hidden" th:field="*{idtienda}" />
-                <div class="form-group">
-                    <label>Nombre </label>
-                    <input type="text" class="form-control" th:field="*{nombre}">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="container">
+
+                            <h2 th:text="${tienda.idtienda == 0? 'Nueva tienda' : 'Editar tienda'}">
+                                Nuevo/Editar</h2>
+                            <hr/>
+                            <div style="width: 40%" th:if="${msg != null}" th:text="${msg}" class="alert alert-danger"
+                                 role="alert"></div>
+
+                            <form method="post" th:action="@{'/tienda/guardar'}" th:object="${tienda}">
+                                <input type="hidden" th:field="*{idtienda}"/>
+                                <div class="form-group">
+                                    <label>Nombre </label>
+                                    <input type="text" class="form-control" th:field="*{nombre}" style="width: 40%">
+                                </div>
+                                <a th:href="@{'/tienda'}" class="btn btn-outline-danger">Cancelar</a>
+                                <!--  falta definir dónde será la vista prinpipal respecto a esta tabla.
+                                Esto aparece cuando se requiere registrar un producto-->
+                                <button type="submit" class="btn btn-outline-danger"
+                                        th:text="${tienda.idtienda == 0? 'Registrar' : 'Actualizar'}">Reg/act
+                                </button>
+                            </form>
+                            <br>
+
+                        </div>
+                    </div>
                 </div>
-                <a th:href="@{'/tienda'}" class="btn btn-outline-danger">Cancelar</a>
-                <!--  falta definir dónde será la vista prinpipal respecto a esta tabla.
-                Esto aparece cuando se requiere registrar un producto-->
-                <button type="submit" class="btn btn-outline-danger" th:text="${tienda.idtienda == 0? 'Registrar' : 'Actualizar'}">Reg/act</button>
-            </form>
+            </div>
         </div>
-
     </div>
-
-
 </div>
-
-<!-- JS Scripts-->
-
-<!-- jQuery Js -->
-<script th:href="@{/js/jquery-1.10.2.js}"></script>
-
-<!-- Bootstrap Js -->
-<script th:href="@{/js/bootstrap.min.js}"></script>
-
-<script th:href="@{/js/materialize.min.js}"></script>
-
-<!-- Metis Menu Js -->
-<script th:href="@{/js/jquery.metisMenu.js}"></script>
-<!-- Morris Chart Js -->
-<script th:href="@{/js/morris/raphael-2.1.0.min.js}"></script>
-<script th:href="@{/js/morris/morris.js}"></script>
-
-
-<script th:href="@{/js/easypiechart.js}"></script>
-<script th:href="@{/js/easypiechart-data.js}"></script>
-
-<script th:href="@{/js/Lightweight-Chart/jquery.chart.js}"></script>
-
-<!-- Custom Js NO CORRE NO SE POR QUE-->
-<script th:href="@{/js/custom-scripts.js}"></script>
+<div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
 
 </body>
 </html>

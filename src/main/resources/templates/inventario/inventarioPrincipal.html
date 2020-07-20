@@ -81,7 +81,8 @@
                                         <th>Artesano</th>
                                         <th>Cantidad</th>
                                         <th>Tipo</th>
-                                        <th>Fecha</th>
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha Fin</th>
                                         <th>Color</th>
                                         <th>Costo Tejedor</th>
                                         <th>Costo Moscoy</th>
@@ -105,7 +106,9 @@
                                         <td th:text="${a.consignacionyventa.artesano.nombreartesano}" >-----</td>
                                         <td th:text="${a.cantidad}" >----</td>
                                         <td th:text="${a.consignacionyventa.tipo}" >----</td>
-                                        <td th:text="${a.consignacionyventa.fechainicio}" >----</td>
+                                        <td th:text="${a.consignacionyventa.fechainicio.getDate()}+'/' +${a.consignacionyventa.fechainicio.getMonth()+1} + '/' + ${a.consignacionyventa.fechainicio.getYear()+1900}" >----</td>
+                                        <td th:if="${a.consignacionyventa.fechafin!=null}" th:text="${a.consignacionyventa.fechafin.getDate()}+'/' +${a.consignacionyventa.fechafin.getMonth()+1} + '/' + ${a.consignacionyventa.fechafin.getYear()+1900}" >----</td>
+                                        <td th:unless="${a.consignacionyventa.fechafin!=null}">----</td>
                                         <td th:text="${a.color}" >------</td>
                                         <td th:text="${a.preciotejedor}">------</td>
                                         <td th:text="${a.preciomosqoy}">------</td>
