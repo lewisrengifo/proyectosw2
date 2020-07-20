@@ -156,12 +156,21 @@ public class InventarioTiendaController {
 
     @GetMapping("/asignarStock")
     public String asignarStock(Model model, @ModelAttribute("tienda") Tienda tienda,
-                               @ModelAttribute("inventariotienda") Inventariotienda inventariotienda, HttpSession session) {
+                               @ModelAttribute("inventariotienda") Inventariotienda inventariotienda, HttpSession session,RedirectAttributes att) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        //model.addAttribute("inventario", inventarioTiendaRepository.listaProductoEnTienda(idTienda));
-        model.addAttribute("inventario", inventarioSedeRepository.listarInventarioPorSedeConStock(usuario.getSede_idsede().getIdsede()));
-        model.addAttribute("tiendas", tiendaRepository.listaTiendasPorSede(usuario.getSede_idsede().getIdsede()));
+        List<Inventariosede> inventariosedes = inventarioSedeRepository.listarInventarioPorSedeConStock(usuario.getSede_idsede().getIdsede());
+        List<Tienda> tiendas = tiendaRepository.listaTiendasPorSede(usuario.getSede_idsede().getIdsede());
+        if(tiendas.size()==0){
+            att.addFlashAttribute("msg2","No hay Tiendas en esta sede");
+            return "redirect:/tienda";
+        }
+        if (inventariosedes.size()==0) {
+            att.addFlashAttribute("msg2","No hay Productos disponibles para enviar a tiendas en esta sede");
+            return "redirect:/tienda";
+        }
+        model.addAttribute("inventario",inventariosedes);
+        model.addAttribute("tiendas",tiendas );
         return "Tienda/asignarStock";
     }
 
