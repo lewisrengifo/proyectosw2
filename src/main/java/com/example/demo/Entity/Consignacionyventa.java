@@ -1,6 +1,8 @@
 package com.example.demo.Entity;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 
 import javax.validation.constraints.NotBlank;
@@ -17,7 +19,8 @@ public class Consignacionyventa implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idconsignacion;
-
+    @NotBlank(message = "el campo no puede ser vacio")
+    //@NotNull(message = "No puede ser vacio")
     private String numeropedido;
 
     @ManyToOne
@@ -28,10 +31,13 @@ public class Consignacionyventa implements Serializable {
     private String tipo;
 
     @Column(nullable = false)
-    @NotNull(message = "la fecha no debe ser nula")
-    @Temporal(TemporalType.DATE)
-    private Date fechainicio;
+    //@Pattern(regexp = "[^(0?[1-9]|[12][0-9]|3[01])[\\/](0?[1-9]|1[012])[/\\\\/](19|20)\\d{2}$]", message = "ingrese una fecha correcta")
 
+    @NotNull(message = "la fecha no debe ser nula")
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    private Date fechainicio;
+    @NotNull(message = "la fecha fin no debe ser nula")
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
     private Date fechafin;
 
     public String getNumeropedido() {

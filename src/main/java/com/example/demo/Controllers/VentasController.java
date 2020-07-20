@@ -4,16 +4,20 @@ package com.example.demo.Controllers;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,7 +64,7 @@ public class VentasController {
             return "redirect:/venta";
         }
 
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Ventas> pageVent = ventaRepository.listaVentasPorSedePageable(usuariologueado.getSede_idsede().getIdsede(), pageRequest);
 
@@ -75,8 +79,14 @@ public class VentasController {
                 return "redirect:/venta";
             }
             model.addAttribute("pages", pages);
-        } else {
-
+        } else if (totalPage == 0) {
+            model.addAttribute("listaInventarioSede", pageVent.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+            return "venta/listaventa";
+        }else {
 
             return "redirect:/venta";
         }
@@ -87,10 +97,13 @@ public class VentasController {
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
         model.addAttribute("totalElementos", totalElementos);
+        model.addAttribute("totalItems", pageVent.getTotalElements());
+
         return "venta/listaventa";
 
 
     }
+
 
     @GetMapping("/registroventa")
     public String registrarVenta(Model model, @ModelAttribute("ventas") Ventas ventas,
@@ -102,11 +115,18 @@ public class VentasController {
             Optional<Tienda> tiendaVenta = tiendaRepository.findById(newid);
 
             int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
+            List<Inventariotienda> proEntienda = inventarioTiendaRepository.listaProductoEnTienda(newid);
+            if (proEntienda.size()==0){
+                redirectAttributes.addFlashAttribute("msg2","No hay producto enviados a la tienda" + tiendaVenta.get().getNombre());
+                return "redirect:/tienda";
+            }else{
+                model.addAttribute("ProductosEnTienda", proEntienda);
+                model.addAttribute("tiendita",tiendaVenta.get());
+                ventas.setPrecioventa(0.0);
 
-            model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(newid));
-            model.addAttribute("tiendita",tiendaVenta.get());
+                return "venta/registroventa";
+            }
 
-            return "venta/registroventa";
         }catch (NumberFormatException e){
             return "redirect:/tienda";
         }
@@ -168,7 +188,12 @@ public class VentasController {
             return "venta/listaventa";
         }
     }
-
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(
+                dateFormat, true));
+    }
 
 
     @PostMapping("/agregarVenta")
@@ -180,6 +205,13 @@ public class VentasController {
         Optional<Sede> sedeid = sedeRepository.findById(usuariologueado.getSede_idsede().getIdsede());
         ventas.setSede(sedeid.get());
         Optional<Tienda> byId = tiendaRepository.findById(ventas.getTienda().getIdtienda());
+        if (ventas.getPrecioventa()<ventas.getInventariosede().getInventarioproductoidinventario().getPreciomosqoy()){
+            model.addAttribute("msgprecio","El precio de venta debe ser mayor o igual al precio registrado por mosqoy");
+            model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(ventas.getTienda().getIdtienda()));
+            ventas.setTienda(byId.get());
+            model.addAttribute("tiendita", byId.get());
+            return "venta/registroventa";
+        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(ventas.getTienda().getIdtienda()));
             ventas.setTienda(byId.get());
@@ -203,6 +235,7 @@ public class VentasController {
                     inventarioTiendaRepository.ActualizarCantidadInventarioTienda(StockNuevoEnTienda, inventariotiendaReduceStock.getIdiventariotienda());
                     //actualizar cantidad en inventario principal
                     inventarioproductoRepository.ActualizarCantidadInventarioPrincipal(nuevaCantidadProducto, CambiaCantidadProducto.get().getIdinventario());
+                    ventas.setPreciototal(ventas.getCantidad()*ventas.getPrecioventa());
                     redirectAttributes.addFlashAttribute("msgInfo", "Venta registrada exitosamente");
                     ventaRepository.save(ventas);
                     return "redirect:/venta";
@@ -285,4 +318,29 @@ public class VentasController {
         }
 
     }
+
+    @GetMapping("/editar")
+    public String editarProducto(Model model, @RequestParam("id") int id, @ModelAttribute("producto") Ventas ventas) {
+
+        Optional<Ventas> optProduct = ventaRepository.findById(id);
+
+        if (optProduct.isPresent()) {
+
+           // Optional<Tienda> tiendaVenta = tiendaRepository.findById(newid);
+
+           // int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
+
+            //model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(newid));
+            //model.addAttribute("tiendita",tiendaVenta.get());
+            Optional<Tienda> byIdtienda = tiendaRepository.findById(optProduct.get().getTienda().getIdtienda());
+            model.addAttribute("tiendita",byIdtienda.get());
+            model.addAttribute("ventas", optProduct.get());
+            model.addAttribute("ProductosEnTienda",inventarioTiendaRepository.listaProductoEnTienda(byIdtienda.get().getIdtienda()) );
+            return "venta/registroventa";
+        } else {
+            return "redirect:/producto";
+        }
+    }
+
+
 }

@@ -58,6 +58,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Modifying
     @Query(value= "UPDATE usuario SET sede_idsede = NULL, rol_idrol = '4' WHERE (idUsuario = :idusuario);", nativeQuery = true)
     void actualizarGestorSede(@Param("idusuario") int idusuario);
+    @Query(value = "SELECT * FROM usuario where rol_idrol = 2", nativeQuery = true)
+    List<Usuario> findGestoresPrincipales();
     //@Query(value = "SELECT * FROM usuario where sede_idsede = ?1", nativeQuery = true)
     //List<Usuario> usuariosdelasede(int sede_idsede);
 

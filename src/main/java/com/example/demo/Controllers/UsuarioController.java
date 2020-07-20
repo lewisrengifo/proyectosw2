@@ -52,6 +52,8 @@ public class UsuarioController {
 
     @GetMapping(value = {"", "/lista"})
     public String listarUsuarios(@RequestParam Map<String, Object> params, Model model, @ModelAttribute("searchField") String searchField, RedirectAttributes attr) {
+
+
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
         } catch (NumberFormatException e) {
@@ -175,6 +177,7 @@ public class UsuarioController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("listaroles", rolRepository.rolgestorprincipal());
             model.addAttribute("listasedes", sedeRepository.findAll());
+            redirectAttributes.addFlashAttribute("msg2", "Ingrese todos los datos solicitados.");
             return "Usuario/form";
         }
 
@@ -182,11 +185,11 @@ public class UsuarioController {
             if (usuario.getIdusuario() == 0) {
                 if (usuario1.getDni().equals(usuario.getDni()) || usuario1.getCorreo().equals(usuario.getCorreo())) {
                     if (usuario1.getDni().equals(usuario.getDni())) {
-                        redirectAttributes.addFlashAttribute("msg", "Usuario con DNI existente");
+                        redirectAttributes.addFlashAttribute("msgdni", "Usuario con DNI existente");
                         redirectAttributes.addFlashAttribute("usuario", usuario);
                     }
                     if (usuario1.getCorreo().equals(usuario.getCorreo())) {
-                        redirectAttributes.addFlashAttribute("msg2", "Usuario con correo existente");
+                        redirectAttributes.addFlashAttribute("msgcorreo", "Usuario con correo existente");
                         redirectAttributes.addFlashAttribute("usuario", usuario);
                     }
                     return "redirect:/usuario/nuevo";
@@ -211,7 +214,6 @@ public class UsuarioController {
 
                     } else {
                         redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
-
                     }
 
                 }
@@ -294,10 +296,11 @@ public class UsuarioController {
 
     @GetMapping("/buscador")
     public String buscadorSearch(@RequestParam Map<String, Object> params, Model model, RedirectAttributes att, @ModelAttribute("searchField") String textbuscador, RedirectAttributes attr) {
+
         if (textbuscador.isEmpty()) {
             att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-            return "redirect:/usuario/lista";
+            return "redirect:/usuario";
         } else {
 
             try {
@@ -308,7 +311,7 @@ public class UsuarioController {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
             if (page < 0) {
-                return "redirect:/usuario/lista";
+                return "redirect:/usuario";
             }
 
 
@@ -320,7 +323,7 @@ public class UsuarioController {
                 if (page > pages.size() - 1) {
                     attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
-                    return "redirect:/usuario/lista";
+                    return "redirect:/usuario";
                 }
 
 

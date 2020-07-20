@@ -36,6 +36,8 @@
                                      role="alert"></div>
                                 <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-danger"
                                      role="alert"></div>
+                                <div th:if="${msgprecio != null}" th:text="${msgprecio}" class="alert alert-danger"
+                                     role="alert"></div>
                                 <form method="post" th:action="@{'/venta/agregarVenta'}" th:object="${ventas}">
                                     <input type="hidden" th:field="*{idventas}"/>
 
@@ -120,6 +122,12 @@
                                             </option>
                                         </select>
                                     </div>
+                                    <div>
+                                        <label >Precio de venta</label>
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{precioventa}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('precioventa')}"
+                                             th:errors="*{precioventa}"></div>
+                                    </div>
 
                                     <div class="form-group" th:unless="${ventas.nombrecomprador == null}" >
                                         <label for="inventariosede">Producto - Descripcion Producto - #Cantidad Disponible - $ Precio de venta</label>
@@ -140,7 +148,7 @@
                                     <!-- FECHA DE VENTA -->
                                     <div>
                                         <label >fecha de venta</label>
-                                        <input style="width: 40%" type="text" class="form-control" th:field="*{fechaventa}">
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{fechaventa}" placeholder="formato:mes/dia/año">
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechaventa')}"
                                              th:errors="*{fechaventa}"></div>
 
@@ -150,13 +158,15 @@
                                     <!-- ELEGIR LA CANTIDAD -->
                                     <div>
                                         <label >Cantidad</label>
-                                        <input style="width: 40%" type="text" class="form-control" th:field="*{cantidad}" >
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{cantidad}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('cantidad')}"
+                                             th:errors="*{cantidad}"></div>
                                     </div>
                                     <!-- FIN -->
 
 
                                     <a th:href="@{'/tienda'}" class="btn btn-danger">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary"> finalizar</button>
+                                    <button type="submit" class="btn btn-outline-danger"> finalizar</button>
                                 </form>
                             </div>
                         </div>

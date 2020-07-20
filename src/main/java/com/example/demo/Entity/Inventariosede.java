@@ -1,6 +1,10 @@
 package com.example.demo.Entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -11,9 +15,13 @@ public class Inventariosede {
     private int idiventariosede;
 
     @Column
+    @NotNull(message = "no puede ser vacio")
+    @Min(value = 1, message = "El valor minimo es 1")
     private int stock;
 
     @Column
+    @NotNull(message = "La fecha no debe ser nula")
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
     private Date fechallegada;
 
     @ManyToOne

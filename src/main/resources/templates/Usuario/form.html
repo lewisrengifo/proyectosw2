@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Crear Usuario - Mosqoy')"></head>
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Gestion de Usuario')" ></head>
 <body>
 <div id="wrapper">
     <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
@@ -17,11 +17,13 @@
                             <h2 th:text="${usuario.idusuario == 0? 'Nuevo Usuario' : 'Editar Usuario'}">
                                 Nuevo/Editar</h2>
                             <hr/>
-                            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
+                            <div style="width: 40%" th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
                                  role="alert"></div>
-                            <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success"
+                            <div style="width: 40%" th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-warning"
                                  role="alert"></div>
-                            <div th:if="${msgsede != null}" th:text="${msgsede}" class="alert alert-success"
+                            <div style="width: 40%" th:if="${msgdni != null}" th:text="${msgdni}" class="alert alert-warning"
+                                 role="alert"></div>
+                            <div style="width: 40%" th:if="${msgcorreo != null}" th:text="${msgcorreo}" class="alert alert-warning"
                                  role="alert"></div>
                             <form method="post" th:action="@{'/usuario/guardar'}" th:object="${usuario}">
                                 <input type="hidden" th:field="*{idusuario}"/>
@@ -159,7 +161,7 @@
                                     <label for="rol_idrol">Rol</label>
 
 
-                                    <select style="width: 90%" class="form-control" name="rol_idrol" id="rol_idrol">
+                                    <select style="width: 40%" class="form-control" name="rol_idrol" id="rol_idrol">
                                         <option th:each="rol : ${listaroles}" th:text="|${rol.nombre}|"
 
                                                 th:value="${rol.idrol}"

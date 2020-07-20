@@ -34,10 +34,14 @@
                     <div th:if="${msgBuscador != null}" th:text="${msgBuscador}" style="color: #ac2925"></div>
 
                     <button type="submit" class="btn btn-outline-danger">buscar</button>
-                    <a th:href="@{'/artesano/lista'}" class="btn btn-outline-danger">Limpiar</a>
+                    <a th:href="@{'/artesano'}" class="btn btn-outline-danger">Limpiar</a>
 
                 </form>
 
+                <div th:if="${msgAr != null}" th:text="${msgAr}" class="alert alert-success"
+                     role="alert"></div>
+                <div th:if="${msgArt != null}" th:text="${msgArt}" class="alert alert-warning"
+                     role="alert"></div>
             </div>
 
             <br>

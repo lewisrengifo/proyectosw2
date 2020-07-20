@@ -87,10 +87,15 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
     @Query(value = "UPDATE inventarioproducto SET estado = :estado WHERE (idinventario = :idinventario);", nativeQuery = true)
     void actualizarEstado(@Param("estado") String estado, @Param("idinventario") int idinventario);
 
-@Query(value = "SELECT * FROM inventarioproducto where estado is null",nativeQuery = true)
+@Query(value = "SELECT * FROM inventarioproducto where estado is null order by idinventario desc",nativeQuery = true)
     Page<Inventarioproducto> listaTotalSinDevueltos(Pageable pageable);
 
 @Query(value="SELECT * FROM inventarioproducto where producto_idproducto = ?1 limit 1",nativeQuery = true)
     Inventarioproducto verificarProductoEnInventario(int id);
+
+    @Query(value="SELECT * FROM inventarioproducto where categoria_idcategoria = ?1 limit 1",nativeQuery = true)
+    Inventarioproducto verificaCategoriaEnInventario(int id);
+
+
 
 }

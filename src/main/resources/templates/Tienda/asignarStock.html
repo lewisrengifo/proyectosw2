@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='Asignar stock a sede')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Asignar stock a Tienda')">
 </head>
 <body>
 <div id="wrapper">
@@ -78,11 +78,12 @@
                                     <!--Fecha de envio-->
                                     <div class="form-group" >
                                         <label >Fecha de envío</label>
-                                        <input type="text" class="form-control" th:field="*{fechaentrega}" style="width: 25%" placeholder="formato:dia/mes/año">
+                                        <input type="text" class="form-control" th:field="*{fechaentrega}" style="width: 25%;margin: 0 0 1px 0" >
+                                        <label>Formato: Mes/Dia/Año</label>
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechaentrega')}" th:errors="*{fechaentrega}"></div>
                                     </div>
 
-                                    <a th:href="@{'/tienda/lista'}" class="btn btn-info">Finalizar</a>
+                                    <a th:href="@{'/tienda'}" class="btn btn-danger">Cancelar</a>
                                     <button    type="submit" class="btn btn-primary">+ producto</button>
 
 

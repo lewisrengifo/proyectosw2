@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Date;
@@ -26,7 +28,7 @@ public class Ventas {
 
     @Column(nullable = false)
     @NotNull(message = "la fecha no debe ser nula")
-    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
     private Date fechaventa;
 
     @NotBlank(message = "El nombre no debe ser vacío")
@@ -46,14 +48,36 @@ public class Ventas {
     private Inventariosede inventariosede;
 
     @NotNull(message = "No puede ser nulo.")
+
     @Digits(integer = 5, fraction = 0)
-    @Min(value=1)
+    @Min(value=1, message = "Mínimo valor debe ser 1")
     @Max(value=32767)
     private int cantidad;
 
     @NotBlank(message = "No debe ser vacío")
     @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String metodopago;
+
+    public Double getPreciototal() {
+        return preciototal;
+    }
+
+    public void setPreciototal(Double preciototal) {
+        this.preciototal = preciototal;
+    }
+
+    private Double preciototal;
+
+    public Double getPrecioventa() {
+        return precioventa;
+    }
+
+    public void setPrecioventa(Double precioventa) {
+        this.precioventa = precioventa;
+    }
+    @NotNull(message = "No puede ser nulo")
+
+    private Double precioventa;
 
     public String getMetodopago() {
         return metodopago;
