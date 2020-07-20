@@ -57,9 +57,9 @@ public class ConsignacionventaController {
             return "redirect:/ConsignacionVenta";
         }
 
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
-        Page<Consignacionyventa> pageConVent = consignacionyventaRepository.findAll(pageRequest);
+        Page<Consignacionyventa> pageConVent = consignacionyventaRepository.listaConsigVenta(pageRequest);
 
         int totalPage = pageConVent.getTotalPages();
         if (totalPage > 0) {

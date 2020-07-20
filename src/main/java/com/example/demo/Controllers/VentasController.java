@@ -64,7 +64,7 @@ public class VentasController {
             return "redirect:/venta";
         }
 
-        PageRequest pageRequest = PageRequest.of(page, 5);
+        PageRequest pageRequest = PageRequest.of(page, 10);
 
         Page<Ventas> pageVent = ventaRepository.listaVentasPorSedePageable(usuariologueado.getSede_idsede().getIdsede(), pageRequest);
 
