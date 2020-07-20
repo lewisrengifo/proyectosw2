@@ -1,58 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'categorias')"></head>
+<head th:replace="fragments/leftbar.html :: cabecera(titulo = 'Gestion de tiendas')"></head>
 <body>
-<nav class="navbar navbar-default top-navbar" role="navigation">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand waves-effect waves-dark" href="index.html"><i class="large material-icons">track_changes</i> <strong>Moscoy</strong></a>
-
-        <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
-    </div>
-
-    <ul class="nav navbar-top-links navbar-right">
-
-        <li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <b>John Doe</b> <i class="material-icons right">arrow_drop_down</i></a></li>
-    </ul>
-</nav>
-<!-- Dropdown Structure -->
-<ul id="dropdown1" class="dropdown-content">
-    <li><a href="#"><i class="fa fa-user fa-fw"></i> My Profile</a>
-    </li>
-
-    <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-    </li>
-</ul>
 
 
-<!--/. NAV TOP  -->
-<!--/. NAV TOP  -->
+<div id="wrapper">
+    <!--/. NAV TOP  -->
+    <!--/. NAV TOP  -->
+    <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
 
-<nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'categoria')"></nav>
+    <nav th:replace="fragments/leftbar.html :: barraizquierda( active = 'tienda')"></nav>
 
-<div id="page-wrapper" >
-    <div class="container">
-        <h2 th:text="${tienda.idtienda == 0? 'Nueva línea' : 'editar línea'}">Nuevo/Editar</h2>
-        <hr/>
-        <form method="post" th:action="@{'/tienda/guardar'}" th:object="${tienda}">
-            <input type="hidden" th:field="*{idtienda}" />
-            <div class="form-group">
-                <label>Nombre </label>
-                <input type="text" class="form-control" th:field="*{nombre}">
+    <div id="page-wrapper">
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="container">
+                            <h2 th:text="${tienda.idtienda == 0? 'Nueva Tienda' : 'editar línea'}">Nuevo/Editar</h2>
+                            <hr/>
+                            <form method="post" th:action="@{'/tienda/guardar'}" th:object="${tienda}">
+                                <input type="hidden" th:field="*{idtienda}"/>
+                                <div class="form-group">
+                                    <label>Nombre </label>
+                                    <input type="text" class="form-control" th:field="*{nombre}" with="50%">
+                                </div>
+                                <a th:href="@{'/tienda'}" class="btn btn-outline-danger">Cancelar</a>
+                                <!--  falta definir dónde será la vista prinpipal respecto a esta tabla.
+                                Esto aparece cuando se requiere registrar un producto-->
+                                <button type="submit" class="btn btn-outline-danger"
+                                        th:text="${tienda.idtienda == 0? 'Registrar' : 'Actualizar'}">Reg/act
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <a th:href="@{'/tienda'}" class="btn btn-outline-danger">Cancelar</a>
-            <!--  falta definir dónde será la vista prinpipal respecto a esta tabla.
-            Esto aparece cuando se requiere registrar un producto-->
-            <button type="submit" class="btn btn-outline-danger" th:text="${tienda.idtienda == 0? 'Registrar' : 'Actualizar'}">Reg/act</button>
-        </form>
+        </div>
+
     </div>
-
-
 </div>
 
 <!-- JS Scripts-->
