@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Moscoy</title>
+    <title>Consignación</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -64,7 +64,7 @@
                             <div class="table-responsive">
 
 
-                                <h2>Consignacion</h2>
+                                <h2>Consignación</h2>
 
                                 <br>
                                 <BR>
@@ -80,9 +80,11 @@
                                     <br>
 
                                     <div class="form-group">
-                                        <label>Numero de Pedido</label>
+                                        <label>Número de Pedido</label>
                                         <input type="text" class="form-control" th:field="*{numeropedido}"
                                                style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('numeropedido')}"
+                                             th:errors="*{numeropedido}"></div>
                                     </div>
 
                                     <!-- Fecha Inicio-->
@@ -124,7 +126,7 @@
                                     </div>
                                     <!- FIN -->
                                     <a th:href="@{'/inventarioPrincipal'}"
-                                       class="btn btn-outline-danger">Cancelar</a>
+                                       class="btn btn-danger">Cancelar</a>
                                     <button type="submit" class="btn btn-outline-danger">siguiente</button>
                                 </form>
                             </div>
