@@ -1,6 +1,7 @@
 package com.example.demo.Dto;
 
 
+import org.apache.poi.util.IOUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -49,7 +50,10 @@ public class StorageService {
                 map.put("estado","error");
                 map.put("msgFoto","No se permiten '..' en el archivo");
             }else{
+
                 try(InputStream inputStream = file.getInputStream()){
+                    //byte[] byteArray = IOUtils.toByteArray(inputStream);
+
                     Path filePath = Paths.get(fileLocation);
                     Files.copy(inputStream,filePath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
                     map.put("estado","exito");
