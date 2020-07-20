@@ -80,7 +80,7 @@
                                         <td th:text="${invT.inventariosede.inventarioproductoidinventario.producto.nombreproducto}" >----</td>
                                         <td th:text="${invT.inventariosede.inventarioproductoidinventario.codigogenerado}"></td>
                                         <td th:text="${invT.stocktienda}" >----</td>
-                                        <td th:text="${invT.fechaentrega}" >---</td>
+                                        <td th:text="${invT.fechaentrega.getDay()+'/'+invT.fechaentrega.getMonth() +'/'+invT.fechaentrega.getYear()}" >---</td>
                                         <td th:text="${invT.estado}" >---</td>
 
                                         <td class="center" >

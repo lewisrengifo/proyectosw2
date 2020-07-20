@@ -105,7 +105,7 @@
                                         <td th:text="${a.consignacionyventa.artesano.nombreartesano}" >-----</td>
                                         <td th:text="${a.cantidad}" >----</td>
                                         <td th:text="${a.consignacionyventa.tipo}" >----</td>
-                                        <td th:text="${a.consignacionyventa.fechainicio}" >----</td>
+                                        <td th:text="${a.consignacionyventa.fechainicio.getDay()+'/' +a.consignacionyventa.fechainicio.getMonth() + '/' + a.consignacionyventa.fechainicio.getYear()}" >----</td>
                                         <td th:text="${a.color}" >------</td>
                                         <td th:text="${a.preciotejedor}">------</td>
                                         <td th:text="${a.preciomosqoy}">------</td>

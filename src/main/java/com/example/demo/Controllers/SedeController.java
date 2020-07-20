@@ -93,11 +93,18 @@ public class SedeController {
 
         } else {
             if (sede.getIdsede() == 0) {
-                redirectAttributes.addFlashAttribute("mgs", "La sede se creo correctamente");
-                sedeRepository.save(sede);
-                model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
-                model.addAttribute("idsede", sedeRepository.save(sede).getIdsede());
-                return "sede/formGestorNew";
+                Sede sedeExiste = sedeRepository.sedePornombre(sede.getNombre());
+                if (sedeExiste == null){
+                    redirectAttributes.addFlashAttribute("mgs", "La sede se creo correctamente");
+                    sedeRepository.save(sede);
+                    model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
+                    model.addAttribute("idsede", sedeRepository.save(sede).getIdsede());
+                    return "sede/formGestorNew";
+                }else{
+                    model.addAttribute("msg","La sede " + sede.getNombre() + " ya existe");
+                    return "sede/form";
+                }
+
             } else {
                 redirectAttributes.addFlashAttribute("msg", "La sede se actualizó correctamente");
                 //model.addAttribute(usuariodelasede);
