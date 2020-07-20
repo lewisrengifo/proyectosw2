@@ -150,13 +150,15 @@
                                     <!-- ELEGIR LA CANTIDAD -->
                                     <div>
                                         <label >Cantidad</label>
-                                        <input style="width: 40%" type="text" class="form-control" th:field="*{cantidad}" >
+                                        <input style="width: 40%" type="text" class="form-control" th:field="*{cantidad}">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('cantidad')}"
+                                             th:errors="*{cantidad}"></div>
                                     </div>
                                     <!-- FIN -->
 
 
                                     <a th:href="@{'/tienda'}" class="btn btn-danger">Cancelar</a>
-                                    <button type="submit" class="btn btn-primary"> finalizar</button>
+                                    <button type="submit" class="btn btn-outline-danger"> finalizar</button>
                                 </form>
                             </div>
                         </div>

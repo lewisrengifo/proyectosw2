@@ -277,13 +277,13 @@ public class ProductoController {
            if (totalPage > 0) {
                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
                if (page > pages.size() - 1) {
-                   attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                   attr.addFlashAttribute("msgPagina", "No se encuentran datos con respecto a su búsqueda");
 
                    return "redirect:/producto";
                }
                model.addAttribute("pages", pages);
            }else{
-               attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+               attr.addFlashAttribute("msgPagina", "No se encuentran datos con respecto a su búsqueda");
 
                return "redirect:/producto";
 

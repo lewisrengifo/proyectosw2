@@ -155,7 +155,7 @@ public class InventariosedeController {
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             if (page > pages.size() - 1) {
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                 return "redirect:/inventarioSede/listarInvMiSede";
             }
@@ -199,7 +199,7 @@ public class InventariosedeController {
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             if (page > pages.size() - 1) {
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                 return "redirect:/inventarioSede/listarinvsedexconfirmar";
             }
@@ -322,13 +322,13 @@ public class InventariosedeController {
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
                 if (page > pages.size() - 1) {
-                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                     return "redirect:/inventarioSede/listarInvMiSede";
                 }
                 model.addAttribute("pages", pages);
             } else {
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                 return "redirect:/inventarioSede/listarInvMiSede";
 
@@ -379,13 +379,13 @@ public class InventariosedeController {
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
                 if (page > pages.size() - 1) {
-                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                     return "redirect:/inventarioSede";
                 }
                 model.addAttribute("pages", pages);
             } else {
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                 return "redirect:/inventarioSede";
 
@@ -405,17 +405,26 @@ public class InventariosedeController {
 
 
     @GetMapping("devolverPrincipal")
-    public String devolverProductoAsedePrincipal(@RequestParam("id") int id) {
-        Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(id);
-        int cantidadSede = productEnSede.get().getStock();
-        String principal = "cuzco";
-        Inventariosede productoSedePrincipal = inventarioSedeRepository.productoParaDevolverAlPrincipal(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), principal);
-        int nuevoTotalEnPrincipal = productoSedePrincipal.getStock() + productEnSede.get().getStock();
-        //SE AGREGA LO DE SEDE AL PRINCIPAL EL STOCK
-        inventarioSedeRepository.actualizarStockSede(nuevoTotalEnPrincipal, productoSedePrincipal.getIdiventariosede());
-        //REDUCIR EL STOCK EN CERO Y PONER ESTADO EN DEVUELTO
-        inventarioSedeRepository.cambiaStockyEstadoSedeCuandoDevuelveProduc(0, "devuelto principal", productEnSede.get().getIdiventariosede());
+    public String devolverProductoAsedePrincipal(@RequestParam("id") String id) {
+
+        try {
+            int idnuevo = Integer.parseInt(id);
+            Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(idnuevo);
+            int cantidadSede = productEnSede.get().getStock();
+            String principal = "cuzco";
+            Inventariosede productoSedePrincipal = inventarioSedeRepository.productoParaDevolverAlPrincipal(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), principal);
+            int nuevoTotalEnPrincipal = productoSedePrincipal.getStock() + productEnSede.get().getStock();
+            //SE AGREGA LO DE SEDE AL PRINCIPAL EL STOCK
+            inventarioSedeRepository.actualizarStockSede(nuevoTotalEnPrincipal, productoSedePrincipal.getIdiventariosede());
+            //REDUCIR EL STOCK EN CERO Y PONER ESTADO EN DEVUELTO
+            inventarioSedeRepository.cambiaStockyEstadoSedeCuandoDevuelveProduc(0, "devuelto principal", productEnSede.get().getIdiventariosede());
+
+        }catch (NumberFormatException e){
+            return "redirect:/inventarioSede/listarInvMiSede";
+        }
+
         return "redirect:/inventarioSede/listarInvMiSede";
+
     }
 
     @GetMapping("/estadoObservado")
