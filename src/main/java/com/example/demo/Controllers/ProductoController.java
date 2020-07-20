@@ -102,7 +102,7 @@ public class ProductoController {
        //Ojala salga xd
         HashMap<String, String> map = storageService.store(file);
         if (map.get("estado").equals("exito")) {
-            String filename2=(map.get("fileName")   );
+            String filename2=(map.get("fileName"));
             producto.setFoto(filename2);
             if (bindingResult.hasErrors()) {
                 model.addAttribute("listaLinea", lineaRepository.findAll());
@@ -112,39 +112,48 @@ public class ProductoController {
 
                     Producto productNameCod = productoRepository.verificarCodigoProducto(producto.getCodigoproducto());
                     Producto productDescripCod = productoRepository.verificarCodigoProducto(producto.getCodigodescripcionproducto());
-                    if (productDescripCod==null && productNameCod == null){
-                        productoRepository.save(producto);
-                        attr.addFlashAttribute("msgCrear","producto creado exitosamente");
-                        return "redirect:/producto";
-                    }else{
-                        attr.addFlashAttribute("msgCrear","El codigo que esta ingresando ya esta siendo utilizado");
+                    if(productDescripCod!=null){
+                        attr.addFlashAttribute("msg","El codigo ingresado en  Descripcion producto ya existe");
                         model.addAttribute("listaLinea", lineaRepository.findAll());
                         return "producto/editFrm";
                     }
-
+                    if(productNameCod!=null){
+                        attr.addFlashAttribute("msg","El codigo ingresado en  codigo producto ya existe");
+                        model.addAttribute("listaLinea", lineaRepository.findAll());
+                        return "producto/editFrm";
+                    }
+                    productoRepository.save(producto);
+                    attr.addFlashAttribute("msgCrear","El producto se creo exitosamente");
+                    return "redirect:/producto";
 
                 } else {
                     Optional<Producto> productExiste = productoRepository.findById(producto.getIdproducto());
                     if(productExiste.get().getCodigoproducto().equals(producto.getCodigoproducto()) && productExiste.get().getCodigodescripcionproducto().equals(producto.getCodigodescripcionproducto())){
-                        attr.addFlashAttribute("msg","Producto editado exitosamente");
+                        model.addAttribute("msg","Producto editado exitosamente");
+
+                        productoRepository.save(producto);
                         return "redirect:/producto";
                     }else{
-                        
+                        Producto verificarCodigoPro = productoRepository.verificarCodigoProductoSinElMio(producto.getCodigoproducto(), productExiste.get().getIdproducto());
+                        Producto verificarCodigoDescripPro = productoRepository.verificarCodigoProductoSinElMio(producto.getCodigodescripcionproducto(), productExiste.get().getIdproducto());
+                        if(verificarCodigoPro!=null ) {
+                            model.addAttribute("msg", "El codigo ingresadp en codigo producto ya existe ");
+                            model.addAttribute("listaLinea", lineaRepository.findAll());
+                        return "producto/editFrm";
+                        }
+                        if (verificarCodigoDescripPro!=null){
+                            model.addAttribute("msg","El codigo ingresado en descripcion producto ya existe ");
+                            model.addAttribute("listaLinea", lineaRepository.findAll());
+                            return "producto/editFrm";
+                        }
+
+                        productoRepository.save(producto);
+                        attr.addFlashAttribute("msg","El producto se editó exitosamente");
+                        return "redirect:/producto";
                     }
                 }
-                String nom = producto.getNombreproducto().substring(0, 1).toUpperCase() + producto.getNombreproducto().substring(1).toLowerCase();
-                producto.setNombreproducto(nom);
-                String nom1 = producto.getDescripcionproducto().substring(0, 1).toUpperCase() + producto.getDescripcionproducto().substring(1).toLowerCase();
-                producto.setDescripcionproducto(nom1);
-                String cod = producto.getCodigoproducto().toUpperCase();
-                producto.setCodigoproducto(cod);
-                String cod1 = producto.getCodigodescripcionproducto().toUpperCase();
-                producto.setCodigodescripcionproducto(cod1);
-                productoRepository.save(producto);
-                return "redirect:/producto";
             }
-        }
-        else {
+        } else {
             model.addAttribute("msgFoto",map.get("msgFoto"));
             model.addAttribute("listaLinea", lineaRepository.findAll());
             return "producto/editFrm";
@@ -332,8 +341,8 @@ public class ProductoController {
     public ResponseEntity<FileSystemResource> getFile(@RequestParam("id")int id) throws IOException {
         Optional<Producto> optProduct = productoRepository.findById(id);
         Producto producto=optProduct.get();
-        //String path = "C:/FotosProyecto/";
-        String path = "/home/ec2-user/FotosProyecto/";
+        String path = "C:/FotosProyecto/";
+        //String path = "/home/ec2-user/FotosProyecto/";
         File file = new File(path + producto.getFoto());
         HttpHeaders respHeaders = new HttpHeaders();
         return new ResponseEntity<FileSystemResource>(
