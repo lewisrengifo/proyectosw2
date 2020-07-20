@@ -4,6 +4,7 @@ package com.example.demo.Controllers;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.*;
 import com.example.demo.service.InventarioTiendaService;
+import com.example.demo.service.SendMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +41,10 @@ public class InventarioTiendaController {
     InventarioTiendaService inventarioTiendaService;
     @Autowired
     InventarioproductoRepository inventarioproductoRepository;
+    @Autowired
+    SendMailService sendMailService;
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
 
     @GetMapping(value = {"", "/", "/lista"})
@@ -149,7 +154,7 @@ public class InventarioTiendaController {
 
     @PostMapping("/agregarStock")
     public String agregarStock(Model model, @ModelAttribute("inventariotienda") Inventariotienda inventariotienda, @ModelAttribute("tienda") Tienda tienda, RedirectAttributes att) {
-
+        //Integer nuevoTotal = null;
         int idTienda = inventariotienda.getTienda().getIdtienda();
         int invSedeParaTienda = inventariotienda.getInventariosede().getIdiventariosede();
         Inventariotienda inventariotiendaExiste = inventarioTiendaRepository.productoEnTienda(idTienda, invSedeParaTienda);
@@ -164,6 +169,16 @@ public class InventarioTiendaController {
                 inventariotienda.setEstado("recibido");
                 inventarioTiendaRepository.save(inventariotienda);
                 att.addFlashAttribute("msg", "Producto enviado a tienda Exitosamente");
+                Optional<Inventariosede> invSedeRecoAgain = inventarioSedeRepository.findById(inventariotienda.getInventariosede().getIdiventariosede());
+                List<Usuario> gestoresPrincipales = usuarioRepository.findGestoresPrincipales();
+                if (nuevoTotalCantidad==0){
+                    String mensaje = "El siguiente producto: "+ invSedeRecoAgain.get().getInventarioproductoidinventario().getProducto().getNombreproducto()+" con codigo generado: "+invSedeRecoAgain.get().getInventarioproductoidinventario().getCodigogenerado() +" de la sede: " + invSedeRecoAgain.get().getSede().getNombre()+ " se quedo sin stock";
+                    for (Usuario gestPrin : gestoresPrincipales){
+                        sendMailService.sendMail(gestPrin.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre stock de productos - Mosqoy", mensaje);
+                    }
+                    //sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
+                }
+
 
             } else {
                 int aumentarCantidadentienda = inventariotienda.getStocktienda();
@@ -174,11 +189,22 @@ public class InventarioTiendaController {
                 int nuevaStockEnsede = invSedeReduceCantidad.get().getStock() - aumentarCantidadentienda;
                 inventarioSedeRepository.actualizarStockSede(nuevaStockEnsede, inventariotiendaExiste.getInventariosede().getIdiventariosede());
                 att.addFlashAttribute("msg", "Se sumo Producto a tienda Exitosamente");
+                Optional<Inventariosede> invSedeRecoAgain = inventarioSedeRepository.findById(inventariotienda.getInventariosede().getIdiventariosede());
+                List<Usuario> gestoresPrincipales = usuarioRepository.findGestoresPrincipales();
+                if (nuevaStockEnsede==0){
+                    String mensaje = "El siguiente producto: "+ invSedeRecoAgain.get().getInventarioproductoidinventario().getProducto().getNombreproducto()+" con codigo generado: "+invSedeRecoAgain.get().getInventarioproductoidinventario().getCodigogenerado() +" de la sede: " + invSedeRecoAgain.get().getSede().getNombre()+ " se quedo sin stock";
+                    for (Usuario gestPrin : gestoresPrincipales){
+                        sendMailService.sendMail(gestPrin.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre stock de productos - Mosqoy", mensaje);
+                    }
+                    //sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
+                }
+
             }
         } else {
             att.addFlashAttribute("msgAlerta", "La cantidad ingresada debe ser menor a la de la Cantidad Disponible");
             return "redirect:/inventarioTienda/asignarStock";
         }
+
         return "redirect:/inventarioTienda/asignarStock";
     }
 
