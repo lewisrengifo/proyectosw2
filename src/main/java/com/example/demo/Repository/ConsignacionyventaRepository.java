@@ -2,6 +2,7 @@ package com.example.demo.Repository;
 
 import com.example.demo.Entity.Consignacionyventa;
 
+import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Entity.Ventas;
 
 import org.springframework.data.domain.Page;
@@ -31,6 +32,9 @@ public interface ConsignacionyventaRepository extends JpaRepository<Consignacion
                     "or a.nombreartesano like %?1% or a.apellidopaterno like %?1% or com.nombrecomunidad like %?1%",
             nativeQuery = true)
     Page<Consignacionyventa> buscadorConsignacionesYVentas(String search, Pageable pageable);
+
+    @Query(value="select * from proyectobasesw2.consignacionyventa where artesano_idartesano = ?1 limit 1;",nativeQuery = true)
+    Consignacionyventa verificaArtesanoEnConsignacionYVenta(int id);
 
 }
 

@@ -73,4 +73,7 @@ public interface InventarioTiendaRepository extends JpaRepository<Inventariotien
     @Query(value = "SELECT invT.* FROM inventariotienda invT where iventariosede_idiventariosede = ?1 and estado = 'recibido' limit 1",nativeQuery = true)
     Inventariotienda productoEntiendaTodavia(int idInventarioSede);
 
+    @Query(value = "SELECT * FROM inventariotienda where estado = 'recibido'", nativeQuery = true)
+    Page<Inventariotienda> findmenosDevuelto(Pageable pageable);
+
 }

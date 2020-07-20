@@ -1,24 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <title>Login</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
-
-    <title>Pagina no Encontrada</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css"  th:href="@{'/css/bootstrap.css'}" >
 </head>
-<body style="background: #fff1d7">
-<br>
-<br>
-<br>
-<br>
-<div align="center" width="200px" height="50px">
-    <h1>Lo sentimos: No puede acceder a esta solictud</h1>
-</div>
-<br>
-<div align="center">
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" class="btn btn-info" value="Volver a Iniciar Sesion" />
-    </form>
+<body >
+<div class="wrap-login100">
+    <form class="login100-form" th:action="@{/processlogin}" method="post">
+	    <span class="login100-form-title p-b-43">
+						Mosqoy
+        </span>
+        <br>
+        <div align="center">
+            <h5 th:if="${param.error}" class="alert alert-danger" style="color:#ff0000">Acceso Denegado</h5>
+        </div>
+        <div align="center" th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+        <div align="center" th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger" role="alert"></div>
+
+        <div class="container" >
+            <h4>Lo sentimos, no podemos encontrar la pagina que busca</h4>
+        </div>
+        <br>
+        <div class="container">
+            <h4></h4>
+        </div>
+        <br>
+
+        <div align="center" sec:authorize="hasAnyAuthority('Gestor principal')" >
+            <a class="nav-link" th:href="@{/inventarioPrincipal}">Intente regresar a la pagina principal de su sesión</a>
+        </div>
+        <div align="center" sec:authorize="hasAnyAuthority('Gestor sede')" >
+            <a class="nav-link" th:href="@{/inventarioSede/listarInvMiSede}">Intente regresar a la pagina principal de su sesión</a>
+        </div>
+        <div align="center" sec:authorize="hasAnyAuthority('Administrador')" >
+            <a class="nav-link" th:href="@{/usuario/lista}">Intente regresar a la pagina principal de su sesión</a>
+        </div>
+        <br>
+        <a type="submit" class="btn btn-info btn-block"  th:href="@{/}">Vuelva a iniciar sesión</a>
+    </form >
+    <div class="login100-more" >
+        <img width="99%" th:src="@{'/img/foto.jpg'}">
+    </div>
 </div>
 </body>
 </html>

@@ -3,7 +3,9 @@ package com.example.demo.Controllers;
 import com.example.demo.Dto.ProductoServiceApi;
 import com.example.demo.Dto.StorageService;
 import com.example.demo.Entity.Consignacionyventa;
+import com.example.demo.Entity.Inventarioproducto;
 import com.example.demo.Entity.Producto;
+import com.example.demo.Repository.InventarioproductoRepository;
 import com.example.demo.Repository.LineaRepository;
 import com.example.demo.Repository.ProductoRepository;
 import com.example.demo.service.UploadFileService;
@@ -49,6 +51,8 @@ public class ProductoController {
 
     @Autowired
     LineaRepository lineaRepository;
+    @Autowired
+    InventarioproductoRepository inventarioproductoRepository;
 
     @Autowired
     StorageService storageService;
@@ -177,16 +181,29 @@ public class ProductoController {
 
     @GetMapping("/borrar")
     public String borrarProducto(Model model,
-                                 @RequestParam("id") int id,
+
+                                 @RequestParam("id") String id,
                                  RedirectAttributes attr) {
 
-        Optional<Producto> optProduct = productoRepository.findById(id);
+        try{
+            int id2=Integer.parseInt(id);
+            Optional<Producto> optProduct = productoRepository.findById(id2);
+            Inventarioproducto inventarioproducto = inventarioproductoRepository.verificarProductoEnInventario(id2);
+            if (inventarioproducto==null){
+                if (optProduct.isPresent()) {
+                    productoRepository.deleteById(id2);
+                    attr.addFlashAttribute("msgBorrado", "Producto borrado exitosamente");
+                }
+                return "redirect:/producto";
+            }else{
+                attr.addFlashAttribute("msg", "Producto se encuentra en el inventario principal");
+                return "redirect:/producto";
+            }
 
-        if (optProduct.isPresent()) {
-            productoRepository.deleteById(id);
-            attr.addFlashAttribute("msg", "Producto borrado exitosamente");
+        }catch (NumberFormatException e){
+            return "redirect:/producto";
         }
-        return "redirect:/producto";
+
 
     }
 

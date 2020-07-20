@@ -18,9 +18,12 @@
                         <div class="card-content">
                             <h1 style="text-align: center">REPORTE GENERAL</h1>
                             <br>
-                            <h3 class="center-align">(Los datos estan comprendido entre el año 2000 a 2022)</h3>
-                            <br>
-                            <div id="mensaje1" style="display: none" class="alert alert-danger"
+                            <!--h3>Los datos estan comprendido entre el año 2000 a 2022</h3-->
+                            <div id="mensaje1"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensaje2"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensaje3"  style="display: none" class="alert alert-danger"
                                  role="alert">Ingrese correctamente los datos</div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
@@ -44,7 +47,7 @@
                                                     <input type="text" class="form-control" value="1930" name="ano" id="ano" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
-                                            <td class="center-align"><button  onclick="return enviarform1()" type="submit"  class="btn btn-outline-info">Exportar Reporte</button></td>
+                                            <td class="center-align"><button type="submit" onclick="return enviarform1()" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
                                     <tr >
@@ -69,7 +72,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anomes" id="anomes" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomes" id="anomes" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align"><button  onclick="return enviarform2()" type="submit" class="btn btn-outline-info">Exportar Reporte</button></td>
                                         </form>
                                     </tr>
@@ -104,8 +107,12 @@
                         <div class="card-content">
                             <h2>Reporte por Sede</h2>
                             <br>
-                            <div id="mensaje2"  style="display: none" class="alert alert-danger"
-                                 role="alert">Ingrese los datos correctamente</div>
+                            <div id="mensajesede1"  style="display: none" class="alert alert-danger"
+                                 role="alert">Debe ingresar un numero</div>
+                            <div id="mensajesede2"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensajesede3"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
@@ -203,17 +210,31 @@
                                     </tbody>
                                 </table>
                             </div>
+                                <!--<div class="card-action">
+                                    <h2>Generar reportes por</h2>
+                                    <br>
+                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Sede</a>
+                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Comunidad</a>
+                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Artículo</a>
+                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Cliente</a>
+                                </div>-->
+
+
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin: auto">
+            <!--div class="row" style="margin: auto">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-content">
                             <h2>Reporte por Comunidad</h2>
                             <br>
-                            <div id="mensaje5"  style="display: none" class="alert alert-danger"
+                            <div id="mensajecom1"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensajecom2"  style="display: none" class="alert alert-danger"
+                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensajecom3"  style="display: none" class="alert alert-danger"
                                  role="alert">Ingrese correctamente los datos</div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
@@ -229,19 +250,22 @@
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/ano/com'}">
+                                        <form method="post" th:action="@{/ventasexcel/ano/comunidad}">
                                             <td class="center-align">1</td>
                                             <td class="center-align">Ventas total del Año</td>
                                             <td class="center-align">-</td>
                                             <td class="center-align">
                                                 <div style="align-content: center" >
-                                                    <input type="text" class="form-control" value="1930" name="anocom" id="anocom" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                    <input type="text" class="form-control" value="1930" name="anocomunidad" id="anocomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="com1" id="com1" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                    <select class="form-control" name="com1" id="com1"
+                                                            style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="x : ${listaComunidad}"
+                                                                th:text="${x.nombrecomunidad}"
+                                                                th:value="${x.idcomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -250,12 +274,12 @@
                                         </form>
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anomes/com'}">
+                                        <form method="post" th:action="@{'/ventasexcel/anomes/comunidad'}">
                                             <td class="center-align">2</td>
                                             <td class="center-align">Ventas total del Mes</td>
                                             <td >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="mescom" id="mescom" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                    <select class="form-control" name="mescomunidad" id="mescomunidad" style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option >Enero</option>
                                                         <option  >Febrero</option>
                                                         <option >Marzo</option>
@@ -271,11 +295,15 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anomescom" id="anomescom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescomunidad"
+                                                                             id="anomescomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="com2" id="com2" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                    <select class="form-control" name="com2" id="com2"
+                                                            style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="x : ${listaComunidad}"
+                                                                th:text="${x.nombrecomunidad}"
+                                                                th:value="${x.idcomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -284,12 +312,12 @@
                                         </form>
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/trimestre/com'}">
+                                        <form method="post" th:action="@{'/ventasexcel/trimestre/comunidad'}">
                                             <td class="center-align">3</td>
                                             <td class="center-align">Ventas total del Trimestre</td>
                                             <td class="center-align">
                                                 <div class="form-group" >
-                                                    <select class="form-control" name="trimestrecom" id="trimestrecom" style="width: 80%;align-content: center;margin:auto;text-align: center">
+                                                    <select class="form-control" name="trimestrecomunidad" id="trimestrecomunidad" style="width: 80%;align-content: center;margin:auto;text-align: center">
                                                         <option >Primero</option>
                                                         <option >Segundo</option>
                                                         <option >Tercero</option>
@@ -297,11 +325,14 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotricom" id="anotricom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980"
+                                                                             name="anotricomunidad" id="anotricomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="com3" id="com3" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                        <option th:each="com : ${listaComunidad}"
+                                                                th:text="|${com.nombrecomunidad}|"
+                                                                th:value="${com.nombrecomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -315,15 +346,20 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div-->
             <div class="row" style="margin: auto">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-content">
                             <h2>Reporte por Cliente</h2>
                             <br>
-                            <div id="mensaje3"  style="display: none" class="alert alert-danger"
-                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensajecli1"  style="display: none" class="alert alert-danger"
+                                 role="alert">reporte anual: Ingrese correctamente los datos</div>
+                            <div id="mensajecli2"  style="display: none" class="alert alert-danger"
+                                 role="alert">reporte mensual: Ingrese correctamente los datos</div>
+                            <div id="mensajecli3"  style="display: none" class="alert alert-danger"
+                                 role="alert">reporte trimestral: Ingrese correctamente los datos</div>
+                            <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr class="info">
@@ -350,7 +386,7 @@
 
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="cliente1" id="cliente1" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="v : ${listaCompradores}"
+                                                        <option th:each="v : ${listaVentas}"
                                                                 th:text="|${v.nombrecomprador}|"
                                                                 th:value="${v.nombrecomprador}"
                                                         ></option>
@@ -386,7 +422,7 @@
                                             <td class="center-align">
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="cliente2" id="cliente2" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="v : ${listaCompradores}"
+                                                        <option th:each="v : ${listaVentas}"
                                                                 th:text="|${v.nombrecomprador}|"
                                                                 th:value="${v.nombrecomprador}"
                                                         ></option>
@@ -414,7 +450,7 @@
                                             <td class="center-align">
                                                 <div class="form-group" style="align-content: center">
                                                     <select class="form-control" name="cliente3" id="cliente3" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="v : ${listaCompradores}"
+                                                        <option th:each="v : ${listaVentas}"
                                                                 th:text="|${v.nombrecomprador}|"
                                                                 th:value="${v.nombrecomprador}"
                                                         ></option>
@@ -430,14 +466,20 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
             <div class="row" style="margin: auto">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-content">
                             <h2>Reporte por Producto</h2>
                             <br>
-                            <div id="mensaje4"  style="display: none" class="alert alert-danger"
-                                 role="alert">Ingrese correctamente los datos</div>
+                            <div id="mensajepro1"  style="display: none" class="alert alert-danger"
+                                 role="alert">reporte anual: Ingrese correctamente los datos</div>
+                            <div id="mensajepro2"  style="display: none" class="alert alert-danger"
+                                 role="alert">reporte mensual: Ingrese correctamente los datos</div>
+                            <div id="mensajepro3"  style="display: none" class="alert alert-danger"
+                                 role="alert">reporte trimestral: Ingrese correctamente los datos</div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
@@ -545,8 +587,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+
+
     </div>
+
+
+
 </div>
 
     <script>
@@ -554,8 +600,6 @@
             document.getElementById('mensaje1').style.display="none";
             document.getElementById('mensaje2').style.display="none";
             document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
             var ano =document.getElementById('ano').value;
             var aux=0;
             //console.log(ano);
@@ -582,8 +626,6 @@
         document.getElementById('mensaje1').style.display="none";
         document.getElementById('mensaje2').style.display="none";
         document.getElementById('mensaje3').style.display="none";
-        document.getElementById('mensaje4').style.display="none";
-        document.getElementById('mensaje5').style.display="none";
         var anomes =document.getElementById('anomes').value;
         var mes =document.getElementById('mes').value;
         var aux=0;
@@ -593,13 +635,12 @@
                 aux=aux+1;
             }
         }
-        console.log(aux);
         if(2000<=anomes && anomes<=2022 && aux===anomes.length && (mes==="Enero" || mes==="Febrero" || mes==="Marzo" || mes==="Abril" || mes==="Mayo" ||
             mes==="Junio" || mes==="Julio" || mes==="Agosto" || mes==="Septiembre" || mes==="Octubre" || mes==="Noviembre" || mes==="Diciembre")
             ) {
                 return true;
         }else{
-            document.getElementById('mensaje1').style.display="block";
+            document.getElementById('mensaje2').style.display="block";
             //$('#mensaje2').hide(4000);
             return false;
         }
@@ -610,8 +651,6 @@
         document.getElementById('mensaje1').style.display="none";
         document.getElementById('mensaje2').style.display="none";
         document.getElementById('mensaje3').style.display="none";
-        document.getElementById('mensaje4').style.display="none";
-        document.getElementById('mensaje5').style.display="none";
         var anotri =document.getElementById('anotri').value;
         var trimestre =document.getElementById('trimestre').value;
         var aux=0;
@@ -624,18 +663,18 @@
         if(2000<=anotri && anotri<=2022 && aux===anotri.length && (trimestre==="Primero" || trimestre==="Segundo" || trimestre==="Tercero" || trimestre==="Cuarto") ) {
                 return true;
         }else{
-            document.getElementById('mensaje1').style.display="block";
+            document.getElementById('mensaje3').style.display="block";
+            //$('#mensaje3').hide(4000);
             return false;
         }
     }
 </script>
+
     <script th:inline="javascript">
         function enviarform4() {
             document.getElementById('mensaje1').style.display="none";
             document.getElementById('mensaje2').style.display="none";
             document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
             var anosede =document.getElementById('anosede').value;
             var sedeano=document.getElementById('sedeano').value;
             var message =  [[${listaSede1}]];
@@ -653,24 +692,29 @@
                 if((Number.isInteger(Number.parseInt(anosede[i])))){
                     aux=aux+1;
                 }
+
             }
+        }
+
 
             if(aux2===1 && aux===anosede.length && 2000<=anosede && anosede<=2022 ){
                 return true;
             }
             else{
-                document.getElementById('mensaje2').style.display="block";
-                return false;
-            }
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensaje1').style.display="block";
+
+
+            //$('#mensaje1').hide(4000);
+            return false;
         }
+
     </script>
     <script th:inline="javascript">
         function enviarform5() {
             document.getElementById('mensaje1').style.display="none";
             document.getElementById('mensaje2').style.display="none";
             document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
             var anomessede =document.getElementById('anomessede').value;
             var messede =document.getElementById('messede').value;
             var sedemes=document.getElementById('sedemes').value;
@@ -696,6 +740,7 @@
                 return true;
             }else{
                 document.getElementById('mensaje2').style.display="block";
+                //$('#mensaje2').hide(4000);
                 return false;
             }
         }
@@ -705,20 +750,19 @@
             document.getElementById('mensaje1').style.display="none";
             document.getElementById('mensaje2').style.display="none";
             document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
             var anotrisede =document.getElementById('anotrisede').value;
             var trimestresede =document.getElementById('trimestresede').value;
             var sedetri =document.getElementById('sede1').value;
             var message =  [[${listaSede1}]];
-            //console.log(message);
+            console.log(message);
+
             var aux2=0;
             for(var ii=0;ii<message.length;ii++){
                 if(message[ii].nombre===sedetri){
                     aux2=aux2+1;
                 }
             }
-            //console.log(sedetri);
+            console.log(sedetri);
             console.log("aux2="+aux2);
             var aux=0;
             for(var i=0;i<anotrisede.length;i++)
@@ -731,335 +775,332 @@
             if(2000<=anotrisede && anotrisede<=2022 && aux===anotrisede.length && (trimestresede==="Primero" || trimestresede==="Segundo" || trimestresede==="Tercero" || trimestresede==="Cuarto") && (aux2!=0)) {
                 return true;
             }else{
-                document.getElementById('mensaje2').style.display="block";
+                document.getElementById('mensaje3').style.display="block";
+                //$('#mensaje3').hide(4000);
                 return false;
             }
         }
     </script>
 
-<script th:inline="javascript">
-    function enviarform7() {
-        document.getElementById('mensaje1').style.display="none";
-        document.getElementById('mensaje2').style.display="none";
-        document.getElementById('mensaje3').style.display="none";
-        document.getElementById('mensaje4').style.display="none";
-        document.getElementById('mensaje5').style.display="none";
-        var anocom =document.getElementById('anocom').value;
-        var com1=document.getElementById('com1').value;
-        var message =  [[${listaComunidad1}]];
-        //var sede=document.getElementById('sede').value;
-        var aux2=0;
-        for(var ii=0;ii<message.length;ii++){
-            if(message[ii].nombrecomunidad===com1){
-                aux2=aux2+1;
-            }
-        }
-        var aux=0;
-        //console.log(anosede);
-        for(var i=0;i<anocom.length;i++)
-        {
-            if((Number.isInteger(Number.parseInt(anocom[i])))){
-                aux=aux+1;
-            }
-        }
+    <script>
+        function enviarform7() {
+            document.getElementById('mensajecom1').style.display="none";
+            document.getElementById('mensajecom2').style.display="none";
+            document.getElementById('mensajecom3').style.display="none";
+            var anocomunidad =document.getElementById('anocomunidad').value;
+            //var sede=document.getElementById('sede').value;
 
-        if(aux2===1 && aux===anocom.length && 2000<=anocom && anocom<=2022 ){
-            return true;
-        }
-        else{
-            document.getElementById('mensaje5').style.display="block";
-            return false;
-        }
-    }
-</script>
-<script th:inline="javascript">
-    function enviarform8() {
-        document.getElementById('mensaje1').style.display="none";
-        document.getElementById('mensaje2').style.display="none";
-        document.getElementById('mensaje3').style.display="none";
-        document.getElementById('mensaje4').style.display="none";
-        document.getElementById('mensaje5').style.display="none";
-        var mescom =document.getElementById('mescom').value;
-        var anomescom =document.getElementById('anomescom').value;
-        var com2=document.getElementById('com2').value;
-        var message =  [[${listaComunidad1}]];
-        var aux=0;
-        //console.log(messede);
-        var aux2=0;
-        for(var ii=0;ii<message.length;ii++){
-            if(message[ii].nombrecomunidad===com2){
-                aux2=aux2+1;
-            }
-        }
-        for(var i=0;i<anomescom.length;i++)
-        {
-            if((Number.isInteger(Number.parseInt(anomescom[i])))){
-                aux=aux+1;
-            }
-        }
-        console.log(aux);
-        if(aux2===1 && 2000<=anomescom && anomescom<=2022 && aux===anomescom.length && (mescom==="Enero" || mescom==="Febrero" || mescom==="Marzo" || mescom==="Abril" || mescom==="Mayo" ||
-            mescom==="Junio" || mescom==="Julio" || mescom==="Agosto" || mescom==="Septiembre" || mescom==="Octubre" || mescom==="Noviembre" || mescom==="Diciembre")
-        ) {
-            return true;
-        }else{
-            document.getElementById('mensaje5').style.display="block";
-            return false;
-        }
-    }
-</script>
-<script th:inline="javascript">
-    function enviarform9() {
-        document.getElementById('mensaje1').style.display="none";
-        document.getElementById('mensaje2').style.display="none";
-        document.getElementById('mensaje3').style.display="none";
-        document.getElementById('mensaje4').style.display="none";
-        document.getElementById('mensaje5').style.display="none";
-        var anotricom =document.getElementById('anotricom').value;
-        var trimestrecom =document.getElementById('trimestrecom').value;
-        var com3 =document.getElementById('com3').value;
-        var message =  [[${listaComunidad1}]];
-        //console.log(message);
-        var aux2=0;
-        for(var ii=0;ii<message.length;ii++){
-            if(message[ii].nombrecomunidad===com3){
-                aux2=aux2+1;
-            }
-        }
-        //console.log(sedetri);
-        console.log("aux2="+aux2);
-        var aux=0;
-        for(var i=0;i<anotricom.length;i++)
-        {
-            if((Number.isInteger(Number.parseInt(anotricom[i])))){
-                aux=aux+1;
-            }
-        }
-        console.log(aux);
-        if(2000<=anotricom && anotricom<=2022 && aux===anotricom.length && (trimestrecom==="Primero" || trimestrecom==="Segundo" || trimestrecom==="Tercero" || trimestrecom==="Cuarto") && (aux2!=0)) {
-            return true;
-        }else{
-            document.getElementById('mensaje5').style.display="block";
-            return false;
-        }
-    }
-</script>
-
-    <script th:inline="javascript">
-        function enviarform10() {
-            document.getElementById('mensaje1').style.display="none";
-            document.getElementById('mensaje2').style.display="none";
-            document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
-            var anocli =document.getElementById('anocli').value;
-            var cliente1 =document.getElementById('cliente1').value;
-            var message =  [[${listaCompradores1}]];
             var aux=0;
-            for(var i=0;i<anocli.length;i++)
+            console.log(anocomunidad);
+            for(var i=0;i<anocomunidad.length;i++)
             {
-                if((Number.isInteger(Number.parseInt(anocli[i])))){
+                if((Number.isInteger(Number.parseInt(anocomunidad[i])))){
                     aux=aux+1;
                 }
             }
-            var aux2=0;
-            for(var ii=0;ii<message.length;ii++){
-                if(message[ii].nombrecomprador===cliente1){
-                    aux2=aux2+1;
-                }
-            }
 
-            if(aux===anocli.length && 2000<=anocli && anocli<=2022 && aux2!=0 ){
+            if(aux===anocomunidad.length){
                 return true;
             }
             else{
-                document.getElementById('mensaje3').style.display="block";
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensajecom1').style.display="block";
+
+                //$('#mensaje1').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script>
+        function enviarform8() {
+            document.getElementById('mensajecom1').style.display="none";
+            document.getElementById('mensajecom2').style.display="none";
+            document.getElementById('mensajecom3').style.display="none";
+            var anomes =document.getElementById('anomescomunidad').value;
+            var messede =document.getElementById('mescomunidad').value;
+            var aux=0;
+            console.log(messede);
+            for(var i=0;i<anomes.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anomes[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anomes.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+                messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
+            ) {
+                return true;
+            }else{
+                document.getElementById('mensajecom2').style.display="block";
+                //$('#mensaje2').hide(4000);
                 return false;
             }
         }
     </script>
     <script th:inline="javascript">
-        function enviarform11() {
-            document.getElementById('mensaje1').style.display="none";
-            document.getElementById('mensaje2').style.display="none";
-            document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
-            var anomescli =document.getElementById('anomescli').value;
-            var mescli =document.getElementById('mescli').value;
-            var cliente2 =document.getElementById('cliente2').value;
-            var message =  [[${listaCompradores1}]];
+        function enviarform9() {
+            document.getElementById('mensajecom1').style.display="none";
+            document.getElementById('mensajecom2').style.display="none";
+            document.getElementById('mensajecom3').style.display="none";
+            var anotricomunidad =document.getElementById('anotricomunidad').value;
+            var trimestrecomunidad =document.getElementById('trimestrecomunidad').value;
+            var comunidad =document.getElementById('com3').value;
+            var message =  [[${listaComunidad1}]];
+            console.log(message);
+
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombrecomunidad===comunidad){
+                    aux2=aux2+1;
+                }
+            }
+            console.log(sede);
+            console.log("aux2="+aux2);
             var aux=0;
-            //console.log(messede);
-            for(var i=0;i<anomescli.length;i++)
+            for(var i=0;i<anotricomunidad.length;i++)
             {
-                if((Number.isInteger(Number.parseInt(anomescli[i])))){
+                if((Number.isInteger(Number.parseInt(anotricomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anotricomunidad.length && (trimestrecomunidad==="Primero" || trimestrecomunidad==="Segundo" || trimestrecomunidad==="Tercero" || trimestrecomunidad==="Cuarto") && (aux2!=0)) {
+                return true;
+            }else{
+                document.getElementById('mensajecom3').style.display="block";
+                //$('#mensaje3').hide(4000);
+                return false;
+            }
+        }
+    </script>
+
+
+    <script th:inline="javascript">
+        function enviarform12() {
+            document.getElementById('mensajecli1').style.display="none";
+            document.getElementById('mensajecli2').style.display="none";
+            document.getElementById('mensajecli3').style.display="none"
+            var anotricomunidad =document.getElementById('anotricli').value;
+            var trimestrecomunidad =document.getElementById('trimestrecli').value;
+            var comunidad =document.getElementById('cliente3').value;
+            var message =  [[${listaVentas1}]];
+            console.log(message);
+
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombrecomprador===comunidad){
+                    aux2=aux2+1;
+                }
+            }
+            console.log(sede);
+            console.log("aux2="+aux2);
+            var aux=0;
+            for(var i=0;i<anotricomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anotricomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anotricomunidad.length && (trimestrecomunidad==="Primero" || trimestrecomunidad==="Segundo" || trimestrecomunidad==="Tercero" || trimestrecomunidad==="Cuarto") && (aux2!=0)) {
+                return true;
+            }else{
+                document.getElementById('mensajecli3').style.display="block";
+                //$('#mensaje3').hide(4000);
+                return false;
+            }
+        }
+    </script>
+
+
+    <script>
+        function enviarform10() {
+            document.getElementById('mensajecli1').style.display="none";
+            document.getElementById('mensajecli2').style.display="none";
+            document.getElementById('mensajecli3').style.display="none";
+            var anocomunidad =document.getElementById('anocli').value;
+            //var sede=document.getElementById('sede').value;
+
+            var aux=0;
+            console.log(anocomunidad);
+            for(var i=0;i<anocomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anocomunidad[i])))){
                     aux=aux+1;
                 }
             }
 
-            var aux2=0;
-            for(var ii=0;ii<message.length;ii++){
-                if(message[ii].nombrecomprador===cliente2){
-                    aux2=aux2+1;
+            if(aux===anocomunidad.length){
+                return true;
+            }
+            else{
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensajecli1').style.display="block";
+
+                //$('#mensaje1').hide(4000);
+                return false;
+            }
+        }
+    </script>
+
+    <script>
+        function enviarform11() {
+            document.getElementById('mensajecli1').style.display="none";
+            document.getElementById('mensajecli2').style.display="none";
+            document.getElementById('mensajecli3').style.display="none"
+            var anomes =document.getElementById('anomescli').value;
+            var messede =document.getElementById('mescli').value;
+            var aux=0;
+            console.log(messede);
+            for(var i=0;i<anomes.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anomes[i])))){
+                    aux=aux+1;
                 }
             }
             console.log(aux);
-            if(aux2!=0 && 2000<=anomescli && anomescli<=2022 && aux===anomescli.length && (mescli==="Enero" || mescli==="Febrero" || mescli==="Marzo" || mescli==="Abril" || mescli==="Mayo" ||
-                mescli==="Junio" || mescli==="Julio" || mescli==="Agosto" || mescli==="Septiembre" || mescli==="Octubre" || mescli==="Noviembre" || mescli==="Diciembre")
+            if(aux===anomes.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+                messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
             ) {
                 return true;
             }else{
-                document.getElementById('mensaje3').style.display="block";
+                document.getElementById('mensajecli2').style.display="block";
+                //$('#mensaje2').hide(4000);
                 return false;
             }
         }
     </script>
     <script th:inline="javascript">
         function enviarform12() {
-            document.getElementById('mensaje1').style.display="none";
-            document.getElementById('mensaje2').style.display="none";
-            document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
-            var anotricli =document.getElementById('anotricli').value;
-            var trimestrecli =document.getElementById('trimestrecli').value;
-            var cliente3 =document.getElementById('cliente3').value;
-            var message =  [[${listaCompradores1}]];
-            //console.log(message);
+            document.getElementById('mensajecli1').style.display="none";
+            document.getElementById('mensajecli2').style.display="none";
+            document.getElementById('mensajecli3').style.display="none";
+            var anotricomunidad =document.getElementById('anotricli').value;
+            var trimestrecomunidad =document.getElementById('trimestrecli').value;
+            var comunidad =document.getElementById('cliente3').value;
+            var message =  [[${listaVentas1}]];
+            console.log(message);
 
             var aux2=0;
             for(var ii=0;ii<message.length;ii++){
-                if(message[ii].nombrecomprador===cliente3){
+                if(message[ii].nombrecomprador===comunidad){
                     aux2=aux2+1;
                 }
             }
-            //console.log(sede);
+            console.log(sede);
             console.log("aux2="+aux2);
             var auxx=0;
-            for(var i=0;i<anotricli.length;i++)
+            for(var i=0;i<anotricomunidad.length;i++)
             {
-                if((Number.isInteger(Number.parseInt(anotricli[i])))){
+                if((Number.isInteger(Number.parseInt(anotricomunidad[i])))){
                     auxx=auxx+1;
                 }
             }
             console.log(auxx);
-            if(2000<=anotricli && anotricli<=2022 && auxx===anotricli.length && (trimestrecli==="Primero" || trimestrecli==="Segundo" || trimestrecli==="Tercero" || trimestrecli==="Cuarto") && (aux2!=0)) {
+            if(auxx===anotricomunidad.length && (trimestrecomunidad==="Primero" || trimestrecomunidad==="Segundo" || trimestrecomunidad==="Tercero" || trimestrecomunidad==="Cuarto") && (aux2!=0)) {
                 return true;
             }else{
-                document.getElementById('mensaje3').style.display="block";
+                document.getElementById('mensajecli3').style.display="block";
+                //$('#mensaje3').hide(4000);
                 return false;
             }
         }
     </script>
     <!--    script producto-->
-    <script th:inline="javascript">
+    <script>
         function enviarform13() {
-            document.getElementById('mensaje1').style.display="none";
-            document.getElementById('mensaje2').style.display="none";
-            document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
-            var anopro =document.getElementById('anopro').value;
-            var producto1 =document.getElementById('producto1').value;
+            document.getElementById('mensajepro1').style.display="none";
+            document.getElementById('mensajepro2').style.display="none";
+            document.getElementById('mensajepro3').style.display="none";
+            var anocomunidad =document.getElementById('anopro').value;
+            //var sede=document.getElementById('sede').value;
+
             var aux=0;
-            var message =  [[${listaProducto1}]];
-            console.log(anopro);
-            var aux2=0;
-            for(var ii=0;ii<message.length;ii++){
-                if(message[ii].nombreproducto===producto1){
-                    aux2=aux2+1;
-                }
-            }
-            for(var i=0;i<anopro.length;i++)
+            console.log(anocomunidad);
+            for(var i=0;i<anocomunidad.length;i++)
             {
-                if((Number.isInteger(Number.parseInt(anopro[i])))){
+                if((Number.isInteger(Number.parseInt(anocomunidad[i])))){
                     aux=aux+1;
                 }
             }
 
-            if(aux===anopro.length && 2000<=anopro && anopro<=2022 && aux2!=0){
+            if(aux===anocomunidad.length){
                 return true;
             }
             else{
-                document.getElementById('mensaje4').style.display="block";
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensajepro1').style.display="block";
+
+
+                //$('#mensaje1').hide(4000);
                 return false;
             }
         }
     </script>
-    <script th:inline="javascript">
+    <script>
         function enviarform14() {
-            document.getElementById('mensaje1').style.display="none";
-            document.getElementById('mensaje2').style.display="none";
-            document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
-            var anomespro =document.getElementById('anomespro').value;
-            var mespro =document.getElementById('mespro').value;
-            var producto2 =document.getElementById('producto2').value;
+            document.getElementById('mensajepro1').style.display="none";
+            document.getElementById('mensajepro2').style.display="none";
+            document.getElementById('mensajepro3').style.display="none";
+            var anomes =document.getElementById('anomespro').value;
+            var messede =document.getElementById('mespro').value;
             var aux=0;
-            var message =  [[${listaProducto1}]];
-            console.log(mespro);
-            var aux2=0;
-            for(var ii=0;ii<message.length;ii++){
-                if(message[ii].nombreproducto===producto2){
-                    aux2=aux2+1;
-                }
-            }
-            for(var i=0;i<anomespro.length;i++)
+            console.log(messede);
+            for(var i=0;i<anomes.length;i++)
             {
-                if((Number.isInteger(Number.parseInt(anomespro[i])))){
+                if((Number.isInteger(Number.parseInt(anomes[i])))){
                     aux=aux+1;
                 }
             }
             console.log(aux);
-            if(aux2!=0 && aux===anomespro.length && (mespro==="Enero" || mespro==="Febrero" || mespro==="Marzo" || mespro==="Abril" || mespro==="Mayo" ||
-                mespro==="Junio" || mespro==="Julio" || mespro==="Agosto" || mespro==="Septiembre" || mespro==="Octubre" || mespro==="Noviembre" || mespro==="Diciembre")
+            if(aux===anomes.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+                messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
             ) {
                 return true;
             }else{
-                document.getElementById('mensaje4').style.display="block";
+                document.getElementById('mensajepro2').style.display="block";
+                //$('#mensaje2').hide(4000);
                 return false;
             }
         }
     </script>
     <script th:inline="javascript">
         function enviarform15() {
-            document.getElementById('mensaje1').style.display="none";
-            document.getElementById('mensaje2').style.display="none";
-            document.getElementById('mensaje3').style.display="none";
-            document.getElementById('mensaje4').style.display="none";
-            document.getElementById('mensaje5').style.display="none";
-            var anotripro =document.getElementById('anotripro').value;
-            var trimestrepro =document.getElementById('trimestrepro').value;
-            var producto3 =document.getElementById('producto3').value;
+            document.getElementById('mensajepro1').style.display="none";
+            document.getElementById('mensajepro2').style.display="none";
+            document.getElementById('mensajepro3').style.display="none";
+            var anotricomunidad =document.getElementById('anotripro').value;
+            var trimestrecomunidad =document.getElementById('trimestrepro').value;
+            var comunidad =document.getElementById('producto3').value;
             var message =  [[${listaProducto1}]];
             console.log(message);
+
             var aux2=0;
             for(var ii=0;ii<message.length;ii++){
-                if(message[ii].nombreproducto===producto3){
+                if(message[ii].nombrecomprador===comunidad){
                     aux2=aux2+1;
                 }
             }
+            console.log(sede);
+            console.log("aux2="+aux2);
             var aux=0;
-            for(var i=0;i<anotripro.length;i++)
+            for(var i=0;i<anotricomunidad.length;i++)
             {
-                if((Number.isInteger(Number.parseInt(anotripro[i])))){
+                if((Number.isInteger(Number.parseInt(anotricomunidad[i])))){
                     aux=aux+1;
                 }
             }
             console.log(aux);
-            console.log(aux2);
-            if(2000<=anotripro && anotripro<=2022 && aux===anotripro.length && (trimestrepro==="Primero" || trimestrepro==="Segundo" || trimestrepro==="Tercero" || trimestrepro==="Cuarto") && (aux2!=0)) {
+            if(aux===anotricomunidad.length && (trimestrecomunidad==="Primero" || trimestrecomunidad==="Segundo" || trimestrecomunidad==="Tercero" || trimestrecomunidad==="Cuarto") && (aux2!=0)) {
                 return true;
             }else{
-                document.getElementById('mensaje4').style.display="block";
+                document.getElementById('mensajepro3').style.display="block";
+                //$('#mensaje3').hide(4000);
                 return false;
             }
         }
     </script>
-
-
 
 <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
 </div>

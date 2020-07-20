@@ -21,7 +21,7 @@ public class Excel implements ServiceExcel{
     VentaRepository ventaRepository;
 
     @Override
-    public  ByteArrayInputStream exportarData(String ano,List<ReporteMensualoAnualMosqoyDto> lista,String tipo) throws Exception {
+    public ByteArrayInputStream exportarData(String ano,List<ReporteMensualoAnualMosqoyDto> lista,String tipo) throws Exception {
 
         int linea = 0;
         //los nombres(títulos) de las columnas en el archivo excel
@@ -29,11 +29,14 @@ public class Excel implements ServiceExcel{
         "Codigo de Producto","Nombre de Producto","Color","Metodo de Pago"};
 
         Workbook workbook = new HSSFWorkbook(); //creando archivo Excel
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         Sheet sheet = workbook.createSheet("Ventas "+tipo +" "+ano); //nombre de la hoja de excel
 
+
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
+        //estilos
         headerFont.setColor(IndexedColors.BLUE.getIndex());
         CellStyle headerCellStyle = workbook.createCellStyle();//estilo de la celda
         headerCellStyle.setFont(headerFont);

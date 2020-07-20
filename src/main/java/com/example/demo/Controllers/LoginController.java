@@ -203,7 +203,7 @@ public class LoginController {
                 if (calendar3.get(Calendar.DAY_OF_MONTH) >= 15 && calendar3.get(Calendar.DAY_OF_MONTH)<=20) {
                     if (mensajes.isEmpty()) {
                         String mensaje1 = "¡Hola! este es un mensaje automatico del sistema <br><br>En este momento ninguna consignacion esta cerca de su fecha de vencimiento";
-                        sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje1);
+                       sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje1);
                     } else {
 
                         String mensaje = "¡Hola! este es un mensaje automatico del sistema <br><br>El sistema le avisa que el/los siguiente(s) pedido(s) :"

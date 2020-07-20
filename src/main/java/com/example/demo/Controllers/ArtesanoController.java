@@ -1,11 +1,10 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ArtesanoServiceApi;
-import com.example.demo.Entity.Artesano;
-import com.example.demo.Entity.Comunidad;
-import com.example.demo.Entity.Producto;
+import com.example.demo.Entity.*;
 import com.example.demo.Repository.ArtesanoRepository;
 import com.example.demo.Repository.ComunidadRepository;
+import com.example.demo.Repository.ConsignacionyventaRepository;
 import com.example.demo.service.ArtesanoService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.sun.org.apache.xpath.internal.operations.Or;
@@ -38,6 +37,8 @@ public class ArtesanoController {
     ArtesanoRepository artesanoRepository;
     @Autowired
     ComunidadRepository comunidadRepository;
+    @Autowired
+    ConsignacionyventaRepository consignacionyventaRepository;
 
     @GetMapping(value = {"", "/lista"})
     public String listaArtesano(Model model, @RequestParam Map<String, Object> params,RedirectAttributes attr) {
@@ -123,14 +124,28 @@ public class ArtesanoController {
 
     @GetMapping("/borrar")
     public String borrarArtesano(Model model,
-                                 @RequestParam("id") int id, RedirectAttributes att) {
+                                 @RequestParam("id") String id, RedirectAttributes att) {
 
-        Optional<Artesano> optionalArtesano = artesanoRepository.findById(id);
-        if (optionalArtesano.isPresent()) {
-            att.addFlashAttribute("msgAr", "Artesano borrado Exitosamente");
-            artesanoRepository.deleteById(id);
+        try{
+            int idart = Integer.parseInt(id);
+            Optional<Artesano> optionalArtesano = artesanoRepository.findById(idart);
+            Consignacionyventa consignacionyventa = consignacionyventaRepository.verificaArtesanoEnConsignacionYVenta(idart);
+            if (consignacionyventa == null){
+                if (optionalArtesano.isPresent()) {
+                    att.addFlashAttribute("msgArt", "Artesano borrado Exitosamente");
+                    artesanoRepository.deleteById(idart);
+                    return "redirect:/artesano";
+                }
+            }else {
+                att.addFlashAttribute("msgArt",
+                        "Actualmente el artesano se encuentra en Consignación y Venta");
+            }
+
+        }catch (NumberFormatException e){
             return "redirect:/artesano";
         }
+
+
         return "redirect:/artesano";
     }
 

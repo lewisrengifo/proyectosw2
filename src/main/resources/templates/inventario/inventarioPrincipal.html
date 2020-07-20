@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:replace="fragments/leftbar.html :: cabecera(titulo='Inventario Principal')">
 </head>
@@ -49,16 +50,9 @@
 
 
                         <div class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
-                            <a class="btn btn-outline-danger"  th:href="@{'/inventarioPrincipal/agregarInventario' + '?referencia=1' }">Agregar Consignación</a>
+                            <a class="btn btn-outline-danger" th:href="@{'/inventarioPrincipal/agregarInventario' + '?referencia=1' }">Agregar Consignación</a>
                         </div>
-                        <div class="card-action" sec:authorize="hasAnyAuthority('Gestor sede')">
-                            <a class="btn btn-outline-danger"  th:href="@{'/inventarioPrincipal/agregarInventario' + '?referencia=1' }">Agregar Consignación</a>
-                        </div>
-
                         <div class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
-                            <a class="btn btn-outline-danger" th:href="@{'/inventarioPrincipal/agregarInventario' + '?referencia=2' }">Agregar Compra</a>
-                        </div>
-                        <div class="card-action" sec:authorize="hasAnyAuthority('Gestor sede')">
                             <a class="btn btn-outline-danger" th:href="@{'/inventarioPrincipal/agregarInventario' + '?referencia=2' }">Agregar Compra</a>
                         </div>
 
