@@ -72,6 +72,7 @@
                                         <th>Nombre de la sede</th>
                                         <th>Estado del producto</th>
                                         <th>Observaciones</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -86,23 +87,19 @@
                                         <td th:text="${inv.sede.nombre}"></td>
                                         <td th:text="${inv.getEstado()}"></td>
                                         <td th:text="${inv.getObservaciones()}"></td>
+                                        </td>
 
-                                        <!--
-                                        <td><select class="form-control" name="estado" id="estado" style="width: 41%">
-                                            <option id="enviado" value="enviado" selected th:text="${inv.getEstado()}">
-                                            </option>
-                                            <option id="recibido" th:text="|recibido por sede|"
-                                                    th:value="|recibido por sede|">
-                                            </option>
+                                        <td th:if="${inv.estado=='observado'}">
+                                            <form method="get" th:action="@{'/inventarioSede/estadoObservado'}">
+                                                <div class="form-group" >
+                                                    <select class="form-control" name="resultEstado" style="width: 60%">
+                                                        <option  value="0"> Recibir Producto</option>
+                                                        <option  value="1" th:text="'Devolver producto a sede '+${inv.sede.nombre}">Observado</option>
+                                                    </select>
+                                                    <input style="width: 50%" type="hidden" class="form-control" name="idinventariosede" th:value="${inv.idiventariosede}">
 
-                                        </select>
-                                        -->
-
-                                            <form method="post" th:action="@{''}">
-                                                <button style="display: none" id="bottttton" type="submit"
-                                                        class=" btn btn-info btn-responsive btninter rigth"
-                                                >Enviar
-                                                </button>
+                                                </div>
+                                                <button  type="submit" class=" btn btn-info btn-responsive ">Enviar</button>
                                             </form>
                                         </td>
 
