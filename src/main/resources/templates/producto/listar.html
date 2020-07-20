@@ -42,6 +42,10 @@
                     <div th:if="${msg != null}" th:text="${msg}" class="alert alert-warning"
                          role="alert"></div>
 
+                    <div th:if="${msgBorrado != null}" th:text="${msgBorrado}" class="alert alert-success"
+                         role="alert"></div>
+
+
                 </form>
 
             </div>
@@ -59,7 +63,7 @@
                         </div>
                         <div class="card-content">
                             <div class="table-responsive">
-                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-success"
+                                <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
                                      role="alert"></div>
                                 <div th:if="${msgCrear != null}" th:text="${msgCrear}" class="alert alert-success"
                                      role="alert"></div>

@@ -158,7 +158,7 @@ public class InventariosedeController {
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             if (page > pages.size() - 1) {
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                 return "redirect:/inventarioSede/listarInvMiSede";
             }
@@ -202,7 +202,7 @@ public class InventariosedeController {
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             if (page > pages.size() - 1) {
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                 return "redirect:/inventarioSede/listarinvsedexconfirmar";
             }
@@ -325,13 +325,13 @@ public class InventariosedeController {
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
                 if (page > pages.size() - 1) {
-                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                     return "redirect:/inventarioSede/listarInvMiSede";
                 }
                 model.addAttribute("pages", pages);
             } else {
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                 return "redirect:/inventarioSede/listarInvMiSede";
 
@@ -382,13 +382,13 @@ public class InventariosedeController {
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
                 if (page > pages.size() - 1) {
-                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                     return "redirect:/inventarioSede";
                 }
                 model.addAttribute("pages", pages);
             } else {
-                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos referidos a su búsqueda");
 
                 return "redirect:/inventarioSede";
 
@@ -408,6 +408,7 @@ public class InventariosedeController {
 
 
     @GetMapping("devolverPrincipal")
+
     public String devolverProductoAsedePrincipal(@RequestParam("id") String id,RedirectAttributes att) {
 
         try{
@@ -426,14 +427,16 @@ public class InventariosedeController {
                 att.addFlashAttribute("msgPagina","producto devuelto a sede");
                 return "redirect:/inventarioSede/listarInvMiSede";
             }else{
-                att.addFlashAttribute("msgPagina","El producto aún se encuentra en la tienda");
+                att.addFlashAttribute("msgNosepuedeDevolver","El producto aún se encuentra en la tienda");
                 return "redirect:/inventarioSede/listarInvMiSede";
             }
+
 
 
         }catch (NumberFormatException e){
             return "redirect:/inventarioSede/listarInvMiSede";
         }
+
 
     }
 
