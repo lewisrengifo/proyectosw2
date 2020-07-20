@@ -221,6 +221,7 @@ public class InventariosedeController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
+        model.addAttribute("totalItems", pageProduct.getTotalElements());
         return "inventario/inventariosedexconfirmar";
 
     }
@@ -417,5 +418,36 @@ public class InventariosedeController {
         return "redirect:/inventarioSede/listarInvMiSede";
     }
 
+    @GetMapping("/estadoObservado")
+    public String resolverEstadoDeObservado(@RequestParam("resultEstado") String estOb,@RequestParam("idinventariosede") String idinventariosede, RedirectAttributes att){
+        try{
+            int estaObservado = Integer.parseInt(estOb);
+            int idInvSede = Integer.parseInt(idinventariosede);
+            //0 es recibir producto y 1, devolver producto a la sede
+            if (estaObservado==1){
+                String estadoDevolver = "Enviado";
+                inventarioSedeRepository.actualizarEstado(estadoDevolver,idInvSede);
+                inventarioSedeRepository.actualizarObservaciones(null,idInvSede);
+                att.addFlashAttribute("msg","Producto fue devuelto a la sede");
+            }
+            if (estaObservado == 0) {
+                Optional<Inventariosede> inventSedeById = inventarioSedeRepository.findById(idInvSede);
+                if (inventSedeById.isPresent()){
+                    int stockMandado = inventSedeById.get().getStock();
+                    Inventariosede productoDevuelto = inventarioSedeRepository.obtenerStockSedePrincipal(3, inventSedeById.get().getInventarioproductoidinventario().getIdinventario());
+                    int totalStockDevolver = stockMandado + productoDevuelto.getStock();
+                    inventarioSedeRepository.actualizarStockSede(totalStockDevolver,productoDevuelto.getIdiventariosede());
+                    inventarioSedeRepository.deleteById(inventSedeById.get().getIdiventariosede());
+                   att.addFlashAttribute("msg","Producto fue devuelto a la sede principal");
+                }else{
+                    return "redirect:/inventarioSede";
+                }
+            }
+            return "redirect:/inventarioSede";
+        }catch (NumberFormatException e){
+            return "redirect:/inventarioSede";
+        }
+
+    }
 
 }

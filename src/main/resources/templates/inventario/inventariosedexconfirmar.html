@@ -51,7 +51,7 @@
                                     </tr>
                                     </thead>
                                     <tbody >
-                                    <tr th:each="inv, info : ${listaInventarioSede}">
+                                    <tr th:if="${totalItems}!=0" th:each="inv, info : ${listaInventarioSede}">
 
 
                                         <td th:text="${info.index +1}" >1</td>
@@ -75,6 +75,7 @@
 
                                                     </select>
                                                     <input style="width: 50%" type="hidden" class="form-control" name="idinventariosede" th:value="${inv.idiventariosede}">
+                                                    <input style="width: 50%" type="hidden" class="form-control" name="observaciones" th:value="${inv.observaciones}">
 
                                                 </div>
                                                 <button  type="submit" class=" btn btn-info btn-responsive ">Enviar</button>
@@ -94,8 +95,8 @@
                                             </form>
                                         </td>
 
-
                                     </tr>
+
 
 
                                     </tbody>
