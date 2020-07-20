@@ -192,7 +192,7 @@ public class ProductoController {
             if (inventarioproducto==null){
                 if (optProduct.isPresent()) {
                     productoRepository.deleteById(id2);
-                    attr.addFlashAttribute("msg", "Producto borrado exitosamente");
+                    attr.addFlashAttribute("msgBorrado", "Producto borrado exitosamente");
                 }
                 return "redirect:/producto";
             }else{

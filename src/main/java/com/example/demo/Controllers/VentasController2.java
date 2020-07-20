@@ -5,10 +5,9 @@ import com.example.demo.Entity.Comunidad;
 import com.example.demo.Entity.Producto;
 import com.example.demo.Entity.Sede;
 import com.example.demo.Entity.Ventas;
-import com.example.demo.Repository.ComunidadRepository;
-import com.example.demo.Repository.ProductoRepository;
-import com.example.demo.Repository.SedeRepository;
-import com.example.demo.Repository.VentaRepository1;
+
+import com.example.demo.Repository.*;
+
 import com.example.demo.service.ServiceExcel;
 import com.sun.istack.Nullable;
 import org.hibernate.boot.spi.NaturalIdUniqueKeyBinder;
@@ -26,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +47,9 @@ public class VentasController2 {
     @Autowired
     ProductoRepository productoRepository;
 
+
+    @Autowired
+    VentasRepository ventasRepository;
 
 
     @GetMapping("")
@@ -86,12 +89,14 @@ public class VentasController2 {
 
     @PostMapping("/ano")
     public ResponseEntity<InputStreamResource> exportDataAnual(@RequestParam("ano")String ano) throws Exception{
+
             List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteAnualMosqoy(ano);
             String tipo="Año";
             ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,tipo);
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Disposition","attachment; filename=Ventas"+ano+".xls");
             return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
+
     }
 
     @PostMapping("/anomes")
@@ -152,7 +157,9 @@ public class VentasController2 {
         String aux="Mes "+mes;
         ByteArrayInputStream stream = serviceExcel.exportarData(anomes,lista,aux);
         HttpHeaders headers = new HttpHeaders();
+
         headers.add("Content-Disposition","attachment; filename=Ventas"+mes+anomes+".xls");
+
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/trimestre")
@@ -186,33 +193,63 @@ public class VentasController2 {
                 break;
             default: mes1="#";
         }
+
         String mmes1 = anotri +"-"+ mes1;
         String mmes2 = anotri +"-"+ mes2;
         String mmes3 = anotri +"-"+ mes3;
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralAnualMosqoy(mmes1,mmes2,mmes3);
         String aux="Trimestre " +trimestre;
         ByteArrayInputStream stream = serviceExcel.exportarData(anotri,lista,aux);
+
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition","attachment; filename=Ventas"+aux+anotri+".xls");
+        String archivo = "Reporte trimestral de Mosqoy:" + trimestre; //titulo del excel
+        headers.add("Content-Disposition","attachment; filename="+archivo+".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
 
     //--------------REPORTES POR SEDE--------------------------------------------
 
 
+    @GetMapping("/sede")
+    public String paginaReportesSede(Model model){
+        List<Sede> listaSede = sedeRepository.findAll();
+        model.addAttribute("listaSede", listaSede);
+        return "Reportes/sede";
+    }
+
+    public String pruebaFiltro (@RequestParam("ano")String ano, Sede sede, Model model){
+
+        //lógica para validar
+        try{
+            Integer anoint = Integer.parseInt(ano);
+            Optional<Sede> sedeporId = sedeRepository.findById(sede.getIdsede());
+            Date hoy = new Date();
+
+            if (anoint != 0){
+
+            }
+        }catch (NumberFormatException e){
+            model.addAttribute("mensaje", "Debe ingresar el año adecuado");
+            return "reportes/principal";
+        }
+
+
+
+        return "reportes/principal";
+    }
+
     @PostMapping("/ano/sede")
-    public ResponseEntity<InputStreamResource> exportDataAnualSede(@RequestParam("anosede")String ano,@RequestParam("sede")String sede) throws Exception{
-        Sede sede1=sedeRepository.sedePornombre(sede);
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteMensualAnualSede(ano, sede1.getIdsede());
-        ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,sede1.getNombre());//cambiar 2variable ano por un string que sea igual a lo correspondiente
+    public ResponseEntity<InputStreamResource> exportDataAnualSede(@RequestParam("ano")String ano, Sede sede) throws Exception{
+
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteMensualAnualSede(ano, sede.getIdsede());
+        ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,ano);//cambiar 2variable ano por un string que sea igual a lo correspondiente
         HttpHeaders headers = new HttpHeaders();
-        String archivo = "Reporte anual del año"+ " "+ ano +" de la sede" + " " + sede1.getNombre(); //titulo del excel, no del sheet
+        String archivo = "Reporte anual del año"+ " "+ ano +" de la sede" + " " + sede.getNombre(); //titulo del excel, no del sheet
         headers.add("Content-Disposition","attachment; filename="+ archivo +".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
-
     }
     @PostMapping("/anomes/sede")
-    public ResponseEntity<InputStreamResource> exportDataAnualyMensualSede(@RequestParam("anomessede")String anomessede,@RequestParam("messede")String mes, @RequestParam("sedemes")String sede) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualyMensualSede(@RequestParam("anomes")String anomes,@RequestParam("mes")String mes, Sede sede) throws Exception{
         String mes1="";
         switch (mes){
             case "Enero":
@@ -264,18 +301,17 @@ public class VentasController2 {
                 break;
             default: mes1="#";
         }
-        String dato=anomessede+"-"+mes1;
-        Sede sede1=sedeRepository.sedePornombre(sede);
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteMensualAnualSede(dato, sede1.getIdsede());
-        String aux="";
-        ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,dato);
+        String dato=anomes+"-"+mes1;
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteMensualAnualSede(dato, sede.getIdsede());
+        String aux="Mes "+mes;
+        ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anomes);
         HttpHeaders headers = new HttpHeaders();
-        String archivo = "Reporte mensual de la sede" + " " + sede1.getNombre(); //titulo del excel
+        String archivo = "Reporte mensual de la sede" + " " + sede.getNombre(); //titulo del excel
         headers.add("Content-Disposition","attachment; filename="+ archivo +".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/trimestre/sede")
-    public ResponseEntity<InputStreamResource> exportDataAnualTrimestralSede(@RequestParam("trimestresede")String trimestre,@RequestParam("anotrisede")String anotri,@RequestParam("sede1")String sede) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualTrimestralSede(@RequestParam("trimestre")String trimestre,@RequestParam("anotri")String anotri,@RequestParam("sede1") String sede) throws Exception{
         String mes1="";
         String mes2="";
         String mes3="";
@@ -308,9 +344,11 @@ public class VentasController2 {
         String mmes1 = anotri +"-"+ mes1;
         String mmes2 = anotri +"-"+ mes2;
         String mmes3 = anotri +"-"+ mes3;
+
         Sede sede1=sedeRepository.sedePornombre(sede);
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestralSede(mmes1,mmes2,mmes3,sede1.getIdsede());
         String aux="Trimestre "+ trimestre;
+
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
         String archivo = "Reporte trimestral de la sede" + " " + sede1.getNombre(); //titulo del excel
@@ -444,17 +482,19 @@ public class VentasController2 {
 
     //REPORTES POR COMUNIDAD
 
+
     /*@PostMapping("/ano/comunidad")
     public ResponseEntity<InputStreamResource> exportDataAnualComunidad(@RequestParam("ano")String ano, Comunidad comunidad) throws Exception{
         List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteComunidad(ano, comunidad.getIdcomunidad());
+>>>>>>> 8356ed35fbab9c976148488d8d6ceb1b7f8e6d7d
         ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,ano);//cambiar 2variable ano por un string que sea igual a lo correspondiente
         HttpHeaders headers = new HttpHeaders();
-        String archivo = "Reporte anual del año " + ano +" de la comunidad:" + " " + comunidad.getNombrecomunidad(); //titulo del excel, no del sheet
+        String archivo = "Reporte anual del año " + ano +" de la comunidad:" + " " + comunidad; //titulo del excel, no del sheet
         headers.add("Content-Disposition","attachment; filename="+ archivo +".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/anomes/comunidad")
-    public ResponseEntity<InputStreamResource> exportDataAnualyMensualComunidad(@RequestParam("anomes")String anomes,@RequestParam("mes")String mes, Comunidad comunidad) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualyMensualComunidad(@RequestParam("anomescomunidad")String anomes,@RequestParam("mescomunidad")String mes, @RequestParam("com2") int comunidad) throws Exception{
         String mes1="";
         switch (mes){
             case "Enero":
@@ -474,7 +514,7 @@ public class VentasController2 {
                 break;
 
             case "Mayo":
-                mes="05";
+                mes1="05";
                 break;
 
             case "Junio":
@@ -507,16 +547,18 @@ public class VentasController2 {
             default: mes1="#";
         }
         String dato=anomes+"-"+mes1;
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteComunidad(dato, comunidad.getIdcomunidad());
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteComunidad(dato, comunidad);
         String aux="Mes "+mes;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anomes);
         HttpHeaders headers = new HttpHeaders();
-        String archivo = "Reporte mensual de la comunidad:" + " " + comunidad.getNombrecomunidad(); //titulo del excel
+        Optional<Comunidad> comunidadbyId = comunidadRepository.findById(comunidad);
+        Comunidad co = comunidadbyId.get();
+        String archivo = "Reporte mensual de la comunidad:" + " " + co.getNombrecomunidad(); //titulo del excel
         headers.add("Content-Disposition","attachment; filename="+ archivo +".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
     @PostMapping("/trimestre/comunidad")
-    public ResponseEntity<InputStreamResource> exportDataAnualTrimestralComunidad(@RequestParam("trimestre")String trimestre,@RequestParam("anotri")String anotri, Comunidad comunidad) throws Exception{
+    public ResponseEntity<InputStreamResource> exportDataAnualTrimestralComunidad(@RequestParam("trimestrecomunidad")String trimestre,@RequestParam("anotricomunidad")String anotri, @RequestParam("com3") String comunidad) throws Exception{
         String mes1="";
         String mes2="";
         String mes3="";
@@ -546,11 +588,14 @@ public class VentasController2 {
                 break;
             default: mes1="#";
         }
-        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestreComunidad(mes1,mes2,mes3,anotri, comunidad.getIdcomunidad());
+        String mmes1 = anotri +"-"+ mes1;
+        String mmes2 = anotri +"-"+ mes2;
+        String mmes3 = anotri +"-"+ mes3;
+        List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteTrimestreComunidad(mmes1,mmes2,mmes3, comunidad);
         String aux="Trimestre "+ trimestre ;
         ByteArrayInputStream stream = serviceExcel.exportarData(aux,lista,anotri);
         HttpHeaders headers = new HttpHeaders();
-        String archivo = "Reporte trimestral de la comunidad:" + " " + comunidad.getNombrecomunidad(); //titulo del excel
+        String archivo = "Reporte trimestral de la comunidad:" + " " + comunidad; //titulo del excel
         headers.add("Content-Disposition","attachment; filename="+ archivo+".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }*/
@@ -673,5 +718,6 @@ public class VentasController2 {
         headers.add("Content-Disposition","attachment; filename="+archivo+".xls");
         return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
-    
+
+
 }

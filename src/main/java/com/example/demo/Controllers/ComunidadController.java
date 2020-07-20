@@ -2,8 +2,10 @@ package com.example.demo.Controllers;
 
 
 import com.example.demo.Dto.RendirizadorPaginas;
+import com.example.demo.Entity.Artesano;
 import com.example.demo.Entity.Comunidad;
 import com.example.demo.Entity.Usuario;
+import com.example.demo.Repository.ArtesanoRepository;
 import com.example.demo.Repository.ComunidadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,8 @@ public class ComunidadController {
 
     @Autowired
     ComunidadRepository comunidadRepository;
+    @Autowired
+    ArtesanoRepository artesanoRepository;
 
     @GetMapping("")
     public String listarComunidad(@RequestParam Map<String, Object> params, Model model) {
@@ -58,6 +62,7 @@ public class ComunidadController {
         return "comunidad/lista";
     }
 
+
     @GetMapping("/nuevo")
     public String nuevaComunidad(@ModelAttribute("comunidad") Comunidad c) {
 
@@ -81,18 +86,30 @@ public class ComunidadController {
 
     @GetMapping("/borrar")
     public String borrarComunidad(Model model,
-                                  @RequestParam("id") int id, RedirectAttributes att) {
+                                  @RequestParam("id") String id, RedirectAttributes att) {
 
-        Optional<Comunidad> optionalComunidad = comunidadRepository.findById(id);
-        if (optionalComunidad.isPresent() && optionalComunidad.get().getIdcomunidad() > 5) {
-            att.addFlashAttribute("msgCo", "Comunidad Borrada Exitosamente");
-            comunidadRepository.deleteById(id);
-            return "redirect:/comunidad";
-        } else {
-            att.addFlashAttribute("msgE", "No puede borrar esta Comunidad");
+        try {
+            int idCom = Integer.parseInt(id);
+            Optional<Comunidad> optionalComunidad = comunidadRepository.findById(idCom);
+            Artesano artesano = artesanoRepository.verificarComunidadenArtesano(idCom);
+            if (artesano == null){
+                if (optionalComunidad.isPresent() && optionalComunidad.get().getIdcomunidad() > 5) {
+                    att.addFlashAttribute("msgCo", "Comunidad Borrada Exitosamente");
+                    comunidadRepository.deleteById(idCom);
+
+                }
+            }
+             else {
+                att.addFlashAttribute("msgE",
+                        "No puede borrar esta Comunidad, porque hay artesanos pertenecientes a esta.");
+                return "redirect:/comunidad";
+            }
+
+        }catch (NumberFormatException e){
             return "redirect:/comunidad";
         }
 
+        return "redirect:/comunidad";
     }
 
     @PostMapping("/guardar")

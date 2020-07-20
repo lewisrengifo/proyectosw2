@@ -210,6 +210,16 @@
                                     </tbody>
                                 </table>
                             </div>
+                                <!--<div class="card-action">
+                                    <h2>Generar reportes por</h2>
+                                    <br>
+                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Sede</a>
+                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Comunidad</a>
+                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Artículo</a>
+                                    <a class="btn btn-outline-danger" th:href="@{'/ventasexcel'}">Cliente</a>
+                                </div>-->
+
+
                         </div>
                     </div>
                 </div>
@@ -221,7 +231,7 @@
                             <h2>Reporte por Comunidad</h2>
                             <br>
                             <div id="mensajecom1"  style="display: none" class="alert alert-danger"
-                                 role="alert">Debe ingresar un numero</div>
+                                 role="alert">Ingrese correctamente los datos</div>
                             <div id="mensajecom2"  style="display: none" class="alert alert-danger"
                                  role="alert">Ingrese correctamente los datos</div>
                             <div id="mensajecom3"  style="display: none" class="alert alert-danger"
@@ -240,19 +250,22 @@
                                     </thead>
                                     <tbody>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/ano/com'}">
+                                        <form method="post" th:action="@{/ventasexcel/ano/comunidad}">
                                             <td class="center-align">1</td>
                                             <td class="center-align">Ventas total del Año</td>
                                             <td class="center-align">-</td>
                                             <td class="center-align">
                                                 <div style="align-content: center" >
-                                                    <input type="text" class="form-control" value="1930" name="anocom" id="anocom" style="width: 20%;align-content: center;margin:auto;text-align: center">
+                                                    <input type="text" class="form-control" value="1930" name="anocomunidad" id="anocomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center">
                                                 </div>
                                             </td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                    <select class="form-control" name="com1" id="com1"
+                                                            style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="x : ${listaComunidad}"
+                                                                th:text="${x.nombrecomunidad}"
+                                                                th:value="${x.idcomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -261,12 +274,12 @@
                                         </form>
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/anomes/com'}">
+                                        <form method="post" th:action="@{'/ventasexcel/anomes/comunidad'}">
                                             <td class="center-align">2</td>
                                             <td class="center-align">Ventas total del Mes</td>
                                             <td >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="mescom" id="mescom" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                    <select class="form-control" name="mescomunidad" id="mescomunidad" style="width: 80%;align-content: center;margin:auto;text-align: center" >
                                                         <option >Enero</option>
                                                         <option  >Febrero</option>
                                                         <option >Marzo</option>
@@ -282,11 +295,15 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescom" id="anomescom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980 " name="anomescomunidad"
+                                                                             id="anomescomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                    <select class="form-control" name="com2" id="com2"
+                                                            style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="x : ${listaComunidad}"
+                                                                th:text="${x.nombrecomunidad}"
+                                                                th:value="${x.idcomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -295,12 +312,12 @@
                                         </form>
                                     </tr>
                                     <tr >
-                                        <form method="post" th:action="@{'/ventasexcel/trimestre/com'}">
+                                        <form method="post" th:action="@{'/ventasexcel/trimestre/comunidad'}">
                                             <td class="center-align">3</td>
                                             <td class="center-align">Ventas total del Trimestre</td>
                                             <td class="center-align">
                                                 <div class="form-group" >
-                                                    <select class="form-control" name="trimestrecom" id="trimestrecom" style="width: 80%;align-content: center;margin:auto;text-align: center">
+                                                    <select class="form-control" name="trimestrecomunidad" id="trimestrecomunidad" style="width: 80%;align-content: center;margin:auto;text-align: center">
                                                         <option >Primero</option>
                                                         <option >Segundo</option>
                                                         <option >Tercero</option>
@@ -308,11 +325,14 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="center-align"><input  type="text" class="form-control" value="1980" name="anotricom" id="anotricom" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
+                                            <td class="center-align"><input  type="text" class="form-control" value="1980"
+                                                                             name="anotricomunidad" id="anotricomunidad" style="width: 20%;align-content: center;margin:auto;text-align: center"></td>
                                             <td class="center-align" >
                                                 <div class="form-group" style="align-content: center">
-                                                    <select class="form-control" name="com" id="com" style="width: 80%;align-content: center;margin:auto;text-align: center" >
-                                                        <option th:each="com : ${listaComunidad}" th:text="|${com.nombrecomunidad}|" th:value="${com.nombrecomunidad}"
+                                                    <select class="form-control" name="com3" id="com3" style="width: 80%;align-content: center;margin:auto;text-align: center" >
+                                                        <option th:each="com : ${listaComunidad}"
+                                                                th:text="|${com.nombrecomunidad}|"
+                                                                th:value="${com.nombrecomunidad}"
                                                         ></option>
                                                     </select>
                                                 </div>
@@ -447,6 +467,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row" style="margin: auto">
                 <div class="col-md-12">
                     <div class="card">
@@ -567,7 +588,11 @@
                 </div>
             </div>
 
+
     </div>
+
+
+
 </div>
 
     <script>
@@ -644,6 +669,7 @@
         }
     }
 </script>
+
     <script th:inline="javascript">
         function enviarform4() {
             document.getElementById('mensaje1').style.display="none";
@@ -666,7 +692,10 @@
                 if((Number.isInteger(Number.parseInt(anosede[i])))){
                     aux=aux+1;
                 }
+
             }
+        }
+
 
             if(aux2===1 && aux===anosede.length && 2000<=anosede && anosede<=2022 ){
                 return true;
@@ -675,10 +704,11 @@
                 //$('#mensaje1').show(10000);
                 document.getElementById('mensaje1').style.display="block";
 
-                //$('#mensaje1').hide(4000);
-                return false;
-            }
+
+            //$('#mensaje1').hide(4000);
+            return false;
         }
+
     </script>
     <script th:inline="javascript">
         function enviarform5() {
@@ -753,6 +783,138 @@
     </script>
 
     <script>
+        function enviarform7() {
+            document.getElementById('mensajecom1').style.display="none";
+            document.getElementById('mensajecom2').style.display="none";
+            document.getElementById('mensajecom3').style.display="none";
+            var anocomunidad =document.getElementById('anocomunidad').value;
+            //var sede=document.getElementById('sede').value;
+
+            var aux=0;
+            console.log(anocomunidad);
+            for(var i=0;i<anocomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anocomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+
+            if(aux===anocomunidad.length){
+                return true;
+            }
+            else{
+                //$('#mensaje1').show(10000);
+                document.getElementById('mensajecom1').style.display="block";
+
+                //$('#mensaje1').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script>
+        function enviarform8() {
+            document.getElementById('mensajecom1').style.display="none";
+            document.getElementById('mensajecom2').style.display="none";
+            document.getElementById('mensajecom3').style.display="none";
+            var anomes =document.getElementById('anomescomunidad').value;
+            var messede =document.getElementById('mescomunidad').value;
+            var aux=0;
+            console.log(messede);
+            for(var i=0;i<anomes.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anomes[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anomes.length && (messede==="Enero" || messede==="Febrero" || messede==="Marzo" || messede==="Abril" || messede==="Mayo" ||
+                messede==="Junio" || messede==="Julio" || messede==="Agosto" || messede==="Septiembre" || messede==="Octubre" || messede==="Noviembre" || messede==="Diciembre")
+            ) {
+                return true;
+            }else{
+                document.getElementById('mensajecom2').style.display="block";
+                //$('#mensaje2').hide(4000);
+                return false;
+            }
+        }
+    </script>
+    <script th:inline="javascript">
+        function enviarform9() {
+            document.getElementById('mensajecom1').style.display="none";
+            document.getElementById('mensajecom2').style.display="none";
+            document.getElementById('mensajecom3').style.display="none";
+            var anotricomunidad =document.getElementById('anotricomunidad').value;
+            var trimestrecomunidad =document.getElementById('trimestrecomunidad').value;
+            var comunidad =document.getElementById('com3').value;
+            var message =  [[${listaComunidad1}]];
+            console.log(message);
+
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombrecomunidad===comunidad){
+                    aux2=aux2+1;
+                }
+            }
+            console.log(sede);
+            console.log("aux2="+aux2);
+            var aux=0;
+            for(var i=0;i<anotricomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anotricomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anotricomunidad.length && (trimestrecomunidad==="Primero" || trimestrecomunidad==="Segundo" || trimestrecomunidad==="Tercero" || trimestrecomunidad==="Cuarto") && (aux2!=0)) {
+                return true;
+            }else{
+                document.getElementById('mensajecom3').style.display="block";
+                //$('#mensaje3').hide(4000);
+                return false;
+            }
+        }
+    </script>
+
+
+    <script th:inline="javascript">
+        function enviarform12() {
+            document.getElementById('mensajecli1').style.display="none";
+            document.getElementById('mensajecli2').style.display="none";
+            document.getElementById('mensajecli3').style.display="none"
+            var anotricomunidad =document.getElementById('anotricli').value;
+            var trimestrecomunidad =document.getElementById('trimestrecli').value;
+            var comunidad =document.getElementById('cliente3').value;
+            var message =  [[${listaVentas1}]];
+            console.log(message);
+
+            var aux2=0;
+            for(var ii=0;ii<message.length;ii++){
+                if(message[ii].nombrecomprador===comunidad){
+                    aux2=aux2+1;
+                }
+            }
+            console.log(sede);
+            console.log("aux2="+aux2);
+            var aux=0;
+            for(var i=0;i<anotricomunidad.length;i++)
+            {
+                if((Number.isInteger(Number.parseInt(anotricomunidad[i])))){
+                    aux=aux+1;
+                }
+            }
+            console.log(aux);
+            if(aux===anotricomunidad.length && (trimestrecomunidad==="Primero" || trimestrecomunidad==="Segundo" || trimestrecomunidad==="Tercero" || trimestrecomunidad==="Cuarto") && (aux2!=0)) {
+                return true;
+            }else{
+                document.getElementById('mensajecli3').style.display="block";
+                //$('#mensaje3').hide(4000);
+                return false;
+            }
+        }
+    </script>
+
+
+    <script>
         function enviarform10() {
             document.getElementById('mensajecli1').style.display="none";
             document.getElementById('mensajecli2').style.display="none";
@@ -781,6 +943,7 @@
             }
         }
     </script>
+
     <script>
         function enviarform11() {
             document.getElementById('mensajecli1').style.display="none";
@@ -869,6 +1032,7 @@
                 //$('#mensaje1').show(10000);
                 document.getElementById('mensajepro1').style.display="block";
 
+
                 //$('#mensaje1').hide(4000);
                 return false;
             }
@@ -937,8 +1101,6 @@
             }
         }
     </script>
-
-
 
 <div th:replace="fragments/leftbar.html :: scriptsAbajo"></div>
 </div>
