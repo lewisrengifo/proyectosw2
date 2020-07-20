@@ -85,14 +85,15 @@
                     </li>
                     <li sec:authorize="hasAnyAuthority('Gestor principal')"
                         th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/productosDevueltos'} ? 'active-menu' : ''">
-                        <a th:href="@{/inventarioPrincipal/productosDevueltos}"> Productos Devueltos  </a>
+                        <a th:href="@{/inventarioPrincipal/productosDevueltos}"> Productos Devueltos </a>
                     </li>
                 </ul>
 
             </li>
 
 
-            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/sede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarInvMiSede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarinvsedexconfirmar'} ? 'nav-item active' : ''">
+            <li sec:authorize="hasAnyAuthority('Gestor principal', 'Gestor sede')"
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/sede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarInvMiSede'||#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarinvsedexconfirmar'} ? 'nav-item active' : ''">
                 <a class=" waves-effect waves-dark"><i class="fa fa-home"></i> Sede <span class="fa arrow"></span></a>
 
                 <ul class="nav nav-second-level ">
@@ -109,7 +110,8 @@
                         <a th:href="@{'/inventarioSede/listarInvMiSede'}"
                            th:text="'Inventario '+${session.usuario.sede_idsede.nombre}">Inventario Sede</a>
                     </li>
-                    <li sec:authorize="hasAnyAuthority('Gestor sede' )" th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarinvsedexconfirmar'} ? 'active-menu' : ''">
+                    <li sec:authorize="hasAnyAuthority('Gestor sede' )"
+                        th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioSede/listarinvsedexconfirmar'} ? 'active-menu' : ''">
                         <a th:href="@{/inventarioSede/listarinvsedexconfirmar}">Producto por confirmar</a>
                     </li>
                 </ul>
@@ -171,11 +173,14 @@
                     </li>
                     <li>
                         <a th:href="@{/inventarioTienda}"
-                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'active-menu' : ''" th:text="'Inventario de tiendas de la sede '+${session.usuario.sede_idsede.nombre}">Inventario de tienda</a>
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda'} ? 'active-menu' : ''"
+                           th:text="'Inventario de tiendas de la sede '+${session.usuario.sede_idsede.nombre}">Inventario
+                            de tienda</a>
                     </li>
                     <li sec:authorize="hasAnyAuthority('Gestor principal')">
                         <a th:href="@{/inventarioTienda/listaTotal}"
-                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda/listaTotal'} ? 'active-menu' : ''">Inventario de tiendas de todas las sedes</a>
+                           th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioTienda/listaTotal'} ? 'active-menu' : ''">Inventario
+                            de tiendas de todas las sedes</a>
                     </li>
                 </ul>
             </li>
@@ -195,26 +200,7 @@
 
                 </ul>
             </li>
-            <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
-                <a href="#" class=" waves-effect waves-dark"><i class="fa fa-sitemap"></i> Reportes <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a th:href="@{'/ventasexcel'}">Reporte General</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/ventasexcel/sede}">Reporte por sedes</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/ventasexcel/articulos}">Reporte por artículos</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/ventasexcel/comunidad}">Reporte por comunidad</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/ventasexcel/cliente}">Reporte por nombre de cliente</a>
-                    </li>
-                </ul>
-            </li>
+            
 
             <!--
                         <li sec:authorize="hasAnyAuthority('Gestor principal','Gestor sede')">
@@ -239,8 +225,6 @@
 </nav>
 
 <div th:fragment="scriptsAbajo">
-
-
 
 
     <!-- jQuery Js -->
