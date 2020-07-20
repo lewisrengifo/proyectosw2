@@ -109,6 +109,7 @@ public class ProductoController {
                 return "producto/editFrm";
             } else {
                 if (producto.getIdproducto() == 0) {
+
                     for (Producto prod : productoRepository.findAll()) {
                         if (prod.getCodigoproducto().equalsIgnoreCase(producto.getCodigoproducto())) {
                             attr.addFlashAttribute("msg", "Código de producto ya existe");
