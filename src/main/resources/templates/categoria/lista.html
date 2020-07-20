@@ -34,9 +34,11 @@
 
                                 <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
                                      role="alert"></div>
+                                <div th:if="${msgCo != null}" th:text="${msgCo}" class="alert alert-success"
+                                     role="alert"></div>
                                 <div th:if="${msgBorrado != null}" th:text="${msgBorrado}" class="alert alert-warning"
                                      role="alert"></div>
-                                <div th:if="${msgBorradoExito != null}" th:text="${msgBorrado}" class="alert alert-success"
+                                <div th:if="${msgBorradoExito != null}" th:text="${msgBorradoExito}" class="alert alert-success"
                                      role="alert"></div>
 
                                 <table class="table table-striped table-bordered table-hover">
