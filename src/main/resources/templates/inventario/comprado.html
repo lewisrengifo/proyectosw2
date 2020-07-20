@@ -1,44 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Moscoy</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/materialize/css/materialize.min.css}" media="screen,projection"/>
-    <!-- Bootstrap Styles-->
-    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
-    <!-- FontAwesome Styles-->
-    <link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
-    <!-- Morris Chart Styles-->
-    <link th:href="@{/js/morris/morris-0.4.3.min.css}" rel="stylesheet"/>
-    <!-- Custom Styles-->
-    <link th:href="@{/css/custom-styles.css}" rel="stylesheet"/>
-    <!-- Google Fonts-->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
-    <link rel="stylesheet" th:href="@{/js/Lightweight-Chart/cssCharts.css}">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Nueva Compra')">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <!--script>
-        $(document).ready(function () {
-
-            $("#comprado").click(function () {
-                $("#fechafin").val("01/01/1890");
-                $("#artesano_compra").hide();
-               // document.getElementById("fechafin").value = "01/01/1890";
-
-            });
-            $("#consignacion").click(function () {
-                $("#artesano_compra").show();
-            });
-        });
-    </script-->
-
-
-</head>
 <body>
 <div id="wrapper">
     <nav th:replace="fragments/leftbar.html :: barrasuperior"></nav>
@@ -50,7 +15,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                Compra
+                Nueva Compra
             </h1>
         </div>
 
@@ -63,9 +28,6 @@
                         <div class="card-content">
                             <div class="table-responsive">
 
-
-                                <h2>Compra</h2>
-                                <br>
                                 <div th:if="${msgnumped!= null}" th:text="${msgnumped}" class="alert alert-warning"
                                      role="alert"> </div>
 
@@ -91,9 +53,12 @@
 
 
                                         <label>Fecha Inicio</label>
+
                                         <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%" placeholder="formato:mes/dia/año">
+                                        <label>Formato: Mes/Dia/Año</label>
                                         <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}"
                                              th:errors="*{fechainicio}"></div>
+
 
                                         <!--div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div-->
                                     </div>
