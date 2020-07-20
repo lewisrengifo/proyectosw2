@@ -77,7 +77,7 @@
                     </li>
                     <li sec:authorize="hasAnyAuthority('Gestor principal')"
                         th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/ConsignacionVenta'} ? 'active-menu' : ''">
-                        <a th:href="@{/ConsignacionVenta}">Consignacion / Venta</a>
+                        <a th:href="@{/ConsignacionVenta}">Lista de Consignacion / Venta</a>
                     </li>
                     <li sec:authorize="hasAnyAuthority('Gestor principal')"
                         th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/inventarioPrincipal/stock'} ? 'active-menu' : ''">
