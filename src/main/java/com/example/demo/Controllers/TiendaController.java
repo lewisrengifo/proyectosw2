@@ -85,7 +85,7 @@ public class TiendaController {
         tienda.setNombre(tienda.getNombre().trim());
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("msg2", "Ingrese todos los datos solicitados correctamente.");
+            model.addAttribute("msg5", "Ingrese todos los datos solicitados correctamente.");
             return "Tienda/newEdit";
         }
         tienda.setSede(usuario.getSede_idsede());

@@ -14,6 +14,7 @@ public class Tienda {
     private int idtienda;
     @Column(nullable = false)
     @Size(max = 45,message = "el texto no puede tener más de 45 caracteres")
+    @NotBlank(message = "Tiene que ingresar un Nombre")
     private String nombre;
 
     @ManyToOne
