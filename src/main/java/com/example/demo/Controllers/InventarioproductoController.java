@@ -341,7 +341,7 @@ public class InventarioproductoController {
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-            PageRequest pageRequest = PageRequest.of(page, 5);
+            PageRequest pageRequest = PageRequest.of(page, 10);
 
 
             Page<Inventarioproducto> pageInvProd = inventarioproductoRepository.buscadorInventarioPrincipal(busqueda, pageRequest);
@@ -444,7 +444,7 @@ public class InventarioproductoController {
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-            PageRequest pageRequest = PageRequest.of(page, 5);
+            PageRequest pageRequest = PageRequest.of(page, 10);
 
 
             Page<Inventariosede> pageInvProd = inventarioSedeRepository.buscarStockPaginado(busqueda, usuariologueado.getSede_idsede().getNombre(), pageRequest);

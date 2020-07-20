@@ -58,7 +58,14 @@ public class TiendaController {
                 return "redirect:/tienda/lista";
             }
             model.addAttribute("pages", pages);
-        } else {
+        } else if (totalPage == 0) {
+            model.addAttribute("lista", pageTienda.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+            return "Tienda/lista";
+        }else {
 
             return "redirect:/tienda/lista";
         }
@@ -68,6 +75,7 @@ public class TiendaController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
+        model.addAttribute("totalItems", pageTienda.getTotalElements());
         return "Tienda/lista";
 
 
