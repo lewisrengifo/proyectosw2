@@ -3,6 +3,7 @@ package com.example.demo.Controllers;
 import com.example.demo.Entity.*;
 import com.example.demo.Repository.TiendaRepository;
 import com.example.demo.Repository.VentaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,7 @@ public class TiendaController {
     TiendaRepository tiendaRepository;
     @Autowired
     VentaRepository ventaRepository;
+
     @GetMapping(value = {"lista", "","/"})
     public String listar (Model model, @RequestParam Map<String, Object> params,HttpSession session , RedirectAttributes attr){
 
@@ -56,7 +58,14 @@ public class TiendaController {
                 return "redirect:/tienda/lista";
             }
             model.addAttribute("pages", pages);
-        } else {
+        } else if (totalPage == 0) {
+            model.addAttribute("lista", pageTienda.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+            return "Tienda/lista";
+        }else {
 
             return "redirect:/tienda/lista";
         }
@@ -66,6 +75,7 @@ public class TiendaController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
+        model.addAttribute("totalItems", pageTienda.getTotalElements());
         return "Tienda/lista";
 
 
@@ -140,6 +150,7 @@ public class TiendaController {
     @GetMapping("/borrar")
     public String borrar (@RequestParam("id") String id, RedirectAttributes attr){
         try {
+
             int id1 = Integer.parseInt(id);
             Optional<Tienda> opt = tiendaRepository.findById(id1);
             Ventas verificaidTiendaenVentas = ventaRepository.verificaidTiendaenVentas(id1);

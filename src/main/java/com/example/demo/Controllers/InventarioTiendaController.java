@@ -80,11 +80,17 @@ public class InventarioTiendaController {
                 return "redirect:/inventarioTienda/lista";
             }
             model.addAttribute("pages", pages);
-        } else {
+        } else if (totalPage == 0) {
+            model.addAttribute("listaInventarioSede", pageInvTienda.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+            return "inventario/inventarioTienda";
+        }else{
             attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
             return "redirect:/inventarioTienda/lista";
-
 
         }
 
@@ -93,6 +99,7 @@ public class InventarioTiendaController {
         model.addAttribute("next", page + 2);
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
+        model.addAttribute("totalItems", pageInvTienda.getTotalElements());
 
         return "inventario/inventarioTienda";
     }
