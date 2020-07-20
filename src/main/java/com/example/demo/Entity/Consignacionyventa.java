@@ -20,6 +20,7 @@ public class Consignacionyventa implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idconsignacion;
     @NotBlank(message = "el campo no puede ser vacio")
+    //@NotNull(message = "No puede ser vacio")
     private String numeropedido;
 
     @ManyToOne

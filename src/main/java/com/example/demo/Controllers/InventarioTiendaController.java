@@ -52,6 +52,7 @@ public class InventarioTiendaController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(
                 dateFormat, true));
     }
+
     @GetMapping(value = {"", "/", "/lista"})
     public String listaInventarioTienda(Model model, @RequestParam Map<String, Object> params, RedirectAttributes attr, HttpSession session) {
 
@@ -65,7 +66,7 @@ public class InventarioTiendaController {
 
 
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-        if(page<0){
+        if (page < 0) {
             return "redirect:/inventarioTienda/lista";
         }
         Page<Inventariotienda> pageInvTienda = inventarioTiendaService.listaTiendasPorSede(user.getSede_idsede().getIdsede(), page);
@@ -87,7 +88,7 @@ public class InventarioTiendaController {
             model.addAttribute("prev", page);
             model.addAttribute("last", totalPage);
             return "inventario/inventarioTienda";
-        }else{
+        } else {
             attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
             return "redirect:/inventarioTienda/lista";
@@ -118,7 +119,7 @@ public class InventarioTiendaController {
 
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
-        if(page<0){
+        if (page < 0) {
             return "redirect:/inventarioTienda/lista";
         }
         PageRequest pageRequest = PageRequest.of(page, 10);
@@ -165,8 +166,15 @@ public class InventarioTiendaController {
     }
 
     @PostMapping("/agregarStock")
-    public String agregarStock(Model model, @ModelAttribute("inventariotienda") Inventariotienda inventariotienda, @ModelAttribute("tienda") Tienda tienda, RedirectAttributes att) {
+    public String agregarStock(Model model, @ModelAttribute("inventariotienda") @Valid Inventariotienda inventariotienda, BindingResult bindingResult, @ModelAttribute("tienda") Tienda tienda, RedirectAttributes att, HttpSession session) {
         //Integer nuevoTotal = null;
+        if (bindingResult.hasErrors()) {
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            //model.addAttribute("inventario", inventarioTiendaRepository.listaProductoEnTienda(idTienda));
+            model.addAttribute("inventario", inventarioSedeRepository.listarInventarioPorSedeConStock(usuario.getSede_idsede().getIdsede()));
+            model.addAttribute("tiendas", tiendaRepository.listaTiendasPorSede(usuario.getSede_idsede().getIdsede()));
+            return "Tienda/asignarStock";
+        }
         int idTienda = inventariotienda.getTienda().getIdtienda();
         int invSedeParaTienda = inventariotienda.getInventariosede().getIdiventariosede();
         Inventariotienda inventariotiendaExiste = inventarioTiendaRepository.productoEnTienda(idTienda, invSedeParaTienda);
@@ -184,9 +192,9 @@ public class InventarioTiendaController {
                 att.addFlashAttribute("msg", "Producto enviado a tienda Exitosamente");
                 Optional<Inventariosede> invSedeRecoAgain = inventarioSedeRepository.findById(inventariotienda.getInventariosede().getIdiventariosede());
                 List<Usuario> gestoresPrincipales = usuarioRepository.findGestoresPrincipales();
-                if (nuevoTotalCantidad==0){
-                    String mensaje = "El siguiente producto: "+ invSedeRecoAgain.get().getInventarioproductoidinventario().getProducto().getNombreproducto()+" con codigo generado: "+invSedeRecoAgain.get().getInventarioproductoidinventario().getCodigogenerado() +" de la sede: " + invSedeRecoAgain.get().getSede().getNombre()+ " se quedo sin stock";
-                    for (Usuario gestPrin : gestoresPrincipales){
+                if (nuevoTotalCantidad == 0) {
+                    String mensaje = "El siguiente producto: " + invSedeRecoAgain.get().getInventarioproductoidinventario().getProducto().getNombreproducto() + " con codigo generado: " + invSedeRecoAgain.get().getInventarioproductoidinventario().getCodigogenerado() + " de la sede: " + invSedeRecoAgain.get().getSede().getNombre() + " se quedo sin stock";
+                    for (Usuario gestPrin : gestoresPrincipales) {
                         sendMailService.sendMail(gestPrin.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre stock de productos - Mosqoy", mensaje);
                     }
                     //sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
@@ -204,9 +212,9 @@ public class InventarioTiendaController {
                 att.addFlashAttribute("msg", "Se sumo Producto a tienda Exitosamente");
                 Optional<Inventariosede> invSedeRecoAgain = inventarioSedeRepository.findById(inventariotienda.getInventariosede().getIdiventariosede());
                 List<Usuario> gestoresPrincipales = usuarioRepository.findGestoresPrincipales();
-                if (nuevaStockEnsede==0){
-                    String mensaje = "El siguiente producto: "+ invSedeRecoAgain.get().getInventarioproductoidinventario().getProducto().getNombreproducto()+" con codigo generado: "+invSedeRecoAgain.get().getInventarioproductoidinventario().getCodigogenerado() +" de la sede: " + invSedeRecoAgain.get().getSede().getNombre()+ " se quedo sin stock";
-                    for (Usuario gestPrin : gestoresPrincipales){
+                if (nuevaStockEnsede == 0) {
+                    String mensaje = "El siguiente producto: " + invSedeRecoAgain.get().getInventarioproductoidinventario().getProducto().getNombreproducto() + " con codigo generado: " + invSedeRecoAgain.get().getInventarioproductoidinventario().getCodigogenerado() + " de la sede: " + invSedeRecoAgain.get().getSede().getNombre() + " se quedo sin stock";
+                    for (Usuario gestPrin : gestoresPrincipales) {
                         sendMailService.sendMail(gestPrin.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre stock de productos - Mosqoy", mensaje);
                     }
                     //sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
@@ -238,7 +246,7 @@ public class InventarioTiendaController {
 
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-            if(page<0){
+            if (page < 0) {
                 return "redirect:/inventarioTienda/lista";
             }
             PageRequest pageRequest = PageRequest.of(page, 10);
@@ -272,6 +280,7 @@ public class InventarioTiendaController {
             return "inventario/inventarioTienda";
         }
     }
+
     @GetMapping("/buscadortotal")
     public String buscadortiendatotal(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
         String busqueda = (String) params.get("searchField");
@@ -289,7 +298,7 @@ public class InventarioTiendaController {
 
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-            if(page<0){
+            if (page < 0) {
                 return "redirect:/inventarioTienda/listaTotal";
             }
             PageRequest pageRequest = PageRequest.of(page, 10);

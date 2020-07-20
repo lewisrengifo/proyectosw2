@@ -83,6 +83,8 @@
                                         <label>Numero de Pedido</label>
                                         <input type="text" class="form-control" th:field="*{numeropedido}"
                                                style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('numeropedido')}"
+                                             th:errors="*{numeropedido}"></div>
                                     </div>
 
                                     <!-- Fecha Inicio-->
