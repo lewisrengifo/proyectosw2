@@ -49,7 +49,7 @@ public class InventarioproductoController {
 
 
     @GetMapping(value = {"", "/", "/lista"})
-    public String listaInventarioProducto(Model model, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params,RedirectAttributes att) {
+    public String listaInventarioProducto(Model model, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam Map<String, Object> params, RedirectAttributes att) {
 
         try {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
@@ -97,11 +97,13 @@ public class InventarioproductoController {
         try {
             int ref = Integer.parseInt(referencia);
             if (ref == 1) {
+
                 model.addAttribute("listaArtesano", artesanoRepository.findAll());
                 referencia2 = "consig";
                 return "inventario/consig";
             } else {
                 if (ref == 2) {
+
                     model.addAttribute("listaArtesano", artesanoRepository.findAll());
                     return "inventario/comprado";
                 } else {
@@ -115,6 +117,7 @@ public class InventarioproductoController {
         }
 
     }
+
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -124,41 +127,53 @@ public class InventarioproductoController {
 
     @PostMapping("/agregarConsigVenta")
     public String ingresarConsignacionOventa(@RequestParam("referencia2") String referencia2, Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
-                                             @ModelAttribute("consigYVenta")@Valid Consignacionyventa consigYventa,BindingResult bindingResult,RedirectAttributes att) throws ParseException {
+                                             @ModelAttribute("consigYVenta") @Valid Consignacionyventa consigYventa, BindingResult bindingResult, RedirectAttributes att) throws ParseException {
 
-            if (referencia2.equals("consig")) {
-
-                if (bindingResult.hasErrors()){
-                    model.addAttribute("listaArtesano", artesanoRepository.findAll());
+        List<Consignacionyventa> listconsignacionyventa = consignacionyventaRepository.findAll();
+        for (Consignacionyventa consignacionyventa : listconsignacionyventa) {
+            if (consignacionyventa.getNumeropedido().equals(consigYventa.getNumeropedido())) {
+                model.addAttribute("msgnumped", "Ya existe este numero de pedido");
+                model.addAttribute("listaArtesano", artesanoRepository.findAll());
+                if (referencia2.equals("consig")) {
                     return "inventario/consig";
-                }else{
-                    try{
-                        int numPedido = Integer.parseInt(consigYventa.getNumeropedido());
-                        consigYventa.setTipo("consignacion");
-                        Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
-                        int idultimo = save.getIdconsignacion();
-                        return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
-                    }catch (NumberFormatException e){
-                        att.addFlashAttribute("msgAlert","El numero de pedido deben solo numeros");
-                        model.addAttribute("listaArtesano", artesanoRepository.findAll());
-                        return "inventario/consig";
-                    }
+                }else if (referencia2.equals("comprado")){
+                    return "inventario/comprado";
                 }
+            }
 
+        }
+        if (referencia2.equals("consig")) {
 
-
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("listaArtesano", artesanoRepository.findAll());
+                return "inventario/consig";
             } else {
-                if(referencia2.equals("comprado")){
-                    consigYventa.setTipo("comprado");
-
+                try {
+                    int numPedido = Integer.parseInt(consigYventa.getNumeropedido());
+                    consigYventa.setTipo("consignacion");
                     Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
                     int idultimo = save.getIdconsignacion();
                     return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
-                }else {
-                    return "redirect:/inventarioPrincipal";
+                } catch (NumberFormatException e) {
+                    att.addFlashAttribute("msgAlert", "El numero de pedido deben solo numeros");
+                    model.addAttribute("listaArtesano", artesanoRepository.findAll());
+                    return "inventario/consig";
                 }
-
             }
+
+
+        } else {
+            if (referencia2.equals("comprado")) {
+                consigYventa.setTipo("comprado");
+
+                Consignacionyventa save = consignacionyventaRepository.save(consigYventa);
+                int idultimo = save.getIdconsignacion();
+                return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
+            } else {
+                return "redirect:/inventarioPrincipal";
+            }
+
+        }
 
 
     }
@@ -167,34 +182,34 @@ public class InventarioproductoController {
     @GetMapping("/sgteProductos/{idultimo}")
     public String vistaagregarproductos(Model model, @ModelAttribute("inventarioProducto") Inventarioproducto invPro,
                                         @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @PathVariable("idultimo") String id) {
-        try{
+        try {
             int idcv = Integer.parseInt(id);
             Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(idcv);
-            if (ultimaConsigOventa.get()!=null){
+            if (ultimaConsigOventa.get() != null) {
                 model.addAttribute("listalinea", lineaRepository.findAll());
                 model.addAttribute("listaproducto", productoRepository.findAll());
                 model.addAttribute("listacategoria", categoriaRepository.findAll());
                 model.addAttribute("listatamano", tamanoRepository.findAll());
                 model.addAttribute("consigYventa1", ultimaConsigOventa.get());
                 return "inventario/inventarioProducto";
-            }else{
+            } else {
                 return "redirect:/inventarioPrincipal";
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return "redirect:/inventarioPrincipal";
         }
     }
 
     @PostMapping("/agregarProducto")
-    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto")@Valid Inventarioproducto invPro, BindingResult bindingResult,
-                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") String id, HttpSession session,RedirectAttributes att) {
+    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") @Valid Inventarioproducto invPro, BindingResult bindingResult,
+                                           @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") String id, HttpSession session, RedirectAttributes att) {
 
-        try{
+        try {
             int idcoven = Integer.parseInt(id);
 
             Optional<Consignacionyventa> ultimaConsigOventa = consignacionyventaRepository.findById(idcoven);
 
-            if (ultimaConsigOventa.isPresent()){
+            if (ultimaConsigOventa.isPresent()) {
                 invPro.setConsignacionyventa(ultimaConsigOventa.get());
 
                 if (bindingResult.hasErrors()) {
@@ -277,13 +292,13 @@ public class InventarioproductoController {
                     return "redirect:/inventarioPrincipal/sgteProductos/" + ultimaConsigOventa.get().getIdconsignacion();
                 }
 
-            }else{
-                att.addFlashAttribute("msgdelete","No se creo correctamente");
+            } else {
+                att.addFlashAttribute("msgdelete", "No se creo correctamente");
                 return "redirect:/inventarioPrincipal";
             }
 
-        }catch (NumberFormatException e){
-            att.addFlashAttribute("msgdelete","No se creo correctamente");
+        } catch (NumberFormatException e) {
+            att.addFlashAttribute("msgdelete", "No se creo correctamente");
             return "redirect:/inventarioPrincipal";
         }
 
@@ -472,8 +487,9 @@ public class InventarioproductoController {
         return "redirect:/inventarioPrincipal";
 
     }
+
     @GetMapping("/productosDevueltos")
-    public String listaProductosDevultos(@RequestParam Map<String, Object> params, Model model , RedirectAttributes attr,HttpSession session ){
+    public String listaProductosDevultos(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
 
         String busqueda = (String) params.get("searchField");
 
@@ -522,22 +538,23 @@ public class InventarioproductoController {
 
         return "inventario/inventarioProductosDevueltos";
     }
+
     @GetMapping("/devolverArtesano")
-    public String devolverProductoAlArtesano(@RequestParam("id") int id,HttpSession session,RedirectAttributes att){
+    public String devolverProductoAlArtesano(@RequestParam("id") int id, HttpSession session, RedirectAttributes att) {
 
         Usuario user = (Usuario) session.getAttribute("usuario");
         Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(id);
         Inventariosede inventariosedeDevuelto = inventarioSedeRepository.productoTodaviaNoDevueltosEnSede(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), user.getSede_idsede().getIdsede());
         Inventariotienda productoEnTienda = inventarioTiendaRepository.productoEntiendaTodavia(productEnSede.get().getIdiventariosede());
 
-        if (inventariosedeDevuelto==null && productoEnTienda==null ){
-            inventarioSedeRepository.actualizarEstado("devuelto",productEnSede.get().getIdiventariosede());
-            inventarioproductoRepository.actualizarEstado("devuelto",productEnSede.get().getInventarioproductoidinventario().getIdinventario());
-            att.addFlashAttribute("msg","producto devuelto al artesano existosamente");
+        if (inventariosedeDevuelto == null && productoEnTienda == null) {
+            inventarioSedeRepository.actualizarEstado("devuelto", productEnSede.get().getIdiventariosede());
+            inventarioproductoRepository.actualizarEstado("devuelto", productEnSede.get().getInventarioproductoidinventario().getIdinventario());
+            att.addFlashAttribute("msg", "producto devuelto al artesano existosamente");
             return "redirect:/inventarioPrincipal/stock";
-        }else{
-            att.addFlashAttribute("msg","El producto selecion aún se encuentra en una sede o tienda");
-            return  "redirect:/inventarioPrincipal/stock";
+        } else {
+            att.addFlashAttribute("msg", "El producto selecion aún se encuentra en una sede o tienda");
+            return "redirect:/inventarioPrincipal/stock";
         }
 
     }

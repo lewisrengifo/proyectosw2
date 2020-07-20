@@ -66,8 +66,10 @@
 
                                 <h2>Venta</h2>
                                 <br>
+                                <div th:if="${msgnumped!= null}" th:text="${msgnumped}" class="alert alert-warning"
+                                     role="alert"> </div>
 
-                                <form method="post" th:action="@{'/inventarioPrincipal/agregarConsigVenta'+ '?referencia2= comprado'}" th:object="${consigYVenta}">
+                                <form method="post" th:action="@{'/inventarioPrincipal/agregarConsigVenta'+ '?referencia2=comprado'}" th:object="${consigYVenta}">
 
 
 
