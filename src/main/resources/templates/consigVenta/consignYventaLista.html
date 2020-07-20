@@ -69,8 +69,10 @@
                                         <td th:text="${info.index +1}">1</td>
                                         <td th:text="${c.numeropedido}">Home</td>
                                         <td th:text="${c.tipo}">H</td>
-                                        <td th:text="${c.artesano.nombreartesano}">H</td>
-                                        <td th:text="${c.artesano.apellidopaterno}">H</td>
+                                        <td th:if="${c.tipo.equals('Comprado')}" th:text="--">nombre</td>
+                                        <td th:unless="${c.tipo.equals('Comprado')}" th:text="${c.artesano.nombreartesano}">H</td>
+                                        <td th:if="${c.tipo.equals('Comprado')}" th:text="--">apellido</td>
+                                        <td th:unless="${c.tipo.equals('Comprado')}"  th:text="${c.artesano.apellidopaterno}">H</td>
                                         <td th:text="${c.artesano.comunidad.nombrecomunidad}">H</td>
                                         <td   th:text="${c.fechainicio.getDate()}+'/'+${c.fechainicio.getMonth()+1}+'/'+${c.fechainicio.getYear()+1900}"></td>
                                         <td th:if="${c.fechafin==null}" > -- </td>
