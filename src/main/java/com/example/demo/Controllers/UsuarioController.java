@@ -300,7 +300,7 @@ public class UsuarioController {
         if (textbuscador.isEmpty()) {
             att.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
 
-            return "redirect:/usuario/lista";
+            return "redirect:/usuario";
         } else {
 
             try {
@@ -311,7 +311,7 @@ public class UsuarioController {
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 
             if (page < 0) {
-                return "redirect:/usuario/lista";
+                return "redirect:/usuario";
             }
 
 
@@ -323,7 +323,7 @@ public class UsuarioController {
                 if (page > pages.size() - 1) {
                     attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
 
-                    return "redirect:/usuario/lista";
+                    return "redirect:/usuario";
                 }
 
 
