@@ -73,7 +73,8 @@
                                         <td th:text="${c.artesano.apellidopaterno}">H</td>
                                         <td th:text="${c.artesano.comunidad.nombrecomunidad}">H</td>
                                         <td   th:text="${c.fechainicio.getDate()}+'/'+${c.fechainicio.getMonth()+1}+'/'+${c.fechainicio.getYear()+1900}"></td>
-                                        <td th:text="${c.fechafin.getDate()}+'/'+${c.fechafin.getMonth()+1}+'/'+${c.fechafin.getYear()+1900}"></td>
+                                        <td th:if="${c.fechafin==null}" > -- </td>
+                                        <td th:unless="${c.fechafin==null}" th:text="${c.fechafin.getDate()}+'/'+${c.fechafin.getMonth()+1}+'/'+${c.fechafin.getYear()+1900}"></td>
                                         <td ><a th:href="@{'/ConsignacionVenta/agregarProductosCV?id=' + ${c.idconsignacion} }"> + productos</a></td>
 
                                     </tr>
