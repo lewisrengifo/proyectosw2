@@ -17,13 +17,13 @@
                             <h2 th:text="${usuario.idusuario == 0? 'Nuevo Usuario' : 'Editar Usuario'}">
                                 Nuevo/Editar</h2>
                             <hr/>
-                            <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
+                            <div style="width: 40%" th:if="${msg != null}" th:text="${msg}" class="alert alert-success"
                                  role="alert"></div>
-                            <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success"
+                            <div style="width: 40%" th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-warning"
                                  role="alert"></div>
-                            <div th:if="${msgdni != null}" th:text="${msgdni}" class="alert alert-success"
+                            <div style="width: 40%" th:if="${msgdni != null}" th:text="${msgdni}" class="alert alert-warning"
                                  role="alert"></div>
-                            <div th:if="${msgcorreo != null}" th:text="${msgcorreo}" class="alert alert-success"
+                            <div style="width: 40%" th:if="${msgcorreo != null}" th:text="${msgcorreo}" class="alert alert-warning"
                                  role="alert"></div>
                             <form method="post" th:action="@{'/usuario/guardar'}" th:object="${usuario}">
                                 <input type="hidden" th:field="*{idusuario}"/>
