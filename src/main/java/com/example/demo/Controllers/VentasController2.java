@@ -14,6 +14,7 @@ import com.sun.istack.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/ventasexcel")
@@ -87,13 +89,14 @@ public class VentasController2 {
 
     @PostMapping("/ano")
     public ResponseEntity<InputStreamResource> exportDataAnual(@RequestParam("ano")String ano) throws Exception{
+            
+                List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteAnualMosqoy(ano);
+                String tipo="Año";
+                ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,tipo);
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Content-Disposition","attachment; filename=Reporte Total del Año"+ano+".xls");
+                return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
 
-            List<ReporteMensualoAnualMosqoyDto> lista= ventaRepository1.reporteAnualMosqoy(ano);
-            String tipo="Año";
-            ByteArrayInputStream stream = serviceExcel.exportarData(ano,lista,tipo);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition","attachment; filename=Reporte Total del Año"+ano+".xls");
-            return ResponseEntity.ok().headers(headers).body(new InputStreamResource(stream));
     }
 
     @PostMapping("/anomes")
