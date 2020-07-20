@@ -7,16 +7,22 @@ import com.example.demo.Repository.InventarioTiendaRepository;
 import com.example.demo.Repository.InventarioproductoRepository;
 import com.example.demo.Repository.SedeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -49,9 +55,21 @@ public class InventariosedeController {
         model.addAttribute("listaSede", sedeRepository.listaSedeSinPrincipal(usuario.getSede_idsede().getIdsede()));
         return "sede/asignarStock";
     }
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(
+                dateFormat, true));
+    }
 
     @PostMapping("/agregarStock")
-    public String agregarStock(Model model, @ModelAttribute("inventariosede") Inventariosede inventariosede, @ModelAttribute("sede") Sede sede, RedirectAttributes attr, HttpSession session) {
+    public String agregarStock(Model model, @ModelAttribute("inventariosede") @Valid Inventariosede inventariosede, BindingResult bindingResult, @ModelAttribute("sede") Sede sede, RedirectAttributes attr, HttpSession session) {
+        if (bindingResult.hasErrors()){
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            model.addAttribute("inventario", inventarioSedeRepository.obtenerInvDeMiSedeNormal(usuario.getSede_idsede().getNombre()));
+            model.addAttribute("listaSede", sedeRepository.listaSedeSinPrincipal(usuario.getSede_idsede().getIdsede()));
+            return "sede/asignarStock";
+        }
 
         Usuario user = (Usuario) session.getAttribute("usuario");
         Inventariosede invs = new Inventariosede();
