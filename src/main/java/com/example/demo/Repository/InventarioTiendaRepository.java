@@ -27,7 +27,7 @@ public interface InventarioTiendaRepository extends JpaRepository<Inventariotien
             "inner join producto pr on pr.idproducto = inP.producto_idproducto " +
             "where (t.nombre like %?1% or invt.stocktienda like %?1% or inP.codigogenerado like %?1% " +
             "or invt.fechaentrega like %?1% or invt.estado like %?1% or pr.nombreproducto like %?1%) " +
-            "and s.nombre = ?2",
+            "and s.nombre = ?2 and invt.estado='recibido'",
             countQuery = "SELECT count(*) FROM inventariotienda invt inner join tienda t on t.idtienda=invt.tienda_idtienda " +
                     "inner join inventariosede inS on inS.idiventariosede=invt.iventariosede_idiventariosede " +
                     "inner join sede s on s.idsede=t.sede_idsede " +
@@ -35,12 +35,16 @@ public interface InventarioTiendaRepository extends JpaRepository<Inventariotien
                     "inner join producto pr on pr.idproducto = inP.producto_idproducto " +
                     "where (t.nombre like %?1% or invt.stocktienda like %?1% or inP.codigogenerado like %?1% " +
                     "or invt.fechaentrega like %?1% or invt.estado like %?1% or pr.nombreproducto like %?1%) " +
-                    "and s.nombre = ?2",
+                    "and s.nombre = ?2 and invt.estado='recibido'",
             nativeQuery = true)
     Page<Inventariotienda> buscadorInventarioTienda(String search, String nombresede, Pageable pageable);
 
-    @Query(value = "SELECT invt.* FROM inventariotienda  invt , inventarioproducto inve, inventariosede invs ,producto p, tienda ti, sede se where (p.nombreproducto like %?1% or ti.nombre like %?1% or inve.codigogenerado like %?1% or invt.estado like %?1% or invt.stocktienda like %?1% or se.nombre like %?1%) and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario and invs.idiventariosede = invt.iventariosede_idiventariosede and ti.idtienda = invt.tienda_idtienda and ti.sede_idsede=se.idsede",
-            countQuery = "SELECT count(*) FROM inventariotienda  invt , inventarioproducto inve, inventariosede invs ,producto p, tienda ti, sede se where (p.nombreproducto like %?1% or ti.nombre like %?1% or inve.codigogenerado like %?1% or invt.estado like %?1% or invt.stocktienda like %?1% or se.nombre like %?1%) and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario and invs.idiventariosede = invt.iventariosede_idiventariosede and ti.idtienda = invt.tienda_idtienda and ti.sede_idsede=se.idsede"
+    @Query(value = "SELECT invt.* FROM inventariotienda  invt , inventarioproducto inve, inventariosede invs ,producto p, " +
+            "tienda ti, sede se where (p.nombreproducto like %?1% or ti.nombre like %?1% or inve.codigogenerado like %?1% or " +
+            "invt.estado like %?1% or invt.stocktienda like %?1% or se.nombre like %?1% ) and invt.estado='recibido'  and p.idproducto=inve.producto_idproducto " +
+            "and invs.inventarioproducto_idinventario= inve.idinventario and invs.idiventariosede = invt.iventariosede_idiventariosede " +
+            "and ti.idtienda = invt.tienda_idtienda and ti.sede_idsede=se.idsede",
+            countQuery = "SELECT count(*) FROM inventariotienda  invt , inventarioproducto inve, inventariosede invs ,producto p, tienda ti, sede se where (p.nombreproducto like %?1% or ti.nombre like %?1% or inve.codigogenerado like %?1% or invt.estado like %?1% or invt.stocktienda like %?1% or se.nombre like %?1%) and invt.estado='recibido'  and p.idproducto=inve.producto_idproducto and invs.inventarioproducto_idinventario= inve.idinventario and invs.idiventariosede = invt.iventariosede_idiventariosede and ti.idtienda = invt.tienda_idtienda and ti.sede_idsede=se.idsede"
             , nativeQuery = true)
     Page<Inventariotienda> buscadorInventarioTiendaTotal(String search, Pageable pageable);
 

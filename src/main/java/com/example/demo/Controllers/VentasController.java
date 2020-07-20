@@ -115,12 +115,18 @@ public class VentasController {
             Optional<Tienda> tiendaVenta = tiendaRepository.findById(newid);
 
             int sedeUsuario = usuariologueado.getSede_idsede().getIdsede();
+            List<Inventariotienda> proEntienda = inventarioTiendaRepository.listaProductoEnTienda(newid);
+            if (proEntienda.size()==0){
+                redirectAttributes.addFlashAttribute("msg2","No hay producto enviados a la tienda" + tiendaVenta.get().getNombre());
+                return "redirect:/tienda";
+            }else{
+                model.addAttribute("ProductosEnTienda", proEntienda);
+                model.addAttribute("tiendita",tiendaVenta.get());
+                ventas.setPrecioventa(0.0);
 
-            model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(newid));
-            model.addAttribute("tiendita",tiendaVenta.get());
-            ventas.setPrecioventa(0.0);
+                return "venta/registroventa";
+            }
 
-            return "venta/registroventa";
         }catch (NumberFormatException e){
             return "redirect:/tienda";
         }

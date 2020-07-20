@@ -164,6 +164,10 @@ public class InventarioproductoController {
 
 
         } else {
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("listaArtesano", artesanoRepository.findAll());
+                return "inventario/comprado";
+            }
             if (referencia2.equals("comprado")) {
                 consigYventa.setTipo("comprado");
                 consigYventa.setFechafin(consigYventa.getFechainicio());

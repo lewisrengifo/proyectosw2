@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/leftbar.html :: cabecera(titulo='Tienda')">
+<head th:replace="fragments/leftbar.html :: cabecera(titulo='Gestion de Tiendas')">
 </head>
 <body>
 <div id="wrapper">
@@ -12,16 +12,18 @@
 
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper">
-
+        <div class="header">
+            <h1 class="page-header">
+                Gestion de Tiendas
+            </h1>
+        </div>
         <!-- /. CATEGORIA  -->
         <div id="page-inner">
+
             <!-- /. CATEGORIA  -->
             <div class="row">
                 <div class="col-md-10">
                     <div class="card">
-                        <div class="card-action">
-                            TIENDA
-                        </div>
                         <div class="card-action">
                             <a class="btn btn-outline-danger" th:href="@{'/tienda/nuevo'}">agregar</a>
                         </div>
