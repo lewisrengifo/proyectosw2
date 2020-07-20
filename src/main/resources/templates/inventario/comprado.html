@@ -82,6 +82,8 @@
                                         <label>Numero de Pedido</label>
                                         <input type="text" class="form-control" th:field="*{numeropedido}"
                                                style="width: 25%">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('numeropedido')}"
+                                             th:errors="*{numeropedido}"></div>
                                     </div>
 
                                     <!-- Fecha Inicio-->
@@ -90,6 +92,8 @@
 
                                         <label>Fecha Inicio</label>
                                         <input type="text" class="form-control" th:field="*{fechainicio}" style="width: 25%" placeholder="formato:mes/dia/año">
+                                        <div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}"
+                                             th:errors="*{fechainicio}"></div>
 
                                         <!--div class="text-danger" th:if="${#fields.hasErrors('fechainicio')}" th:errors="*{fechainicio}"></div-->
                                     </div>
