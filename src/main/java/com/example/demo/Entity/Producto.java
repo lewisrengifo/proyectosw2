@@ -18,7 +18,6 @@ public class Producto  implements Serializable {
     @Column(name = "nombreproducto")
     @NotBlank(message = "El nombre del producto no puede estar vacío")
     //@Size(max = 45,message = "El nombre del producto no puede tener más de 45 caracteres")
-    @Pattern(regexp="[a-zA-ZÀ-ÿ\\u00f1\\u00d1]{1,45}",message = "Solo aceptan letras")
     private String nombreproducto;
 
     @Column(name = "codigoproducto")

@@ -102,53 +102,58 @@ public class ProductoController {
        //Ojala salga xd
         HashMap<String, String> map = storageService.store(file);
         if (map.get("estado").equals("exito")) {
-            String filename2=(map.get("fileName")   );
+            String filename2=(map.get("fileName"));
             producto.setFoto(filename2);
             if (bindingResult.hasErrors()) {
                 model.addAttribute("listaLinea", lineaRepository.findAll());
                 return "producto/editFrm";
             } else {
                 if (producto.getIdproducto() == 0) {
-                    for (Producto prod : productoRepository.findAll()) {
-                        if (prod.getCodigoproducto().equalsIgnoreCase(producto.getCodigoproducto())) {
-                            attr.addFlashAttribute("msg", "Código de producto ya existe");
-                            return "redirect:/producto/nuevo";
 
-                        } else if (producto.getIdproducto() == 0) {
-                            attr.addFlashAttribute("msgCo", "Producto Creado Exitosamente");
-                        } else {
-                            attr.addFlashAttribute("msgCo", "Producto Actualizado Exitosamente");
-                        }
+                    Producto productNameCod = productoRepository.verificarCodigoProducto(producto.getCodigoproducto());
+                    Producto productDescripCod = productoRepository.verificarCodigoProducto(producto.getCodigodescripcionproducto());
+                    if(productDescripCod!=null){
+                        attr.addFlashAttribute("msg","El codigo ingresado en  Descripcion producto ya existe");
+                        model.addAttribute("listaLinea", lineaRepository.findAll());
+                        return "producto/editFrm";
                     }
-                } else {
-                    for (Producto prod : productoRepository.mio(producto.getIdproducto())) {
-                        if (prod.getCodigoproducto().equalsIgnoreCase(producto.getCodigoproducto())) {
-                            if (prod.getNombreproducto().equalsIgnoreCase(producto.getNombreproducto())) {
-                                attr.addFlashAttribute("msg1", "Nombre de Comunidad ya exite");
-                                attr.addFlashAttribute("comunidad", producto);
-                            }
-                            return "redirect:/producto/nuevo";
+                    if(productNameCod!=null){
+                        attr.addFlashAttribute("msg","El codigo ingresado en  codigo producto ya existe");
+                        model.addAttribute("listaLinea", lineaRepository.findAll());
+                        return "producto/editFrm";
+                    }
+                    productoRepository.save(producto);
+                    attr.addFlashAttribute("msgCrear","El producto se creo exitosamente");
+                    return "redirect:/producto";
 
-                        } else if (producto.getIdproducto() == 0) {
-                            attr.addFlashAttribute("msgCo", "Producto Creado Exitosamente");
-                        } else {
-                            attr.addFlashAttribute("msgCo", "Producto Actualizado Exitosamente");
+                } else {
+                    Optional<Producto> productExiste = productoRepository.findById(producto.getIdproducto());
+                    if(productExiste.get().getCodigoproducto().equals(producto.getCodigoproducto()) && productExiste.get().getCodigodescripcionproducto().equals(producto.getCodigodescripcionproducto())){
+                        model.addAttribute("msg","Producto editado exitosamente");
+
+                        productoRepository.save(producto);
+                        return "redirect:/producto";
+                    }else{
+                        Producto verificarCodigoPro = productoRepository.verificarCodigoProductoSinElMio(producto.getCodigoproducto(), productExiste.get().getIdproducto());
+                        Producto verificarCodigoDescripPro = productoRepository.verificarCodigoProductoSinElMio(producto.getCodigodescripcionproducto(), productExiste.get().getIdproducto());
+                        if(verificarCodigoPro!=null ) {
+                            model.addAttribute("msg", "El codigo ingresadp en codigo producto ya existe ");
+                            model.addAttribute("listaLinea", lineaRepository.findAll());
+                        return "producto/editFrm";
                         }
+                        if (verificarCodigoDescripPro!=null){
+                            model.addAttribute("msg","El codigo ingresado en descripcion producto ya existe ");
+                            model.addAttribute("listaLinea", lineaRepository.findAll());
+                            return "producto/editFrm";
+                        }
+
+                        productoRepository.save(producto);
+                        attr.addFlashAttribute("msg","El producto se editó exitosamente");
+                        return "redirect:/producto";
                     }
                 }
-                String nom = producto.getNombreproducto().substring(0, 1).toUpperCase() + producto.getNombreproducto().substring(1).toLowerCase();
-                producto.setNombreproducto(nom);
-                String nom1 = producto.getDescripcionproducto().substring(0, 1).toUpperCase() + producto.getDescripcionproducto().substring(1).toLowerCase();
-                producto.setDescripcionproducto(nom1);
-                String cod = producto.getCodigoproducto().toUpperCase();
-                producto.setCodigoproducto(cod);
-                String cod1 = producto.getCodigodescripcionproducto().toUpperCase();
-                producto.setCodigodescripcionproducto(cod1);
-                productoRepository.save(producto);
-                return "redirect:/producto";
             }
-        }
-        else {
+        } else {
             model.addAttribute("msgFoto",map.get("msgFoto"));
             model.addAttribute("listaLinea", lineaRepository.findAll());
             return "producto/editFrm";
@@ -277,13 +282,13 @@ public class ProductoController {
            if (totalPage > 0) {
                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
                if (page > pages.size() - 1) {
-                   attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                   attr.addFlashAttribute("msgPagina", "No se encuentran datos con respecto a su búsqueda");
 
                    return "redirect:/producto";
                }
                model.addAttribute("pages", pages);
            }else{
-               attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+               attr.addFlashAttribute("msgPagina", "No se encuentran datos con respecto a su búsqueda");
 
                return "redirect:/producto";
 
@@ -336,8 +341,8 @@ public class ProductoController {
     public ResponseEntity<FileSystemResource> getFile(@RequestParam("id")int id) throws IOException {
         Optional<Producto> optProduct = productoRepository.findById(id);
         Producto producto=optProduct.get();
-        //String path = "C:/FotosProyecto/";
-        String path = "/home/ec2-user/FotosProyecto/";
+        String path = "C:/FotosProyecto/";
+        //String path = "/home/ec2-user/FotosProyecto/";
         File file = new File(path + producto.getFoto());
         HttpHeaders respHeaders = new HttpHeaders();
         return new ResponseEntity<FileSystemResource>(

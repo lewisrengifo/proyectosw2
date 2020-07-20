@@ -88,16 +88,24 @@ public class SedeController {
     @PostMapping("/guardar")
     public String guardarSede(@ModelAttribute("sede") @Valid Sede sede, BindingResult bindingResult, RedirectAttributes redirectAttributes, @ModelAttribute("usuariodelasede") Usuario usuariodelasede, Model model,
                               @ModelAttribute("idsede") int idsede, @ModelAttribute("usuario") Usuario usuario) {
+        sede.setNombre(sede.getNombre().trim());
         if (bindingResult.hasErrors()) {
             return "sede/form";
 
         } else {
             if (sede.getIdsede() == 0) {
-                redirectAttributes.addFlashAttribute("mgs", "La sede se creo correctamente");
-                sedeRepository.save(sede);
-                model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
-                model.addAttribute("idsede", sedeRepository.save(sede).getIdsede());
-                return "sede/formGestorNew";
+                Sede sedeExiste = sedeRepository.sedePornombre(sede.getNombre());
+                if (sedeExiste == null){
+                    redirectAttributes.addFlashAttribute("mgs", "La sede se creo correctamente");
+                    sedeRepository.save(sede);
+                    model.addAttribute("listausuariosdisponibles", usuarioRepository.usuariosDisponibles());
+                    model.addAttribute("idsede", sedeRepository.save(sede).getIdsede());
+                    return "sede/formGestorNew";
+                }else{
+                    model.addAttribute("msg","La sede " + sede.getNombre() + " ya existe");
+                    return "sede/form";
+                }
+
             } else {
                 redirectAttributes.addFlashAttribute("msg", "La sede se actualizó correctamente");
                 //model.addAttribute(usuariodelasede);

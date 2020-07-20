@@ -21,7 +21,9 @@
                                  role="alert"></div>
                             <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success"
                                  role="alert"></div>
-                            <div th:if="${msgsede != null}" th:text="${msgsede}" class="alert alert-success"
+                            <div th:if="${msgdni != null}" th:text="${msgdni}" class="alert alert-success"
+                                 role="alert"></div>
+                            <div th:if="${msgcorreo != null}" th:text="${msgcorreo}" class="alert alert-success"
                                  role="alert"></div>
                             <form method="post" th:action="@{'/usuario/guardar'}" th:object="${usuario}">
                                 <input type="hidden" th:field="*{idusuario}"/>
@@ -159,7 +161,7 @@
                                     <label for="rol_idrol">Rol</label>
 
 
-                                    <select style="width: 90%" class="form-control" name="rol_idrol" id="rol_idrol">
+                                    <select style="width: 40%" class="form-control" name="rol_idrol" id="rol_idrol">
                                         <option th:each="rol : ${listaroles}" th:text="|${rol.nombre}|"
 
                                                 th:value="${rol.idrol}"

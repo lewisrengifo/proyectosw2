@@ -57,7 +57,9 @@
                                         <td th:text="${info.index +1}" >1</td>
                                         <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
                                         <td th:text="${inv.stock}">de31edae</td>
-                                        <td th:text="${inv.getFechallegada()}">---</td>
+
+                                        <td th:text="${inv.getFechallegada().getDate()} + '/' + ${inv.getFechallegada().getMonth() + 1} + '/' + ${inv.getFechallegada().getYear() + 1900}">---</td>
+
                                         <td th:text="${inv.sede.nombre}"></td>
                                         <td th:text="${inv.estado}"></td>
 
