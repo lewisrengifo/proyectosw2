@@ -51,8 +51,9 @@
                                 <div th:if="${msgPagina != null}" th:text="${msgPagina}" class="alert alert-warning"
                                      role="alert"></div>
 
+                                <div th:if="${last ==0}">No se encuentras ventas en esta sede</div>
 
-                                <table class="table table-striped table-bordered table-hover">
+                                <table class="table table-striped table-bordered table-hover" th:if="${last>0}">
                                     <thead>
                                     <tr class="info">
                                         <th>#</th>
@@ -87,18 +88,11 @@
                                         <td th:text="${venta.inventariosede.inventarioproductoidinventario.color}"></td>
                                         <td th:text="${venta.precioventa}"></td>
                                         <td th:text="${venta.metodopago}"></td>
-
-
-                                    </tr>
-
-                                    <tr th:unless="${totalElementos} > 0" >
-                                        <h1> No hay Ventas</h1>
-
                                     </tr>
 
                                     </tbody>
                                 </table>
-                                <div class="row">
+                                <div class="row"  th:if="${last>0}">
                                     <div class="col-md-4"></div>
                                     <div class="col-md-8">
 

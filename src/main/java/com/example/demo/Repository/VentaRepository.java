@@ -29,7 +29,6 @@ public interface VentaRepository extends JpaRepository<Ventas, Integer> {
     Page<Ventas> listaVentasPorSedePageable(int id, Pageable pageable);
 
 
-
     //Query para el caso de mensual/anual de mosqoy
     //Falta seleccionar los campos que se deben mostrar por reportes, dependerá de la base de datos que tengamos.
     //Crear Dto para el caso particular de sedes, artículos, comunidad, nombre del cliente
