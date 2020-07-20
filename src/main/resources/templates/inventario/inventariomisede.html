@@ -51,10 +51,11 @@
                                      role="alert"></div>
 
 
+                                <div th:if="${last ==0}">En este momento no hay productos recibidos </div>
 
                                 <br>
 
-                                <table class="table table-striped table-bordered table-hover" >
+                                <table class="table table-striped table-bordered table-hover" th:if="${last>0}" >
                                     <thead>
 
                                     <tr class="info">
@@ -70,7 +71,7 @@
                                     </tr>
                                     </thead>
                                     <tbody >
-                                    <tr th:each="inv , info : ${listaInventarioSede}" th:if="${inv.estado == 'recibido'}">
+                                    <tr th:if="${totalItems}!=0" th:each="inv , info : ${listaInventarioSede}" >
                                         <td th:text="${info.index +1+prev*5}" >1</td>
                                         <td th:text="${inv.getInventarioproductoidinventario().getProducto().nombreproducto}"></td>
                                         <td th:text="${inv.getInventarioproductoidinventario().getProducto().getDescripcionproducto()}"></td>
@@ -80,7 +81,6 @@
                                         <td><a th:if="${inv.getInventarioproductoidinventario().getConsignacionyventa().getTipo() == 'consignacion'}"
                                                th:href="@{'/inventarioSede/devolverPrincipal?id=' + ${inv.getIdiventariosede()} }">Devolver al Principal</a></td>
 
-
                                     </tr>
 
                                     </tbody>
@@ -89,7 +89,7 @@
 
                                 </form>
 
-                                <div class="row">
+                                <div class="row" th:if="${last>0}">
                                     <div class="col-md-4"></div>
                                     <div class="col-md-8">
 

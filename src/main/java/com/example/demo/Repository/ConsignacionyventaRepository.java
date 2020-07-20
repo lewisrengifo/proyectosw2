@@ -22,7 +22,7 @@ public interface ConsignacionyventaRepository extends JpaRepository <Consignacio
             "where cyv.numeropedido like %?1% or cyv.tipo like %?1% or a.nombreartesano like %?1% or a.apellidopaterno like %?1% or com.nombrecomunidad like %?1%",
             countQuery ="SELECT count(*) FROM consignacionyventa cyv "+
                     "inner join artesano a on a.idartesano=cyv.artesano_idartesano " +
-                    "inner join comunidad com on c.idcomunidad=a.comunidad_idcomunidad " +
+                    "inner join comunidad com on com.idcomunidad=a.comunidad_idcomunidad " +
                     "where cyv.numeropedido like %?1% or cyv.tipo like %?1% or a.nombreartesano like %?1% or a.apellidopaterno like %?1% or com.nombrecomunidad like %?1%",
             nativeQuery = true)
     Page<Consignacionyventa> buscadorConsignacionesYVentas(String search, Pageable pageable);

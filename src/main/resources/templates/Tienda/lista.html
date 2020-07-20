@@ -26,7 +26,7 @@
                             <a class="btn btn-outline-danger" th:href="@{'/tienda/nuevo'}">agregar</a>
                         </div>
 
-                        <div class="card-action">
+                        <div class="card-action" th:if="${last !=0}">
                             <a class="btn btn-outline-danger right"
                                th:href="@{'/inventarioTienda/asignarStock'}">Enviar Stock</a>
                         </div>
@@ -39,7 +39,10 @@
                                 <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-danger"
                                      role="alert"></div>
 
-                                <table class="table table-striped table-bordered table-hover">
+                                <div th:if="${last ==0}">En este momento no hay tiendas en esta sede </div>
+
+
+                                <table class="table table-striped table-bordered table-hover" th:if="${last>0}">
                                     <thead>
                                     <tr class="info" >
                                         <th>#</th>
@@ -63,7 +66,7 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="row">
+                                <div class="row" th:if="${last>0}">
                                     <div class="col-md-4"></div>
                                     <div class="col-md-8">
 

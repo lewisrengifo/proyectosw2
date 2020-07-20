@@ -79,8 +79,14 @@ public class VentasController {
                 return "redirect:/venta";
             }
             model.addAttribute("pages", pages);
-        } else {
-
+        } else if (totalPage == 0) {
+            model.addAttribute("listaInventarioSede", pageVent.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+            return "venta/listaventa";
+        }else {
 
             return "redirect:/venta";
         }
@@ -91,6 +97,8 @@ public class VentasController {
         model.addAttribute("prev", page);
         model.addAttribute("last", totalPage);
         model.addAttribute("totalElementos", totalElementos);
+        model.addAttribute("totalItems", pageVent.getTotalElements());
+
         return "venta/listaventa";
 
 
