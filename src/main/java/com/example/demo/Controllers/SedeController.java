@@ -88,6 +88,7 @@ public class SedeController {
     @PostMapping("/guardar")
     public String guardarSede(@ModelAttribute("sede") @Valid Sede sede, BindingResult bindingResult, RedirectAttributes redirectAttributes, @ModelAttribute("usuariodelasede") Usuario usuariodelasede, Model model,
                               @ModelAttribute("idsede") int idsede, @ModelAttribute("usuario") Usuario usuario) {
+        sede.setNombre(sede.getNombre().trim());
         if (bindingResult.hasErrors()) {
             return "sede/form";
 

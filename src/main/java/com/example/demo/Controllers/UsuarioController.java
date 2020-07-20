@@ -177,6 +177,7 @@ public class UsuarioController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("listaroles", rolRepository.rolgestorprincipal());
             model.addAttribute("listasedes", sedeRepository.findAll());
+            redirectAttributes.addFlashAttribute("msg2", "Ingrese todos los datos solicitados.");
             return "Usuario/form";
         }
 
@@ -184,11 +185,11 @@ public class UsuarioController {
             if (usuario.getIdusuario() == 0) {
                 if (usuario1.getDni().equals(usuario.getDni()) || usuario1.getCorreo().equals(usuario.getCorreo())) {
                     if (usuario1.getDni().equals(usuario.getDni())) {
-                        redirectAttributes.addFlashAttribute("msg", "Usuario con DNI existente");
+                        redirectAttributes.addFlashAttribute("msgdni", "Usuario con DNI existente");
                         redirectAttributes.addFlashAttribute("usuario", usuario);
                     }
                     if (usuario1.getCorreo().equals(usuario.getCorreo())) {
-                        redirectAttributes.addFlashAttribute("msg2", "Usuario con correo existente");
+                        redirectAttributes.addFlashAttribute("msgcorreo", "Usuario con correo existente");
                         redirectAttributes.addFlashAttribute("usuario", usuario);
                     }
                     return "redirect:/usuario/nuevo";
@@ -213,7 +214,6 @@ public class UsuarioController {
 
                     } else {
                         redirectAttributes.addFlashAttribute("msg", "Usuario actualizado exitosamente");
-
                     }
 
                 }

@@ -50,7 +50,7 @@
     <div id="page-wrapper">
         <div class="header">
             <h1 class="page-header">
-                Venta
+                Compra
             </h1>
         </div>
 
@@ -64,10 +64,12 @@
                             <div class="table-responsive">
 
 
-                                <h2>Venta</h2>
+                                <h2>Compra</h2>
                                 <br>
+                                <div th:if="${msgnumped!= null}" th:text="${msgnumped}" class="alert alert-warning"
+                                     role="alert"> </div>
 
-                                <form method="post" th:action="@{'/inventarioPrincipal/agregarConsigVenta'+ '?referencia2= comprado'}" th:object="${consigYVenta}">
+                                <form method="post" th:action="@{'/inventarioPrincipal/agregarConsigVenta'+ '?referencia2=comprado'}" th:object="${consigYVenta}">
 
 
 

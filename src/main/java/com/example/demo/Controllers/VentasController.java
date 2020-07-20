@@ -96,6 +96,7 @@ public class VentasController {
 
     }
 
+
     @GetMapping("/registroventa")
     public String registrarVenta(Model model, @ModelAttribute("ventas") Ventas ventas,
                                  RedirectAttributes redirectAttributes, HttpSession session,@RequestParam("id") String idTienda) {
@@ -109,6 +110,7 @@ public class VentasController {
 
             model.addAttribute("ProductosEnTienda", inventarioTiendaRepository.listaProductoEnTienda(newid));
             model.addAttribute("tiendita",tiendaVenta.get());
+            ventas.setPrecioventa(0.0);
 
             return "venta/registroventa";
         }catch (NumberFormatException e){
