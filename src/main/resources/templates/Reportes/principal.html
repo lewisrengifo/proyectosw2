@@ -12,7 +12,7 @@
         <div class="header">
         </div>
         <div id="page-inner" style="margin: auto">
-            <div class="row" style="margin: auto" sec:authorize="hasAnyAuthority('Gestor principal')">
+            <div class="row" style="margin: auto" sec:authorize="hasAnyAuthority('Gestor principal','Administrador')">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-content">
@@ -207,7 +207,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin: auto" sec:authorize="hasAnyAuthority('Gestor principal')">
+            <div class="row" style="margin: auto" sec:authorize="hasAnyAuthority('Gestor principal','Administrador')">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-content">
@@ -316,7 +316,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin: auto" sec:authorize="hasAnyAuthority('Gestor principal')">
+            <div class="row" style="margin: auto" sec:authorize="hasAnyAuthority('Gestor principal','Administrador')">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-content">
@@ -430,7 +430,7 @@
                         </div>
                     </div>
                 </div>
-            <div class="row" style="margin: auto" sec:authorize="hasAnyAuthority('Gestor principal')">
+            <div class="row" style="margin: auto" sec:authorize="hasAnyAuthority('Gestor principal','Administrador')">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-content">
