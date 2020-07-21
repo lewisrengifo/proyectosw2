@@ -479,6 +479,56 @@ public class InventarioproductoController {
             return "inventario/stockProductoInvPrincipal";
         }
     }
+    @GetMapping("/buscadorProductosDevueltos")
+    public String buscadorProductosDevueltos(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
+        Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
+        String busqueda = (String) params.get("searchField");
+        if (busqueda.isEmpty()) {
+            attr.addFlashAttribute("msgBuscador", "Campo vacio. Ingrese el dato a buscar");
+
+            return "redirect:/inventarioPrincipal/productosDevueltos";
+        } else {
+
+            try {
+                int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            } catch (NumberFormatException e) {
+                return "redirect:/inventarioPrincipal/productosDevueltos";
+            }
+
+
+            int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+
+            PageRequest pageRequest = PageRequest.of(page, 10);
+
+
+            Page<Inventariosede> pageInvProd = inventarioSedeRepository.buscadorDevueltos(busqueda,usuariologueado.getSede_idsede().getIdsede(), pageRequest);
+            int totalPage = pageInvProd.getTotalPages();
+            if (totalPage > 0) {
+                List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+                if (page > pages.size() - 1) {
+                    attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                    return "redirect:/inventarioPrincipal/productosDevueltos";
+                }
+                model.addAttribute("pages", pages);
+            } else {
+                attr.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+
+                return "redirect:/inventarioPrincipal/productosDevueltos";
+
+
+            }
+
+            model.addAttribute("ProductosDevueltos", pageInvProd.getContent());
+            model.addAttribute("current", page + 1);
+            model.addAttribute("next", page + 2);
+            model.addAttribute("busqueda", busqueda);
+            model.addAttribute("prev", page);
+            model.addAttribute("last", totalPage);
+
+            return "inventario/inventarioProductosDevueltos";
+        }
+    }
 
     @GetMapping("/borrar")
     public String borrarProducto(@RequestParam("id") String id, RedirectAttributes redirectAttributes, Model model) {
@@ -576,7 +626,7 @@ public class InventarioproductoController {
                 att.addFlashAttribute("msg", "producto devuelto al artesano existosamente");
                 return "redirect:/inventarioPrincipal/stock";
             } else {
-                att.addFlashAttribute("msg", "El producto selecion aún se encuentra en una sede o tienda");
+                att.addFlashAttribute("msg1", "El producto selecion aún se encuentra en una sede o tienda");
                 return "redirect:/inventarioPrincipal/stock";
             }
         }catch (NumberFormatException e){

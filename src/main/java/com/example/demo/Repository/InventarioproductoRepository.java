@@ -87,15 +87,32 @@ public interface InventarioproductoRepository extends JpaRepository<Inventariopr
     @Query(value = "UPDATE inventarioproducto SET estado = :estado WHERE (idinventario = :idinventario);", nativeQuery = true)
     void actualizarEstado(@Param("estado") String estado, @Param("idinventario") int idinventario);
 
-@Query(value = "SELECT * FROM inventarioproducto where estado is null order by idinventario desc",nativeQuery = true)
+    @Query(value = "SELECT * FROM inventarioproducto where estado is null order by idinventario desc", nativeQuery = true)
     Page<Inventarioproducto> listaTotalSinDevueltos(Pageable pageable);
 
-@Query(value="SELECT * FROM inventarioproducto where producto_idproducto = ?1 limit 1",nativeQuery = true)
+    @Query(value = "SELECT * FROM inventarioproducto where producto_idproducto = ?1 limit 1", nativeQuery = true)
     Inventarioproducto verificarProductoEnInventario(int id);
 
-    @Query(value="SELECT * FROM inventarioproducto where categoria_idcategoria = ?1 limit 1",nativeQuery = true)
+    @Query(value = "SELECT * FROM inventarioproducto where categoria_idcategoria = ?1 limit 1", nativeQuery = true)
     Inventarioproducto verificaCategoriaEnInventario(int id);
 
+    @Query(value = "SELECT inP.* FROM inventarioproducto inP \n" +
+            "inner join consignacionyventa cyv on cyv.idconsignacion=inP.consignacionyventa_idconsignacion \n" +
+            "inner join producto p on p.idproducto = inP.producto_idproducto \n" +
+            "inner join artesano a on a.idartesano=cyv.artesano_idartesano \n" +
+            "inner join comunidad c on c.idcomunidad=a.comunidad_idcomunidad \n" +
+            "where (cyv.numeropedido like %?1% or p.nombreproducto like %?1% or p.descripcionproducto like %?1% or \n" +
+            "a.nombreartesano like %?1%  or a.apellidopaterno like %?1% or a.apellidomaterno like %?1% \n" +
+            "or c.nombrecomunidad like %?1% or inP.cantidad like %?1% or inP.codigogenerado like %?1% ) and estado = 'devuelto'",
+            countQuery = "SELECT count(*) FROM inventarioproducto inP \n" +
+                    "inner join consignacionyventa cyv on cyv.idconsignacion=inP.consignacionyventa_idconsignacion \n" +
+                    "inner join producto p on p.idproducto = inP.producto_idproducto \n" +
+                    "inner join artesano a on a.idartesano=cyv.artesano_idartesano \n" +
+                    "inner join comunidad c on c.idcomunidad=a.comunidad_idcomunidad \n" +
+                    "where (cyv.numeropedido like %?1% or p.nombreproducto like %?1% or p.descripcionproducto like %?1% or \n" +
+                    "a.nombreartesano like %?1%  or a.apellidopaterno like %?1% or a.apellidomaterno like %?1% \n" +
+                    "or c.nombrecomunidad like %?1% or inP.cantidad like %?1% or inP.codigogenerado like %?1% ) and estado = 'devuelto'", nativeQuery = true)
+    Page<Inventarioproducto> prodDevuelto(String search, Pageable pageable);
 
 
 }

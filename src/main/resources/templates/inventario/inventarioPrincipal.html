@@ -88,8 +88,8 @@
                                         <th>Costo Moscoy</th>
                                         <th>Facilitador</th>
                                         <th>Codigo generado</th>
-                                        <th>Foto</th>
-                                        <th></th>
+                                        <th sec:authorize="hasAnyAuthority('Gestor principal')">Foto</th>
+                                        <th sec:authorize="hasAnyAuthority('Gestor principal')"></th>
 
                                     </tr>
                                     </thead>
@@ -114,10 +114,10 @@
                                         <td th:text="${a.preciomosqoy}">------</td>
                                         <td th:text="${a.facilitador}">-----</td>
                                         <td th:text="${a.codigogenerado}" >----</td>
-                                        <td class="center" >
+                                        <td sec:authorize="hasAnyAuthority('Gestor principal')" class="center" >
                                             <a  data-toggle="modal" href="#" th:data-target="|#${a.producto.getIdproducto()}|">Ver</a>
                                         </td>
-                                        <td><a th:href="@{'inventarioPrincipal/borrar?id=' + ${a.idinventario}}">Borrar</a></td>
+                                        <td sec:authorize="hasAnyAuthority('Gestor principal')"><a th:href="@{'inventarioPrincipal/borrar?id=' + ${a.idinventario}}">Borrar</a></td>
                                         <!-- Modal -->
                                         <div class="modal fade" th:id="${a.producto.getIdproducto()}" tabindex="-1"
                                              role="dialog" aria-hidden="true">

@@ -164,6 +164,25 @@ public interface InventarioSedeRepository extends JpaRepository<Inventariosede, 
             "sede_idsede not in (select p.sede_idsede from inventariosede p where p.sede_idsede=?2) " +
             "and (estado = 'recibido' or estado = 'enviado' ) limit 1",nativeQuery = true)
     Inventariosede productoTodaviaNoDevueltosEnSede(int idInventario,int idSede);
+    @Query(value = "SELECT inS.* FROM inventariosede inS\n" +
+            "inner join inventarioproducto inP on inS.inventarioproducto_idinventario=inP.idinventario \n" +
+            "inner join consignacionyventa cyv on cyv.idconsignacion=inP.consignacionyventa_idconsignacion \n" +
+            "inner join producto p on p.idproducto = inP.producto_idproducto \n" +
+            "inner join artesano a on a.idartesano=cyv.artesano_idartesano \n" +
+            "inner join comunidad c on c.idcomunidad=a.comunidad_idcomunidad \n" +
+            "where (cyv.numeropedido like %?1% or p.nombreproducto like %?1% or p.descripcionproducto like %?1% or \n" +
+            "a.nombreartesano like %?1% or a.apellidopaterno like %?1% or a.apellidomaterno like %?1% \n" +
+            "or c.nombrecomunidad like %?1% or inP.cantidad like %?1% or inP.codigogenerado like %?1% ) and inS.sede_idsede = ?2 and inS.estado = 'devuelto'",
+            countQuery = "SELECT count(*) FROM inventariosede inS\n" +
+                    "inner join inventarioproducto inP on inS.inventarioproducto_idinventario=inP.idinventario \n" +
+                    "inner join consignacionyventa cyv on cyv.idconsignacion=inP.consignacionyventa_idconsignacion \n" +
+                    "inner join producto p on p.idproducto = inP.producto_idproducto \n" +
+                    "inner join artesano a on a.idartesano=cyv.artesano_idartesano \n" +
+                    "inner join comunidad c on c.idcomunidad=a.comunidad_idcomunidad \n" +
+                    "where (cyv.numeropedido like %?1% or p.nombreproducto like %?1% or p.descripcionproducto like %?1% or \n" +
+                    "a.nombreartesano like %?1% or a.apellidopaterno like %?1% or a.apellidomaterno like %?1% \n" +
+                    "or c.nombrecomunidad like %?1% or inP.cantidad like %?1% or inP.codigogenerado like %?1% ) and inS.sede_idsede = ?2 and inS.estado = 'devuelto'", nativeQuery = true)
+    Page<Inventariosede> buscadorDevueltos(String search,int idsede, Pageable pageable);
 
 
 }

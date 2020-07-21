@@ -18,13 +18,13 @@ public class ArtesanoService {
     ArtesanoRepository artesanoRepository;
 
     public Page<Artesano> listAll(int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber ,5);
+        Pageable pageable = PageRequest.of(pageNumber ,10);
         return artesanoRepository.findAll( pageable);
     }
 
 
     public Page<Artesano> listSearch(String search, int page){
-        Pageable pageRequest = PageRequest.of(page,5);
+        Pageable pageRequest = PageRequest.of(page,10);
         return artesanoRepository.buscadorArtesano(search,pageRequest);
     }
 
