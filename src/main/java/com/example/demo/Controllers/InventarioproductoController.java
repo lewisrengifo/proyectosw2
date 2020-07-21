@@ -137,7 +137,7 @@ public class InventarioproductoController {
                 model.addAttribute("listaArtesano", artesanoRepository.findAll());
                 if (referencia2.equals("consig")) {
                     return "inventario/consig";
-                }else if (referencia2.equals("comprado")){
+                } else if (referencia2.equals("comprado")) {
                     return "inventario/comprado";
                 }
             }
@@ -207,8 +207,8 @@ public class InventarioproductoController {
 
     @PostMapping("/agregarProducto")
 
-    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto")@Valid Inventarioproducto invPro, BindingResult bindingResult,
-                                           RedirectAttributes redirectAttributes, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") String id, HttpSession session,RedirectAttributes att) {
+    public String agregarProductosEnPedido(Model model, @ModelAttribute("inventarioProducto") @Valid Inventarioproducto invPro, BindingResult bindingResult,
+                                           RedirectAttributes redirectAttributes, @ModelAttribute("consigYVenta") Consignacionyventa consigYventa, @RequestParam("idconsignacionVenta") String id, HttpSession session, RedirectAttributes att) {
 
 
         try {
@@ -230,7 +230,7 @@ public class InventarioproductoController {
                     Date fechatudei = new Date();
 
                     invPro.setFechainicio(fechatudei);
-                    if (invPro.getPreciomosqoy()>invPro.getPreciotejedor()) {
+                    if (invPro.getPreciomosqoy() > invPro.getPreciotejedor()) {
                         if (ultimaConsigOventa.get().getTipo().equals("consignacion")) {
                             String lineac = invPro.getProducto().getLinea().getCodigolinea();
                             String categoriac = invPro.getCategoria().getCodigocategoria();
@@ -285,8 +285,8 @@ public class InventarioproductoController {
                             String totalCodigoGenerado = lineac + categoriac + productoc + descriccionC + tamano + comunidadC;
                             invPro.setCodigogenerado(totalCodigoGenerado);
                         }
-                    }else{
-                        model.addAttribute("inventarioProducto",invPro);
+                    } else {
+                        model.addAttribute("inventarioProducto", invPro);
                         int idultimo = invPro.getConsignacionyventa().getIdconsignacion();
                         redirectAttributes.addFlashAttribute("msg2", "El precio Moscoy debe ser mayor que el precio tejedor.");
                         return "redirect:/inventarioPrincipal/sgteProductos/" + idultimo;
@@ -344,6 +344,9 @@ public class InventarioproductoController {
 
 
             int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+            if (page < 0) {
+                return "redirect:/inventarioPrincipal";
+            }
 
             PageRequest pageRequest = PageRequest.of(page, 10);
 
@@ -479,6 +482,7 @@ public class InventarioproductoController {
             return "inventario/stockProductoInvPrincipal";
         }
     }
+
     @GetMapping("/buscadorProductosDevueltos")
     public String buscadorProductosDevueltos(@RequestParam Map<String, Object> params, Model model, RedirectAttributes attr, HttpSession session) {
         Usuario usuariologueado = (Usuario) session.getAttribute("usuario");
@@ -501,7 +505,7 @@ public class InventarioproductoController {
             PageRequest pageRequest = PageRequest.of(page, 10);
 
 
-            Page<Inventariosede> pageInvProd = inventarioSedeRepository.buscadorDevueltos(busqueda,usuariologueado.getSede_idsede().getIdsede(), pageRequest);
+            Page<Inventariosede> pageInvProd = inventarioSedeRepository.buscadorDevueltos(busqueda, usuariologueado.getSede_idsede().getIdsede(), pageRequest);
             int totalPage = pageInvProd.getTotalPages();
             if (totalPage > 0) {
                 List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
@@ -613,7 +617,7 @@ public class InventarioproductoController {
     @GetMapping("/devolverArtesano")
     public String devolverProductoAlArtesano(@RequestParam("id") String id, HttpSession session, RedirectAttributes att) {
 
-        try{
+        try {
             int idDevolver = Integer.parseInt(id);
             Usuario user = (Usuario) session.getAttribute("usuario");
             Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(idDevolver);
@@ -629,7 +633,7 @@ public class InventarioproductoController {
                 att.addFlashAttribute("msg1", "El producto selecion aún se encuentra en una sede o tienda");
                 return "redirect:/inventarioPrincipal/stock";
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return "redirect:/inventarioPrincipal/stock";
         }
 
