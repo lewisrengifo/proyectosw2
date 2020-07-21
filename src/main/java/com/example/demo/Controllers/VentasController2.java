@@ -1,10 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Dto.ReporteMensualoAnualMosqoyDto;
-import com.example.demo.Entity.Comunidad;
-import com.example.demo.Entity.Producto;
-import com.example.demo.Entity.Sede;
-import com.example.demo.Entity.Ventas;
+import com.example.demo.Entity.*;
 import com.example.demo.Repository.ComunidadRepository;
 import com.example.demo.Repository.ProductoRepository;
 import com.example.demo.Repository.SedeRepository;
@@ -24,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +51,17 @@ public class VentasController2 {
 
 
     @GetMapping("")
-    public String paginaReportes(Model model){
+    public String paginaReportes(Model model, HttpSession httpSession){
+        Usuario usuario = (Usuario) httpSession.getAttribute("usuario");
 
         model.addAttribute("listaComunidad",comunidadRepository.findAll());
         model.addAttribute("listaComunidad1",comunidadRepository.findAll());
-        model.addAttribute("listaSede",sedeRepository.findAll());
+        if (usuario.getSede_idsede().getIdsede()==3){
+            model.addAttribute("listaSede",sedeRepository.findAll());
+        }else {
+            model.addAttribute("listaSede", sedeRepository.findsede(usuario.getSede_idsede().getIdsede()));
+        }
+
         model.addAttribute("listaSede1",sedeRepository.findAll());
         model.addAttribute("listaProducto",productoRepository.findAll());
         model.addAttribute("listaProducto1", productoRepository.findAll());

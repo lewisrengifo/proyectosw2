@@ -28,16 +28,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
         ;
 
-        http.authorizeRequests().antMatchers( "/sede", "/sede/**").hasAnyAuthority("Administrador", "Gestor principal");
+        http.authorizeRequests().antMatchers( "/inventarioPrincipal","/inventarioPrincipal/**").hasAnyAuthority("Administrador", "Gestor principal");
+        http.authorizeRequests().antMatchers( "/ventasexcel","/ventasexcel/**").hasAnyAuthority("Administrador", "Gestor principal","Gestor sede");
         http.authorizeRequests().antMatchers( "/usuario", "/usuario/**").hasAuthority("Administrador");
 
-        http.authorizeRequests().antMatchers( "/ConsignacionVenta", "/ConsignacionVenta/**").hasAuthority("Gestor principal");
-        http.authorizeRequests().antMatchers("/categoria", "/categoria/**","/comunidad","/comunidad/**").hasAnyAuthority( "Gestor principal", "Gestor sede");
+        http.authorizeRequests().antMatchers( "/ConsignacionVenta", "/ConsignacionVenta/**","/sede", "/sede/**").hasAuthority("Gestor principal");
+        http.authorizeRequests().antMatchers("/categoria", "/categoria/**","/comunidad","/comunidad/**","/tamano","/tamano/**").hasAnyAuthority( "Gestor principal", "Gestor sede");
 
         //http.authorizeRequests().antMatchers( "/sede", "/sede/**").hasAuthority("Gestor sede");
        // http.authorizeRequests().antMatchers("/venta", "/venta/**").hasAnyAuthority( "Gestor principal", "Gestor sede");
 
-        http.authorizeRequests().antMatchers("/producto", "/producto/**", "/comunidad", "/comunidad/**", "/venta", "/venta/**").hasAnyAuthority("Gestor principal", "Gestor sede");
+        http.authorizeRequests().antMatchers("/producto", "/producto/**", "/comunidad", "/comunidad/**", "/venta", "/venta/**","/linea","/linea/**").hasAnyAuthority("Gestor principal", "Gestor sede");
         http.authorizeRequests().antMatchers("/artesano", "/artesano/**").hasAnyAuthority("Gestor principal", "Gestor sede");
         http.authorizeRequests().antMatchers("/login", "/login/**").permitAll();
         http.authorizeRequests().antMatchers("/cambiar1/**", "/cambiar1/", "/cambiarContrasenia").permitAll();

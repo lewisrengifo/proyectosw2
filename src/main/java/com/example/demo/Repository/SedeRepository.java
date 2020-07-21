@@ -32,6 +32,8 @@ public interface SedeRepository extends JpaRepository<Sede, Integer> {
 
     @Query(value = "SELECT * FROM sede where idsede not in (select idsede from sede where idsede=?1)",nativeQuery = true)
     List<Sede> listaSedeSinPrincipal(int id);
+    @Query(value = "select * from sede where idsede =?1", nativeQuery = true)
+    Sede findsede(int idsede);
 
 
 
