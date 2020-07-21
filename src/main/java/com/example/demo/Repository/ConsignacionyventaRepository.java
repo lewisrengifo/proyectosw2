@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ConsignacionyventaRepository extends JpaRepository <Consignacionyventa, Integer> {
 
@@ -32,5 +34,7 @@ public interface ConsignacionyventaRepository extends JpaRepository <Consignacio
 
     @Query(value = "SELECT * FROM consignacionyventa order by idconsignacion desc",nativeQuery = true)
     Page<Consignacionyventa> listaConsigVenta(Pageable pageable);
+    @Query(value = "SELECT * FROM consignacionyventa where tipo=?1", nativeQuery = true)
+    List<Consignacionyventa> listarconsig(String a);
 
 }

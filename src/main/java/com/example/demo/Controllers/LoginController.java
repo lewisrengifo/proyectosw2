@@ -145,6 +145,8 @@ public class LoginController {
         } else if (rol.equals("Gestor sede")) {
             return "redirect:/inventarioSede/listarInvMiSede";
         } else if (rol.equals("Gestor principal")) {
+            /*
+            System.out.println("checkpoint1");
             ZonedDateTime now = ZonedDateTime.now();
             System.out.println(now);
             Date nowdate = Date.from(now.toInstant());
@@ -156,8 +158,18 @@ public class LoginController {
 
             System.out.println(formatnow);
             ArrayList<String> mensajes = new ArrayList<>();
-            for (Consignacionyventa consignacionyventa : consignacionyventaRepository.findAll()) {
-                if (consignacionyventa.getFechafin() != null) {
+            System.out.println("checkpoint2");
+            String a = "consignacion";
+            System.out.println(a);
+            List<Consignacionyventa> consignacionyventaList = consignacionyventaRepository.listarconsig(a);
+            System.out.println("imprime lista");
+            System.out.println(consignacionyventaList.size());
+
+            for (Consignacionyventa consignacionyventa : consignacionyventaList) {
+                System.out.println(consignacionyventa);
+                System.out.println("entra al if");
+                if (consignacionyventa.getTipo().equals("consignacion")) {
+                    System.out.println("llega al if");
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(consignacionyventa.getFechafin());
                     calendar.add(calendar.MONTH, -1);
@@ -168,6 +180,7 @@ public class LoginController {
                     formatfechadb = simpleDateFormat.format(calendar.getTime());
 
 
+                    System.out.println("checkpoint3");
                     System.out.println(formatfechadb);
                     while (formatfechadb.equals(formatnow)) {
                         //List<Consignacionyventa> listaconsigs = new List<>;
@@ -184,6 +197,7 @@ public class LoginController {
                 }
 
             }
+            System.out.println("checkpoint4");
             String newline = System.lineSeparator();
             String mensajefin = String.join("<br>", mensajes);
             Usuario usuario1 = (Usuario) session.getAttribute("usuario");
@@ -199,20 +213,24 @@ public class LoginController {
                 notificacionesRepository.actualizarFlagFalse(usuario1.getIdusuario());
             }
             Notificaciones notificaciones1 = notificacionesRepository.findByUserId(usuario1.getIdusuario());
+            System.out.println("checkpoint5");
             if(!notificaciones1.isFlag()){
-                if (calendar3.get(Calendar.DAY_OF_MONTH) >= 15 && calendar3.get(Calendar.DAY_OF_MONTH)<=20) {
+                if (calendar3.get(Calendar.DAY_OF_MONTH) >= 19 && calendar3.get(Calendar.DAY_OF_MONTH)<=27) {
                     if (mensajes.isEmpty()) {
                         String mensaje1 = "¡Hola! este es un mensaje automatico del sistema <br><br>En este momento ninguna consignacion esta cerca de su fecha de vencimiento";
                        sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje1);
+                        System.out.println("checkpoint6");
                     } else {
 
                         String mensaje = "¡Hola! este es un mensaje automatico del sistema <br><br>El sistema le avisa que el/los siguiente(s) pedido(s) :"
                                 + "<br><br>" + mensajefin + "<br><br> esta(n) proximo(s) a vencer";
                         sendMailService.sendMail(usuario1.getCorreo(), "saritaatanacioarenas@gmail.com", "Notificacion sobre vencimiento de consignacion - Mosqoy", mensaje);
+                        System.out.println("checkpoint5");
                     }
                 }
                 notificacionesRepository.actualizarFlagFecha(usuario1.getIdusuario(),calendar3.getTime());
-            }
+                System.out.println("checkpoint6");
+            }*/
 
 
             return "redirect:/inventarioPrincipal";
