@@ -23,6 +23,7 @@ import javax.xml.bind.Element;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.SecureRandom;
+import java.sql.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
@@ -145,7 +146,7 @@ public class LoginController {
         } else if (rol.equals("Gestor sede")) {
             return "redirect:/inventarioSede/listarInvMiSede";
         } else if (rol.equals("Gestor principal")) {
-            /*
+
             System.out.println("checkpoint1");
             ZonedDateTime now = ZonedDateTime.now();
             System.out.println(now);
@@ -161,7 +162,12 @@ public class LoginController {
             System.out.println("checkpoint2");
             String a = "consignacion";
             System.out.println(a);
+            //List<Consignacionyventa> consignacionyventaList = new ArrayList<>();
             List<Consignacionyventa> consignacionyventaList = consignacionyventaRepository.listarconsig(a);
+            //Consignacionyventa consignacionyventa1 = consignacionyventaRepository.listarconsig();
+            System.out.println("funcionaaa");
+           // ArrayList<Consignacionyventa> consignacionyventaList = new ArrayList<>();
+            //consignacionyventaList.add(consignacionyventa1);
             System.out.println("imprime lista");
             System.out.println(consignacionyventaList.size());
 
@@ -230,7 +236,7 @@ public class LoginController {
                 }
                 notificacionesRepository.actualizarFlagFecha(usuario1.getIdusuario(),calendar3.getTime());
                 System.out.println("checkpoint6");
-            }*/
+            }
 
 
             return "redirect:/inventarioPrincipal";

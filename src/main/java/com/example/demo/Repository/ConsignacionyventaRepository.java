@@ -34,7 +34,7 @@ public interface ConsignacionyventaRepository extends JpaRepository <Consignacio
 
     @Query(value = "SELECT * FROM consignacionyventa order by idconsignacion desc",nativeQuery = true)
     Page<Consignacionyventa> listaConsigVenta(Pageable pageable);
-    @Query(value = "SELECT * FROM consignacionyventa where tipo=?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM consignacionyventa where tipo=?1 limit 1", nativeQuery = true)
     List<Consignacionyventa> listarconsig(String a);
 
 }
