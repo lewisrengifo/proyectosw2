@@ -39,7 +39,7 @@
                 </form>
 
             </div>
-            <div class="row">
+            <div class="row" style="padding-top: 10px">
                 <div class="col-md-12">
                     <div class="card">
 
@@ -49,10 +49,10 @@
                         </div>
 
 
-                        <div class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
+                        <div class="card-action right-align" sec:authorize="hasAnyAuthority('Gestor principal')">
                             <a class="btn btn-outline-danger" th:href="@{'/inventarioPrincipal/agregarInventario' + '?referencia=1' }">Agregar Consignación</a>
-                        </div>
-                        <div class="card-action" sec:authorize="hasAnyAuthority('Gestor principal')">
+
+
                             <a class="btn btn-outline-danger" th:href="@{'/inventarioPrincipal/agregarInventario' + '?referencia=2' }">Agregar Compra</a>
                         </div>
 

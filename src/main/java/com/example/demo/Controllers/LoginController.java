@@ -141,7 +141,7 @@ public class LoginController {
         ArrayList<Inventarioproducto> listProductoPedido = new ArrayList<>();
         session.setAttribute("listaProductosEnPedido", listProductoPedido);
         if (rol.equals("Administrador")) {
-            return "redirect:/usuario/lista";
+            return "redirect:/usuario";
         } else if (rol.equals("Gestor sede")) {
             return "redirect:/inventarioSede/listarInvMiSede";
         } else if (rol.equals("Gestor principal")) {
