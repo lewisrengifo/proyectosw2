@@ -33,14 +33,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers( "/usuario", "/usuario/**").hasAuthority("Administrador");
 
         http.authorizeRequests().antMatchers( "/ConsignacionVenta", "/ConsignacionVenta/**","/sede", "/sede/**").hasAuthority("Gestor principal");
-        http.authorizeRequests().antMatchers("/categoria", "/comunidad","/tamano").hasAnyAuthority( "Gestor principal", "Gestor sede");
+        //http.authorizeRequests().antMatchers("/categoria", "/comunidad","/tamano").hasAnyAuthority( "Gestor principal", "Gestor sede");
         //descripcion de productos
-        http.authorizeRequests().antMatchers( "/categoria/**", "/comunidad/**","/tamano/**", "/artesano/**","/producto/**","/comunidad/**","/linea/**").hasAuthority("Gestor principal");
+        //http.authorizeRequests().antMatchers( "/categoria/**", "/comunidad/**","/tamano/**", "/artesano/**","/producto/**","/comunidad/**","/linea/**").hasAuthority("Gestor principal");
         //http.authorizeRequests().antMatchers( "/sede", "/sede/**").hasAuthority("Gestor sede");
        // http.authorizeRequests().antMatchers("/venta", "/venta/**").hasAnyAuthority( "Gestor principal", "Gestor sede");
 
-        http.authorizeRequests().antMatchers("/producto",  "/comunidad",  "/venta", "/venta/**","/linea").hasAnyAuthority("Gestor principal", "Gestor sede");
-        http.authorizeRequests().antMatchers("/artesano").hasAnyAuthority("Gestor principal", "Gestor sede");
+        http.authorizeRequests().antMatchers("/producto",  "/comunidad",  "/venta", "/venta/**","/linea","/categoria/**", "/comunidad/**","/tamano/**", "/artesano/**","/producto/**","/comunidad/**","/linea/**","/tamano").hasAnyAuthority("Gestor principal", "Gestor sede");
+        //http.authorizeRequests().antMatchers("/artesano").hasAnyAuthority("Gestor principal", "Gestor sede");
         http.authorizeRequests().antMatchers("/login", "/login/**").permitAll();
         http.authorizeRequests().antMatchers("/cambiar1/**", "/cambiar1/", "/cambiarContrasenia").permitAll();
         http.authorizeRequests().antMatchers("/inventarioSede", "/inventarioSede/**").hasAnyAuthority("Gestor sede", "Gestor principal");
