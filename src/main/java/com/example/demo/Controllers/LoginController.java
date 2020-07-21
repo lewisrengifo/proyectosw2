@@ -145,7 +145,7 @@ public class LoginController {
         } else if (rol.equals("Gestor sede")) {
             return "redirect:/inventarioSede/listarInvMiSede";
         } else if (rol.equals("Gestor principal")) {
-            /*
+
             System.out.println("checkpoint1");
             ZonedDateTime now = ZonedDateTime.now();
             System.out.println(now);
@@ -230,7 +230,7 @@ public class LoginController {
                 }
                 notificacionesRepository.actualizarFlagFecha(usuario1.getIdusuario(),calendar3.getTime());
                 System.out.println("checkpoint6");
-            }*/
+            }
 
 
             return "redirect:/inventarioPrincipal";
