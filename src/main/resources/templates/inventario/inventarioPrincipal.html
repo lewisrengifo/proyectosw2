@@ -119,19 +119,24 @@
                                         </td>
                                         <td><a th:href="@{'inventarioPrincipal/borrar?id=' + ${a.idinventario}}">Borrar</a></td>
                                         <!-- Modal -->
-                                        <div class="modal fade" th:id="${a.producto.getIdproducto()}" tabindex="-1" role="dialog" aria-hidden="true">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" th:text="${a.producto.getNombreproducto()}"></h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <div class="modal fade" th:id="${a.producto.getIdproducto()}" tabindex="-1"
+                                             role="dialog" aria-hidden="true">
+                                            <div class="modal-header" style="padding: 8px">
+                                                <h5 class="modal-title" style="text-align: center;font-size: xx-large"
+                                                    th:text="${a.producto.getNombreproducto()}"></h5>
+                                                <!--button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
-                                                </button>
+                                                </button-->
                                             </div>
-                                            <div class="modal-body" align="center">
-                                                <img  width="480px" height="300px" th:src="@{'/producto/fotoProducto' + '?id=' + ${a.producto.idproducto}}" />
+                                            <div class="modal-body" align="center" style="padding: 5px">
+                                                <img width="480px" height="380px"
+                                                     th:src="@{'/producto/fotoProducto' + '?id=' + ${a.producto.idproducto}}"/>
 
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button"  class="btn btn-outline-danger" data-dismiss="modal">Cerrar</button>
+                                            <div class="modal-header" style="text-align: center">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Cerrar
+                                                </button>
                                             </div>
                                         </div>
                                     </tr>

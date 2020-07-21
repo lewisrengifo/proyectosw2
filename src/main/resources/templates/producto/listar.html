@@ -78,8 +78,8 @@
                                         <th class="center">Código Desc. Producto</th>
                                         <th class="center">Línea</th>
                                         <th class="center">Foto</th>
-                                        <th class="center"></th>
-                                        <th class="center"></th>
+                                        <th class="center" sec:authorize="hasAnyAuthority('Gestor principal')"></th>
+                                        <th class="center" sec:authorize="hasAnyAuthority('Gestor principal')"></th>
                                     </tr>
                                     </thead>
 
