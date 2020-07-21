@@ -131,16 +131,21 @@ public class TiendaController {
     @GetMapping("editar")
     public String editar(@ModelAttribute("tienda") Tienda tienda,
                          Model model,
-                         @RequestParam("id") int id){
+                         @RequestParam("id") String id){
 
-        Optional<Tienda> opt = tiendaRepository.findById(id);
+        try {
+            int id2 = Integer.parseInt(id);
+            Optional<Tienda> opt = tiendaRepository.findById(id2);
 
-        if (opt.isPresent()){
-            tienda= opt.get();
-            model.addAttribute("tienda", tienda);
-            return "Tienda/newEdit";
+            if (opt.isPresent()){
+                tienda= opt.get();
+                model.addAttribute("tienda", tienda);
+                return "Tienda/newEdit";
 
-        }else {
+            }else {
+                return "redirect:/tienda";
+            }
+        }catch (NumberFormatException e){
             return "redirect:/tienda";
         }
 

@@ -119,7 +119,7 @@
 
 
             <li sec:authorize="hasAnyAuthority('Administrador')"
-                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/usuario'||#httpServletRequest.requestURI == '/UnaChiqui/usuario/buscador?searchField=lewis'} ? 'nav-item active' : ''">
+                th:classappend="${#httpServletRequest.requestURI == '/UnaChiqui/usuario'||#httpServletRequest.requestURI == '/UnaChiqui/usuario/lista'} ? 'nav-item active' : ''">
                 <a th:href="@{'/usuario'}" class=" waves-effect waves-dark"><i class="fa fa-qrcode"></i> Gestion de
                     Usuarios</a>
             </li>

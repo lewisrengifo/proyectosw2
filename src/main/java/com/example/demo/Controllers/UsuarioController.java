@@ -278,7 +278,7 @@ public class UsuarioController {
 
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
-            model.addAttribute("listaroles", rolRepository.findAll());
+            model.addAttribute("listaroles", rolRepository.rolgestorprincipal());
             model.addAttribute("listasedes", sedeRepository.findAll());
             usuario = optionalUsuario.get();
             model.addAttribute("usuario", usuario);

@@ -59,6 +59,7 @@
 
 
                                 <table class="table table-striped table-bordered table-hover">
+
                                     <tr class="info">
                                         <th>#</th>
                                         <th>Nombre</th>
@@ -89,7 +90,7 @@
                                         <td th:if="${usuario.enable == true}" th:text="Activado"></td>
                                         <td th:if="${usuario.enable == false}" th:text="Desactivado"></td>
 
-                                        <td><a class="btn btn-outline-danger"
+                                        <td><a
                                                th:href="@{'/usuario/editar' + '?id=' + ${usuario.idusuario}}">Editar</a>
                                         </td>
 

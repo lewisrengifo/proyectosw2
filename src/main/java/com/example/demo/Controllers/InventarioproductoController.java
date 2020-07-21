@@ -73,7 +73,7 @@ public class InventarioproductoController {
             List<Integer> pages = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pages", pages);
             if (page > pages.size() - 1) {
-                att.addFlashAttribute("msgPagina", "No se encuentran datos en esa página");
+                att.addFlashAttribute("msgPagina", "No se encuentran datos con respecto a su búsqueda");
 
                 return "redirect:/inventarioPrincipal";
             }
@@ -481,25 +481,32 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/borrar")
-    public String borrarProducto(@RequestParam("id") int id, RedirectAttributes redirectAttributes, Model model) {
-        Optional<Inventarioproducto> optionalInventarioproducto = inventarioproductoRepository.findById(id);
-        if (optionalInventarioproducto.isPresent()) {
-            //validar que sea de la sede cuzco
-            Inventariosede inventariosede = inventarioSedeRepository.buscarporIdInventarioProd(optionalInventarioproducto.get().getIdinventario());
-            Inventariosede inventariosede1 = inventarioSedeRepository.inventarioProdnotsedecuz(optionalInventarioproducto.get().getIdinventario());
-            if (inventariosede != null && inventariosede1 == null) {
+    public String borrarProducto(@RequestParam("id") String id, RedirectAttributes redirectAttributes, Model model) {
 
-                inventarioSedeRepository.deleteById(inventariosede.getIdiventariosede());
-                inventarioproductoRepository.deleteById(id);
-                redirectAttributes.addFlashAttribute("msgdeletesucc", "Producto borrado del inventario correctamente");
+        try {
+            int idborrar = Integer.parseInt(id);
+            Optional<Inventarioproducto> optionalInventarioproducto = inventarioproductoRepository.findById(idborrar);
+            if (optionalInventarioproducto.isPresent()) {
+                //validar que sea de la sede cuzco
+                Inventariosede inventariosede = inventarioSedeRepository.buscarporIdInventarioProd(optionalInventarioproducto.get().getIdinventario());
+                Inventariosede inventariosede1 = inventarioSedeRepository.inventarioProdnotsedecuz(optionalInventarioproducto.get().getIdinventario());
+                if (inventariosede != null && inventariosede1 == null) {
 
+                    inventarioSedeRepository.deleteById(inventariosede.getIdiventariosede());
+                    inventarioproductoRepository.deleteById(idborrar);
+                    redirectAttributes.addFlashAttribute("msgdeletesucc", "Producto borrado del inventario exitosamente");
+                    return "redirect:/inventarioPrincipal";
 
-            } else {
-                redirectAttributes.addFlashAttribute("msgdelete", "Este producto no se puede borrar del inventario principal debido a que fue entregado a una sede");
+                } else {
+                    redirectAttributes.addFlashAttribute("msgdelete", "Este producto no se puede borrar del inventario principal debido a que fue entregado a una sede");
+                    return "redirect:/inventarioPrincipal";
+                }
             }
+        } catch (NumberFormatException e) {
+            return "redirect:/inventarioPrincipal";
         }
-        return "redirect:/inventarioPrincipal";
 
+        return "redirect:/inventarioPrincipal";
     }
 
     @GetMapping("/productosDevueltos")
@@ -554,22 +561,28 @@ public class InventarioproductoController {
     }
 
     @GetMapping("/devolverArtesano")
-    public String devolverProductoAlArtesano(@RequestParam("id") int id, HttpSession session, RedirectAttributes att) {
+    public String devolverProductoAlArtesano(@RequestParam("id") String id, HttpSession session, RedirectAttributes att) {
 
-        Usuario user = (Usuario) session.getAttribute("usuario");
-        Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(id);
-        Inventariosede inventariosedeDevuelto = inventarioSedeRepository.productoTodaviaNoDevueltosEnSede(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), user.getSede_idsede().getIdsede());
-        Inventariotienda productoEnTienda = inventarioTiendaRepository.productoEntiendaTodavia(productEnSede.get().getIdiventariosede());
+        try{
+            int idDevolver = Integer.parseInt(id);
+            Usuario user = (Usuario) session.getAttribute("usuario");
+            Optional<Inventariosede> productEnSede = inventarioSedeRepository.findById(idDevolver);
+            Inventariosede inventariosedeDevuelto = inventarioSedeRepository.productoTodaviaNoDevueltosEnSede(productEnSede.get().getInventarioproductoidinventario().getIdinventario(), user.getSede_idsede().getIdsede());
+            Inventariotienda productoEnTienda = inventarioTiendaRepository.productoEntiendaTodavia(productEnSede.get().getIdiventariosede());
 
-        if (inventariosedeDevuelto == null && productoEnTienda == null) {
-            inventarioSedeRepository.actualizarEstado("devuelto", productEnSede.get().getIdiventariosede());
-            inventarioproductoRepository.actualizarEstado("devuelto", productEnSede.get().getInventarioproductoidinventario().getIdinventario());
-            att.addFlashAttribute("msg", "producto devuelto al artesano existosamente");
-            return "redirect:/inventarioPrincipal/stock";
-        } else {
-            att.addFlashAttribute("msg", "El producto selecion aún se encuentra en una sede o tienda");
+            if (inventariosedeDevuelto == null && productoEnTienda == null) {
+                inventarioSedeRepository.actualizarEstado("devuelto", productEnSede.get().getIdiventariosede());
+                inventarioproductoRepository.actualizarEstado("devuelto", productEnSede.get().getInventarioproductoidinventario().getIdinventario());
+                att.addFlashAttribute("msg", "producto devuelto al artesano existosamente");
+                return "redirect:/inventarioPrincipal/stock";
+            } else {
+                att.addFlashAttribute("msg", "El producto selecion aún se encuentra en una sede o tienda");
+                return "redirect:/inventarioPrincipal/stock";
+            }
+        }catch (NumberFormatException e){
             return "redirect:/inventarioPrincipal/stock";
         }
+
 
     }
 
